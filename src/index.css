@@ -8,3 +8,66 @@
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
 }
+
+/* 2-Frame Flying Birds Animation positioned strictly relative to COEP Building image */
+@keyframes flyAcrossBuilding {
+  0% {
+    left: 8%;
+    top: 27%;
+    opacity: 0;
+    visibility: visible;
+  }
+  12% {
+    /* Smooth fade in */
+    left: 18%;
+    top: 25%;
+    opacity: 1;
+  }
+  32% {
+    left: 36%;
+    top: 22.5%;
+    opacity: 1;
+  }
+  58% {
+    left: 58%;
+    top: 19.5%;
+    opacity: 1;
+  }
+  80% {
+    left: 78%;
+    top: 16.5%;
+    opacity: 1;
+  }
+  88% {
+    /* Start fading out gently */
+    left: 86%;
+    top: 15.2%;
+    opacity: 0.85;
+  }
+  96.5% {
+    /* Smooth fade out as birds reach right edge */
+    left: 98%;
+    top: 14%;
+    opacity: 0;
+    visibility: visible;
+  }
+  97% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    /* Fast ~0.8s gap before new birds fade in */
+    left: 98%;
+    top: 14%;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.animate-birds-flight {
+  position: absolute;
+  animation: flyAcrossBuilding 26s linear infinite;
+  will-change: left, top, opacity;
+}
+
+

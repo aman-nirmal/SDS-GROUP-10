@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   MapPin,
   Calendar,
   Search,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Monitor,
   Users,
   Presentation,
@@ -13,9 +14,36 @@ import {
   Clock,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
+  ArrowUpRight,
   Menu,
-  X
+  X,
+  FileText,
+  AlertCircle,
+  ShieldCheck
 } from 'lucide-react'
+
+// 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
+function FlyingBirds() {
+  const [frame, setFrame] = useState(1)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFrame((prev) => (prev === 1 ? 2 : 1))
+    }, 340) // natural wing-beat tempo
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="animate-birds-flight w-14 sm:w-16 lg:w-18 pointer-events-none select-none z-10">
+      <img
+        src={frame === 1 ? '/bird1.png' : '/bird2.png'}
+        alt="Flying Birds"
+        className="w-full h-auto object-contain"
+      />
+    </div>
+  )
+}
 
 // Official LOCUS Logo Component
 function LocusLogo({ size = 'default' }) {
@@ -59,6 +87,586 @@ function VenueTypeCard({ icon: Icon, title, description, count }) {
   )
 }
 
+import { coepVenuesData } from './data/venues'
+
+// Custom Calendar Picker matching Website Design System
+function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
+  const initialDate = selectedDate ? new Date(selectedDate) : new Date(2026, 9, 16)
+  const [viewDate, setViewDate] = useState(initialDate)
+
+  const year = viewDate.getFullYear()
+  const month = viewDate.getMonth()
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ]
+
+  const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+
+  // Days in current month
+  const firstDayIndex = new Date(year, month, 1).getDay()
+  const daysInCurrentMonth = new Date(year, month + 1, 0).getDate()
+
+  // Previous month trailing days
+  const daysInPrevMonth = new Date(year, month, 0).getDate()
+  const prevMonthDays = []
+  for (let i = firstDayIndex - 1; i >= 0; i--) {
+    prevMonthDays.push(daysInPrevMonth - i)
+  }
+
+  // Next month leading days
+  const totalSlots = Math.ceil((firstDayIndex + daysInCurrentMonth) / 7) * 7
+  const nextMonthDaysCount = totalSlots - (firstDayIndex + daysInCurrentMonth)
+
+  const handlePrevMonth = (e) => {
+    e.stopPropagation()
+    setViewDate(new Date(year, month - 1, 1))
+  }
+
+  const handleNextMonth = (e) => {
+    e.stopPropagation()
+    setViewDate(new Date(year, month + 1, 1))
+  }
+
+  const handlePickDate = (d) => {
+    const mm = String(month + 1).padStart(2, '0')
+    const dd = String(d).padStart(2, '0')
+    onSelectDate(`${year}-${mm}-${dd}`)
+    onClose()
+  }
+
+  const handlePickToday = (e) => {
+    e.stopPropagation()
+    const now = new Date(2026, 9, 16) // academic session date
+    const mm = String(now.getMonth() + 1).padStart(2, '0')
+    const dd = String(now.getDate()).padStart(2, '0')
+    onSelectDate(`${now.getFullYear()}-${mm}-${dd}`)
+    onClose()
+  }
+
+  const handleClear = (e) => {
+    e.stopPropagation()
+    onSelectDate('')
+    onClose()
+  }
+
+  return (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute top-15 left-0 sm:left-auto sm:right-0 w-[290px] bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/90 p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
+    >
+      {/* Month & Year Navigation Header */}
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+        <span className="text-xs font-bold text-slate-900 tracking-tight">
+          {monthNames[month]} {year}
+        </span>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={handlePrevMonth}
+            className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={handleNextMonth}
+            className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Days of Week */}
+      <div className="grid grid-cols-7 text-center mb-1">
+        {daysOfWeek.map((day, idx) => (
+          <span key={idx} className="text-[11px] font-bold text-slate-400 py-1">
+            {day}
+          </span>
+        ))}
+      </div>
+
+      {/* Days Grid */}
+      <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
+        {/* Prev month days */}
+        {prevMonthDays.map((d, i) => (
+          <span key={`prev-${i}`} className="text-slate-300 py-1.5 text-[11px]">
+            {d}
+          </span>
+        ))}
+
+        {/* Current month days */}
+        {Array.from({ length: daysInCurrentMonth }).map((_, i) => {
+          const dayNum = i + 1
+          const mm = String(month + 1).padStart(2, '0')
+          const dd = String(dayNum).padStart(2, '0')
+          const dateString = `${year}-${mm}-${dd}`
+          const isSelected = selectedDate === dateString
+
+          return (
+            <button
+              key={dayNum}
+              type="button"
+              onClick={() => handlePickDate(dayNum)}
+              className={`w-8 h-8 mx-auto flex items-center justify-center rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-blue-600 text-white font-bold shadow-xs scale-105'
+                  : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+            >
+              {dayNum}
+            </button>
+          )
+        })}
+
+        {/* Next month days */}
+        {Array.from({ length: nextMonthDaysCount }).map((_, i) => (
+          <span key={`next-${i}`} className="text-slate-300 py-1.5 text-[11px]">
+            {i + 1}
+          </span>
+        ))}
+      </div>
+
+      {/* Footer Actions: Clear & Today */}
+      <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
+        <button
+          type="button"
+          onClick={handleClear}
+          className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          onClick={handlePickToday}
+          className="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+        >
+          Today
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// Format date helper (e.g., '16 Oct 2026')
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return 'Select Date'
+  try {
+    const [year, month, day] = dateStr.split('-')
+    const date = new Date(year, month - 1, day)
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    })
+  } catch {
+    return dateStr
+  }
+}
+
+// Complete Interactive Venue Booking Modal Component
+function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
+  const [date, setDate] = useState(defaultDate || '2026-10-16')
+  const [selectedSlot, setSelectedSlot] = useState('09:00 AM - 11:00 AM')
+  const [applicantName, setApplicantName] = useState('')
+  const [department, setDepartment] = useState(venue?.department || 'Computer Engineering')
+  const [eventPurpose, setEventPurpose] = useState('')
+  const [attendees, setAttendees] = useState(venue?.benches ? venue.benches * 2 : 50)
+  const [submitted, setSubmitted] = useState(false)
+  const [bookingRef, setBookingRef] = useState('')
+
+  const availableSlots = [
+    { id: 'slot-1', label: '09:00 AM - 11:00 AM', status: 'available' },
+    { id: 'slot-2', label: '11:15 AM - 01:15 PM', status: 'available' },
+    { id: 'slot-3', label: '02:00 PM - 04:00 PM', status: 'available' },
+    { id: 'slot-4', label: '04:15 PM - 06:15 PM', status: 'available' },
+    { id: 'slot-5', label: '06:30 PM - 08:30 PM', status: 'available' }
+  ]
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!applicantName || !eventPurpose) return
+
+    const refNumber = 'LOCUS-' + Math.floor(100000 + Math.random() * 900000)
+    setBookingRef(refNumber)
+    setSubmitted(true)
+
+    if (onSubmitBooking) {
+      onSubmitBooking({
+        ref: refNumber,
+        venueName: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
+        oldName: venue?.old_hall_name,
+        department,
+        applicantName,
+        date,
+        slot: selectedSlot,
+        purpose: eventPurpose,
+        capacity: attendees,
+        status: 'Confirmed'
+      })
+    }
+  }
+
+  const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
+
+  return (
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 overflow-y-auto"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 my-8"
+      >
+        {submitted ? (
+          <div className="text-center py-4">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-xs">
+              <CheckCircle2 className="w-9 h-9 stroke-[2]" />
+            </div>
+            <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">
+              Reservation Confirmed
+            </span>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">
+              Slot Reserved Successfully!
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+              Your venue reservation for <strong className="text-slate-900">{venueTitle}</strong> on{' '}
+              <strong className="text-slate-900">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been registered.
+            </p>
+
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left mb-6 space-y-2">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 font-medium">Reference Code:</span>
+                <span className="font-mono font-bold text-blue-600">{bookingRef}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 font-medium">Applicant:</span>
+                <span className="font-semibold text-slate-800">{applicantName}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 font-medium">Department:</span>
+                <span className="font-semibold text-slate-800">{department}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 font-medium">Status:</span>
+                <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Official Request Logged
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all duration-200 cursor-pointer shadow-xs"
+            >
+              Done & Return
+            </button>
+          </div>
+        ) : (
+          <div>
+            {/* Header */}
+            <div className="flex items-start justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+              <div>
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-lg mb-2">
+                  <Building className="w-3.5 h-3.5" />
+                  <span>{venue?.department || 'COEP Campus'}</span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                  {venueTitle}
+                </h3>
+                {venue?.old_hall_name && venue.new_hall_name && (
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Formerly: {venue.old_hall_name} &bull; Capacity: {venue.benches * 2} Students ({venue.benches} Benches)
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-9 h-9 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4.5">
+              {/* Date & Slot selection */}
+              <div>
+                <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Select Booking Date
+                </label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                />
+              </div>
+
+              {/* Time Slots */}
+              <div>
+                <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Available Time Slots
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {availableSlots.map((slot) => {
+                    const isSelected = selectedSlot === slot.label
+                    return (
+                      <button
+                        key={slot.id}
+                        type="button"
+                        onClick={() => setSelectedSlot(slot.label)}
+                        className={`px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition-all cursor-pointer flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{slot.label}</span>
+                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Applicant Name & Department */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Faculty / Student Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={applicantName}
+                    onChange={(e) => setApplicantName(e.target.value)}
+                    placeholder="e.g. Prof. R. Sharma / Student"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Organizing Department
+                  </label>
+                  <input
+                    type="text"
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 outline-none focus:border-blue-500 transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* Purpose & Attendees */}
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Event Purpose / Session Topic *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={eventPurpose}
+                    onChange={(e) => setEventPurpose(e.target.value)}
+                    placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+                  <span>Expected Attendees: <strong>{attendees}</strong></span>
+                  <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Instant Campus Approval
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-3 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 h-11 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm cursor-pointer"
+                >
+                  Submit Reservation
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Interactive My Bookings Page Component
+function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
+  const [activeFilter, setActiveFilter] = useState('All')
+
+  const sampleDefaultBookings = [
+    {
+      ref: 'LOCUS-482910',
+      venueName: 'NC01',
+      oldName: 'AC 101',
+      department: 'Academics Complex',
+      applicantName: 'Prof. Aniket Joshi',
+      date: '2026-10-18',
+      slot: '09:00 AM - 11:00 AM',
+      purpose: 'End-Sem Project Viva & Evaluation',
+      capacity: 72,
+      status: 'Confirmed'
+    },
+    {
+      ref: 'LOCUS-319502',
+      venueName: 'NC-27',
+      oldName: 'Computer Dept Hall A',
+      department: 'Computer New Building',
+      applicantName: 'CS Student Chapter',
+      date: '2026-10-21',
+      slot: '02:00 PM - 04:00 PM',
+      purpose: 'Technical Seminar on Distributed Systems',
+      capacity: 80,
+      status: 'Confirmed'
+    }
+  ]
+
+  const allBookings = bookings.length > 0 ? bookings : sampleDefaultBookings
+
+  const filteredBookings = allBookings.filter((b) => {
+    if (activeFilter === 'All') return true
+    return b.status === activeFilter
+  })
+
+  return (
+    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <button
+            type="button"
+            onClick={onBackHome}
+            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+            <span>Back to Home</span>
+          </button>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            My Venue Bookings
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Track your slot confirmations, approved timings, and reservation slips across campus.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={onExploreVenues}
+          className="h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
+        >
+          <Calendar className="w-4 h-4" />
+          <span>New Reservation</span>
+        </button>
+      </div>
+
+      {/* Status Filter Tabs */}
+      <div className="flex items-center gap-2 mb-6 border-b border-slate-200/80 pb-3">
+        {['All', 'Confirmed', 'Pending'].map((status) => (
+          <button
+            key={status}
+            type="button"
+            onClick={() => setActiveFilter(status)}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+              activeFilter === status
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            {status}
+          </button>
+        ))}
+      </div>
+
+      {/* Bookings List */}
+      <div className="space-y-4">
+        {filteredBookings.map((b) => (
+          <div
+            key={b.ref}
+            className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5"
+          >
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+                  {b.ref}
+                </span>
+                <span className="text-xs font-bold text-slate-900">
+                  {b.venueName}
+                </span>
+                {b.oldName && (
+                  <span className="text-xs text-slate-400">
+                    ({b.oldName})
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  {b.status}
+                </span>
+              </div>
+
+              <h3 className="font-bold text-slate-900 text-base">
+                {b.purpose}
+              </h3>
+
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  {formatDateDisplay(b.date)}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                  {b.slot}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Building className="w-3.5 h-3.5 text-slate-400" />
+                  {b.department}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-slate-400" />
+                  {b.applicantName} ({b.capacity} cap)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-3 md:pt-0 border-t md:border-0 border-slate-100">
+              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4" />
+                COEP Admin Verified
+              </span>
+            </div>
+          </div>
+        ))}
+
+        {filteredBookings.length === 0 && (
+          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+            <p className="text-slate-500 text-sm font-semibold">No bookings found for this filter.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // Coming Soon Placeholder Component
 function ComingSoonPage({ title, description, onBackHome }) {
   return (
@@ -88,17 +696,180 @@ function ComingSoonPage({ title, description, onBackHome }) {
   )
 }
 
+// Full Interactive Venue Catalog Page
+function VenuesPage({ initialType, initialDate, onSelectVenue, onBackHome }) {
+  const [filterDept, setFilterDept] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterType, setFilterType] = useState(initialType || 'All Venues')
+
+  const departments = ['All', ...new Set(coepVenuesData.map((v) => v.department))]
+
+  const filteredVenues = coepVenuesData.filter((venue) => {
+    const matchesDept = filterDept === 'All' || venue.department === filterDept
+    const matchesType =
+      filterType === 'All Venues' || venue.type === filterType
+    const matchesSearch =
+      (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      venue.department.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesDept && matchesType && matchesSearch
+  })
+
+  return (
+    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <button
+            type="button"
+            onClick={onBackHome}
+            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+            <span>Back to Home</span>
+          </button>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            COEP Campus Venues
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Browse all classrooms, seminar halls, and drawing halls across departments.
+            {initialDate && (
+              <span className="ml-2 font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md">
+                Checking: {formatDateDisplay(initialDate)}
+              </span>
+            )}
+          </p>
+        </div>
+
+        {/* Live Search Input */}
+        <div className="relative w-full sm:w-72">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search hall (e.g. SC06, AC 101)"
+            className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors shadow-xs"
+          />
+        </div>
+      </div>
+
+      {/* Filter Controls: Venue Type & Department Tabs */}
+      <div className="space-y-3 mb-8">
+        {/* Venue Type Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+            Type:
+          </span>
+          {['All Venues', 'Classrooms', 'Seminar Halls', 'Auditoriums', 'Meeting Rooms'].map((type) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => setFilterType(type)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                filterType === type
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+
+        {/* Department Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+            Dept:
+          </span>
+          {departments.map((dept) => (
+            <button
+              key={dept}
+              type="button"
+              onClick={() => setFilterDept(dept)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                filterDept === dept
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              {dept}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Venues Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {filteredVenues.map((venue, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+                  {venue.new_hall_name || 'Passage Hall'}
+                </span>
+                <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                  {venue.benches} Benches ({venue.benches * 2} Capacity)
+                </span>
+              </div>
+
+              <h3 className="font-bold text-slate-900 text-base mb-1">
+                {venue.old_hall_name || venue.new_hall_name}
+              </h3>
+              <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
+                <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="truncate">{venue.department}</span>
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Available
+              </span>
+              <button
+                type="button"
+                onClick={() => onSelectVenue(venue)}
+                className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              >
+                <span>Book Slot</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredVenues.length === 0 && (
+        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+          <p className="text-slate-500 text-sm font-semibold">No halls found matching your filter.</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('home')
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [selectedVenueForBooking, setSelectedVenueForBooking] = useState(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const [userBookings, setUserBookings] = useState([])
 
   const handleNavClick = (tab) => {
     setActiveTab(tab)
     setIsMobileMenuOpen(false)
+  }
+
+  const handleAddBooking = (newBooking) => {
+    setUserBookings((prev) => [newBooking, ...prev])
   }
 
   const venueTypes = [
@@ -141,18 +912,19 @@ export default function App() {
     switch (activeTab) {
       case 'venues':
         return (
-          <ComingSoonPage
-            title="Venue Catalog"
-            description="We are currently cataloging all COEP classrooms, seminar halls, and auditoriums with live interactive seat maps and 360° views."
+          <VenuesPage
+            initialType={selectedType}
+            initialDate={selectedDate}
+            onSelectVenue={(hall) => setSelectedVenueForBooking(hall)}
             onBackHome={() => setActiveTab('home')}
           />
         )
       case 'my-bookings':
         return (
-          <ComingSoonPage
-            title="My Bookings Dashboard"
-            description="Track your pending booking requests, view official approval statuses, and download reservation slips directly from this portal."
+          <MyBookingsPage
+            bookings={userBookings}
             onBackHome={() => setActiveTab('home')}
+            onExploreVenues={() => setActiveTab('venues')}
           />
         )
       case 'about':
@@ -174,12 +946,31 @@ export default function App() {
       default:
         return (
           <>
-            {/* 2. Hero Section */}
-            <section className="relative overflow-hidden pt-6 pb-12 sm:pt-10 sm:pb-16 bg-[rgb(249,248,246)]">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-                  {/* Left Hero Content */}
-                  <div className="lg:col-span-6 xl:col-span-6 space-y-4 sm:space-y-6 z-10 py-2 sm:py-6">
+            {/* 2. Hero Section: Wide Full-Bleed Right Layout */}
+            <section className="relative pt-6 pb-10 sm:pt-8 sm:pb-12 lg:pb-14 bg-[rgb(249,248,246)] z-20">
+              {/* Desktop Full-Bleed Right Image Container with subtle breathing room */}
+              <div className="hidden lg:block absolute top-0 bottom-0 left-[50%] xl:left-[48%] right-0 pointer-events-none select-none z-0 pl-3 xl:pl-4 overflow-hidden">
+                <div className="relative w-full h-full flex items-center justify-end">
+                  {/* Subtle Circular Sky Glow behind the tower */}
+                  <div className="absolute top-4 right-16 w-80 xl:w-96 aspect-square rounded-full bg-gradient-to-tr from-sky-200/50 via-sky-100/35 to-transparent pointer-events-none -z-10"></div>
+                  
+                  {/* Dedicated Building + Sky Wrapper for Birds */}
+                  <div className="relative flex items-center justify-end w-full h-full">
+                    {/* Animated Birds flying behind the building tower */}
+                    <FlyingBirds />
+                    <img
+                      src="/coep_building.png"
+                      alt="COEP Technological University Main Building"
+                      className="relative z-20 w-full h-full object-contain object-right max-h-[580px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  {/* Left Hero Content: Anchored cleanly */}
+                  <div className="lg:col-span-7 xl:col-span-6 space-y-4 sm:space-y-6 py-2 sm:py-6">
                     <div className="inline-flex items-center gap-2 text-slate-500 text-[11px] sm:text-xs font-bold uppercase tracking-widest">
                       COEP TECHNOLOGICAL UNIVERSITY
                     </div>
@@ -260,29 +1051,43 @@ export default function App() {
 
                         <div className="hidden sm:block w-px h-8 bg-slate-200"></div>
 
-                        {/* Date Picker */}
+                        {/* Date Picker Trigger with Custom In-Website Calendar Popup */}
                         <div className="relative flex-1 w-full">
-                          <label className="w-full h-12 sm:h-13 px-3.5 rounded-xl bg-transparent hover:bg-slate-50 flex items-center justify-between gap-2 transition-colors cursor-pointer">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsDatePickerOpen(!isDatePickerOpen)
+                              setIsTypeDropdownOpen(false)
+                            }}
+                            className={`w-full h-12 sm:h-13 px-3.5 rounded-xl transition-colors cursor-pointer text-left flex items-center justify-between gap-2 ${
+                              isDatePickerOpen ? 'bg-blue-50/70 ring-1 ring-blue-500/30' : 'bg-transparent hover:bg-slate-50'
+                            }`}
+                          >
                             <div className="flex items-center gap-2.5 overflow-hidden">
-                              <Calendar className="w-4.5 h-4.5 text-slate-400 shrink-0" />
+                              <Calendar className={`w-4.5 h-4.5 shrink-0 ${selectedDate || isDatePickerOpen ? 'text-blue-600' : 'text-slate-400'}`} />
                               <div className="text-left">
                                 <div className="text-[10px] sm:text-[11px] font-bold text-slate-900 leading-tight">
                                   Date
                                 </div>
-                                <div className="text-xs text-slate-500 truncate">
-                                  {selectedDate || 'Select Date'}
+                                <div className={`text-xs truncate ${selectedDate ? 'font-bold text-blue-600' : 'text-slate-500'}`}>
+                                  {formatDateDisplay(selectedDate)}
                                 </div>
                               </div>
                             </div>
-                            <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
-                            {/* Hidden native date picker overlay */}
-                            <input
-                              type="date"
-                              value={selectedDate}
-                              onChange={(e) => setSelectedDate(e.target.value)}
-                              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                            <ChevronDown className={`w-4 h-4 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180 text-blue-600' : 'text-slate-400'}`} />
+                          </button>
+
+                          {/* Custom Website-Styled Calendar Dropdown */}
+                          {isDatePickerOpen && (
+                            <CustomCalendarPicker
+                              selectedDate={selectedDate}
+                              onSelectDate={(newDate) => {
+                                setSelectedDate(newDate)
+                                setIsDatePickerOpen(false)
+                              }}
+                              onClose={() => setIsDatePickerOpen(false)}
                             />
-                          </label>
+                          )}
                         </div>
 
                         {/* Search Button */}
@@ -295,24 +1100,39 @@ export default function App() {
                         </button>
                       </div>
                     </div>
+
+                    {/* Quick Campus Stats Pills */}
+                    <div className="pt-1 flex flex-wrap items-center gap-5 text-xs text-slate-500">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span className="font-semibold text-slate-700">60+ Venues Active</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span>Conflict-Free Booking</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span>Instant Request Tracking</span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Right Hero Illustration */}
-                  <div className="lg:col-span-6 xl:col-span-6 relative flex items-center justify-center lg:justify-end mt-4 lg:mt-0 w-full overflow-hidden lg:overflow-visible">
-                    <div className="w-full max-w-sm sm:max-w-md lg:max-w-none lg:w-[135%] xl:w-[145%] lg:-mr-24 xl:-mr-36 sm:translate-x-4 lg:translate-x-8 pointer-events-none select-none">
-                      <img
-                        src="/coep_building.png"
-                        alt="COEP Technological University Main Building"
-                        className="w-full h-auto object-contain scale-100 lg:scale-115 origin-center lg:origin-right"
-                      />
-                    </div>
+                  {/* Mobile-Only Illustration */}
+                  <div className="block lg:hidden mt-4 w-full relative overflow-hidden">
+                    <FlyingBirds />
+                    <img
+                      src="/coep_building.png"
+                      alt="COEP Technological University Main Building"
+                      className="relative z-20 w-full h-auto object-contain max-h-[360px] mx-auto select-none pointer-events-none"
+                    />
                   </div>
                 </div>
               </div>
             </section>
 
             {/* 3. Popular Venue Types Section */}
-            <section className="py-12 sm:py-16 bg-[rgb(249,248,246)]">
+            <section className="relative z-0 pt-4 pb-12 sm:pt-6 sm:pb-14 bg-[rgb(249,248,246)]">
               <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
                   <div>
@@ -547,28 +1367,28 @@ export default function App() {
         {renderTabContent()}
       </main>
 
-      {/* Modal for Venue Cards Click -> Coming Soon */}
+      {/* Interactive Venue Reservation Modal */}
       {selectedVenueForBooking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200 text-center animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-14 h-14 rounded-xl bg-blue-50 border border-blue-200/80 text-blue-600 flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-7 h-7" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              {selectedVenueForBooking} Details
-            </h3>
-            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-              Real-time booking and slot reservation for {selectedVenueForBooking.toLowerCase()} is currently under development.
-            </p>
-            <button
-              type="button"
-              onClick={() => setSelectedVenueForBooking(null)}
-              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors cursor-pointer"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <VenueBookingModal
+          venue={
+            typeof selectedVenueForBooking === 'object'
+              ? selectedVenueForBooking
+              : coepVenuesData.find(
+                  (v) =>
+                    v.new_hall_name === selectedVenueForBooking ||
+                    v.old_hall_name === selectedVenueForBooking
+                ) || {
+                  new_hall_name: selectedVenueForBooking,
+                  department: 'COEP Technological University',
+                  benches: 30
+                }
+          }
+          defaultDate={selectedDate}
+          onClose={() => setSelectedVenueForBooking(null)}
+          onSubmitBooking={(bookingData) => {
+            handleAddBooking(bookingData)
+          }}
+        />
       )}
 
       {/* 5. Enhanced Campus Footer */}
