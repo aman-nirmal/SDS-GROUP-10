@@ -87,7 +87,7 @@ function VenueTypeCard({ icon: Icon, title, description, count }) {
   )
 }
 
-import { coepVenuesData } from './data/venues'
+import { supabase } from './lib/supabase'
 
 // Custom Calendar Picker matching Website Design System
 function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
@@ -697,21 +697,21 @@ function ComingSoonPage({ title, description, onBackHome }) {
 }
 
 // Full Interactive Venue Catalog Page
-function VenuesPage({ initialType, initialDate, onSelectVenue, onBackHome }) {
+function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
   const [filterDept, setFilterDept] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
   const [filterType, setFilterType] = useState(initialType || 'All Venues')
 
-  const departments = ['All', ...new Set(coepVenuesData.map((v) => v.department))]
+  const departments = ['All', ...new Set(venues.map((v) => v.department).filter(Boolean))]
 
-  const filteredVenues = coepVenuesData.filter((venue) => {
+  const filteredVenues = venues.filter((venue) => {
     const matchesDept = filterDept === 'All' || venue.department === filterDept
     const matchesType =
       filterType === 'All Venues' || venue.type === filterType
     const matchesSearch =
       (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      venue.department.toLowerCase().includes(searchQuery.toLowerCase())
+      (venue.department && venue.department.toLowerCase().includes(searchQuery.toLowerCase()))
     return matchesDept && matchesType && matchesSearch
   })
 
@@ -799,53 +799,62 @@ function VenuesPage({ initialType, initialDate, onSelectVenue, onBackHome }) {
         </div>
       </div>
 
-      {/* Venues Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {filteredVenues.map((venue, idx) => (
-          <div
-            key={idx}
-            className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
-                  {venue.new_hall_name || 'Passage Hall'}
-                </span>
-                <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-                  {venue.benches} Benches ({venue.benches * 2} Capacity)
-                </span>
+      {/* Venues Grid / States */}
+      {isLoading ? (
+        <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-slate-600 text-sm font-semibold">Loading campus venues...</p>
+        </div>
+      ) : filteredVenues.length === 0 ? (
+        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+          <p className="text-slate-500 text-sm font-semibold">
+            {venues.length === 0
+              ? 'No venues found. Please make sure your Supabase project is active and seeded.'
+              : 'No halls found matching your filter.'}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {filteredVenues.map((venue, idx) => (
+            <div
+              key={venue.id || idx}
+              className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+                    {venue.new_hall_name || 'Passage Hall'}
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                    {venue.benches} Benches ({venue.capacity || venue.benches * 2} Capacity)
+                  </span>
+                </div>
+
+                <h3 className="font-bold text-slate-900 text-base mb-1">
+                  {venue.old_hall_name || venue.new_hall_name}
+                </h3>
+                <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
+                  <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <span className="truncate">{venue.department}</span>
+                </p>
               </div>
 
-              <h3 className="font-bold text-slate-900 text-base mb-1">
-                {venue.old_hall_name || venue.new_hall_name}
-              </h3>
-              <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-                <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="truncate">{venue.department}</span>
-              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Available
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onSelectVenue(venue)}
+                  className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <span>Book Slot</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </div>
             </div>
-
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                Available
-              </span>
-              <button
-                type="button"
-                onClick={() => onSelectVenue(venue)}
-                className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-              >
-                <span>Book Slot</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredVenues.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-slate-500 text-sm font-semibold">No halls found matching your filter.</p>
+          ))}
         </div>
       )}
     </div>
@@ -853,6 +862,8 @@ function VenuesPage({ initialType, initialDate, onSelectVenue, onBackHome }) {
 }
 
 export default function App() {
+  const [venues, setVenues] = useState([])
+  const [isLoadingVenues, setIsLoadingVenues] = useState(true)
   const [activeTab, setActiveTab] = useState('home')
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
@@ -862,6 +873,39 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const [userBookings, setUserBookings] = useState([])
+
+  useEffect(() => {
+    async function loadVenues() {
+      if (!supabase) {
+        setIsLoadingVenues(false)
+        return
+      }
+
+      try {
+        setIsLoadingVenues(true)
+        const { data, error } = await supabase
+          .from('venues')
+          .select('*')
+          .eq('is_active', true)
+          .order('new_hall_name', { ascending: true })
+
+        if (error) {
+          console.error('Could not fetch venues from Supabase:', error.message)
+          return
+        }
+
+        if (data) {
+          setVenues(data)
+        }
+      } catch (err) {
+        console.error('Supabase fetch failed:', err)
+      } finally {
+        setIsLoadingVenues(false)
+      }
+    }
+
+    loadVenues()
+  }, [])
 
   const handleNavClick = (tab) => {
     setActiveTab(tab)
@@ -913,6 +957,8 @@ export default function App() {
       case 'venues':
         return (
           <VenuesPage
+            venues={venues}
+            isLoading={isLoadingVenues}
             initialType={selectedType}
             initialDate={selectedDate}
             onSelectVenue={(hall) => setSelectedVenueForBooking(hall)}
@@ -1373,7 +1419,7 @@ export default function App() {
           venue={
             typeof selectedVenueForBooking === 'object'
               ? selectedVenueForBooking
-              : coepVenuesData.find(
+              : venues.find(
                   (v) =>
                     v.new_hall_name === selectedVenueForBooking ||
                     v.old_hall_name === selectedVenueForBooking
