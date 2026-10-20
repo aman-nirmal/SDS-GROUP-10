@@ -20,7 +20,9 @@ import {
   X,
   FileText,
   AlertCircle,
-  ShieldCheck
+  ShieldCheck,
+  LayoutGrid,
+  CalendarDays
 } from 'lucide-react'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
@@ -664,6 +666,577 @@ function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
   )
 }
 
+
+
+// Interactive Events Calendar View Component
+function EventsCalendarView({ events = [], onExploreVenues }) {
+  // Academic session default date (October 2026)
+  const [viewDate, setViewDate] = useState(new Date(2026, 9, 1))
+  const [selectedDate, setSelectedDate] = useState('2026-10-25')
+
+  const year = viewDate.getFullYear()
+  const month = viewDate.getMonth()
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ]
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+  const firstDayIndex = new Date(year, month, 1).getDay()
+  const daysInCurrentMonth = new Date(year, month + 1, 0).getDate()
+  const daysInPrevMonth = new Date(year, month, 0).getDate()
+
+  const prevMonthDays = []
+  for (let i = firstDayIndex - 1; i >= 0; i--) {
+    prevMonthDays.push(daysInPrevMonth - i)
+  }
+
+  const totalSlots = Math.ceil((firstDayIndex + daysInCurrentMonth) / 7) * 7
+  const nextMonthDaysCount = totalSlots - (firstDayIndex + daysInCurrentMonth)
+
+  const handlePrevMonth = () => setViewDate(new Date(year, month - 1, 1))
+  const handleNextMonth = () => setViewDate(new Date(year, month + 1, 1))
+  const handleToday = () => {
+    setViewDate(new Date(2026, 9, 1))
+    setSelectedDate('2026-10-25')
+  }
+
+  const getEventsForDate = (dateStr) => {
+    return events.filter((e) => e.event_date === dateStr)
+  }
+
+  const selectedDayEvents = getEventsForDate(selectedDate)
+
+  const getCategoryDotColor = (category) => {
+    switch (category) {
+      case 'Competition':
+        return 'bg-purple-500'
+      case 'Workshop':
+        return 'bg-emerald-500'
+      case 'Club Event':
+        return 'bg-amber-500'
+      case 'College Event':
+        return 'bg-blue-500'
+      default:
+        return 'bg-slate-500'
+    }
+  }
+
+  const getCategoryBadgeClass = (category) => {
+    switch (category) {
+      case 'Competition':
+        return 'bg-purple-50 text-purple-700 border-purple-200'
+      case 'Workshop':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      case 'Club Event':
+        return 'bg-amber-50 text-amber-700 border-amber-200'
+      case 'College Event':
+        return 'bg-blue-50 text-blue-700 border-blue-200'
+      default:
+        return 'bg-slate-50 text-slate-700 border-slate-200'
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Calendar Navigation Bar */}
+      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handlePrevMonth}
+              className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer"
+              title="Previous Month"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleNextMonth}
+              className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer"
+              title="Next Month"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+          <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+            {monthNames[month]} {year}
+          </h2>
+          <button
+            type="button"
+            onClick={handleToday}
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+          >
+            Today
+          </button>
+        </div>
+
+        {/* Category Legend */}
+        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+            <span className="font-medium">Competition</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span className="font-medium">Workshop</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <span className="font-medium">Club Event</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid: Calendar on Left, Selected Day Agenda on Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Monthly Calendar View */}
+        <div className="lg:col-span-8 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs">
+          {/* Days of Week Header */}
+          <div className="grid grid-cols-7 mb-2 text-center">
+            {daysOfWeek.map((day, idx) => (
+              <div
+                key={idx}
+                className="py-2 text-xs font-bold text-slate-400 uppercase tracking-wider"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Day Cells */}
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            {/* Previous Month Trailing Days */}
+            {prevMonthDays.map((d, i) => (
+              <div
+                key={`prev-${i}`}
+                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 border border-transparent text-slate-300 text-xs font-medium select-none"
+              >
+                {d}
+              </div>
+            ))}
+
+            {/* Current Month Days */}
+            {Array.from({ length: daysInCurrentMonth }).map((_, i) => {
+              const dayNum = i + 1
+              const mm = String(month + 1).padStart(2, '0')
+              const dd = String(dayNum).padStart(2, '0')
+              const dateStr = `${year}-${mm}-${dd}`
+              const dayEvents = getEventsForDate(dateStr)
+              const isSelected = selectedDate === dateStr
+              const hasEvents = dayEvents.length > 0
+
+              return (
+                <button
+                  key={dayNum}
+                  type="button"
+                  onClick={() => setSelectedDate(dateStr)}
+                  className={`min-h-[72px] sm:min-h-[88px] p-2 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between border ${
+                    isSelected
+                      ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-500/20'
+                      : hasEvents
+                      ? 'border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs'
+                      : 'border-slate-100 bg-white hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span
+                      className={`text-xs font-bold ${
+                        isSelected
+                          ? 'text-blue-600'
+                          : hasEvents
+                          ? 'text-slate-900'
+                          : 'text-slate-600'
+                      }`}
+                    >
+                      {dayNum}
+                    </span>
+                    {hasEvents && (
+                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                    )}
+                  </div>
+
+                  {/* Compact Event Pills in Cell */}
+                  <div className="space-y-1 w-full overflow-hidden">
+                    {dayEvents.slice(0, 2).map((ev) => (
+                      <div
+                        key={ev.id || ev.title}
+                        className="truncate text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-800 flex items-center gap-1"
+                        title={`${ev.title} (${ev.venue_name})`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full shrink-0 ${getCategoryDotColor(
+                            ev.category
+                          )}`}
+                        ></span>
+                        <span className="truncate">{ev.title}</span>
+                      </div>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <span className="text-[9px] font-bold text-slate-400 block">
+                        +{dayEvents.length - 2} more
+                      </span>
+                    )}
+                  </div>
+                </button>
+              )
+            })}
+
+            {/* Next Month Leading Days */}
+            {Array.from({ length: nextMonthDaysCount }).map((_, i) => (
+              <div
+                key={`next-${i}`}
+                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 border border-transparent text-slate-300 text-xs font-medium select-none"
+              >
+                {i + 1}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Date Agenda Side Panel */}
+        <div className="lg:col-span-4 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                Selected Date
+              </span>
+              <h3 className="text-base font-extrabold text-slate-900">
+                {formatDateDisplay(selectedDate)}
+              </h3>
+            </div>
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+              {selectedDayEvents.length} {selectedDayEvents.length === 1 ? 'Event' : 'Events'}
+            </span>
+          </div>
+
+          {/* List of events on this date */}
+          <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+            {selectedDayEvents.map((ev) => (
+              <div
+                key={ev.id || ev.title}
+                className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-2.5 hover:bg-slate-50 transition-colors"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getCategoryBadgeClass(
+                      ev.category
+                    )}`}
+                  >
+                    {ev.category}
+                  </span>
+                  <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Confirmed
+                  </span>
+                </div>
+
+                <h4 className="font-bold text-slate-900 text-sm leading-snug">
+                  {ev.title}
+                </h4>
+
+                <p className="text-xs font-semibold text-blue-600">
+                  {ev.club_name || ev.organizer}
+                </p>
+
+                <div className="space-y-1.5 pt-1.5 border-t border-slate-200/70 text-xs text-slate-600">
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{ev.time_slot}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span className="font-semibold text-slate-800">
+                      Venue: {ev.venue_name}
+                    </span>
+                  </div>
+                  {ev.expected_attendees && (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span>{ev.expected_attendees} Expected Attendees</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={onExploreVenues}
+                    className="w-full h-8 rounded-lg bg-white border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 text-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <span>Check Hall Details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {selectedDayEvents.length === 0 && (
+              <div className="text-center py-12 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+                <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                <p className="text-xs font-semibold text-slate-600 mb-1">
+                  No events scheduled on this date
+                </p>
+                <p className="text-[11px] text-slate-400 mb-4">
+                  All halls and auditoriums are open for reservation.
+                </p>
+                <button
+                  type="button"
+                  onClick={onExploreVenues}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                >
+                  <Building className="w-3.5 h-3.5" />
+                  <span>Browse Venues</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Campus Events Page Component (Auto-populated from confirmed club & college bookings)
+function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHome }) {
+  const [viewMode, setViewMode] = useState('grid')
+  const [activeCategory, setActiveCategory] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const categories = ['All', 'Competition', 'Workshop', 'Club Event', 'College Event']
+
+  const filteredEvents = events.filter((event) => {
+    const matchesCategory =
+      activeCategory === 'All' || event.category === activeCategory
+    const matchesSearch =
+      (event.title && event.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (event.club_name && event.club_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (event.organizer && event.organizer.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (event.venue_name && event.venue_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (event.department && event.department.toLowerCase().includes(searchQuery.toLowerCase()))
+
+    return matchesCategory && matchesSearch
+  })
+
+  const getCategoryBadgeClass = (category) => {
+    switch (category) {
+      case 'Competition':
+        return 'bg-purple-50 text-purple-700 border-purple-200'
+      case 'Workshop':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      case 'Club Event':
+        return 'bg-amber-50 text-amber-700 border-amber-200'
+      case 'College Event':
+        return 'bg-blue-50 text-blue-700 border-blue-200'
+      default:
+        return 'bg-slate-50 text-slate-700 border-slate-200'
+    }
+  }
+
+  return (
+    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <button
+            type="button"
+            onClick={onBackHome}
+            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+            <span>Back to Home</span>
+          </button>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              Campus Events
+            </h1>
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-150">
+              Live Schedule
+            </span>
+          </div>
+          <p className="text-sm text-slate-500 mt-1">
+            Browse confirmed club fests, technical workshops, competitions, and college events scheduled across campus.
+          </p>
+        </div>
+
+        {/* View Switcher & Search Input */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          {/* Grid vs Calendar Toggle */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-white text-blue-600 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Cards</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('calendar')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                viewMode === 'calendar'
+                  ? 'bg-white text-blue-600 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <CalendarDays className="w-3.5 h-3.5" />
+              <span>Calendar</span>
+            </button>
+          </div>
+
+          {/* Search Input (visible in Grid View) */}
+          {viewMode === 'grid' && (
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search event, club, or hall"
+                className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors shadow-xs"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Filter Tabs (Grid Mode Only) */}
+      {viewMode === 'grid' && (
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none">
+        {categories.map((category) => (
+          <button
+            key={category}
+            type="button"
+            onClick={() => setActiveCategory(category)}
+            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+              activeCategory === category
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+      )}
+
+      {/* Calendar or Cards View */}
+      {viewMode === 'calendar' ? (
+        <EventsCalendarView
+          events={events}
+          onExploreVenues={onExploreVenues}
+        />
+      ) : isLoading ? (
+        <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-slate-600 text-sm font-semibold">Loading campus events from Supabase...</p>
+        </div>
+      ) : filteredEvents.length === 0 ? (
+        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+          <p className="text-slate-500 text-sm font-semibold">
+            {events.length === 0
+              ? 'No campus events currently scheduled in the database.'
+              : 'No events match your selected filter.'}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEvents.map((event) => (
+            <div
+              key={event.id || event.booking_id}
+              className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+            >
+              <div>
+                {/* Category & Status Bar */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span
+                    className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border ${getCategoryBadgeClass(
+                      event.category
+                    )}`}
+                  >
+                    {event.category || 'Campus Event'}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-150">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {event.status || 'Confirmed'}
+                  </span>
+                </div>
+
+                {/* Event Title */}
+                <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-1.5 line-clamp-2">
+                  {event.title}
+                </h3>
+
+                {/* Organizer / Club */}
+                <div className="text-xs font-semibold text-blue-600 mb-3 flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 shrink-0 text-blue-500" />
+                  <span className="truncate">
+                    {event.club_name || event.organizer}
+                  </span>
+                </div>
+
+                {/* Description */}
+                {event.description && (
+                  <p className="text-xs text-slate-500 leading-relaxed mb-4 line-clamp-3">
+                    {event.description}
+                  </p>
+                )}
+
+                {/* Event Metadata details */}
+                <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span className="font-medium">{formatDateDisplay(event.event_date)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{event.time_slot}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span className="font-semibold text-slate-800">
+                      Venue: {event.venue_name}
+                    </span>
+                  </div>
+                  {event.expected_attendees && (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span>{event.expected_attendees} Expected Attendees</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Card Footer */}
+              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">
+                  {event.department}
+                </span>
+                <button
+                  type="button"
+                  onClick={onExploreVenues}
+                  className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <span>Explore Venues</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Coming Soon Placeholder Component
 function ComingSoonPage({ title, description, onBackHome }) {
   return (
@@ -869,6 +1442,55 @@ export default function App() {
 
   const [userBookings, setUserBookings] = useState([])
 
+  const sampleEventsFallback = [
+    {
+      id: 'evt-1',
+      title: "MindSpark '26: 24-Hour Campus Hackathon",
+      organizer: 'MindSpark Secretary',
+      club_name: 'MindSpark',
+      department: 'Student Gymkhana',
+      category: 'Competition',
+      venue_name: 'ND01',
+      event_date: '2026-10-25',
+      time_slot: '09:00 AM - 09:00 PM',
+      expected_attendees: 180,
+      description: 'Flagship hackathon with students building real-world software and hardware prototypes.',
+      status: 'Confirmed'
+    },
+    {
+      id: 'evt-2',
+      title: 'Autonomous Drone Navigation & ROS Workshop',
+      organizer: 'RSC Coordinator',
+      club_name: 'Robot Study Circle (RSC)',
+      department: 'Electronics and Telecommunication Engineering',
+      category: 'Workshop',
+      venue_name: 'NC24',
+      event_date: '2026-10-24',
+      time_slot: '02:00 PM - 05:00 PM',
+      expected_attendees: 70,
+      description: 'Practical workshop on Robot Operating System, LIDAR mapping, and flight controllers.',
+      status: 'Confirmed'
+    },
+    {
+      id: 'evt-3',
+      title: 'E-Cell Pune Startup Pitch Fest 2026',
+      organizer: 'Incubation Officer',
+      club_name: 'BHAU Institute',
+      department: 'Manufacturing Engineering and Industrial Management',
+      category: 'Club Event',
+      venue_name: 'SC10',
+      event_date: '2026-10-26',
+      time_slot: '10:00 AM - 01:00 PM',
+      expected_attendees: 90,
+      description: 'Selected student and faculty startups pitch to angel investors and industry mentors.',
+      status: 'Confirmed'
+    }
+  ]
+
+  const [events, setEvents] = useState(sampleEventsFallback)
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false)
+
+
   useEffect(() => {
     async function loadVenues() {
       if (!supabase) {
@@ -901,6 +1523,36 @@ export default function App() {
 
     loadVenues()
   }, [])
+
+  useEffect(() => {
+    async function loadEvents() {
+      if (!supabase) return
+
+      try {
+        setIsLoadingEvents(true)
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .order('event_date', { ascending: true })
+
+        if (error) {
+          console.warn('Could not fetch events from Supabase, using fallback:', error.message)
+          return
+        }
+
+        if (data && data.length > 0) {
+          setEvents(data)
+        }
+      } catch (err) {
+        console.warn('Supabase events fetch failed:', err)
+      } finally {
+        setIsLoadingEvents(false)
+      }
+    }
+
+    loadEvents()
+  }, [])
+
 
   const handleNavClick = (tab) => {
     setActiveTab(tab)
@@ -957,6 +1609,15 @@ export default function App() {
             initialType={selectedType}
             initialDate={selectedDate}
             onSelectVenue={(hall) => setSelectedVenueForBooking(hall)}
+            onBackHome={() => setActiveTab('home')}
+          />
+        )
+      case 'events':
+        return (
+          <EventsPage
+            events={events}
+            isLoading={isLoadingEvents}
+            onExploreVenues={() => setActiveTab('venues')}
             onBackHome={() => setActiveTab('home')}
           />
         )
@@ -1314,6 +1975,17 @@ export default function App() {
             </button>
             <button
               type="button"
+              onClick={() => handleNavClick('events')}
+              className={`transition-colors cursor-pointer relative pb-1 ${
+                activeTab === 'events'
+                  ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              Events
+            </button>
+            <button
+              type="button"
               onClick={() => handleNavClick('my-bookings')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'my-bookings'
                 ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
@@ -1383,6 +2055,15 @@ export default function App() {
                 }`}
             >
               Venues
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('events')}
+              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${
+                activeTab === 'events' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              Events
             </button>
             <button
               type="button"
