@@ -22,8 +22,12 @@ import {
   AlertCircle,
   ShieldCheck,
   LayoutGrid,
-  CalendarDays
+  CalendarDays,
+  Mail,
+  RefreshCw
 } from 'lucide-react'
+import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
+import { authApi } from './lib/api'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -2298,335 +2302,522 @@ const handleNavClick = (tab) => {
   )
 }
 
-const mockEmails = [
-  'admin@coeptech.ac.in',
-  'faculty@coeptech.ac.in'
+function MicrosoftLogo({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 1H10V10H1V1Z" fill="#F25022"/>
+      <path d="M11 1H20V10H11V1Z" fill="#7FBA00"/>
+      <path d="M1 11H10V20H1V11Z" fill="#00A4EF"/>
+      <path d="M11 11H20V20H11V11Z" fill="#FFB900"/>
+    </svg>
+  )
+}
+
+function OutlookLogo({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14.5 3H21.5C22.0523 3 22.5 3.44772 22.5 4V20C22.5 20.5523 22.0523 21 21.5 21H14.5V3Z" fill="#0078D4"/>
+      <path d="M14.5 12L22.5 7V17L14.5 12Z" fill="#005A9E"/>
+      <path d="M1.5 6C1.5 4.89543 2.39543 4 3.5 4H14.5V20H3.5C2.39543 20 1.5 19.1046 1.5 18V6Z" fill="#0078D4"/>
+      <circle cx="8" cy="12" r="3.5" fill="white"/>
+      <circle cx="8" cy="12" r="2" fill="#0078D4"/>
+    </svg>
+  )
+}
+
+const OFFICIAL_COEP_ACCOUNTS = [
+  {
+    role: 'Administrator',
+    email: 'admin@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Central Estate Admin',
+    department: 'Central Estate & Infrastructure',
+    id: 'ADM-001'
+  },
+  {
+    role: 'Faculty',
+    email: 'faculty@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. V. K. Kulkarni',
+    department: 'Computer Engineering',
+    id: 'FAC-1042'
+  },
+  {
+    role: 'Club Lead',
+    email: 'mindspark@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'MindSpark Secretarial Lead',
+    department: 'Technical Events Secretariat',
+    id: 'CLUB-MS-26'
+  },
+  {
+    role: 'Student',
+    email: 'student@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Aman Nirmal',
+    department: 'Computer Engineering',
+    id: 'STU-2026-101'
+  }
 ]
 
 export function LoginForm({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
+  const [authMethod, setAuthMethod] = useState('password') // 'password' | 'otp'
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [role, setRole] = useState('Faculty Coordinator')
-  const [userStatus, setUserStatus] = useState(null)
+  const [role] = useState('Student')
   const [errorMessage, setErrorMessage] = useState('')
+  const [successNotice, setSuccessNotice] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
-  const timerRef = React.useRef(null)
+
+  // OTP flow states
+  const [otpCode, setOtpCode] = useState('')
+  const [isOtpSent, setIsOtpSent] = useState(false)
+  const [resendCooldown, setResendCooldown] = useState(0)
 
   useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
+    let interval = null
+    if (resendCooldown > 0) {
+      interval = setInterval(() => {
+        setResendCooldown((prev) => prev - 1)
+      }, 1000)
     }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [resendCooldown])
+
+  useEffect(() => {
+    clearStaleMsalInteractionStatus()
   }, [])
 
-  const verifyEmailInput = () => {
-    const trimmedEmail = email.trim().toLowerCase()
-
-    if (!trimmedEmail || !trimmedEmail.endsWith('@coeptech.ac.in')) {
-      setUserStatus(null)
-      setErrorMessage('Please use your official @coeptech.ac.in email address.')
-      return false
-    }
-
+  // 1. One-Click Authentic Microsoft 365 / Outlook Sign-In
+  const handleOutlookSignIn = async () => {
     setErrorMessage('')
-    if (mockEmails.includes(trimmedEmail)) {
-      setUserStatus('existing')
-    } else {
-      setUserStatus('new')
+    setSuccessNotice('')
+    setIsVerifying(true)
+
+    try {
+      const result = await loginWithOutlook()
+      if (result && result.userProfile) {
+        setSuccessNotice(`Signed in as ${result.userProfile.name}`)
+        try {
+          await authApi.outlookLogin(result.userProfile.email, result.userProfile.role)
+        } catch {
+          // Sync fallback
+        }
+        if (typeof onLoginSuccess === 'function') {
+          onLoginSuccess(result.userProfile)
+        }
+      }
+    } catch (err) {
+      if (err.code === 'USER_CANCELLED') {
+        setErrorMessage('Microsoft sign-in was closed before completion.')
+      } else if (err.code === 'NON_INSTITUTIONAL_DOMAIN') {
+        setErrorMessage(err.message)
+      } else if (err.message && err.message.includes('AADSTS50011')) {
+        setErrorMessage('Azure Redirect URI mismatch. Ensure http://localhost:5173/ is registered as SPA in Azure.')
+      } else {
+        setErrorMessage(err.message || 'Outlook authentication could not be completed.')
+      }
+    } finally {
+      setIsVerifying(false)
     }
-    return true
   }
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value)
-    if (errorMessage) setErrorMessage('')
-    if (userStatus) {
-      setUserStatus(null)
-      setPassword('')
-      setConfirmPassword('')
-    }
-  }
-
-  const handleEmailBlur = () => {
-    if (email.trim() && !userStatus) {
-      verifyEmailInput()
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  // 2. Standard Institutional Password Sign-In
+  const handlePasswordSubmit = async (e) => {
+    if (e) e.preventDefault()
     setErrorMessage('')
+    setSuccessNotice('')
 
     const trimmedEmail = email.trim().toLowerCase()
-
-    if (!trimmedEmail || !trimmedEmail.endsWith('@coeptech.ac.in')) {
-      setUserStatus(null)
-      setErrorMessage('Please use your official @coeptech.ac.in email address.')
+    if (!trimmedEmail) {
+      setErrorMessage('Please enter your university email address.')
       return
     }
 
-    if (!userStatus) {
-      verifyEmailInput()
+    if (!trimmedEmail.endsWith('@coeptech.ac.in') && !trimmedEmail.endsWith('@coep.ac.in')) {
+      setErrorMessage('Please use your official @coeptech.ac.in or @coep.ac.in university email.')
       return
     }
 
-    if (userStatus === 'existing') {
-      if (!password.trim()) {
-        setErrorMessage('Password cannot be blank.')
+    if (!password.trim()) {
+      setErrorMessage('Password cannot be blank.')
+      return
+    }
+
+    setIsVerifying(true)
+
+    // Check predefined institutional accounts
+    const matchedAccount = OFFICIAL_COEP_ACCOUNTS.find((acc) => acc.email === trimmedEmail)
+    if (matchedAccount) {
+      if (password !== matchedAccount.password) {
+        setIsVerifying(false)
+        setErrorMessage('Incorrect password. Please verify your credentials.')
         return
       }
 
-      setIsVerifying(true)
-      timerRef.current = setTimeout(() => {
+      const userProfile = {
+        id: matchedAccount.id,
+        name: matchedAccount.name,
+        email: matchedAccount.email,
+        role: matchedAccount.role,
+        department: matchedAccount.department,
+        authProvider: 'password',
+        authenticatedAt: new Date().toISOString()
+      }
+
+      try {
+        await authApi.login(trimmedEmail, password, matchedAccount.role)
+      } catch {
+        // Fallback
+      }
+
+      setTimeout(() => {
         setIsVerifying(false)
         if (typeof onLoginSuccess === 'function') {
-          onLoginSuccess({
-            email: trimmedEmail,
-            role: 'Existing User',
-            isNewUser: false
-          })
+          onLoginSuccess(userProfile)
         }
-      }, 900)
+      }, 350)
       return
     }
 
-    if (userStatus === 'new') {
-      if (!password.trim()) {
-        setErrorMessage('Password cannot be blank.')
-        return
-      }
-      if (password !== confirmPassword) {
-        setErrorMessage('Passwords do not match. Please verify your confirmation password.')
-        return
+    // Other valid campus users
+    try {
+      const res = await authApi.login(trimmedEmail, password, role)
+      const userProfile = res?.user || {
+        id: `COEP-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: trimmedEmail.split('@')[0],
+        email: trimmedEmail,
+        role: trimmedEmail.includes('admin') ? 'Administrator' : trimmedEmail.includes('faculty') ? 'Faculty' : role,
+        department: 'COEP Technological University',
+        authProvider: 'password',
+        authenticatedAt: new Date().toISOString()
       }
 
-      setIsVerifying(true)
-      timerRef.current = setTimeout(() => {
+      setTimeout(() => {
         setIsVerifying(false)
         if (typeof onLoginSuccess === 'function') {
-          onLoginSuccess({
-            email: trimmedEmail,
-            role,
-            isNewUser: true
-          })
+          onLoginSuccess(userProfile)
         }
-      }, 900)
+      }, 350)
+    } catch (err) {
+      setIsVerifying(false)
+      setErrorMessage(err.message || 'Authentication failed. Please verify your credentials.')
+    }
+  }
+
+  // 3. Dispatch 6-digit OTP
+  const handleSendOtp = async () => {
+    setErrorMessage('')
+    const trimmedEmail = email.trim().toLowerCase()
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)
+    if (!trimmedEmail || !isValidEmail) {
+      setErrorMessage('Please enter a valid email address.')
+      return
+    }
+
+    setIsVerifying(true)
+    try {
+      const res = await authApi.sendOtp(trimmedEmail)
+      setIsOtpSent(true)
+      setResendCooldown(45)
+      setSuccessNotice(res.message || `Verification code sent to ${trimmedEmail}`)
+    } catch (err) {
+      setErrorMessage(err.message || 'Failed to dispatch verification email.')
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  // 4. Verify entered 6-digit OTP code
+  const handleVerifyOtp = async (e) => {
+    if (e) e.preventDefault()
+    setErrorMessage('')
+
+    if (!otpCode.trim() || otpCode.trim().length < 6) {
+      setErrorMessage('Please enter the full 6-digit verification code.')
+      return
+    }
+
+    setIsVerifying(true)
+    try {
+      const res = await authApi.verifyOtp(email.trim().toLowerCase(), otpCode.trim(), role)
+      if (res.user && typeof onLoginSuccess === 'function') {
+        onLoginSuccess(res.user)
+      }
+    } catch (err) {
+      setErrorMessage(err.message || 'Invalid or expired verification code.')
+    } finally {
+      setIsVerifying(false)
     }
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 sm:p-8 rounded-2xl bg-[rgb(249,248,246)] text-slate-900 border border-slate-200 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-xl font-bold tracking-tight text-slate-900">
-          {userStatus === 'new'
-            ? 'Create Account'
-            : userStatus === 'existing'
-              ? 'Welcome Back'
-              : 'COEP Sign In'}
+    <div className="w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-white text-slate-900 border border-slate-200 shadow-xl transition-all">
+      {/* Header */}
+      <div className="mb-6 text-center sm:text-left">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900">
+          COEP Campus Sign In
         </h2>
-        <p className="text-xs text-slate-600 mt-1">
-          {userStatus === 'new'
-            ? 'Complete your profile to register for campus venue bookings.'
-            : userStatus === 'existing'
-              ? 'Enter your password to access your reservations.'
-              : 'Enter your official university email to continue.'}
+        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+          Access campus venues, auditoriums, and reservation records.
         </p>
       </div>
 
+      {/* Prominent "Sign in with Outlook" SSO Action Button */}
+      <div className="mb-5">
+        <button
+          type="button"
+          onClick={handleOutlookSignIn}
+          disabled={isVerifying}
+          className="w-full h-12 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wide transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-3 cursor-pointer disabled:opacity-75"
+        >
+          <div className="flex items-center gap-2">
+            <MicrosoftLogo className="w-4 h-4" />
+            <OutlookLogo className="w-4 h-4" />
+          </div>
+          <span>{isVerifying ? 'Authenticating with Microsoft...' : 'Sign in with Microsoft 365 / Outlook'}</span>
+        </button>
+      </div>
+
+      {/* Visual Divider */}
+      <div className="relative my-5 text-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200"></div>
+        </div>
+        <span className="relative px-3 bg-white text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          or sign in with credentials
+        </span>
+      </div>
+
+      {/* Auth Method Toggle */}
+      <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl mb-4 text-xs font-bold">
+        <button
+          type="button"
+          onClick={() => {
+            setAuthMethod('password')
+            setErrorMessage('')
+          }}
+          className={`py-2 rounded-lg transition-all cursor-pointer ${
+            authMethod === 'password'
+              ? 'bg-white text-blue-600 shadow-xs'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          University Password
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setAuthMethod('otp')
+            setErrorMessage('')
+          }}
+          className={`py-2 rounded-lg transition-all cursor-pointer ${
+            authMethod === 'otp'
+              ? 'bg-white text-blue-600 shadow-xs'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          Email OTP
+        </button>
+      </div>
+
+      {/* Error Message Alert */}
       {errorMessage && (
         <div
           role="alert"
-          className="mb-5 flex items-start gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"
+          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"
         >
           <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      {userStatus && (
-        <div className="mb-4 flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-700">
-          <span className="font-medium">
-            {userStatus === 'existing' ? 'Existing account detected' : 'New account registration'}
-          </span>
-          <button
-            type="button"
-            onClick={() => {
-              setUserStatus(null)
-              setPassword('')
-              setConfirmPassword('')
-            }}
-            className="text-blue-600 hover:text-blue-700 font-semibold cursor-pointer text-[11px]"
-          >
-            Change
-          </button>
+      {/* Success Notification Alert */}
+      {successNotice && !errorMessage && (
+        <div
+          role="status"
+          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium"
+        >
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+          <span>{successNotice}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* University Email Input Box */}
-        <div>
-          <label
-            htmlFor="university-email"
-            className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-          >
-            University Email
-          </label>
-          <input
-            id="university-email"
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-            onBlur={handleEmailBlur}
-            placeholder="name@coeptech.ac.in"
-            disabled={isVerifying}
-            className="w-full h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
-          />
-        </div>
-
-        {/* Existing User View: Single Password Field */}
-        {userStatus === 'existing' && (
+      {/* =========================================================================
+          FLOW A: PASSWORD AUTHENTICATION (DEFAULT)
+          ========================================================================= */}
+      {authMethod === 'password' && (
+        <form onSubmit={handlePasswordSubmit} className="space-y-4">
           <div>
             <label
-              htmlFor="password"
+              htmlFor="password-university-email"
+              className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+            >
+              University Email
+            </label>
+            <input
+              id="password-university-email"
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (errorMessage) setErrorMessage('')
+              }}
+              placeholder="name@coeptech.ac.in"
+              disabled={isVerifying}
+              className="w-full h-11 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password-input"
               className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
             >
               Password
             </label>
             <input
-              id="password"
+              id="password-input"
               type="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value)
                 if (errorMessage) setErrorMessage('')
               }}
-              placeholder="Enter your password"
+              placeholder="Enter password"
               disabled={isVerifying}
-              className="w-full h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+              className="w-full h-11 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
             />
           </div>
-        )}
 
-        {/* New User View: Role + Create Password & Confirm Password in two-column row */}
-        {userStatus === 'new' && (
-          <>
-            <div>
-              <label
-                htmlFor="user-role"
-                className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Role
-              </label>
-              <div className="relative">
-                <select
-                  id="user-role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  disabled={isVerifying}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 outline-none focus:border-blue-500 transition-colors disabled:opacity-60 appearance-none pr-8 cursor-pointer"
-                >
-                  <option value="Faculty Coordinator">Faculty Coordinator</option>
-                  <option value="Club/Org Representative">Club/Org Representative</option>
-                  <option value="Campus Site Administrator">Campus Site Administrator</option>
-                </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="create-password"
-                  className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-                >
-                  Create Password
-                </label>
-                <input
-                  id="create-password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                    if (errorMessage) setErrorMessage('')
-                  }}
-                  placeholder="Enter password"
-                  disabled={isVerifying}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirm-password"
-                  className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  id="confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value)
-                    if (errorMessage) setErrorMessage('')
-                  }}
-                  placeholder="Confirm password"
-                  disabled={isVerifying}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
-                />
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Action Button */}
-        {!userStatus ? (
-          <button
-            type="button"
-            onClick={verifyEmailInput}
-            className="w-full h-10 mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold tracking-wide transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-          >
-            Next
-          </button>
-        ) : (
           <button
             type="submit"
             disabled={isVerifying}
-            className="w-full h-10 mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold tracking-wide transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed shadow-sm"
+            className="w-full h-11 mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold tracking-wide transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-60"
           >
-            {isVerifying ? (
-              <>
-                <svg
-                  className="animate-spin h-4 w-4 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  aria-label="Verifying identity"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  />
-                </svg>
-                <span>Verifying identity...</span>
-              </>
-            ) : (
-              <span>{userStatus === 'existing' ? 'Secure Login' : 'Register & Sign Up'}</span>
-            )}
+            {isVerifying ? 'Authenticating...' : 'Sign In with University Account'}
           </button>
-        )}
-      </form>
+        </form>
+      )}
+
+      {/* =========================================================================
+          FLOW B: EMAIL OTP VERIFICATION
+          ========================================================================= */}
+      {authMethod === 'otp' && (
+        <div className="space-y-4">
+          <div>
+            <label
+              htmlFor="otp-university-email"
+              className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+            >
+              Institutional Email
+            </label>
+            <div className="relative">
+              <input
+                id="otp-university-email"
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (errorMessage) setErrorMessage('')
+                }}
+                placeholder="name@coeptech.ac.in"
+                disabled={isVerifying || isOtpSent}
+                className="w-full h-11 px-3 pl-9 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+              />
+              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              {isOtpSent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOtpSent(false)
+                    setOtpCode('')
+                    setSuccessNotice('')
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-blue-600 font-bold hover:underline cursor-pointer"
+                >
+                  Change
+                </button>
+              )}
+            </div>
+          </div>
+
+          {!isOtpSent ? (
+            <button
+              type="button"
+              onClick={handleSendOtp}
+              disabled={isVerifying}
+              className="w-full h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold tracking-wide transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-60"
+            >
+              {isVerifying ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Dispatching code...</span>
+                </>
+              ) : (
+                <>
+                  <Mail className="w-4 h-4" />
+                  <span>Send Verification Code</span>
+                </>
+              )}
+            </button>
+          ) : (
+            <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="six-digit-otp"
+                  className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+                >
+                  6-Digit Verification Code
+                </label>
+                <input
+                  id="six-digit-otp"
+                  type="text"
+                  maxLength={6}
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="Enter 6-digit code"
+                  autoFocus
+                  disabled={isVerifying}
+                  className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isVerifying}
+                className="w-full h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold tracking-wide transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-60"
+              >
+                {isVerifying ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Verifying code...</span>
+                  </>
+                ) : (
+                  <span>Verify Code & Enter</span>
+                )}
+              </button>
+
+              <div className="text-center text-xs">
+                {resendCooldown > 0 ? (
+                  <span className="text-slate-400">Resend code in {resendCooldown}s</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    className="text-blue-600 hover:underline font-bold cursor-pointer"
+                  >
+                    Resend verification code
+                  </button>
+                )}
+              </div>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   )
 }
