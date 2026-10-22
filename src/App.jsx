@@ -2414,6 +2414,8 @@ export function LoginForm({ onLoginSuccess }) {
         setErrorMessage('Microsoft sign-in was closed before completion.')
       } else if (err.code === 'NON_INSTITUTIONAL_DOMAIN') {
         setErrorMessage(err.message)
+      } else if (err.code === 'AZURE_NOT_CONFIGURED' || err.message === 'AZURE_NOT_CONFIGURED') {
+        setErrorMessage('Azure Entra ID client ID is not configured. Add VITE_AZURE_CLIENT_ID to .env.local or sign in with University Password / OTP.')
       } else if (err.message && err.message.includes('AADSTS50011')) {
         setErrorMessage('Azure Redirect URI mismatch. Ensure http://localhost:5173/ is registered as SPA in Azure.')
       } else {

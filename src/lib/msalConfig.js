@@ -1,5 +1,8 @@
 import { PublicClientApplication, LogLevel } from '@azure/msal-browser'
 
+const DEFAULT_AZURE_CLIENT_ID = 'b177caf5-6457-4162-b680-ea9eea7bf560'
+const DEFAULT_AZURE_TENANT_ID = 'b4c6b754-54e3-41e4-a8da-304355c62816'
+
 // Retrieve active Azure Client ID from localStorage (runtime dynamic) or Vite environment variables
 export function getAzureClientId() {
   if (typeof window !== 'undefined') {
@@ -12,7 +15,7 @@ export function getAzureClientId() {
   if (envVal && envVal.trim() && envVal.trim() !== 'your-azure-app-client-id') {
     return envVal.trim()
   }
-  return ''
+  return DEFAULT_AZURE_CLIENT_ID
 }
 
 export function getAzureTenantId() {
@@ -22,7 +25,7 @@ export function getAzureTenantId() {
       return stored.trim()
     }
   }
-  return import.meta.env.VITE_AZURE_TENANT_ID || 'common'
+  return import.meta.env.VITE_AZURE_TENANT_ID || DEFAULT_AZURE_TENANT_ID
 }
 
 export function setAzureConfig(clientId, tenantId = 'common') {
