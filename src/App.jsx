@@ -24,10 +24,13 @@ import {
   LayoutGrid,
   CalendarDays,
   Mail,
-  RefreshCw
+  RefreshCw,
+  Shield,
+  LogOut
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
+import AdminPanel from './components/AdminPanel'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -1447,7 +1450,8 @@ export default function App() {
       'events',
       'my-bookings',
       'about',
-      'login'
+      'login',
+      'admin'
     ]
 
     if (validTabs.includes(tab)) {
@@ -1465,6 +1469,15 @@ export default function App() {
     window.removeEventListener('popstate', handlePopState)
   }
 }, [])
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_auth_user')
+      return stored ? JSON.parse(stored) : null
+    } catch {
+      return null
+    }
+  })
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
@@ -1683,7 +1696,19 @@ const handleNavClick = (tab) => {
         return (
           <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
             <LoginForm
-              onLoginSuccess={() => {
+              onLoginSuccess={(user) => {
+                if (user) {
+                  setCurrentUser(user)
+                  try {
+                    localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                  } catch {
+                    // ignore
+                  }
+                  if (user.role === 'Administrator') {
+                    setActiveTab('admin')
+                    return
+                  }
+                }
                 setActiveTab('home')
               }}
             />
@@ -1697,6 +1722,13 @@ const handleNavClick = (tab) => {
               </button>
             </div>
           </div>
+        )
+      case 'admin':
+        return (
+          <AdminPanel
+            currentUser={currentUser}
+            onBackHome={() => setActiveTab('home')}
+          />
         )
       default:
         return (
@@ -2046,27 +2078,76 @@ const handleNavClick = (tab) => {
             >
               About
             </button>
-          </nav>
-
-          {/* Desktop Login Button */}
-          <div className="hidden md:flex items-center gap-3">
             <button
               type="button"
-              onClick={() => handleNavClick('login')}
-              className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm hover:shadow transition-all duration-200 cursor-pointer"
+              onClick={() => handleNavClick('admin')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${
+                activeTab === 'admin'
+                  ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
+                  : 'hover:text-purple-600 text-slate-700'
+              }`}
             >
-              Login
+              <Shield className="w-3.5 h-3.5 text-purple-600" />
+              <span>Admin</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-purple-100 text-purple-700">
+                Console
+              </span>
             </button>
+          </nav>
+
+          {/* Desktop Auth Controls */}
+          <div className="hidden md:flex items-center gap-3">
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleNavClick(currentUser.role === 'Administrator' ? 'admin' : 'my-bookings')}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-800 font-semibold transition-colors cursor-pointer"
+                >
+                  <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
+                    {currentUser.name ? currentUser.name.charAt(0) : 'U'}
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold leading-tight">{currentUser.name}</div>
+                    <div className="text-[10px] text-slate-500">{currentUser.role}</div>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentUser(null)
+                    try {
+                      localStorage.removeItem('locus_auth_user')
+                    } catch {
+                      // ignore
+                    }
+                    handleNavClick('home')
+                  }}
+                  className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition-colors cursor-pointer"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleNavClick('login')}
+                className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm hover:shadow transition-all duration-200 cursor-pointer"
+              >
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile Hamburger Toggle */}
           <div className="flex md:hidden items-center gap-2">
             <button
               type="button"
-              onClick={() => handleNavClick('login')}
+              onClick={() => handleNavClick(currentUser ? 'admin' : 'login')}
               className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-xs"
             >
-              Login
+              {currentUser ? 'Console' : 'Login'}
             </button>
             <button
               type="button"
@@ -2122,6 +2203,18 @@ const handleNavClick = (tab) => {
                 }`}
             >
               About
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('admin')}
+              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'
+                }`}
+            >
+              <Shield className="w-4 h-4 text-purple-600" />
+              <span>Admin Console</span>
+              <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-purple-100 text-purple-700">
+                Admin
+              </span>
             </button>
           </div>
         )}
