@@ -1433,6 +1433,34 @@ export default function App() {
   const [venues, setVenues] = useState([])
   const [isLoadingVenues, setIsLoadingVenues] = useState(true)
   const [activeTab, setActiveTab] = useState('home')
+  useEffect(() => {
+  const handlePopState = (event) => {
+    const tab = event.state?.activeTab
+
+    const validTabs = [
+      'home',
+      'venues',
+      'events',
+      'my-bookings',
+      'about',
+      'login'
+    ]
+
+    if (validTabs.includes(tab)) {
+      setActiveTab(tab)
+    } else {
+      setActiveTab('home')
+    }
+
+    setIsMobileMenuOpen(false)
+  }
+
+  window.addEventListener('popstate', handlePopState)
+
+  return () => {
+    window.removeEventListener('popstate', handlePopState)
+  }
+}, [])
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
@@ -1553,11 +1581,21 @@ export default function App() {
     loadEvents()
   }, [])
 
-
-  const handleNavClick = (tab) => {
-    setActiveTab(tab)
+const handleNavClick = (tab) => {
+  if (tab === activeTab) {
     setIsMobileMenuOpen(false)
+    return
   }
+
+  window.history.pushState(
+    { activeTab: tab },
+    '',
+    window.location.pathname
+  )
+
+  setActiveTab(tab)
+  setIsMobileMenuOpen(false)
+}
 
   const handleAddBooking = (newBooking) => {
     setUserBookings((prev) => [newBooking, ...prev])
