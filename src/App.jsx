@@ -2722,6 +2722,14 @@ const OFFICIAL_COEP_ACCOUNTS = [
     name: 'Aman Nirmal',
     department: 'Computer Engineering',
     id: 'STU-2026-101'
+  },
+  {
+    role: 'Security Guard',
+    email: 'security@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Officer S. Patil',
+    department: 'Campus Security & Gate 1 Control',
+    id: 'SEC-G1-04'
   }
 ]
 
@@ -2856,8 +2864,8 @@ export function LoginForm({ onLoginSuccess }) {
         id: `COEP-${Math.floor(1000 + Math.random() * 9000)}`,
         name: trimmedEmail.split('@')[0],
         email: trimmedEmail,
-        role: trimmedEmail.includes('admin') ? 'Administrator' : trimmedEmail.includes('faculty') ? 'Faculty' : role,
-        department: 'COEP Technological University',
+        role: trimmedEmail.includes('admin') ? 'Administrator' : trimmedEmail.includes('faculty') ? 'Faculty' : trimmedEmail.includes('security') ? 'Security Guard' : trimmedEmail.includes('mindspark') || trimmedEmail.includes('club') ? 'Club Lead' : role,
+        department: trimmedEmail.includes('security') ? 'Campus Security & Gate 1 Control' : 'COEP Technological University',
         authProvider: 'password',
         authenticatedAt: new Date().toISOString()
       }

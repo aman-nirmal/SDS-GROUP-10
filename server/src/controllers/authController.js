@@ -24,6 +24,7 @@ const recognizedDemoEmails = [
   'faculty@coeptech.ac.in',
   'mindspark@coeptech.ac.in',
   'student@coeptech.ac.in',
+  'security@coeptech.ac.in',
   'nirmala21.comp@coep.ac.in'
 ]
 
@@ -46,6 +47,9 @@ function deriveUserProfile(email, role = null) {
   } else if (trimmedEmail.includes('mindspark') || trimmedEmail.includes('club')) {
     userRole = 'Club Lead'
     name = 'MindSpark Secretarial Lead'
+  } else if (trimmedEmail.includes('security') || trimmedEmail.includes('guard')) {
+    userRole = 'Security Guard'
+    name = 'Officer S. Patil'
   }
 
   return {
