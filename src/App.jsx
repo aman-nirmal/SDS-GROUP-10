@@ -12,13 +12,10 @@ import {
   Building,
   CheckCircle2,
   Clock,
-  Sparkles,
   ArrowRight,
   ArrowLeft,
-  ArrowUpRight,
   Menu,
   X,
-  FileText,
   AlertCircle,
   ShieldCheck,
   LayoutGrid,
@@ -29,8 +26,7 @@ import {
   LogOut,
   GraduationCap,
   BookOpen,
-  Trophy,
-  Compass
+  Trophy
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
@@ -2230,14 +2226,23 @@ const handleNavClick = (tab) => {
             </button>
             <button
               type="button"
-              onClick={() => handleNavClick('guest')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'guest'
+              onClick={() => handleNavClick('events')}
+              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'events'
                 ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
-                : 'hover:text-slate-900 text-slate-700'
+                : 'hover:text-slate-900'
                 }`}
             >
-              <Compass className="w-3.5 h-3.5 text-blue-500" />
-              <span>Guest</span>
+              Events
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('about')}
+              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'about'
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
+                : 'hover:text-slate-900'
+                }`}
+            >
+              About
             </button>
 
             {/* Role-Specific Portal Links - Rendered only when authorized */}
@@ -2404,11 +2409,17 @@ const handleNavClick = (tab) => {
 
             <button
               type="button"
-              onClick={() => handleNavClick('guest')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'guest' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-100'}`}
+              onClick={() => handleNavClick('events')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
             >
-              <Compass className="w-4 h-4 text-blue-600" />
-              <span>Guest Portal</span>
+              Events
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('about')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
+            >
+              About
             </button>
 
             {currentUser && (currentUser.role === 'Student' || currentUser.role === 'Administrator') && (
@@ -2587,6 +2598,18 @@ const handleNavClick = (tab) => {
                 Support
               </h4>
               <ul className="space-y-2.5 text-xs font-medium">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('guest')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    className="hover:text-blue-600 transition-colors cursor-pointer"
+                  >
+                    Visitor Guidelines
+                  </button>
+                </li>
                 <li>
                   <button
                     type="button"
