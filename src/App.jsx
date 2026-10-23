@@ -1470,6 +1470,20 @@ export default function App() {
       'security'
     ]
 
+    const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+    let isAuthed = false
+    try {
+      isAuthed = !!localStorage.getItem('locus_auth_user')
+    } catch {
+      isAuthed = false
+    }
+
+    if (protectedTabs.includes(tab) && !isAuthed) {
+      setActiveTab('login')
+      setIsMobileMenuOpen(false)
+      return
+    }
+
     if (validTabs.includes(tab)) {
       setActiveTab(tab)
     } else {
@@ -1615,6 +1629,14 @@ export default function App() {
   }, [])
 
 const handleNavClick = (tab) => {
+  const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+  if (protectedTabs.includes(tab) && !currentUser) {
+    setActiveTab('login')
+    window.history.pushState({ activeTab: 'login' }, '', window.location.pathname)
+    setIsMobileMenuOpen(false)
+    return
+  }
+
   if (tab === activeTab) {
     setIsMobileMenuOpen(false)
     return
@@ -1759,6 +1781,25 @@ const handleNavClick = (tab) => {
           />
         )
       case 'faculty':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Faculty' || user.role === 'Administrator' ? 'faculty' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
           <FacultyPortal
             currentUser={currentUser}
@@ -1766,6 +1807,25 @@ const handleNavClick = (tab) => {
           />
         )
       case 'student':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Student' || user.role === 'Administrator' ? 'student' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
           <StudentPortal
             currentUser={currentUser}
@@ -1773,6 +1833,25 @@ const handleNavClick = (tab) => {
           />
         )
       case 'club':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Club Lead' || user.role === 'Administrator' ? 'club' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
           <ClubPortal
             currentUser={currentUser}
@@ -1780,6 +1859,25 @@ const handleNavClick = (tab) => {
           />
         )
       case 'admin':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Administrator' ? 'admin' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
           <AdminPanel
             currentUser={currentUser}
@@ -1788,6 +1886,25 @@ const handleNavClick = (tab) => {
           />
         )
       case 'security':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Security Guard' || user.role === 'Administrator' ? 'security' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
           <SecurityPortal
             currentUser={currentUser}
@@ -2122,61 +2239,77 @@ const handleNavClick = (tab) => {
               <Compass className="w-3.5 h-3.5 text-blue-500" />
               <span>Guest</span>
             </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('student')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'student'
-                ? 'text-indigo-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 font-bold'
-                : 'hover:text-slate-900 text-slate-700'
-                }`}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Student</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('faculty')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'faculty'
-                ? 'text-blue-800 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 font-bold'
-                : 'hover:text-slate-900 text-slate-700'
-                }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-blue-700" />
-              <span>Faculty</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('club')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'club'
-                ? 'text-amber-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 font-bold'
-                : 'hover:text-slate-900 text-slate-700'
-                }`}
-            >
-              <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>Club</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('admin')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'admin'
-                ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
-                : 'hover:text-purple-600 text-slate-700'
-                }`}
-            >
-              <Shield className="w-3.5 h-3.5 text-purple-600" />
-              <span>Admin</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('security')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'security'
-                ? 'text-emerald-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 font-bold'
-                : 'hover:text-emerald-700 text-slate-700'
-                }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Security</span>
-            </button>
+
+            {/* Role-Specific Portal Links - Rendered only when authorized */}
+            {currentUser && (currentUser.role === 'Student' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('student')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'student'
+                  ? 'text-indigo-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 font-bold'
+                  : 'hover:text-slate-900 text-slate-700'
+                  }`}
+              >
+                <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Student</span>
+              </button>
+            )}
+
+            {currentUser && (currentUser.role === 'Faculty' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('faculty')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'faculty'
+                  ? 'text-blue-800 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 font-bold'
+                  : 'hover:text-slate-900 text-slate-700'
+                  }`}
+              >
+                <GraduationCap className="w-3.5 h-3.5 text-blue-700" />
+                <span>Faculty</span>
+              </button>
+            )}
+
+            {currentUser && (currentUser.role === 'Club Lead' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('club')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'club'
+                  ? 'text-amber-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 font-bold'
+                  : 'hover:text-slate-900 text-slate-700'
+                  }`}
+              >
+                <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <span>Club</span>
+              </button>
+            )}
+
+            {currentUser && (currentUser.role === 'Security Guard' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('security')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'security'
+                  ? 'text-emerald-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 font-bold'
+                  : 'hover:text-emerald-700 text-slate-700'
+                  }`}
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Security</span>
+              </button>
+            )}
+
+            {currentUser && currentUser.role === 'Administrator' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('admin')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'admin'
+                  ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
+                  : 'hover:text-purple-600 text-slate-700'
+                  }`}
+              >
+                <Shield className="w-3.5 h-3.5 text-purple-600" />
+                <span>Admin</span>
+              </button>
+            )}
           </nav>
 
           {/* Desktop Auth Controls */}
@@ -2269,12 +2402,6 @@ const handleNavClick = (tab) => {
               Venues Catalog
             </button>
 
-            <div className="pt-2 pb-1 border-t border-slate-200">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-4">
-                Role Portals
-              </span>
-            </div>
-
             <button
               type="button"
               onClick={() => handleNavClick('guest')}
@@ -2284,50 +2411,60 @@ const handleNavClick = (tab) => {
               <span>Guest Portal</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('student')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-100'}`}
-            >
-              <BookOpen className="w-4 h-4 text-indigo-600" />
-              <span>Student Portal</span>
-            </button>
+            {currentUser && (currentUser.role === 'Student' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('student')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-100'}`}
+              >
+                <BookOpen className="w-4 h-4 text-indigo-600" />
+                <span>Student Portal</span>
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('faculty')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-100'}`}
-            >
-              <GraduationCap className="w-4 h-4 text-blue-700" />
-              <span>Faculty Portal</span>
-            </button>
+            {currentUser && (currentUser.role === 'Faculty' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('faculty')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-100'}`}
+              >
+                <GraduationCap className="w-4 h-4 text-blue-700" />
+                <span>Faculty Portal</span>
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('club')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 text-amber-800' : 'text-slate-700 hover:bg-slate-100'}`}
-            >
-              <Trophy className="w-4 h-4 text-amber-500" />
-              <span>Club Portal</span>
-            </button>
+            {currentUser && (currentUser.role === 'Club Lead' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('club')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 text-amber-800' : 'text-slate-700 hover:bg-slate-100'}`}
+              >
+                <Trophy className="w-4 h-4 text-amber-500" />
+                <span>Club Portal</span>
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('admin')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'}`}
-            >
-              <Shield className="w-4 h-4 text-purple-600" />
-              <span>Admin Console</span>
-            </button>
+            {currentUser && (currentUser.role === 'Security Guard' || currentUser.role === 'Administrator') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('security')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-100'}`}
+              >
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Security Terminal</span>
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('security')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-100'}`}
-            >
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Security Terminal</span>
-            </button>
+            {currentUser && currentUser.role === 'Administrator' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('admin')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'}`}
+              >
+                <Shield className="w-4 h-4 text-purple-600" />
+                <span>Admin Console</span>
+              </button>
+            )}
           </div>
         )}
       </header>
