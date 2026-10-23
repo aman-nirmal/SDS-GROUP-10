@@ -33,6 +33,14 @@ const DEMO_PROFILES = {
     role: 'Administrator',
     department: 'Central Estate & Infrastructure',
     authProvider: 'Password & SSO'
+  },
+  'Security Guard': {
+    id: 'SEC-042',
+    name: 'Inspector R. S. Patil',
+    email: 'security.patil@coeptech.ac.in',
+    role: 'Security Guard',
+    department: 'Campus Security & Gate 1 Post',
+    authProvider: 'Institutional Guard PIN & SSO'
   }
 }
 

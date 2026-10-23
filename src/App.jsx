@@ -39,6 +39,7 @@ import GuestPortal from './components/GuestPortal'
 import FacultyPortal from './components/FacultyPortal'
 import StudentPortal from './components/StudentPortal'
 import ClubPortal from './components/ClubPortal'
+import SecurityPortal from './components/SecurityPortal'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -1465,7 +1466,8 @@ export default function App() {
       'faculty',
       'student',
       'club',
-      'admin'
+      'admin',
+      'security'
     ]
 
     if (validTabs.includes(tab)) {
@@ -1740,6 +1742,9 @@ const handleNavClick = (tab) => {
                   } else if (user.role === 'Student') {
                     setActiveTab('student')
                     return
+                  } else if (user.role === 'Security Guard') {
+                    setActiveTab('security')
+                    return
                   }
                 }
                 setActiveTab('home')
@@ -1805,6 +1810,17 @@ const handleNavClick = (tab) => {
             onQuickLogin={(profile) => {
               handleQuickLogin(profile)
               setActiveTab('admin')
+            }}
+          />
+        )
+      case 'security':
+        return (
+          <SecurityPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            onQuickLogin={(profile) => {
+              handleQuickLogin(profile)
+              setActiveTab('security')
             }}
           />
         )
@@ -2180,6 +2196,17 @@ const handleNavClick = (tab) => {
               <Shield className="w-3.5 h-3.5 text-purple-600" />
               <span>Admin</span>
             </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('security')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'security'
+                ? 'text-emerald-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 font-bold'
+                : 'hover:text-emerald-700 text-slate-700'
+                }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Security</span>
+            </button>
           </nav>
 
           {/* Desktop Auth Controls */}
@@ -2193,6 +2220,7 @@ const handleNavClick = (tab) => {
                     if (role === 'Administrator') handleNavClick('admin')
                     else if (role === 'Faculty') handleNavClick('faculty')
                     else if (role === 'Club Lead') handleNavClick('club')
+                    else if (role === 'Security Guard') handleNavClick('security')
                     else handleNavClick('student')
                   }}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-800 font-semibold transition-colors cursor-pointer"
@@ -2325,6 +2353,16 @@ const handleNavClick = (tab) => {
               <Shield className="w-4 h-4 text-purple-600" />
               <span>Admin Console</span>
               <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">Admin</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleNavClick('security')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-100'}`}
+            >
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Security Terminal</span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Guard</span>
             </button>
           </div>
         )}

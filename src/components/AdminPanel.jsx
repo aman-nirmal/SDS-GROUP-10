@@ -108,6 +108,17 @@ const INITIAL_USERS = [
     status: 'Suspended',
     lastActive: '2 weeks ago',
     createdAt: '2026-10-02'
+  },
+  {
+    id: 'USR-009',
+    name: 'Inspector R. S. Patil',
+    email: 'security.patil@coeptech.ac.in',
+    role: 'Security Guard',
+    department: 'Campus Security & Gate 1 Post',
+    authProvider: 'Institutional Guard PIN & SSO',
+    status: 'Active',
+    lastActive: 'Just now',
+    createdAt: '2026-10-05'
   }
 ]
 
@@ -588,6 +599,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, o
       faculty: users.filter((u) => u.role === 'Faculty').length,
       clubLeads: users.filter((u) => u.role === 'Club Lead').length,
       students: users.filter((u) => u.role === 'Student').length,
+      securityGuards: users.filter((u) => u.role === 'Security Guard').length,
       pendingBookings: bookings.filter((b) => b.status === 'Pending').length,
       confirmedBookings: bookings.filter((b) => b.status === 'Confirmed').length,
       totalVenues: venuesList.length,
@@ -843,6 +855,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, o
                   <option value="Faculty">Faculty ({stats.faculty})</option>
                   <option value="Club Lead">Club Lead ({stats.clubLeads})</option>
                   <option value="Student">Student ({stats.students})</option>
+                  <option value="Security Guard">Security Guard ({stats.securityGuards})</option>
                 </select>
               </div>
             </div>
@@ -1284,6 +1297,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, o
                     <option value="Faculty">Faculty</option>
                     <option value="Club Lead">Club Lead</option>
                     <option value="Student">Student</option>
+                    <option value="Security Guard">Security Guard</option>
                   </select>
                 </div>
 
