@@ -2245,8 +2245,8 @@ const handleNavClick = (tab) => {
               About
             </button>
 
-            {/* Role-Specific Portal Links - Rendered only when authorized */}
-            {currentUser && (currentUser.role === 'Student' || currentUser.role === 'Administrator') && (
+            {/* Role-Specific Portal Links - Rendered only for the user's specific role */}
+            {currentUser && currentUser.role === 'Student' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('student')}
@@ -2260,7 +2260,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Faculty' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
@@ -2274,7 +2274,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Club Lead' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Club Lead' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
@@ -2288,7 +2288,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Security Guard' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Security Guard' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}
@@ -2422,7 +2422,7 @@ const handleNavClick = (tab) => {
               About
             </button>
 
-            {currentUser && (currentUser.role === 'Student' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Student' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('student')}
@@ -2433,7 +2433,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Faculty' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
@@ -2444,7 +2444,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Club Lead' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Club Lead' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
@@ -2455,7 +2455,7 @@ const handleNavClick = (tab) => {
               </button>
             )}
 
-            {currentUser && (currentUser.role === 'Security Guard' || currentUser.role === 'Administrator') && (
+            {currentUser && currentUser.role === 'Security Guard' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}

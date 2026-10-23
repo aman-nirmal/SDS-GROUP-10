@@ -8,8 +8,6 @@ import {
   AlertCircle,
   Search,
   Plus,
-  RefreshCw,
-  ArrowLeft,
   UserCheck,
   UserX,
   Download,
@@ -616,114 +614,105 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       onNavigateLogin={onNavigateLogin}
     >
       <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-20">
-      {/* Top Banner & Control Bar */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onBackHome}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Portal</span>
-            </button>
-            <div className="h-5 w-px bg-slate-200 hidden sm:block"></div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-blue-100 text-blue-700">
-                  <Shield className="w-3 h-3" />
-                  Admin Console
-                </span>
-                <span className="text-xs text-slate-400 font-medium">COEP LOCUS Central Estate</span>
-              </div>
-              <h1 className="text-lg font-black text-slate-900 tracking-tight mt-0.5">
-                Central Campus Administration
-              </h1>
+      {/* Sleek Admin Header */}
+      <div className="bg-white border-b border-slate-200/90 shadow-2xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200/80">
+                <Shield className="w-3.5 h-3.5" />
+                <span>Admin Console</span>
+              </span>
+              <span className="text-xs text-slate-400 font-medium">COEP Central Estate</span>
             </div>
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+              Campus Administration
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Identity provisioning, space allocation reviews, and security audit records.
+            </p>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleExportUsersCSV}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer bg-white shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-500" />
               <span>Export CSV</span>
             </button>
             <button
               type="button"
-              onClick={() => {
-                showNotification('Refreshing system telemetry...')
-                setTimeout(() => showNotification('All records synced with Supabase PostgreSQL.'), 500)
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              onClick={() => setIsAddUserModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Sync Telemetry</span>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add User</span>
             </button>
           </div>
         </div>
 
-        {/* Sub-Tabs Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 overflow-x-auto border-t border-slate-100 scrollbar-none">
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('users')}
-            className={`py-3 px-4 font-bold text-xs border-b-2 flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'users'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Campus Users ({stats.totalUsers})</span>
-          </button>
+        {/* Clean Segmented Pill Navigation */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3.5">
+          <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/70 gap-1 overflow-x-auto max-w-full scrollbar-none">
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('users')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeSubTab === 'users'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Directory</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 text-slate-700 font-bold">{stats.totalUsers}</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('bookings')}
-            className={`py-3 px-4 font-bold text-xs border-b-2 flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'bookings'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Calendar className="w-4 h-4" />
-            <span>Reservations & Approvals</span>
-            {stats.pendingBookings > 0 && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-amber-500 text-white">
-                {stats.pendingBookings}
-              </span>
-            )}
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('bookings')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeSubTab === 'bookings'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Approvals</span>
+              {stats.pendingBookings > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">{stats.pendingBookings}</span>
+              )}
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('venues')}
-            className={`py-3 px-4 font-bold text-xs border-b-2 flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'venues'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Building className="w-4 h-4" />
-            <span>Venues & Facilities ({stats.totalVenues})</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('venues')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeSubTab === 'venues'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Building className="w-3.5 h-3.5" />
+              <span>Venues</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 text-slate-700 font-bold">{stats.totalVenues}</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('logs')}
-            className={`py-3 px-4 font-bold text-xs border-b-2 flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'logs'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Clock className="w-4 h-4" />
-            <span>Security Audit Logs</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('logs')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeSubTab === 'logs'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Audit Trail</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -735,71 +724,49 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
-        {/* KPI Statistics Row */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Users</span>
-              <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                <Users className="w-4 h-4" />
-              </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-5">
+        {/* Compact Modern Stat Tiles */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5" />
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-black text-slate-900">{stats.totalUsers}</span>
-              <span className="text-xs text-slate-500">accounts</span>
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Users</div>
+              <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalUsers}</div>
             </div>
-            <p className="mt-2 text-[11px] text-slate-500 leading-tight">
-              {stats.faculty} Faculty • {stats.clubLeads} Club Leads • {stats.students} Students
-            </p>
           </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Pending Actions</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                <AlertCircle className="w-4 h-4" />
-              </div>
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <AlertCircle className="w-5 h-5" />
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-black text-amber-600">{stats.pendingBookings}</span>
-              <span className="text-xs text-slate-500">need review</span>
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Pending Reviews</div>
+              <div className="text-xl font-black text-amber-600 mt-0.5">{stats.pendingBookings}</div>
             </div>
-            <p className="mt-2 text-[11px] text-slate-500 leading-tight">
-              Awaiting Central Estate approval before scheduling
-            </p>
           </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Active Bookings</span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5" />
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-black text-emerald-600">{stats.confirmedBookings}</span>
-              <span className="text-xs text-slate-500">confirmed</span>
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Active Bookings</div>
+              <div className="text-xl font-black text-emerald-600 mt-0.5">{stats.confirmedBookings}</div>
             </div>
-            <p className="mt-2 text-[11px] text-slate-500 leading-tight">
-              Venues reserved across campus calendar
-            </p>
           </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Campus Venues</span>
-              <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-                <Building className="w-4 h-4" />
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <Building className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Venues Listed</div>
+              <div className="text-xl font-black text-slate-900 mt-0.5">
+                {stats.availableVenues} <span className="text-xs font-bold text-slate-400">/ {stats.totalVenues}</span>
               </div>
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-black text-slate-900">{stats.availableVenues} / {stats.totalVenues}</span>
-              <span className="text-xs text-emerald-600 font-bold">ready</span>
-            </div>
-            <p className="mt-2 text-[11px] text-slate-500 leading-tight">
-              Classrooms, Labs & Auditoriums listed
-            </p>
           </div>
         </section>
 
@@ -807,47 +774,26 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 1: USERS & ROLES
             ===================================================================== */}
         {activeSubTab === 'users' && (
-          <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-            {/* Header Toolbar */}
-            <div className="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <div>
-                <h2 className="text-base font-extrabold text-slate-900">University User Directory</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Manage campus identities, elevate roles, and oversee authentication privileges.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddUserModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Provision New User</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Filter Bar */}
-            <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-              <div className="relative flex-1 max-w-md">
+          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+            {/* Unified Search & Filter Toolbar */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+              <div className="relative flex-1 max-w-sm">
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
                   placeholder="Search by name, email, or department..."
-                  className="w-full h-10 pl-9 pr-3 rounded-xl border border-slate-300 bg-white text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-slate-50/60 text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white transition-colors"
                 />
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 whitespace-nowrap">Filter Role:</span>
+                <span className="text-xs font-medium text-slate-500 whitespace-nowrap">Filter:</span>
                 <select
                   value={userRoleFilter}
                   onChange={(e) => setUserRoleFilter(e.target.value)}
-                  className="h-10 px-3 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
+                  className="h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
                 >
                   <option value="All">All Roles ({users.length})</option>
                   <option value="Administrator">Administrator ({stats.admins})</option>
@@ -858,6 +804,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 </select>
               </div>
             </div>
+
 
             {/* Users Table */}
             <div className="overflow-x-auto">
@@ -903,13 +850,15 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           <select
                             value={user.role}
                             onChange={(e) => handleChangeUserRole(user.id, e.target.value)}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer ${
+                            className={`px-2 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors ${
                               user.role === 'Administrator'
                                 ? 'bg-purple-50 text-purple-700 border-purple-200'
                                 : user.role === 'Faculty'
                                 ? 'bg-blue-50 text-blue-700 border-blue-200'
                                 : user.role === 'Club Lead'
                                 ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                : user.role === 'Security Guard'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                 : 'bg-slate-100 text-slate-700 border-slate-200'
                             }`}
                           >
@@ -917,6 +866,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <option value="Faculty">Faculty</option>
                             <option value="Club Lead">Club Lead</option>
                             <option value="Student">Student</option>
+                            <option value="Security Guard">Security Guard</option>
                           </select>
                         </td>
 
@@ -980,40 +930,31 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 2: CAMPUS BOOKINGS & APPROVAL WORKFLOW
             ===================================================================== */}
         {activeSubTab === 'bookings' && (
-          <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <div>
-                <h2 className="text-base font-extrabold text-slate-900">Campus Venue Reservations</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Review and moderate space allocation requests submitted across student and departmental bodies.
-                </p>
+          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+              <div className="relative flex-1 max-w-sm">
+                <input
+                  type="text"
+                  value={bookingSearch}
+                  onChange={(e) => setBookingSearch(e.target.value)}
+                  placeholder="Search bookings or venues..."
+                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-slate-50/60 text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={bookingSearch}
-                    onChange={(e) => setBookingSearch(e.target.value)}
-                    placeholder="Search bookings or venues..."
-                    className="h-9 pl-8 pr-3 rounded-xl border border-slate-300 bg-white text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500"
-                  />
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-slate-500">Status:</span>
-                  <select
-                    value={bookingStatusFilter}
-                    onChange={(e) => setBookingStatusFilter(e.target.value)}
-                    className="h-9 px-3 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
-                  >
-                    <option value="All">All ({bookings.length})</option>
-                    <option value="Pending">Pending ({stats.pendingBookings})</option>
-                    <option value="Confirmed">Confirmed ({stats.confirmedBookings})</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-slate-500">Status:</span>
+                <select
+                  value={bookingStatusFilter}
+                  onChange={(e) => setBookingStatusFilter(e.target.value)}
+                  className="h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
+                >
+                  <option value="All">All ({bookings.length})</option>
+                  <option value="Pending">Pending ({stats.pendingBookings})</option>
+                  <option value="Confirmed">Confirmed ({stats.confirmedBookings})</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
               </div>
             </div>
 
@@ -1103,13 +1044,11 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 3: VENUES INVENTORY
             ===================================================================== */}
         {activeSubTab === 'venues' && (
-          <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-extrabold text-slate-900">Campus Facilities & Halls</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Real-time occupancy status, capacity thresholds, and maintenance overrides.
-                </p>
+                <h2 className="text-sm font-bold text-slate-900">Facilities & Spaces</h2>
+                <p className="text-xs text-slate-500">Real-time availability and maintenance states.</p>
               </div>
             </div>
 
@@ -1168,13 +1107,11 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 4: SECURITY AUDIT LOGS
             ===================================================================== */}
         {activeSubTab === 'logs' && (
-          <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between">
+          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-extrabold text-slate-900">Security & Authentication Audit Trail</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Immutable chronological records of institutional logins, OTP dispatches, and administrative actions.
-                </p>
+                <h2 className="text-sm font-bold text-slate-900">Security & Access Logs</h2>
+                <p className="text-xs text-slate-500">Authentication audit records.</p>
               </div>
 
               <button
@@ -1183,9 +1120,9 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   setLogs([])
                   showNotification('Audit log records cleared.')
                 }}
-                className="text-xs font-bold text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                className="text-xs font-semibold text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
               >
-                Clear Log History
+                Clear Logs
               </button>
             </div>
 
