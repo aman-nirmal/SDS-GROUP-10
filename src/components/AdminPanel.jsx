@@ -12,7 +12,6 @@ import {
   UserX,
   Download,
   Key,
-  Shield,
   Clock
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
@@ -618,14 +617,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       <div className="bg-white border-b border-slate-200/90 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200/80">
-                <Shield className="w-3.5 h-3.5" />
-                <span>Admin Console</span>
-              </span>
-              <span className="text-xs text-slate-400 font-medium">COEP Central Estate</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Campus Administration
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -966,50 +958,73 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 </div>
               ) : (
                 filteredBookings.map((b) => (
-                  <div key={b.id} className="p-4 sm:p-5 hover:bg-slate-50/60 transition-colors flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                    <div className="space-y-1.5 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-bold text-slate-900">{b.id}</span>
+                  <div key={b.id} className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-2 flex-1 min-w-0">
+                      {/* Top: Event Title, Status Badge, Reference ID */}
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase ${
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
                             b.status === 'Confirmed'
                               ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                               : b.status === 'Pending'
-                              ? 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse'
-                              : 'bg-red-50 text-red-700 border border-red-200'
+                              ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                              : 'bg-slate-100 text-slate-600 border border-slate-200'
                           }`}
                         >
                           {b.status}
                         </span>
-                        <span className="text-xs font-bold text-blue-600">{b.venueName}</span>
+                        <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                          {b.id}
+                        </span>
                       </div>
 
-                      <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
+                      {/* Clean Details Row */}
+                      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-xs text-slate-500">
+                        <span className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50/70 border border-blue-100 px-2 py-0.5 rounded-md">
+                          <Building className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                          <span>{b.venueName}</span>
+                        </span>
 
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-                        <span>Organizer: <strong>{b.applicantName}</strong> ({b.applicantRole} • {b.department})</span>
-                        <span>Date: <strong>{b.bookingDate}</strong></span>
-                        <span>Time: <strong>{b.timeSlot}</strong></span>
-                        <span>Expected: <strong>{b.attendees} attendees</strong></span>
+                        <span className="inline-flex items-center gap-1 text-slate-600">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{b.bookingDate}</span>
+                        </span>
+
+                        <span className="inline-flex items-center gap-1 text-slate-600">
+                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{b.timeSlot}</span>
+                        </span>
+
+                        <span className="inline-flex items-center gap-1 text-slate-600">
+                          <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{b.attendees} attendees</span>
+                        </span>
+
+                        <span className="text-slate-300">|</span>
+
+                        <span className="text-slate-600">
+                          Organizer: <strong className="font-semibold text-slate-800">{b.applicantName}</strong> ({b.department})
+                        </span>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 shrink-0 self-end lg:self-auto">
+                    <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
                       {b.status === 'Pending' ? (
                         <>
                           <button
                             type="button"
                             onClick={() => handleApproveBooking(b.id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Approve Venue</span>
+                            <span>Approve</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleRejectBooking(b.id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition-colors cursor-pointer"
                           >
                             <XCircle className="w-3.5 h-3.5" />
                             <span>Reject</span>
@@ -1019,7 +1034,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                         <button
                           type="button"
                           onClick={() => handleRejectBooking(b.id)}
-                          className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-600 hover:text-red-600 hover:border-red-200 text-xs font-semibold transition-colors cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-600 hover:text-red-700 text-xs font-semibold transition-colors cursor-pointer"
                         >
                           Revoke Approval
                         </button>
@@ -1027,7 +1042,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                         <button
                           type="button"
                           onClick={() => handleApproveBooking(b.id)}
-                          className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-200 text-xs font-semibold transition-colors cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 text-xs font-semibold transition-colors cursor-pointer"
                         >
                           Re-approve
                         </button>
