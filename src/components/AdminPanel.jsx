@@ -17,6 +17,7 @@ import {
   Shield,
   Clock
 } from 'lucide-react'
+import ProtectedGate from './ProtectedGate'
 
 // Initial institutional users store
 const INITIAL_USERS = [
@@ -287,7 +288,7 @@ const INITIAL_LOGS = [
   }
 ]
 
-export default function AdminPanel({ onBackHome, currentUser }) {
+export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, onQuickLogin }) {
   const [activeSubTab, setActiveSubTab] = useState('users') // 'users' | 'bookings' | 'venues' | 'logs'
 
   // Users state
@@ -595,7 +596,15 @@ export default function AdminPanel({ onBackHome, currentUser }) {
   }, [users, bookings, venuesList])
 
   return (
-    <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <ProtectedGate
+      allowedRoles={['Administrator']}
+      portalName="COEP Central Estate & Admin Console"
+      portalDescription="Restricted to verified Central Estate administrators for campus-wide user provisioning, venue moderation, and security audit logs."
+      currentUser={currentUser}
+      onNavigateLogin={onNavigateLogin}
+      onQuickLogin={onQuickLogin}
+    >
+      <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-20">
       {/* Top Banner & Control Bar */}
       <div className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1312,6 +1321,7 @@ export default function AdminPanel({ onBackHome, currentUser }) {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </ProtectedGate>
   )
 }

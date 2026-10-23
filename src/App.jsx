@@ -26,11 +26,19 @@ import {
   Mail,
   RefreshCw,
   Shield,
-  LogOut
+  LogOut,
+  GraduationCap,
+  BookOpen,
+  Trophy,
+  Compass
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
 import AdminPanel from './components/AdminPanel'
+import GuestPortal from './components/GuestPortal'
+import FacultyPortal from './components/FacultyPortal'
+import StudentPortal from './components/StudentPortal'
+import ClubPortal from './components/ClubPortal'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -1440,6 +1448,8 @@ export default function App() {
   const [venues, setVenues] = useState([])
   const [isLoadingVenues, setIsLoadingVenues] = useState(true)
   const [activeTab, setActiveTab] = useState('home')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   useEffect(() => {
   const handlePopState = (event) => {
     const tab = event.state?.activeTab
@@ -1451,6 +1461,10 @@ export default function App() {
       'my-bookings',
       'about',
       'login',
+      'guest',
+      'faculty',
+      'student',
+      'club',
       'admin'
     ]
 
@@ -1478,12 +1492,22 @@ export default function App() {
       return null
     }
   })
+
+  const handleQuickLogin = (userProfile) => {
+    if (userProfile) {
+      setCurrentUser(userProfile)
+      try {
+        localStorage.setItem('locus_auth_user', JSON.stringify(userProfile))
+      } catch {
+        // ignore
+      }
+    }
+  }
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [selectedVenueForBooking, setSelectedVenueForBooking] = useState(null)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const [userBookings, setUserBookings] = useState([])
 
@@ -1707,6 +1731,15 @@ const handleNavClick = (tab) => {
                   if (user.role === 'Administrator') {
                     setActiveTab('admin')
                     return
+                  } else if (user.role === 'Faculty') {
+                    setActiveTab('faculty')
+                    return
+                  } else if (user.role === 'Club Lead') {
+                    setActiveTab('club')
+                    return
+                  } else if (user.role === 'Student') {
+                    setActiveTab('student')
+                    return
                   }
                 }
                 setActiveTab('home')
@@ -1723,11 +1756,56 @@ const handleNavClick = (tab) => {
             </div>
           </div>
         )
+      case 'guest':
+        return (
+          <GuestPortal
+            onNavigateLogin={() => setActiveTab('login')}
+            onExploreVenues={() => setActiveTab('venues')}
+          />
+        )
+      case 'faculty':
+        return (
+          <FacultyPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            onQuickLogin={(profile) => {
+              handleQuickLogin(profile)
+              setActiveTab('faculty')
+            }}
+          />
+        )
+      case 'student':
+        return (
+          <StudentPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            onQuickLogin={(profile) => {
+              handleQuickLogin(profile)
+              setActiveTab('student')
+            }}
+          />
+        )
+      case 'club':
+        return (
+          <ClubPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            onQuickLogin={(profile) => {
+              handleQuickLogin(profile)
+              setActiveTab('club')
+            }}
+          />
+        )
       case 'admin':
         return (
           <AdminPanel
             currentUser={currentUser}
             onBackHome={() => setActiveTab('home')}
+            onNavigateLogin={() => setActiveTab('login')}
+            onQuickLogin={(profile) => {
+              handleQuickLogin(profile)
+              setActiveTab('admin')
+            }}
           />
         )
       default:
@@ -2026,12 +2104,12 @@ const handleNavClick = (tab) => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-xs sm:text-sm font-semibold text-slate-600">
             <button
               type="button"
               onClick={() => handleNavClick('home')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'home'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
                 : 'hover:text-slate-900'
                 }`}
             >
@@ -2041,7 +2119,7 @@ const handleNavClick = (tab) => {
               type="button"
               onClick={() => handleNavClick('venues')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'venues'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
                 : 'hover:text-slate-900'
                 }`}
             >
@@ -2049,49 +2127,58 @@ const handleNavClick = (tab) => {
             </button>
             <button
               type="button"
-              onClick={() => handleNavClick('events')}
-              className={`transition-colors cursor-pointer relative pb-1 ${
-                activeTab === 'events'
-                  ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                  : 'hover:text-slate-900'
-              }`}
+              onClick={() => handleNavClick('guest')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'guest'
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
+                : 'hover:text-slate-900 text-slate-700'
+                }`}
             >
-              Events
+              <Compass className="w-3.5 h-3.5 text-blue-500" />
+              <span>Guest</span>
             </button>
             <button
               type="button"
-              onClick={() => handleNavClick('my-bookings')}
-              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'my-bookings'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                : 'hover:text-slate-900'
+              onClick={() => handleNavClick('student')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'student'
+                ? 'text-indigo-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 font-bold'
+                : 'hover:text-slate-900 text-slate-700'
                 }`}
             >
-              My Bookings
+              <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Student</span>
             </button>
             <button
               type="button"
-              onClick={() => handleNavClick('about')}
-              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'about'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                : 'hover:text-slate-900'
+              onClick={() => handleNavClick('faculty')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'faculty'
+                ? 'text-blue-800 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 font-bold'
+                : 'hover:text-slate-900 text-slate-700'
                 }`}
             >
-              About
+              <GraduationCap className="w-3.5 h-3.5 text-blue-700" />
+              <span>Faculty</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('club')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'club'
+                ? 'text-amber-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 font-bold'
+                : 'hover:text-slate-900 text-slate-700'
+                }`}
+            >
+              <Trophy className="w-3.5 h-3.5 text-amber-500" />
+              <span>Club</span>
             </button>
             <button
               type="button"
               onClick={() => handleNavClick('admin')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${
-                activeTab === 'admin'
-                  ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
-                  : 'hover:text-purple-600 text-slate-700'
-              }`}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'admin'
+                ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
+                : 'hover:text-purple-600 text-slate-700'
+                }`}
             >
               <Shield className="w-3.5 h-3.5 text-purple-600" />
               <span>Admin</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-purple-100 text-purple-700">
-                Console
-              </span>
             </button>
           </nav>
 
@@ -2101,7 +2188,13 @@ const handleNavClick = (tab) => {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => handleNavClick(currentUser.role === 'Administrator' ? 'admin' : 'my-bookings')}
+                  onClick={() => {
+                    const role = currentUser.role
+                    if (role === 'Administrator') handleNavClick('admin')
+                    else if (role === 'Faculty') handleNavClick('faculty')
+                    else if (role === 'Club Lead') handleNavClick('club')
+                    else handleNavClick('student')
+                  }}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-800 font-semibold transition-colors cursor-pointer"
                 >
                   <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
@@ -2166,55 +2259,72 @@ const handleNavClick = (tab) => {
             <button
               type="button"
               onClick={() => handleNavClick('home')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'home' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
-                }`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'home' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
             >
               Home
             </button>
             <button
               type="button"
               onClick={() => handleNavClick('venues')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
-                }`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
             >
-              Venues
+              Venues Catalog
             </button>
+
+            <div className="pt-2 pb-1 border-t border-slate-200">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-4">
+                Role Portals
+              </span>
+            </div>
+
             <button
               type="button"
-              onClick={() => handleNavClick('events')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${
-                activeTab === 'events' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
-              }`}
+              onClick={() => handleNavClick('guest')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'guest' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-100'}`}
             >
-              Events
+              <Compass className="w-4 h-4 text-blue-600" />
+              <span>Guest Portal</span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Public</span>
             </button>
+
             <button
               type="button"
-              onClick={() => handleNavClick('my-bookings')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'my-bookings' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
-                }`}
+              onClick={() => handleNavClick('student')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-100'}`}
             >
-              My Bookings
+              <BookOpen className="w-4 h-4 text-indigo-600" />
+              <span>Student Workspace</span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
             </button>
+
             <button
               type="button"
-              onClick={() => handleNavClick('about')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'
-                }`}
+              onClick={() => handleNavClick('faculty')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-100'}`}
             >
-              About
+              <GraduationCap className="w-4 h-4 text-blue-700" />
+              <span>Faculty Portal</span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => handleNavClick('club')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 text-amber-800' : 'text-slate-700 hover:bg-slate-100'}`}
+            >
+              <Trophy className="w-4 h-4 text-amber-500" />
+              <span>Club Portal</span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
+            </button>
+
             <button
               type="button"
               onClick={() => handleNavClick('admin')}
-              className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'
-                }`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'}`}
             >
               <Shield className="w-4 h-4 text-purple-600" />
               <span>Admin Console</span>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-purple-100 text-purple-700">
-                Admin
-              </span>
+              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">Admin</span>
             </button>
           </div>
         )}
