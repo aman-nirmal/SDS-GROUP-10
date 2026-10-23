@@ -1495,16 +1495,6 @@ export default function App() {
     }
   })
 
-  const handleQuickLogin = (userProfile) => {
-    if (userProfile) {
-      setCurrentUser(userProfile)
-      try {
-        localStorage.setItem('locus_auth_user', JSON.stringify(userProfile))
-      } catch {
-        // ignore
-      }
-    }
-  }
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
@@ -1773,10 +1763,6 @@ const handleNavClick = (tab) => {
           <FacultyPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            onQuickLogin={(profile) => {
-              handleQuickLogin(profile)
-              setActiveTab('faculty')
-            }}
           />
         )
       case 'student':
@@ -1784,10 +1770,6 @@ const handleNavClick = (tab) => {
           <StudentPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            onQuickLogin={(profile) => {
-              handleQuickLogin(profile)
-              setActiveTab('student')
-            }}
           />
         )
       case 'club':
@@ -1795,10 +1777,6 @@ const handleNavClick = (tab) => {
           <ClubPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            onQuickLogin={(profile) => {
-              handleQuickLogin(profile)
-              setActiveTab('club')
-            }}
           />
         )
       case 'admin':
@@ -1807,10 +1785,6 @@ const handleNavClick = (tab) => {
             currentUser={currentUser}
             onBackHome={() => setActiveTab('home')}
             onNavigateLogin={() => setActiveTab('login')}
-            onQuickLogin={(profile) => {
-              handleQuickLogin(profile)
-              setActiveTab('admin')
-            }}
           />
         )
       case 'security':
@@ -1818,10 +1792,6 @@ const handleNavClick = (tab) => {
           <SecurityPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            onQuickLogin={(profile) => {
-              handleQuickLogin(profile)
-              setActiveTab('security')
-            }}
           />
         )
       default:
@@ -2312,7 +2282,6 @@ const handleNavClick = (tab) => {
             >
               <Compass className="w-4 h-4 text-blue-600" />
               <span>Guest Portal</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Public</span>
             </button>
 
             <button
@@ -2321,8 +2290,7 @@ const handleNavClick = (tab) => {
               className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-100'}`}
             >
               <BookOpen className="w-4 h-4 text-indigo-600" />
-              <span>Student Workspace</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
+              <span>Student Portal</span>
             </button>
 
             <button
@@ -2332,7 +2300,6 @@ const handleNavClick = (tab) => {
             >
               <GraduationCap className="w-4 h-4 text-blue-700" />
               <span>Faculty Portal</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
             </button>
 
             <button
@@ -2342,7 +2309,6 @@ const handleNavClick = (tab) => {
             >
               <Trophy className="w-4 h-4 text-amber-500" />
               <span>Club Portal</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Protected</span>
             </button>
 
             <button
@@ -2352,7 +2318,6 @@ const handleNavClick = (tab) => {
             >
               <Shield className="w-4 h-4 text-purple-600" />
               <span>Admin Console</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">Admin</span>
             </button>
 
             <button
@@ -2362,7 +2327,6 @@ const handleNavClick = (tab) => {
             >
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>Security Terminal</span>
-              <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Guard</span>
             </button>
           </div>
         )}

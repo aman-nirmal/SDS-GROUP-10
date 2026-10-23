@@ -299,7 +299,7 @@ const INITIAL_LOGS = [
   }
 ]
 
-export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, onQuickLogin }) {
+export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin }) {
   const [activeSubTab, setActiveSubTab] = useState('users') // 'users' | 'bookings' | 'venues' | 'logs'
 
   // Users state
@@ -614,7 +614,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin, o
       portalDescription="Restricted to verified Central Estate administrators for campus-wide user provisioning, venue moderation, and security audit logs."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
-      onQuickLogin={onQuickLogin}
     >
       <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-20">
       {/* Top Banner & Control Bar */}
