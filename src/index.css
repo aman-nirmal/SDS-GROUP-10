@@ -51,14 +51,18 @@
   }
 
   html.dark .text-slate-700 {
-    color: #cbd5e1;
+    color: #e2e8f0;
   }
 
   html.dark .text-slate-600 {
-    color: #94a3b8;
+    color: #cbd5e1;
   }
 
   html.dark .text-slate-500 {
+    color: #94a3b8;
+  }
+
+  html.dark .text-slate-400 {
     color: #94a3b8;
   }
 
@@ -69,6 +73,24 @@
   html.dark .border-slate-100 {
     border-color: #1e293b;
   }
+}
+
+/* High-contrast dark mode utility overrides */
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: #f8fafc;
+}
+
+.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+
+.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+
+.dark .text-slate-500 {
+  color: #94a3b8;
 }
 
 /* 2-Frame Flying Birds Animation positioned strictly relative to COEP Building image */

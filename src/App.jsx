@@ -85,24 +85,24 @@ function LocusLogo({ size = 'default' }) {
 // Popular Venue Type Card - Equal dimensions
 function VenueTypeCard({ icon: Icon, title, description, count }) {
   return (
-    <div className="group h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between">
+    <div className="group h-full bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between">
       <div className="flex-1 flex flex-col">
-        <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-150 flex items-center justify-center text-slate-700 group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:border-blue-200 transition-colors mb-5 shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/40 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors mb-5 shrink-0">
           <Icon className="w-6 h-6 stroke-[1.6]" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-2">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
           {title}
         </h3>
-        <p className="text-xs text-slate-500 leading-relaxed min-h-[40px]">
+        <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed min-h-[40px]">
           {description}
         </p>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between shrink-0">
-        <span className="text-xs font-semibold text-slate-500">
+      <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
           {count} Available
         </span>
-        <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-slate-600 transition-colors">
+        <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors">
           <ChevronRight className="w-3.5 h-3.5" />
         </div>
       </div>
@@ -177,25 +177,25 @@ function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute top-15 left-0 sm:left-auto sm:right-0 w-[290px] bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/90 p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
+      className="absolute top-15 left-0 sm:left-auto sm:right-0 w-[290px] bg-white dark:bg-slate-900 rounded-2xl shadow-xl shadow-slate-200/60 dark:shadow-none border border-slate-200/90 dark:border-slate-800 p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
     >
       {/* Month & Year Navigation Header */}
-      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-        <span className="text-xs font-bold text-slate-900 tracking-tight">
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+        <span className="text-xs font-bold text-slate-900 dark:text-white tracking-tight">
           {monthNames[month]} {year}
         </span>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={handlePrevMonth}
-            className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             type="button"
             onClick={handleNextMonth}
-            className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -205,7 +205,7 @@ function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
       {/* Days of Week */}
       <div className="grid grid-cols-7 text-center mb-1">
         {daysOfWeek.map((day, idx) => (
-          <span key={idx} className="text-[11px] font-bold text-slate-400 py-1">
+          <span key={idx} className="text-[11px] font-bold text-slate-400 dark:text-slate-500 py-1">
             {day}
           </span>
         ))}
@@ -215,7 +215,7 @@ function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
       <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
         {/* Prev month days */}
         {prevMonthDays.map((d, i) => (
-          <span key={`prev-${i}`} className="text-slate-300 py-1.5 text-[11px]">
+          <span key={`prev-${i}`} className="text-slate-300 dark:text-slate-600 py-1.5 text-[11px]">
             {d}
           </span>
         ))}
@@ -235,7 +235,7 @@ function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
               onClick={() => handlePickDate(dayNum)}
               className={`w-8 h-8 mx-auto flex items-center justify-center rounded-xl text-xs font-semibold transition-all cursor-pointer ${isSelected
                 ? 'bg-blue-600 text-white font-bold shadow-xs scale-105'
-                : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600'
+                : 'text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
             >
               {dayNum}
@@ -245,18 +245,18 @@ function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
 
         {/* Next month days */}
         {Array.from({ length: nextMonthDaysCount }).map((_, i) => (
-          <span key={`next-${i}`} className="text-slate-300 py-1.5 text-[11px]">
+          <span key={`next-${i}`} className="text-slate-300 dark:text-slate-600 py-1.5 text-[11px]">
             {i + 1}
           </span>
         ))}
       </div>
 
       {/* Footer Actions: Clear & Today */}
-      <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
+      <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] font-bold">
         <button
           type="button"
           onClick={handleClear}
-          className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+          className="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
         >
           Clear
         </button>
@@ -463,44 +463,44 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 my-6 flex flex-col"
+        className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 my-6 flex flex-col text-slate-900 dark:text-slate-100"
       >
         {submitted ? (
           <div className="p-8 text-center py-10">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-xs">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-xs">
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
-            <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">
+            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mb-1">
               Reservation Confirmed
             </span>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">
+            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
               Slot Reserved Successfully!
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed max-w-md mx-auto">
-              Your venue reservation for <strong className="text-slate-900">{venueTitle}</strong> on{' '}
-              <strong className="text-slate-900">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been registered.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
+              Your venue reservation for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+              <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been registered.
             </p>
 
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-left mb-6 space-y-3 max-w-lg mx-auto">
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 text-left mb-6 space-y-3 max-w-lg mx-auto">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Reference Code:</span>
-                <span className="font-mono font-bold text-blue-600 text-sm">{bookingRef}</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Reference Code:</span>
+                <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-sm">{bookingRef}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Applicant:</span>
-                <span className="font-semibold text-slate-800">{applicantName}</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Applicant:</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">{applicantName}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Department:</span>
-                <span className="font-semibold text-slate-800">{department}</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Department:</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">{department}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Faculty In-Charge Notified:</span>
-                <span className="font-bold text-blue-700">{faculty.name} ({faculty.email})</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Faculty In-Charge Notified:</span>
+                <span className="font-bold text-blue-700 dark:text-blue-400">{faculty.name} ({faculty.email})</span>
               </div>
-              <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200/80">
-                <span className="text-slate-500 font-medium">Status:</span>
-                <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600">
+              <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200/80 dark:border-slate-700/80">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Status:</span>
+                <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   Official Request Logged
                 </span>
@@ -567,30 +567,30 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
 
             <div className="p-6 sm:p-7 space-y-5">
               {/* 2. Venue Specifications Strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
                     Capacity
                   </span>
-                  <span className="font-extrabold text-slate-900 text-sm">{capacity} Persons</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">{capacity} Persons</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
                     Benches
                   </span>
-                  <span className="font-extrabold text-slate-900 text-sm">{benches} Benches</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">{benches} Benches</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
                     Category
                   </span>
-                  <span className="font-bold text-slate-800 text-sm truncate block">{venue?.type || 'Classrooms'}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200 text-sm truncate block">{venue?.type || 'Classrooms'}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
                     Status
                   </span>
-                  <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 mt-0.5">
+                  <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     Available Now
                   </span>
@@ -598,38 +598,38 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
               </div>
 
               {/* 3. Concise Faculty In-Charge */}
-              <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
                 <div className="flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span className="text-slate-500 font-medium">Faculty In-Charge:</span>
-                  <span className="font-bold text-slate-800">{faculty.name}</span>
+                  <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Faculty In-Charge:</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{faculty.name}</span>
                 </div>
                 <a
                   href={`mailto:${faculty.email}`}
-                  className="text-blue-600 hover:text-blue-800 text-[11px] font-semibold hover:underline inline-flex items-center gap-1"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-[11px] font-semibold hover:underline inline-flex items-center gap-1"
                 >
-                  <Mail className="w-3.5 h-3.5 text-blue-500" />
+                  <Mail className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                   {faculty.email}
                 </a>
               </div>
 
               {/* 4. Installed Facilities & Amenities */}
               <div>
-                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2">
                   Installed Classroom Facilities:
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(venue?.features || [
-                    'Overhead Projector',
-                    'PA Sound System',
-                    'Air Conditioned',
-                    'Wi-Fi 6'
-                  ]).map((feat, i) => (
+                     'Overhead Projector',
+                     'PA Sound System',
+                     'Air Conditioned',
+                     'Wi-Fi 6'
+                   ]).map((feat, i) => (
                     <span
                       key={i}
-                      className="text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70"
+                      className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700"
                     >
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       {feat}
                     </span>
                   ))}
@@ -637,11 +637,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
               </div>
 
               {/* 5. Slot Reservation Form */}
-              <div className="pt-2 border-t border-slate-100">
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Date & Time Slot */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       1. Reservation Date
                     </label>
                     <input
@@ -649,19 +649,19 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                       required
-                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
                     />
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                         2. Time Slot
                       </label>
                       <button
                         type="button"
                         onClick={() => setShowSchedule(!showSchedule)}
-                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 cursor-pointer"
+                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Calendar className="w-3.5 h-3.5" />
                         <span>{showSchedule ? 'Hide Timetable' : 'View Timetable'}</span>
@@ -671,29 +671,29 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
 
                     {/* Expandable Daily Timetable Strip */}
                     {showSchedule && (
-                      <div className="mb-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs animate-in fade-in duration-150">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-2">
+                      <div className="mb-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs animate-in fade-in duration-150">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2">
                           <span>Lecture Hours (10:30 AM – 5:30 PM)</span>
-                          <span className="text-emerald-600 font-semibold">Green = Free for booking</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Green = Free for booking</span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-                          <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+                          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
                             <span className="font-bold block">08:30 – 10:30 AM</span> Free
                           </div>
-                          <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 font-medium line-through">
+                          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
                             <span className="font-bold block">10:30 – 12:30 PM</span> Lecture
                           </div>
-                          <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+                          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
                             <span className="font-bold block">12:30 – 02:30 PM</span> Free Gaps
                           </div>
-                          <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 font-medium line-through">
+                          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
                             <span className="font-bold block">02:30 – 04:30 PM</span> Practical
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {/* Clean Simple Time Slot Buttons */}
+                    {/* Clean Simple Time Slot Buttons (Bottom Options) */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {classroomTimeSlots.map((slot, i) => {
                         const isFree = slot.status === 'free'
@@ -706,20 +706,20 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                             className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${
                               isSelected
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                                : 'bg-white text-slate-800 border-slate-200 hover:border-blue-400'
+                                : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
                             }`}
                           >
-                            <span>{slot.time}</span>
-                            {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
+                            <span className="dark:text-slate-100">{slot.time}</span>
+                            {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
                           </button>
                         ) : (
                           <div
                             key={i}
-                            className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 bg-slate-100 text-slate-400 line-through flex items-center justify-between cursor-not-allowed select-none"
+                            className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 line-through flex items-center justify-between cursor-not-allowed select-none"
                             title="Occupied for regular classes"
                           >
                             <span>{slot.time}</span>
-                            <span className="text-[10px] text-rose-500 font-semibold">{slot.label}</span>
+                            <span className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold">{slot.label}</span>
                           </div>
                         )
                       })}
@@ -729,7 +729,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                   {/* Applicant Details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                         Applicant / Faculty Name *
                       </label>
                       <input
@@ -738,25 +738,25 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                         value={applicantName}
                         onChange={(e) => setApplicantName(e.target.value)}
                         placeholder="e.g. Prof. R. Sharma / Student"
-                        className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                         Applicant Department
                       </label>
                       <input
                         type="text"
                         value={department}
                         onChange={(e) => setDepartment(e.target.value)}
-                        className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 outline-none focus:border-blue-500 transition-colors"
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Event Purpose */}
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Event Purpose / Session Topic *
                     </label>
                     <input
@@ -765,15 +765,15 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                       value={eventPurpose}
                       onChange={(e) => setEventPurpose(e.target.value)}
                       placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
-                      className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
                     <span>
-                      Venue Capacity: <strong>{capacity} Persons</strong> ({benches} Benches)
+                      Venue Capacity: <strong className="dark:text-slate-200">{capacity} Persons</strong> ({benches} Benches)
                     </span>
-                    <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" /> Instant Campus Approval
                     </span>
                   </div>
@@ -783,7 +783,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 h-11 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                      className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -1021,28 +1021,28 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
   const getCategoryBadgeClass = (category) => {
     switch (category) {
       case 'Competition':
-        return 'bg-purple-50 text-purple-700 border-purple-200'
+        return 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
       case 'Workshop':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
       case 'Club Event':
-        return 'bg-amber-50 text-amber-700 border-amber-200'
+        return 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
       case 'College Event':
-        return 'bg-blue-50 text-blue-700 border-blue-200'
+        return 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200'
+        return 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
     }
   }
 
   return (
     <div className="space-y-6">
       {/* Calendar Navigation Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
               title="Previous Month"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -1050,26 +1050,26 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
             <button
               type="button"
               onClick={handleNextMonth}
-              className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
               title="Next Month"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {monthNames[month]} {year}
           </h2>
           <button
             type="button"
             onClick={handleToday}
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
           >
             Today
           </button>
         </div>
 
         {/* Category Legend */}
-        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
             <span className="font-medium">Competition</span>
@@ -1088,13 +1088,13 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
       {/* Main Grid: Calendar on Left, Selected Day Agenda on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Monthly Calendar View */}
-        <div className="lg:col-span-8 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs">
+        <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
           {/* Days of Week Header */}
           <div className="grid grid-cols-7 mb-2 text-center">
             {daysOfWeek.map((day, idx) => (
               <div
                 key={idx}
-                className="py-2 text-xs font-bold text-slate-400 uppercase tracking-wider"
+                className="py-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider"
               >
                 {day}
               </div>
@@ -1107,7 +1107,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
             {prevMonthDays.map((d, i) => (
               <div
                 key={`prev-${i}`}
-                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 border border-transparent text-slate-300 text-xs font-medium select-none"
+                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 border border-transparent text-slate-300 dark:text-slate-600 text-xs font-medium select-none"
               >
                 {d}
               </div>
@@ -1130,26 +1130,26 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                   onClick={() => setSelectedDate(dateStr)}
                   className={`min-h-[72px] sm:min-h-[88px] p-2 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between border ${
                     isSelected
-                      ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-500/20'
+                      ? 'border-blue-600 bg-blue-50/60 dark:bg-blue-950/40 shadow-xs ring-2 ring-blue-500/20'
                       : hasEvents
-                      ? 'border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs'
-                      : 'border-slate-100 bg-white hover:bg-slate-50'
+                      ? 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-xs'
+                      : 'border-slate-100 dark:border-slate-800/80 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
                     <span
                       className={`text-xs font-bold ${
                         isSelected
-                          ? 'text-blue-600'
+                          ? 'text-blue-600 dark:text-blue-400'
                           : hasEvents
-                          ? 'text-slate-900'
-                          : 'text-slate-600'
+                          ? 'text-slate-900 dark:text-white'
+                          : 'text-slate-600 dark:text-slate-400'
                       }`}
                     >
                       {dayNum}
                     </span>
                     {hasEvents && (
-                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                      <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></span>
                     )}
                   </div>
 
@@ -1158,7 +1158,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                     {dayEvents.slice(0, 2).map((ev) => (
                       <div
                         key={ev.id || ev.title}
-                        className="truncate text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-800 flex items-center gap-1"
+                        className="truncate text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-1"
                         title={`${ev.title} (${ev.venue_name})`}
                       >
                         <span
@@ -1170,7 +1170,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                       </div>
                     ))}
                     {dayEvents.length > 2 && (
-                      <span className="text-[9px] font-bold text-slate-400 block">
+                      <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 block">
                         +{dayEvents.length - 2} more
                       </span>
                     )}
@@ -1183,7 +1183,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
             {Array.from({ length: nextMonthDaysCount }).map((_, i) => (
               <div
                 key={`next-${i}`}
-                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 border border-transparent text-slate-300 text-xs font-medium select-none"
+                className="min-h-[72px] sm:min-h-[88px] p-1.5 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 border border-transparent text-slate-300 dark:text-slate-600 text-xs font-medium select-none"
               >
                 {i + 1}
               </div>
@@ -1192,17 +1192,17 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
         </div>
 
         {/* Selected Date Agenda Side Panel */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+        <div className="lg:col-span-4 bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 dark:border-slate-800 pb-3 flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
                 Selected Date
               </span>
-              <h3 className="text-base font-extrabold text-slate-900">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
                 {formatDateDisplay(selectedDate)}
               </h3>
             </div>
-            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-lg">
               {selectedDayEvents.length} {selectedDayEvents.length === 1 ? 'Event' : 'Events'}
             </span>
           </div>
@@ -1212,7 +1212,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
             {selectedDayEvents.map((ev) => (
               <div
                 key={ev.id || ev.title}
-                className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-2.5 hover:bg-slate-50 transition-colors"
+                className="p-4 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 space-y-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span
@@ -1222,34 +1222,34 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                   >
                     {ev.category}
                   </span>
-                  <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                  <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     Confirmed
                   </span>
                 </div>
 
-                <h4 className="font-bold text-slate-900 text-sm leading-snug">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm leading-snug">
                   {ev.title}
                 </h4>
 
-                <p className="text-xs font-semibold text-blue-600">
+                <p className="text-xs font-semibold text-blue-600 dark:text-blue-400">
                   {ev.club_name || ev.organizer}
                 </p>
 
-                <div className="space-y-1.5 pt-1.5 border-t border-slate-200/70 text-xs text-slate-600">
+                <div className="space-y-1.5 pt-1.5 border-t border-slate-200/70 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                     <span>{ev.time_slot}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span className="font-semibold text-slate-800">
+                    <Building className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">
                       Venue: {ev.venue_name}
                     </span>
                   </div>
                   {ev.expected_attendees && (
                     <div className="flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <Users className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                       <span>{ev.expected_attendees} Expected Attendees</span>
                     </div>
                   )}
@@ -1259,7 +1259,7 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                   <button
                     type="button"
                     onClick={onExploreVenues}
-                    className="w-full h-8 rounded-lg bg-white border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 text-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                    className="w-full h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/40 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-600 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                   >
                     <span>Check Hall Details</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1269,12 +1269,12 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
             ))}
 
             {selectedDayEvents.length === 0 && (
-              <div className="text-center py-12 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-                <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-xs font-semibold text-slate-600 mb-1">
+              <div className="text-center py-12 px-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <Calendar className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+                <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
                   No events scheduled on this date
                 </p>
-                <p className="text-[11px] text-slate-400 mb-4">
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mb-4">
                   All halls and auditoriums are open for reservation.
                 </p>
                 <button
@@ -1318,15 +1318,15 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
   const getCategoryBadgeClass = (category) => {
     switch (category) {
       case 'Competition':
-        return 'bg-purple-50 text-purple-700 border-purple-200'
+        return 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800'
       case 'Workshop':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
       case 'Club Event':
-        return 'bg-amber-50 text-amber-700 border-amber-200'
+        return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
       case 'College Event':
-        return 'bg-blue-50 text-blue-700 border-blue-200'
+        return 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800'
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200'
+        return 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
     }
   }
 
@@ -1338,20 +1338,20 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
           <button
             type="button"
             onClick={onBackHome}
-            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+            className="group text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
             <span>Back to Home</span>
           </button>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Campus Events
             </h1>
-            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-150">
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 px-2.5 py-1 rounded-full border border-blue-150 dark:border-blue-800">
               Live Schedule
             </span>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Browse confirmed club fests, technical workshops, competitions, and college events scheduled across campus.
           </p>
         </div>
@@ -1359,14 +1359,14 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
         {/* View Switcher & Search Input */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           {/* Grid vs Calendar Toggle */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shrink-0 self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setViewMode('grid')}
               className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 viewMode === 'grid'
-                  ? 'bg-white text-blue-600 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -1377,8 +1377,8 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
               onClick={() => setViewMode('calendar')}
               className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 viewMode === 'calendar'
-                  ? 'bg-white text-blue-600 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <CalendarDays className="w-3.5 h-3.5" />
@@ -1395,7 +1395,7 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search event, club, or hall"
-                className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors shadow-xs"
+                className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors shadow-xs"
               />
             </div>
           )}
@@ -1413,7 +1413,7 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
             className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
               activeCategory === category
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
             {category}
@@ -1429,13 +1429,13 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
           onExploreVenues={onExploreVenues}
         />
       ) : isLoading ? (
-        <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
+        <div className="text-center py-24 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
           <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-slate-600 text-sm font-semibold">Loading campus events from Supabase...</p>
+          <p className="text-slate-600 dark:text-slate-300 text-sm font-semibold">Loading campus events from Supabase...</p>
         </div>
       ) : filteredEvents.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-slate-500 text-sm font-semibold">
+        <div className="text-center py-16 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-semibold">
             {events.length === 0
               ? 'No campus events currently scheduled in the database.'
               : 'No events match your selected filter.'}
@@ -1446,7 +1446,7 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
           {filteredEvents.map((event) => (
             <div
               key={event.id || event.booking_id}
-              className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+              className="bg-white dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/90 dark:border-slate-700 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
             >
               <div>
                 {/* Category & Status Bar */}
@@ -1458,19 +1458,19 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
                   >
                     {event.category || 'Campus Event'}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-150">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-150 dark:border-emerald-800">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     {event.status || 'Confirmed'}
                   </span>
                 </div>
 
                 {/* Event Title */}
-                <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-1.5 line-clamp-2">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1.5 line-clamp-2">
                   {event.title}
                 </h3>
 
                 {/* Organizer / Club */}
-                <div className="text-xs font-semibold text-blue-600 mb-3 flex items-center gap-1.5">
+                <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 shrink-0 text-blue-500" />
                   <span className="truncate">
                     {event.club_name || event.organizer}
@@ -1479,13 +1479,13 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
 
                 {/* Description */}
                 {event.description && (
-                  <p className="text-xs text-slate-500 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed mb-4 line-clamp-3">
                     {event.description}
                   </p>
                 )}
 
                 {/* Event Metadata details */}
-                <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span className="font-medium">{formatDateDisplay(event.event_date)}</span>
@@ -1496,7 +1496,7 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
                   </div>
                   <div className="flex items-center gap-2">
                     <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span className="font-semibold text-slate-800">
+                    <span className="font-semibold text-slate-800 dark:text-white">
                       Venue: {event.venue_name}
                     </span>
                   </div>
@@ -1510,14 +1510,14 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
               </div>
 
               {/* Card Footer */}
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <span className="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">
                   {event.department}
                 </span>
                 <button
                   type="button"
                   onClick={onExploreVenues}
-                  className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="group text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                 >
                   <span>Explore Venues</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -1535,16 +1535,16 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
 function ComingSoonPage({ title, description, onBackHome }) {
   return (
     <div className="flex-1 max-w-4xl mx-auto px-6 py-24 flex flex-col items-center justify-center text-center">
-      <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-blue-600 mb-6 shadow-xs">
+      <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 shadow-xs">
         <Clock className="w-8 h-8 stroke-[1.75]" />
       </div>
-      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
+      <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2">
         Under Development
       </span>
-      <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
         {title}
       </h2>
-      <p className="text-base text-slate-600 max-w-md mb-8 leading-relaxed">
+      <p className="text-base text-slate-600 dark:text-slate-300 max-w-md mb-8 leading-relaxed">
         {description}
       </p>
       <div className="flex items-center gap-4">
@@ -1638,31 +1638,31 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
     <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
       {/* 1. Header & Navigation Breadcrumb */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-2">
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
           <button
             type="button"
             onClick={onBackHome}
-            className="hover:text-blue-600 transition-colors cursor-pointer"
+            className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
           >
             Home
           </button>
           <span>/</span>
-          <span className="text-slate-800">Campus Venues Catalog</span>
+          <span className="text-slate-800 dark:text-slate-200">Campus Venues Catalog</span>
         </div>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
               <span>COEP Campus Venues</span>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5">
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 {venues.length} Spaces Registered
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
               Browse, filter, and reserve academic classrooms, drawing halls, seminar spaces, and auditoriums with live availability.
               {initialDate && (
-                <span className="ml-2 font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block mt-1 sm:mt-0">
+                <span className="ml-2 font-bold text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md inline-block mt-1 sm:mt-0">
                   Checking Date: {formatDateDisplay(initialDate)}
                 </span>
               )}
@@ -1671,21 +1671,21 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 
           {/* Quick Stats Banner */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="px-4 py-2 rounded-2xl bg-white border border-slate-200/90 shadow-2xs text-left">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Showing</div>
-              <div className="text-base font-black text-slate-900">
+            <div className="px-4 py-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs text-left">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Showing</div>
+              <div className="text-base font-black text-slate-900 dark:text-white">
                 {sortedVenues.length}{' '}
-                <span className="text-xs font-semibold text-slate-400">/ {venues.length}</span>
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">/ {venues.length}</span>
               </div>
             </div>
             {isFiltered && (
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="h-11 px-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                className="h-11 px-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
                 title="Reset all filters"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+                <RotateCcw className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                 <span>Reset</span>
               </button>
             )}
@@ -1694,7 +1694,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
       </div>
 
       {/* 2. Controls & Search Toolbar */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs mb-6 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-2xs mb-6 space-y-4">
         {/* Category Type Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {venueTypeOptions.map((type) => {
@@ -1707,14 +1707,14 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 onClick={() => setFilterType(type)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
                   isActive
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-50 border border-slate-200/80 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <span>{type}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-600'
+                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                   }`}
                 >
                   {count}
@@ -1725,7 +1725,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
         </div>
 
         {/* Search & Filter Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
           {/* Live Search Input */}
           <div className="relative md:col-span-5">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -1734,13 +1734,13 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by hall (e.g. SC10, ND01), dept, or keyword..."
-              className="w-full h-10 pl-10 pr-8 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
+              className="w-full h-10 pl-10 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 transition-all"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -1752,7 +1752,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             <select
               value={filterDept}
               onChange={(e) => setFilterDept(e.target.value)}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="All">All Departments ({venues.length})</option>
               {departments
@@ -1770,7 +1770,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             <select
               value={filterCapacity}
               onChange={(e) => setFilterCapacity(e.target.value)}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="All">Any Capacity</option>
               <option value="compact">Small (&lt; 50 Seats)</option>
@@ -1785,7 +1785,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="flex-1 h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="flex-1 h-10 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="default">Default</option>
               <option value="capacity-desc">Capacity &darr;</option>
@@ -1794,14 +1794,14 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             </select>
 
             {/* View Mode Switcher */}
-            <div className="flex items-center p-0.5 rounded-xl bg-slate-100 border border-slate-200 shrink-0">
+            <div className="flex items-center p-0.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
                 className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                   viewMode === 'grid'
-                    ? 'bg-white shadow-2xs text-blue-600'
-                    : 'text-slate-500 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="Grid Cards"
               >
@@ -1812,8 +1812,8 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 onClick={() => setViewMode('list')}
                 className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                   viewMode === 'list'
-                    ? 'bg-white shadow-2xs text-blue-600'
-                    : 'text-slate-500 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="Compact List"
               >
@@ -1825,53 +1825,53 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 
         {/* Active Filter Chips Strip */}
         {isFiltered && (
-          <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               Active Filters:
             </span>
             {filterType !== 'All Spaces' && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-lg">
                 Type: {filterType}
                 <button
                   type="button"
                   onClick={() => setFilterType('All Spaces')}
-                  className="hover:text-red-600 cursor-pointer"
+                  className="hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
                 </button>
               </span>
             )}
             {filterDept !== 'All' && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg">
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-lg">
                 Dept: {filterDept}
                 <button
                   type="button"
                   onClick={() => setFilterDept('All')}
-                  className="hover:text-red-600 cursor-pointer"
+                  className="hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
                 </button>
               </span>
             )}
             {filterCapacity !== 'All' && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg">
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-lg">
                 Capacity: {filterCapacity}
                 <button
                   type="button"
                   onClick={() => setFilterCapacity('All')}
-                  className="hover:text-red-600 cursor-pointer"
+                  className="hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
                 </button>
               </span>
             )}
             {searchQuery && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-lg">
                 Query: &quot;{searchQuery}&quot;
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="hover:text-red-600 cursor-pointer"
+                  className="hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -1880,7 +1880,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             <button
               type="button"
               onClick={resetAllFilters}
-              className="text-[11px] font-bold text-blue-600 hover:text-blue-800 underline cursor-pointer ml-1"
+              className="text-[11px] font-bold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline cursor-pointer ml-1"
             >
               Clear All
             </button>
@@ -1890,19 +1890,19 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 
       {/* 3. Venues Content: Loading, Empty, Grid or List */}
       {isLoading ? (
-        <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
+        <div className="text-center py-24 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
           <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-slate-600 text-sm font-semibold">Loading campus venues...</p>
+          <p className="text-slate-600 dark:text-slate-300 text-sm font-semibold">Loading campus venues...</p>
         </div>
       ) : sortedVenues.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-slate-200/90 shadow-2xs max-w-lg mx-auto">
-          <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-16 px-4 bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200/90 dark:border-slate-700 shadow-2xs max-w-lg mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center mx-auto mb-4">
             <Search className="w-7 h-7 stroke-[1.5]" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 mb-1">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
             No campus venues match your search
           </h3>
-          <p className="text-xs text-slate-500 mb-6 leading-relaxed max-w-xs mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed max-w-xs mx-auto">
             Try adjusting your search query, selecting another department, or clearing the capacity filter.
           </p>
           <button
@@ -1924,10 +1924,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
               <div
                 key={venue.id || idx}
                 onClick={() => onSelectVenue(venue)}
-                className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
+                className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
               >
                 {/* Image Banner */}
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                   <img
                     src={venueImage}
                     alt={venue.old_hall_name || venue.new_hall_name}
@@ -1969,12 +1969,12 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <h3
-                      className="font-bold text-slate-900 text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors"
+                      className="font-bold text-slate-900 dark:text-white text-base mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                       title={venue.old_hall_name || venue.new_hall_name}
                     >
                       {venue.old_hall_name || venue.new_hall_name}
                     </h3>
-                    <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-3">
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-3">
                       <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span className="truncate">{venue.department}</span>
                     </p>
@@ -1985,7 +1985,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                         {venue.features.slice(0, 3).map((feat, i) => (
                           <span
                             key={i}
-                            className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md"
+                            className="text-[10px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
                           >
                             {feat}
                           </span>
@@ -1994,8 +1994,8 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                     )}
                   </div>
 
-                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       Available
                     </span>
@@ -2006,7 +2006,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                         e.stopPropagation()
                         onSelectVenue(venue)
                       }}
-                      className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md"
+                      className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md cursor-pointer"
                     >
                       <span>Book Slot</span>
                       <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -2019,7 +2019,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
         </div>
       ) : (
         /* COMPACT LIST VIEW */
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs divide-y divide-slate-100 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xs divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
@@ -2027,10 +2027,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
               <div
                 key={venue.id || idx}
                 onClick={() => onSelectVenue(venue)}
-                className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-blue-50/30 transition-colors cursor-pointer group"
+                className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-blue-50/30 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group"
               >
                 <div className="flex items-start sm:items-center gap-4 flex-1">
-                  <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
+                  <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     <img
                       src={venueImage}
                       alt={venue.old_hall_name || venue.new_hall_name}
@@ -2050,27 +2050,27 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {venue.old_hall_name || venue.new_hall_name}
                       </h3>
-                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
                         {venue.type}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
                       <Building className="w-3.5 h-3.5 text-slate-400" />
                       <span>{venue.department}</span>
                     </p>
 
                     <div className="flex flex-wrap items-center gap-2 pt-0.5">
-                      <span className="text-[11px] font-semibold text-slate-600">
+                      <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
                         <strong>{capacity}</strong> Seats ({venue.benches} Benches)
                       </span>
                       {venue.features && venue.features.slice(0, 2).map((f, i) => (
                         <span
                           key={i}
-                          className="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded"
+                          className="text-[10px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.2 rounded"
                         >
                           {f}
                         </span>
@@ -2086,7 +2086,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                       e.stopPropagation()
                       onSelectVenue(venue)
                     }}
-                    className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md"
+                    className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md cursor-pointer"
                   >
                     <span>Book Slot</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -3112,14 +3112,14 @@ const handleNavClick = (tab) => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   {/* Left Hero Content: Anchored cleanly */}
                   <div className="lg:col-span-7 xl:col-span-6 space-y-4 sm:space-y-6 py-2 sm:py-6">
-                    <div className="inline-flex items-center gap-2 text-slate-500 text-[11px] sm:text-xs font-bold uppercase tracking-widest">
+                    <div className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 text-[11px] sm:text-xs font-bold uppercase tracking-widest">
                       COEP TECHNOLOGICAL UNIVERSITY
                     </div>
 
-                    <h1 className="text-3xl sm:text-5xl xl:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                    <h1 className="text-3xl sm:text-5xl xl:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
                       Book Venues,<br />
                       Without the{' '}
-                      <span className="relative inline-block text-blue-600">
+                      <span className="relative inline-block text-blue-600 dark:text-blue-400">
                         Hassle
                         {/* Curved underline vector */}
                         <svg
@@ -3140,27 +3140,27 @@ const handleNavClick = (tab) => {
                       </span>
                     </h1>
 
-                    <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-lg leading-relaxed">
+                    <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
                       Find and book classrooms, seminar halls, auditoriums and other campus venues easily.
                     </p>
 
                     {/* Quick Search Floating Bar */}
                     <div className="pt-2">
-                      <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 max-w-xl">
+                      <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 max-w-xl">
                         {/* Venue Type Picker */}
                         <div className="relative flex-1 w-full">
                           <button
                             type="button"
                             onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
-                            className="w-full h-12 sm:h-13 px-3.5 rounded-xl bg-transparent hover:bg-slate-50 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                            className="w-full h-12 sm:h-13 px-3.5 rounded-xl bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
                           >
                             <div className="flex items-center gap-2.5 overflow-hidden">
                               <MapPin className="w-4.5 h-4.5 text-slate-400 shrink-0" />
                               <div className="text-left">
-                                <div className="text-[10px] sm:text-[11px] font-bold text-slate-900 leading-tight">
+                                <div className="text-[10px] sm:text-[11px] font-bold text-slate-900 dark:text-white leading-tight">
                                   Venue Type
                                 </div>
-                                <div className="text-xs text-slate-500 truncate">
+                                <div className="text-xs text-slate-500 dark:text-slate-400 truncate">
                                   {selectedType}
                                 </div>
                               </div>
@@ -3170,7 +3170,7 @@ const handleNavClick = (tab) => {
 
                           {/* Dropdown Menu */}
                           {isTypeDropdownOpen && (
-                            <div className="absolute top-14 sm:top-15 left-0 w-full min-w-[200px] bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-40">
+                            <div className="absolute top-14 sm:top-15 left-0 w-full min-w-[200px] bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 py-1.5 z-40">
                               {venueTypes.map((type) => (
                                 <button
                                   key={type}
@@ -3179,7 +3179,7 @@ const handleNavClick = (tab) => {
                                     setSelectedType(type)
                                     setIsTypeDropdownOpen(false)
                                   }}
-                                  className={`w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-blue-50 transition-colors flex items-center justify-between cursor-pointer ${selectedType === type ? 'text-blue-600 font-semibold bg-blue-50/50' : 'text-slate-700'
+                                  className={`w-full px-4 py-2.5 text-left text-sm font-medium transition-colors flex items-center justify-between cursor-pointer ${selectedType === type ? 'text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/40' : 'text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800'
                                     }`}
                                 >
                                   {type}
@@ -3189,7 +3189,7 @@ const handleNavClick = (tab) => {
                           )}
                         </div>
 
-                        <div className="hidden sm:block w-px h-8 bg-slate-200"></div>
+                        <div className="hidden sm:block w-px h-8 bg-slate-200 dark:bg-slate-800"></div>
 
                         {/* Date Picker Trigger with Custom In-Website Calendar Popup */}
                         <div className="relative flex-1 w-full">
@@ -3199,21 +3199,21 @@ const handleNavClick = (tab) => {
                               setIsDatePickerOpen(!isDatePickerOpen)
                               setIsTypeDropdownOpen(false)
                             }}
-                            className={`w-full h-12 sm:h-13 px-3.5 rounded-xl transition-colors cursor-pointer text-left flex items-center justify-between gap-2 ${isDatePickerOpen ? 'bg-blue-50/70 ring-1 ring-blue-500/30' : 'bg-transparent hover:bg-slate-50'
+                            className={`w-full h-12 sm:h-13 px-3.5 rounded-xl transition-colors cursor-pointer text-left flex items-center justify-between gap-2 ${isDatePickerOpen ? 'bg-blue-50/70 dark:bg-blue-950/40 ring-1 ring-blue-500/30' : 'bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800'
                               }`}
                           >
                             <div className="flex items-center gap-2.5 overflow-hidden">
-                              <Calendar className={`w-4.5 h-4.5 shrink-0 ${selectedDate || isDatePickerOpen ? 'text-blue-600' : 'text-slate-400'}`} />
+                              <Calendar className={`w-4.5 h-4.5 shrink-0 ${selectedDate || isDatePickerOpen ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400'}`} />
                               <div className="text-left">
-                                <div className="text-[10px] sm:text-[11px] font-bold text-slate-900 leading-tight">
+                                <div className="text-[10px] sm:text-[11px] font-bold text-slate-900 dark:text-white leading-tight">
                                   Date
                                 </div>
-                                <div className={`text-xs truncate ${selectedDate ? 'font-bold text-blue-600' : 'text-slate-500'}`}>
+                                <div className={`text-xs truncate ${selectedDate ? 'font-bold text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400'}`}>
                                   {formatDateDisplay(selectedDate)}
                                 </div>
                               </div>
                             </div>
-                            <ChevronDown className={`w-4 h-4 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180 text-blue-600' : 'text-slate-400'}`} />
+                            <ChevronDown className={`w-4 h-4 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : 'text-slate-400'}`} />
                           </button>
 
                           {/* Custom Website-Styled Calendar Dropdown */}
@@ -3241,17 +3241,17 @@ const handleNavClick = (tab) => {
                     </div>
 
                     {/* Quick Campus Stats Pills */}
-                    <div className="pt-1 flex flex-wrap items-center gap-5 text-xs text-slate-500">
+                    <div className="pt-1 flex flex-wrap items-center gap-5 text-xs text-slate-500 dark:text-slate-400">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span className="font-semibold text-slate-700">60+ Venues Active</span>
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">60+ Venues Active</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                         <span>Conflict-Free Booking</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                         <span>Instant Request Tracking</span>
                       </div>
                     </div>
@@ -3271,21 +3271,21 @@ const handleNavClick = (tab) => {
             </section>
 
             {/* 3. Popular Venue Types Section */}
-            <section className="relative z-0 pt-4 pb-12 sm:pt-6 sm:pb-14 bg-[rgb(249,248,246)]">
+            <section className="relative z-0 pt-4 pb-12 sm:pt-6 sm:pb-14 bg-[rgb(249,248,246)] dark:bg-[#0b0f19]">
               <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
                   <div>
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block mb-1">
                       Browse Venues
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                       Popular Venue Types
                     </h2>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActiveTab('venues')}
-                    className="self-start sm:self-auto group inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+                    className="self-start sm:self-auto group inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
                   >
                     <span>View All Venues</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -3312,52 +3312,52 @@ const handleNavClick = (tab) => {
             </section>
 
             {/* 4. How It Works Section */}
-            <section className="py-12 sm:py-16 bg-[rgb(249,248,246)] border-t border-slate-200/60">
+            <section className="py-12 sm:py-16 bg-[rgb(249,248,246)] dark:bg-slate-900/40 border-t border-slate-200/60 dark:border-slate-800">
               <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="mb-8 sm:mb-10 text-left sm:text-left">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block mb-1">
                     How It Works
                   </span>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                     Book in 3 Simple Steps
                   </h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative">
                   {/* Step 1 */}
-                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white sm:bg-transparent border sm:border-0 border-slate-200/80 shadow-xs sm:shadow-none">
+                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white dark:bg-slate-900/60 sm:bg-transparent sm:dark:bg-transparent border sm:border-0 border-slate-200/80 dark:border-slate-800 shadow-xs sm:shadow-none">
                     <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 shadow-sm">
                       1
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 text-base mb-1">Check Availability</h3>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">Check Availability</h3>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                         Select your desired venue and inspect live open slots on the calendar.
                       </p>
                     </div>
                   </div>
 
                   {/* Step 2 */}
-                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white sm:bg-transparent border sm:border-0 border-slate-200/80 shadow-xs sm:shadow-none">
+                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white dark:bg-slate-900/60 sm:bg-transparent sm:dark:bg-transparent border sm:border-0 border-slate-200/80 dark:border-slate-800 shadow-xs sm:shadow-none">
                     <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 shadow-sm">
                       2
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 text-base mb-1">Make a Booking</h3>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">Make a Booking</h3>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                         Fill in event purpose, department, and faculty coordinator details.
                       </p>
                     </div>
                   </div>
 
                   {/* Step 3 */}
-                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white sm:bg-transparent border sm:border-0 border-slate-200/80 shadow-xs sm:shadow-none">
+                  <div className="flex items-start gap-4 p-4 sm:p-0 rounded-2xl bg-white dark:bg-slate-900/60 sm:bg-transparent sm:dark:bg-transparent border sm:border-0 border-slate-200/80 dark:border-slate-800 shadow-xs sm:shadow-none">
                     <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 shadow-sm">
                       3
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 text-base mb-1">Get Confirmation</h3>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">Get Confirmation</h3>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                         Receive approval notification and reservation slip from administration.
                       </p>
                     </div>
@@ -3428,8 +3428,8 @@ const handleNavClick = (tab) => {
                 type="button"
                 onClick={() => handleNavClick('student')}
                 className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'student'
-                  ? 'text-indigo-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 font-bold'
-                  : 'hover:text-slate-900 text-slate-700'
+                  ? 'text-indigo-600 dark:text-indigo-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 dark:after:bg-indigo-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
                 <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
@@ -3442,11 +3442,11 @@ const handleNavClick = (tab) => {
                 type="button"
                 onClick={() => handleNavClick('faculty')}
                 className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'faculty'
-                  ? 'text-blue-800 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 font-bold'
-                  : 'hover:text-slate-900 text-slate-700'
+                  ? 'text-blue-800 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <GraduationCap className="w-3.5 h-3.5 text-blue-700" />
+                <GraduationCap className="w-3.5 h-3.5 text-blue-700 dark:text-blue-400" />
                 <span>Faculty</span>
               </button>
             )}
@@ -3456,8 +3456,8 @@ const handleNavClick = (tab) => {
                 type="button"
                 onClick={() => handleNavClick('club')}
                 className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'club'
-                  ? 'text-amber-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 font-bold'
-                  : 'hover:text-slate-900 text-slate-700'
+                  ? 'text-amber-700 dark:text-amber-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 dark:after:bg-amber-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
                 <Trophy className="w-3.5 h-3.5 text-amber-500" />
@@ -3470,11 +3470,11 @@ const handleNavClick = (tab) => {
                 type="button"
                 onClick={() => handleNavClick('security')}
                 className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'security'
-                  ? 'text-emerald-700 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 font-bold'
-                  : 'hover:text-emerald-700 text-slate-700'
+                  ? 'text-emerald-700 dark:text-emerald-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 dark:after:bg-emerald-400 font-bold'
+                  : 'hover:text-emerald-700 dark:hover:text-emerald-400 text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Security</span>
               </button>
             )}
@@ -3484,11 +3484,11 @@ const handleNavClick = (tab) => {
                 type="button"
                 onClick={() => handleNavClick('admin')}
                 className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'admin'
-                  ? 'text-purple-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 font-bold'
-                  : 'hover:text-purple-600 text-slate-700'
+                  ? 'text-purple-600 dark:text-purple-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 dark:after:bg-purple-400 font-bold'
+                  : 'hover:text-purple-600 dark:hover:text-purple-400 text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <Shield className="w-3.5 h-3.5 text-purple-600" />
+                <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 <span>Admin</span>
               </button>
             )}
@@ -3632,9 +3632,9 @@ const handleNavClick = (tab) => {
               <button
                 type="button"
                 onClick={() => handleNavClick('student')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <BookOpen className="w-4 h-4 text-indigo-600" />
+                <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Student Portal</span>
               </button>
             )}
@@ -3643,9 +3643,9 @@ const handleNavClick = (tab) => {
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <GraduationCap className="w-4 h-4 text-blue-700" />
+                <GraduationCap className="w-4 h-4 text-blue-700 dark:text-blue-400" />
                 <span>Faculty Portal</span>
               </button>
             )}
@@ -3654,7 +3654,7 @@ const handleNavClick = (tab) => {
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 text-amber-800' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
                 <Trophy className="w-4 h-4 text-amber-500" />
                 <span>Club Portal</span>
@@ -3665,9 +3665,9 @@ const handleNavClick = (tab) => {
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Security Terminal</span>
               </button>
             )}
@@ -3676,9 +3676,9 @@ const handleNavClick = (tab) => {
               <button
                 type="button"
                 onClick={() => handleNavClick('admin')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 text-purple-700' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <Shield className="w-4 h-4 text-purple-600" />
+                <Shield className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 <span>Admin Console</span>
               </button>
             )}
@@ -4136,13 +4136,13 @@ export function LoginForm({ onLoginSuccess }) {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-white text-slate-900 border border-slate-200 shadow-xl transition-all">
+    <div className="w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 shadow-xl transition-all">
       {/* Header */}
       <div className="mb-6 text-center sm:text-left">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
           COEP Campus Sign In
         </h2>
-        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
           Access campus venues, auditoriums, and reservation records.
         </p>
       </div>
@@ -4153,7 +4153,7 @@ export function LoginForm({ onLoginSuccess }) {
           type="button"
           onClick={handleOutlookSignIn}
           disabled={isVerifying}
-          className="w-full h-12 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wide transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-3 cursor-pointer disabled:opacity-75"
+          className="w-full h-12 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-xs tracking-wide transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-3 cursor-pointer disabled:opacity-75 border border-transparent dark:border-slate-700"
         >
           <div className="flex items-center gap-2">
             <MicrosoftLogo className="w-4 h-4" />
@@ -4166,15 +4166,15 @@ export function LoginForm({ onLoginSuccess }) {
       {/* Visual Divider */}
       <div className="relative my-5 text-center">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-200"></div>
+          <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
         </div>
-        <span className="relative px-3 bg-white text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <span className="relative px-3 bg-white dark:bg-slate-900 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
           or sign in with credentials
         </span>
       </div>
 
       {/* Auth Method Toggle */}
-      <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl mb-4 text-xs font-bold">
+      <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 text-xs font-bold">
         <button
           type="button"
           onClick={() => {
@@ -4183,8 +4183,8 @@ export function LoginForm({ onLoginSuccess }) {
           }}
           className={`py-2 rounded-lg transition-all cursor-pointer ${
             authMethod === 'password'
-              ? 'bg-white text-blue-600 shadow-xs'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           University Password
@@ -4197,8 +4197,8 @@ export function LoginForm({ onLoginSuccess }) {
           }}
           className={`py-2 rounded-lg transition-all cursor-pointer ${
             authMethod === 'otp'
-              ? 'bg-white text-blue-600 shadow-xs'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           Email OTP
@@ -4209,9 +4209,9 @@ export function LoginForm({ onLoginSuccess }) {
       {errorMessage && (
         <div
           role="alert"
-          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"
+          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-medium"
         >
-          <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+          <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
           <span>{errorMessage}</span>
         </div>
       )}
@@ -4220,9 +4220,9 @@ export function LoginForm({ onLoginSuccess }) {
       {successNotice && !errorMessage && (
         <div
           role="status"
-          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium"
+          className="mb-4 flex items-start gap-2.5 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-medium"
         >
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
           <span>{successNotice}</span>
         </div>
       )}
@@ -4235,7 +4235,7 @@ export function LoginForm({ onLoginSuccess }) {
           <div>
             <label
               htmlFor="password-university-email"
-              className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+              className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
             >
               University Email
             </label>
@@ -4249,14 +4249,14 @@ export function LoginForm({ onLoginSuccess }) {
               }}
               placeholder="name@coeptech.ac.in"
               disabled={isVerifying}
-              className="w-full h-11 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+              className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
             />
           </div>
 
           <div>
             <label
               htmlFor="password-input"
-              className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+              className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
             >
               Password
             </label>
@@ -4270,7 +4270,7 @@ export function LoginForm({ onLoginSuccess }) {
               }}
               placeholder="Enter password"
               disabled={isVerifying}
-              className="w-full h-11 px-3 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+              className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
             />
           </div>
 
@@ -4292,7 +4292,7 @@ export function LoginForm({ onLoginSuccess }) {
           <div>
             <label
               htmlFor="otp-university-email"
-              className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+              className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
             >
               Institutional Email
             </label>
@@ -4307,7 +4307,7 @@ export function LoginForm({ onLoginSuccess }) {
                 }}
                 placeholder="name@coeptech.ac.in"
                 disabled={isVerifying || isOtpSent}
-                className="w-full h-11 px-3 pl-9 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
+                className="w-full h-11 px-3 pl-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors disabled:opacity-60"
               />
               <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               {isOtpSent && (
@@ -4318,7 +4318,7 @@ export function LoginForm({ onLoginSuccess }) {
                     setOtpCode('')
                     setSuccessNotice('')
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-blue-600 font-bold hover:underline cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer"
                 >
                   Change
                 </button>
@@ -4350,7 +4350,7 @@ export function LoginForm({ onLoginSuccess }) {
               <div>
                 <label
                   htmlFor="six-digit-otp"
-                  className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+                  className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
                 >
                   6-Digit Verification Code
                 </label>
@@ -4363,7 +4363,7 @@ export function LoginForm({ onLoginSuccess }) {
                   placeholder="Enter 6-digit code"
                   autoFocus
                   disabled={isVerifying}
-                  className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                  className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
 
@@ -4384,12 +4384,12 @@ export function LoginForm({ onLoginSuccess }) {
 
               <div className="text-center text-xs">
                 {resendCooldown > 0 ? (
-                  <span className="text-slate-400">Resend code in {resendCooldown}s</span>
+                  <span className="text-slate-400 dark:text-slate-500">Resend code in {resendCooldown}s</span>
                 ) : (
                   <button
                     type="button"
                     onClick={handleSendOtp}
-                    className="text-blue-600 hover:underline font-bold cursor-pointer"
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-bold cursor-pointer"
                   >
                     Resend verification code
                   </button>

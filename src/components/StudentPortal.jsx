@@ -82,19 +82,19 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
-      <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-16">
+      <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
         {/* Header */}
-        <div className="bg-white border-b border-slate-200">
+        <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 mb-2">
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>Student Workspace</span>
               </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Study Spaces & Digital Passes
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 {currentUser?.name || 'Aman Nirmal'} • {currentUser?.department || 'Computer Engineering'}
               </p>
             </div>
@@ -112,35 +112,35 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
 
         {/* Bookings List */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold text-slate-900">My Study Room Passes ({bookings.length})</h2>
-                <p className="text-xs text-slate-500">Show your digital confirmation pass at the security desk or library gate.</p>
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white">My Study Room Passes ({bookings.length})</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Show your digital confirmation pass at the security desk or library gate.</p>
               </div>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {bookings.map((b) => (
                 <div
                   key={b.id}
-                  className="p-4 sm:p-5 hover:bg-slate-50/60 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                  className="p-4 sm:p-5 hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-slate-900">{b.id}</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{b.id}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                         {b.status}
                       </span>
-                      <span className="text-xs font-bold text-indigo-600">{b.venue}</span>
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{b.venue}</span>
                     </div>
 
-                    <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">{b.purpose}</h3>
 
-                    <div className="flex flex-wrap items-center gap-x-4 text-xs text-slate-500">
-                      <span>Date: <strong>{b.date}</strong></span>
-                      <span>Slot: <strong>{b.timeSlot}</strong></span>
-                      <span>Team: <strong>{b.attendees} persons</strong></span>
+                    <div className="flex flex-wrap items-center gap-x-4 text-xs text-slate-500 dark:text-slate-400">
+                      <span>Date: <strong className="text-slate-700 dark:text-slate-200">{b.date}</strong></span>
+                      <span>Slot: <strong className="text-slate-700 dark:text-slate-200">{b.timeSlot}</strong></span>
+                      <span>Team: <strong className="text-slate-700 dark:text-slate-200">{b.attendees} persons</strong></span>
                     </div>
                   </div>
 
@@ -148,7 +148,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                     <button
                       type="button"
                       onClick={() => setSelectedPass(b)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
                     >
                       <QrCode className="w-3.5 h-3.5" />
                       <span>View QR Gate Pass</span>
@@ -156,7 +156,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                     <button
                       type="button"
                       onClick={() => handleDelete(b.id)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                       title="Cancel Booking"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -165,7 +165,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                 </div>
               ))}
               {bookings.length === 0 && (
-                <div className="p-8 text-center text-slate-400 text-xs">
+                <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-xs">
                   You have no active study room reservations.
                 </div>
               )}
@@ -176,13 +176,13 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
         {/* Modal: Book Study Room */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <h3 className="text-base font-bold text-slate-900">Book Study Pod / Lab Space</h3>
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Book Study Pod / Lab Space</h3>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -190,13 +190,13 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Study Facility
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
                   >
                     <option value="Central Library Discussion Room A">Central Library Discussion Room A (4 Seats)</option>
                     <option value="Central Library Discussion Room B">Central Library Discussion Room B (6 Seats)</option>
@@ -206,7 +206,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Study Topic / Project Goal
                   </label>
                   <input
@@ -215,13 +215,13 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                     value={form.purpose}
                     onChange={(e) => setForm({ ...form, purpose: e.target.value })}
                     placeholder="e.g. Distributed Consensus Systems Capstone"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-indigo-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Date
                     </label>
                     <input
@@ -229,18 +229,18 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                       required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-indigo-500"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Time Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
                     >
                       <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
                       <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
@@ -251,7 +251,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Team Members
                   </label>
                   <input
@@ -260,7 +260,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                     max="8"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-indigo-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
                   />
                 </div>
 
@@ -268,13 +268,13 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700 cursor-pointer"
+                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold cursor-pointer shadow-sm"
+                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
                   >
                     Issue Digital Pass
                   </button>
@@ -287,21 +287,21 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
         {/* Modal: View Digital Pass Slip */}
         {selectedPass && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-sm bg-white rounded-3xl border border-slate-200 shadow-2xl p-6 text-center space-y-4">
-              <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center">
+            <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-center space-y-4">
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                 <QrCode className="w-7 h-7" />
               </div>
 
               <div>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   {selectedPass.status} Gate Pass
                 </span>
-                <h3 className="text-base font-extrabold text-slate-900 mt-2">{selectedPass.venue}</h3>
-                <p className="text-xs text-slate-500">{selectedPass.purpose}</p>
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-2">{selectedPass.venue}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{selectedPass.purpose}</p>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-1 font-mono">
-                <div>Pass Code: <strong className="text-indigo-700">{selectedPass.digitalPassCode}</strong></div>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs text-left space-y-1 font-mono text-slate-700 dark:text-slate-300">
+                <div>Pass Code: <strong className="text-indigo-700 dark:text-indigo-400">{selectedPass.digitalPassCode}</strong></div>
                 <div>Slot: {selectedPass.date} • {selectedPass.timeSlot}</div>
                 <div>Team: {selectedPass.attendees} Persons</div>
                 <div>Applicant: {currentUser?.name || 'Aman Nirmal'}</div>
@@ -310,7 +310,7 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
               <button
                 type="button"
                 onClick={() => setSelectedPass(null)}
-                className="w-full h-10 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer transition-colors"
+                className="w-full h-10 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition-colors border border-transparent dark:border-slate-700"
               >
                 Done
               </button>
