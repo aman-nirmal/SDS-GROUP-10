@@ -1,11 +1,73 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html,
   body {
     background-color: rgb(249, 248, 246);
     color: #1e293b;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html.dark,
+  html.dark body {
+    background-color: #0b0f19;
+    color: #e2e8f0;
+    color-scheme: dark;
+  }
+
+  html.dark input,
+  html.dark select,
+  html.dark textarea {
+    color-scheme: dark;
+  }
+
+  html.dark .bg-\[rgb\(249\,248\,246\)\] {
+    background-color: #0b0f19 !important;
+  }
+
+  html.dark .bg-\[rgb\(244\,242\,238\)\] {
+    background-color: #070b12 !important;
+  }
+
+  html.dark .bg-white {
+    background-color: #101726;
+    color: #f1f5f9;
+  }
+
+  html.dark .bg-slate-50 {
+    background-color: #1a2234;
+  }
+
+  html.dark .bg-slate-100 {
+    background-color: #1e293b;
+  }
+
+  html.dark .text-slate-900,
+  html.dark .text-slate-800 {
+    color: #f8fafc;
+  }
+
+  html.dark .text-slate-700 {
+    color: #cbd5e1;
+  }
+
+  html.dark .text-slate-600 {
+    color: #94a3b8;
+  }
+
+  html.dark .text-slate-500 {
+    color: #94a3b8;
+  }
+
+  html.dark .border-slate-200,
+  html.dark .border-slate-200\/80,
+  html.dark .border-slate-200\/90,
+  html.dark .border-slate-150,
+  html.dark .border-slate-100 {
+    border-color: #1e293b;
   }
 }
 

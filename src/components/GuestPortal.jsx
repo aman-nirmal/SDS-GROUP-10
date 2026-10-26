@@ -16,6 +16,7 @@ const PUBLIC_CAMPUS_VENUES = [
     type: 'Heritage Landmark & Administrative Hall',
     location: 'North Campus Quadrangle',
     capacity: '300 Persons',
+    image: '/coep_building.png',
     publicAccess: 'Open for guided heritage walks on Saturdays & public academic ceremonies.'
   },
   {
@@ -24,6 +25,7 @@ const PUBLIC_CAMPUS_VENUES = [
     type: 'Incubation Center & Auditorium',
     location: 'Boat Club Road, Mula Riverbank',
     capacity: '250 Seat Auditorium',
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
     publicAccess: 'Open for guest symposiums, startup pitches, and public technology lectures.'
   },
   {
@@ -32,6 +34,7 @@ const PUBLIC_CAMPUS_VENUES = [
     type: 'Riverside Regatta Pavilion',
     location: 'Sangam River Front',
     capacity: '1,500 Spectators',
+    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
     publicAccess: 'Home of the COEP Regatta. Public spectator gallery open during scheduled fixtures.'
   }
 ]
@@ -146,21 +149,33 @@ export default function GuestPortal({ onNavigateLogin, onExploreVenues }) {
             <p className="text-xs text-slate-500">Key architectural venues accessible during open days.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {PUBLIC_CAMPUS_VENUES.map((venue) => (
-              <div key={venue.id} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 flex flex-col justify-between">
-                <div>
-                  <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center mb-3">
-                    <Building2 className="w-4 h-4" />
+              <div key={venue.id} className="rounded-2xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-2xs hover:shadow-md transition-shadow">
+                <div className="relative h-36 w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={venue.image}
+                    alt={venue.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null
+                      e.currentTarget.src = '/coep_building.png'
+                    }}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-3 right-3 text-white text-[11px] font-semibold flex items-center justify-between">
+                    <span>{venue.location}</span>
+                    <span className="font-bold">{venue.capacity}</span>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">{venue.name}</h3>
-                  <div className="text-xs text-blue-600 font-medium mt-0.5">{venue.type}</div>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">{venue.publicAccess}</p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
-                  <span>{venue.location}</span>
-                  <span className="font-bold text-slate-700">{venue.capacity}</span>
+                <div className="p-4 sm:p-5 space-y-2 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">{venue.name}</h3>
+                    <div className="text-xs text-blue-600 font-medium mt-0.5">{venue.type}</div>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">{venue.publicAccess}</p>
+                  </div>
                 </div>
               </div>
             ))}

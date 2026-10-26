@@ -24,9 +24,18 @@ import {
   RefreshCw,
   Shield,
   LogOut,
+  Lock,
   GraduationCap,
   BookOpen,
-  Trophy
+  Trophy,
+  List,
+  SlidersHorizontal,
+  RotateCcw,
+  Info,
+  Sparkles,
+  Check,
+  Sun,
+  Moon
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
@@ -279,10 +288,136 @@ function formatDateDisplay(dateStr) {
   }
 }
 
-// Complete Interactive Venue Booking Modal Component
+// Helper function to get authentic high-quality image for any campus venue
+export function getVenueImageUrl(venue) {
+  if (venue?.image) return venue.image
+  if (venue?.image_url) return venue.image_url
+
+  const name = `${venue?.new_hall_name || ''} ${venue?.old_hall_name || ''} ${venue?.name || ''}`.toLowerCase()
+  const type = `${venue?.type || ''}`.toLowerCase()
+
+  if (type.includes('auditorium') || name.includes('aud')) {
+    return 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80'
+  }
+  if (type.includes('seminar') || name.includes('sh') || name.includes('seminar') || name.includes('drawing') || name.includes('nd')) {
+    return 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80'
+  }
+  if (type.includes('meeting') || name.includes('mr') || name.includes('conference')) {
+    return 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'
+  }
+  // Default authentic university classroom interior with desks and chalkboard
+  return 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80'
+}
+
+// Helper function to get official faculty in-charge & department coordinator for any venue
+export function getVenueFaculty(venue) {
+  if (venue?.faculty_incharge) return venue.faculty_incharge
+
+  const dept = (venue?.department || '').toLowerCase()
+  if (dept.includes('civil')) {
+    return {
+      name: 'Prof. K. A. Patil',
+      designation: 'Faculty In-Charge & Head of Department',
+      email: 'hod.civil@coeptech.ac.in',
+      office: 'Civil Main Building, Room 102'
+    }
+  }
+  if (dept.includes('academics')) {
+    return {
+      name: 'Dr. P. R. Dhamangaonkar',
+      designation: 'Dean Academics & Complex In-Charge',
+      email: 'dean.acad@coeptech.ac.in',
+      office: 'Academic Complex Administrative Block, 1st Floor'
+    }
+  }
+  if (dept.includes('electrical')) {
+    return {
+      name: 'Dr. V. N. Pande',
+      designation: 'Faculty In-Charge, Electrical Dept',
+      email: 'hod.elec@coeptech.ac.in',
+      office: 'Electrical Dept Building, Room 105'
+    }
+  }
+  if (dept.includes('electronics') || dept.includes('entc')) {
+    return {
+      name: 'Dr. P. P. Bartakke',
+      designation: 'Faculty In-Charge, ENTC Dept',
+      email: 'hod.extc@coeptech.ac.in',
+      office: 'ENTC Building, 2nd Floor'
+    }
+  }
+  if (dept.includes('mechanical')) {
+    return {
+      name: 'Dr. S. S. Pardeshi',
+      designation: 'Faculty In-Charge, Mechanical Dept',
+      email: 'hod.mech@coeptech.ac.in',
+      office: 'Mechanical Dept Main Hall, Room 14'
+    }
+  }
+  if (dept.includes('metallurgy')) {
+    return {
+      name: 'Dr. S. T. Vagge',
+      designation: 'Faculty In-Charge, Metallurgy Dept',
+      email: 'hod.meta@coeptech.ac.in',
+      office: 'Metallurgy Dept Block, Ground Floor'
+    }
+  }
+  if (dept.includes('management')) {
+    return {
+      name: 'Dr. S. K. Patil',
+      designation: 'Faculty Coordinator, Department of Management',
+      email: 'hod.mgmt@coeptech.ac.in',
+      office: 'Management Studies Wing, Room 05'
+    }
+  }
+  if (dept.includes('manufacturing')) {
+    return {
+      name: 'Dr. Rajiv B.',
+      designation: 'Faculty In-Charge, Manufacturing & Industrial Mgmt',
+      email: 'hod.mfg@coeptech.ac.in',
+      office: 'Production & Manufacturing Block, Room 12'
+    }
+  }
+  if (dept.includes('computer')) {
+    return {
+      name: 'Dr. V. K. Pachghare',
+      designation: 'Faculty In-Charge & HOD, Computer Dept',
+      email: 'hod.comp@coeptech.ac.in',
+      office: 'Computer New Building, 3rd Floor, Room 301'
+    }
+  }
+  if (dept.includes('bhau')) {
+    return {
+      name: 'Dr. S. Radhakrishnan',
+      designation: 'Faculty Director, BHAU Institute',
+      email: 'director.bhau@coeptech.ac.in',
+      office: 'BHAU Incubation Center, Executive Suite'
+    }
+  }
+  return {
+    name: 'Central Estate Officer',
+    designation: 'Faculty In-Charge, Campus Infrastructure & Estate',
+    email: 'estate@coeptech.ac.in',
+    office: 'Central Estate Office, Main Victorian Quadrangle'
+  }
+}
+
+// Classrooms are mostly occupied 10:30 to 5:30 with regular lectures, with free gaps in between
+export const classroomTimeSlots = [
+  { time: '08:30 AM - 10:30 AM', status: 'free' },
+  { time: '10:30 AM - 12:30 PM', status: 'occupied', label: 'Lecture' },
+  { time: '12:30 PM - 01:30 PM', status: 'free', label: 'Tutorial Gap' },
+  { time: '01:30 PM - 02:30 PM', status: 'free', label: 'Lunch Gap' },
+  { time: '02:30 PM - 04:30 PM', status: 'occupied', label: 'Lab Class' },
+  { time: '04:30 PM - 05:30 PM', status: 'free', label: 'Evening Gap' },
+  { time: '05:30 PM - 07:30 PM', status: 'free' }
+]
+
+// Complete Interactive Venue Booking Modal Component with Full Venue Specs & Faculty In-Charge
 function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
   const [date, setDate] = useState(defaultDate || '2026-10-16')
-  const [selectedSlot, setSelectedSlot] = useState('09:00 AM - 11:00 AM')
+  const [selectedSlot, setSelectedSlot] = useState('12:30 PM - 01:30 PM')
+  const [showSchedule, setShowSchedule] = useState(false)
   const [applicantName, setApplicantName] = useState('')
   const [department, setDepartment] = useState(venue?.department || 'Computer Engineering')
   const [eventPurpose, setEventPurpose] = useState('')
@@ -290,13 +425,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
   const [submitted, setSubmitted] = useState(false)
   const [bookingRef, setBookingRef] = useState('')
 
-  const availableSlots = [
-    { id: 'slot-1', label: '09:00 AM - 11:00 AM', status: 'available' },
-    { id: 'slot-2', label: '11:15 AM - 01:15 PM', status: 'available' },
-    { id: 'slot-3', label: '02:00 PM - 04:00 PM', status: 'available' },
-    { id: 'slot-4', label: '04:15 PM - 06:15 PM', status: 'available' },
-    { id: 'slot-5', label: '06:30 PM - 08:30 PM', status: 'available' }
-  ]
+  const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
+  const venuePhoto = getVenueImageUrl(venue)
+  const faculty = getVenueFaculty(venue)
+  const capacity = venue?.capacity || (venue?.benches ? venue.benches * 2 : 60)
+  const benches = venue?.benches || Math.round(capacity / 2)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -317,24 +450,23 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
         slot: selectedSlot,
         purpose: eventPurpose,
         capacity: attendees,
+        facultyInCharge: faculty.name,
         status: 'Confirmed'
       })
     }
   }
 
-  const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
-
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 my-8"
+        className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 my-6 flex flex-col"
       >
         {submitted ? (
-          <div className="text-center py-4">
+          <div className="p-8 text-center py-10">
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-xs">
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
@@ -344,15 +476,15 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
             <h3 className="text-2xl font-black text-slate-900 mb-2">
               Slot Reserved Successfully!
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed max-w-md mx-auto">
               Your venue reservation for <strong className="text-slate-900">{venueTitle}</strong> on{' '}
               <strong className="text-slate-900">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been registered.
             </p>
 
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left mb-6 space-y-2">
+            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-left mb-6 space-y-3 max-w-lg mx-auto">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 font-medium">Reference Code:</span>
-                <span className="font-mono font-bold text-blue-600">{bookingRef}</span>
+                <span className="font-mono font-bold text-blue-600 text-sm">{bookingRef}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 font-medium">Applicant:</span>
@@ -363,6 +495,10 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                 <span className="font-semibold text-slate-800">{department}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 font-medium">Faculty In-Charge Notified:</span>
+                <span className="font-bold text-blue-700">{faculty.name} ({faculty.email})</span>
+              </div>
+              <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200/80">
                 <span className="text-slate-500 font-medium">Status:</span>
                 <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -374,148 +510,294 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
             <button
               type="button"
               onClick={onClose}
-              className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all duration-200 cursor-pointer shadow-xs"
+              className="px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all duration-200 cursor-pointer shadow-xs"
             >
               Done & Return
             </button>
           </div>
         ) : (
           <div>
-            {/* Header */}
-            <div className="flex items-start justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
-              <div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-lg mb-2">
-                  <Building className="w-3.5 h-3.5" />
-                  <span>{venue?.department || 'COEP Campus'}</span>
-                </div>
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">
-                  {venueTitle}
-                </h3>
-                {venue?.old_hall_name && venue.new_hall_name && (
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Formerly: {venue.old_hall_name} &bull; Capacity: {venue.benches * 2} Students ({venue.benches} Benches)
-                  </p>
-                )}
-              </div>
+            {/* 1. Large Image Banner Header */}
+            <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-900">
+              <img
+                src={venuePhoto}
+                alt={venueTitle}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.onerror = null
+                  e.currentTarget.src = '/coep_building.png'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-black/20" />
+
+              {/* Close Button */}
               <button
                 type="button"
                 onClick={onClose}
-                className="w-9 h-9 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+                title="Close"
               >
                 <X className="w-5 h-5" />
               </button>
+
+              {/* Floating Badges */}
+              <div className="absolute top-4 left-4 flex items-center gap-2">
+                <span className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 shadow-xs">
+                  {venue?.new_hall_name || 'Passage Hall'}
+                </span>
+                <span className="text-[11px] font-bold text-blue-200 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/20">
+                  {venue?.type || 'Classrooms'}
+                </span>
+              </div>
+
+              {/* Banner Title & Department */}
+              <div className="absolute bottom-4 left-5 right-5 text-white">
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md">
+                  {venue?.old_hall_name || venue?.new_hall_name}
+                </h2>
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-200 mt-1">
+                  <Building className="w-3.5 h-3.5 text-blue-300 shrink-0" />
+                  <span>{venue?.department || 'COEP Campus'}</span>
+                  {venue?.old_hall_name && venue.new_hall_name && (
+                    <span>&bull; Hall Code: {venue.new_hall_name}</span>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4.5">
-              {/* Date & Slot selection */}
-              <div>
-                <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-                  Select Booking Date
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-colors"
-                />
-              </div>
-
-              {/* Time Slots */}
-              <div>
-                <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-                  Available Time Slots
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {availableSlots.map((slot) => {
-                    const isSelected = selectedSlot === slot.label
-                    return (
-                      <button
-                        key={slot.id}
-                        type="button"
-                        onClick={() => setSelectedSlot(slot.label)}
-                        className={`px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition-all cursor-pointer flex items-center justify-between ${isSelected
-                          ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                          : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                          }`}
-                      >
-                        <span>{slot.label}</span>
-                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Applicant Name & Department */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="p-6 sm:p-7 space-y-5">
+              {/* 2. Venue Specifications Strip */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Faculty / Student Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={applicantName}
-                    onChange={(e) => setApplicantName(e.target.value)}
-                    placeholder="e.g. Prof. R. Sharma / Student"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
-                  />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Capacity
+                  </span>
+                  <span className="font-extrabold text-slate-900 text-sm">{capacity} Persons</span>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Organizing Department
-                  </label>
-                  <input
-                    type="text"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 outline-none focus:border-blue-500 transition-colors"
-                  />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Benches
+                  </span>
+                  <span className="font-extrabold text-slate-900 text-sm">{benches} Benches</span>
                 </div>
-              </div>
-
-              {/* Purpose & Attendees */}
-              <div className="space-y-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Event Purpose / Session Topic *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={eventPurpose}
-                    onChange={(e) => setEventPurpose(e.target.value)}
-                    placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
-                  />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Category
+                  </span>
+                  <span className="font-bold text-slate-800 text-sm truncate block">{venue?.type || 'Classrooms'}</span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-                  <span>Expected Attendees: <strong>{attendees}</strong></span>
-                  <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Instant Campus Approval
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Status
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Available Now
                   </span>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-3 flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="flex-1 h-11 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+              {/* 3. Concise Faculty In-Charge */}
+              <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-slate-500 font-medium">Faculty In-Charge:</span>
+                  <span className="font-bold text-slate-800">{faculty.name}</span>
+                </div>
+                <a
+                  href={`mailto:${faculty.email}`}
+                  className="text-blue-600 hover:text-blue-800 text-[11px] font-semibold hover:underline inline-flex items-center gap-1"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm cursor-pointer"
-                >
-                  Submit Reservation
-                </button>
+                  <Mail className="w-3.5 h-3.5 text-blue-500" />
+                  {faculty.email}
+                </a>
               </div>
-            </form>
+
+              {/* 4. Installed Facilities & Amenities */}
+              <div>
+                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                  Installed Classroom Facilities:
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {(venue?.features || [
+                    'Overhead Projector',
+                    'PA Sound System',
+                    'Air Conditioned',
+                    'Wi-Fi 6'
+                  ]).map((feat, i) => (
+                    <span
+                      key={i}
+                      className="text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70"
+                    >
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      {feat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 5. Slot Reservation Form */}
+              <div className="pt-2 border-t border-slate-100">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Date & Time Slot */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                      1. Reservation Date
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      required
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        2. Time Slot
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowSchedule(!showSchedule)}
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{showSchedule ? 'Hide Timetable' : 'View Timetable'}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSchedule ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+
+                    {/* Expandable Daily Timetable Strip */}
+                    {showSchedule && (
+                      <div className="mb-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs animate-in fade-in duration-150">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-2">
+                          <span>Lecture Hours (10:30 AM – 5:30 PM)</span>
+                          <span className="text-emerald-600 font-semibold">Green = Free for booking</span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
+                          <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+                            <span className="font-bold block">08:30 – 10:30 AM</span> Free
+                          </div>
+                          <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 font-medium line-through">
+                            <span className="font-bold block">10:30 – 12:30 PM</span> Lecture
+                          </div>
+                          <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+                            <span className="font-bold block">12:30 – 02:30 PM</span> Free Gaps
+                          </div>
+                          <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 font-medium line-through">
+                            <span className="font-bold block">02:30 – 04:30 PM</span> Practical
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Clean Simple Time Slot Buttons */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {classroomTimeSlots.map((slot, i) => {
+                        const isFree = slot.status === 'free'
+                        const isSelected = selectedSlot === slot.time
+                        return isFree ? (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => setSelectedSlot(slot.time)}
+                            className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${
+                              isSelected
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-white text-slate-800 border-slate-200 hover:border-blue-400'
+                            }`}
+                          >
+                            <span>{slot.time}</span>
+                            {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
+                          </button>
+                        ) : (
+                          <div
+                            key={i}
+                            className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 bg-slate-100 text-slate-400 line-through flex items-center justify-between cursor-not-allowed select-none"
+                            title="Occupied for regular classes"
+                          >
+                            <span>{slot.time}</span>
+                            <span className="text-[10px] text-rose-500 font-semibold">{slot.label}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Applicant Details */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Applicant / Faculty Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={applicantName}
+                        onChange={(e) => setApplicantName(e.target.value)}
+                        placeholder="e.g. Prof. R. Sharma / Student"
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Applicant Department
+                      </label>
+                      <input
+                        type="text"
+                        value={department}
+                        onChange={(e) => setDepartment(e.target.value)}
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 outline-none focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Event Purpose */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Event Purpose / Session Topic *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={eventPurpose}
+                      onChange={(e) => setEventPurpose(e.target.value)}
+                      placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+                    <span>
+                      Venue Capacity: <strong>{capacity} Persons</strong> ({benches} Benches)
+                    </span>
+                    <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Instant Campus Approval
+                    </span>
+                  </div>
+
+                  {/* Submit / Cancel Buttons */}
+                  <div className="pt-3 flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="flex-1 h-11 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                    >
+                      <span>Confirm Reservation</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -1278,172 +1560,1067 @@ function ComingSoonPage({ title, description, onBackHome }) {
   )
 }
 
-// Full Interactive Venue Catalog Page
+// Full Interactive & Modern Venue Catalog Page
 function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
   const [filterDept, setFilterDept] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterType, setFilterType] = useState(initialType || 'All Venues')
+  const [filterType, setFilterType] = useState(
+    initialType && initialType !== 'All' ? initialType : 'All Spaces'
+  )
+  const [filterCapacity, setFilterCapacity] = useState('All')
+  const [sortBy, setSortBy] = useState('default')
+  const [viewMode, setViewMode] = useState('grid') // 'grid' | 'list'
 
   const departments = ['All', ...new Set(venues.map((v) => v.department).filter(Boolean))]
+
+  const venueTypeOptions = [
+    'All Spaces',
+    'Classrooms',
+    'Seminar Halls',
+    'Auditoriums',
+    'Meeting Rooms'
+  ]
+
+  const getTypeCount = (type) => {
+    if (type === 'All Spaces') return venues.length
+    return venues.filter((v) => v.type === type).length
+  }
+
+  const isFiltered =
+    filterDept !== 'All' ||
+    searchQuery.trim() !== '' ||
+    filterType !== 'All Spaces' ||
+    filterCapacity !== 'All' ||
+    sortBy !== 'default'
+
+  const resetAllFilters = () => {
+    setFilterDept('All')
+    setSearchQuery('')
+    setFilterType('All Spaces')
+    setFilterCapacity('All')
+    setSortBy('default')
+  }
 
   const filteredVenues = venues.filter((venue) => {
     const matchesDept = filterDept === 'All' || venue.department === filterDept
     const matchesType =
-      filterType === 'All Venues' || venue.type === filterType
+      filterType === 'All Spaces' || venue.type === filterType
     const matchesSearch =
+      searchQuery.trim() === '' ||
       (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (venue.department && venue.department.toLowerCase().includes(searchQuery.toLowerCase()))
-    return matchesDept && matchesType && matchesSearch
+
+    const cap = venue.capacity || (venue.benches ? venue.benches * 2 : 0)
+    let matchesCap = true
+    if (filterCapacity === 'compact') matchesCap = cap < 50
+    else if (filterCapacity === 'medium') matchesCap = cap >= 50 && cap <= 100
+    else if (filterCapacity === 'large') matchesCap = cap > 100 && cap <= 200
+    else if (filterCapacity === 'grand') matchesCap = cap > 200
+
+    return matchesDept && matchesType && matchesSearch && matchesCap
+  })
+
+  const sortedVenues = [...filteredVenues].sort((a, b) => {
+    const capA = a.capacity || (a.benches ? a.benches * 2 : 0)
+    const capB = b.capacity || (b.benches ? b.benches * 2 : 0)
+    if (sortBy === 'capacity-desc') return capB - capA
+    if (sortBy === 'capacity-asc') return capA - capB
+    if (sortBy === 'name-asc') {
+      const nameA = a.old_hall_name || a.new_hall_name || ''
+      const nameB = b.old_hall_name || b.new_hall_name || ''
+      return nameA.localeCompare(nameB)
+    }
+    return 0
   })
 
   return (
-    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div>
+    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
+      {/* 1. Header & Navigation Breadcrumb */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-2">
           <button
             type="button"
             onClick={onBackHome}
-            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+            className="hover:text-blue-600 transition-colors cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
-            <span>Back to Home</span>
+            Home
           </button>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            COEP Campus Venues
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Browse all classrooms, seminar halls, and drawing halls across departments.
-            {initialDate && (
-              <span className="ml-2 font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md">
-                Checking: {formatDateDisplay(initialDate)}
+          <span>/</span>
+          <span className="text-slate-800">Campus Venues Catalog</span>
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+              <span>COEP Campus Venues</span>
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                {venues.length} Spaces Registered
+              </span>
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+              Browse, filter, and reserve academic classrooms, drawing halls, seminar spaces, and auditoriums with live availability.
+              {initialDate && (
+                <span className="ml-2 font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block mt-1 sm:mt-0">
+                  Checking Date: {formatDateDisplay(initialDate)}
+                </span>
+              )}
+            </p>
+          </div>
+
+          {/* Quick Stats Banner */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="px-4 py-2 rounded-2xl bg-white border border-slate-200/90 shadow-2xs text-left">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Showing</div>
+              <div className="text-base font-black text-slate-900">
+                {sortedVenues.length}{' '}
+                <span className="text-xs font-semibold text-slate-400">/ {venues.length}</span>
+              </div>
+            </div>
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="h-11 px-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                title="Reset all filters"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Controls & Search Toolbar */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs mb-6 space-y-4">
+        {/* Category Type Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {venueTypeOptions.map((type) => {
+            const count = getTypeCount(type)
+            const isActive = filterType === type
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setFilterType(type)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
+                  isActive
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-50 border border-slate-200/80 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
+              >
+                <span>{type}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-600'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Search & Filter Row */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2 border-t border-slate-100">
+          {/* Live Search Input */}
+          <div className="relative md:col-span-5">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by hall (e.g. SC10, ND01), dept, or keyword..."
+              className="w-full h-10 pl-10 pr-8 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Department Dropdown */}
+          <div className="md:col-span-3">
+            <select
+              value={filterDept}
+              onChange={(e) => setFilterDept(e.target.value)}
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+            >
+              <option value="All">All Departments ({venues.length})</option>
+              {departments
+                .filter((d) => d !== 'All')
+                .map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          {/* Capacity Dropdown */}
+          <div className="md:col-span-2">
+            <select
+              value={filterCapacity}
+              onChange={(e) => setFilterCapacity(e.target.value)}
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+            >
+              <option value="All">Any Capacity</option>
+              <option value="compact">Small (&lt; 50 Seats)</option>
+              <option value="medium">Medium (50–100 Seats)</option>
+              <option value="large">Large (100–200 Seats)</option>
+              <option value="grand">Grand (200+ Seats)</option>
+            </select>
+          </div>
+
+          {/* Sort & View Toggle */}
+          <div className="md:col-span-2 flex items-center justify-between gap-2">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="flex-1 h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+            >
+              <option value="default">Default</option>
+              <option value="capacity-desc">Capacity &darr;</option>
+              <option value="capacity-asc">Capacity &uarr;</option>
+              <option value="name-asc">Name A-Z</option>
+            </select>
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center p-0.5 rounded-xl bg-slate-100 border border-slate-200 shrink-0">
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-white shadow-2xs text-blue-600'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Grid Cards"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'list'
+                    ? 'bg-white shadow-2xs text-blue-600'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Compact List"
+              >
+                <List className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Active Filter Chips Strip */}
+        {isFiltered && (
+          <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              Active Filters:
+            </span>
+            {filterType !== 'All Spaces' && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+                Type: {filterType}
+                <button
+                  type="button"
+                  onClick={() => setFilterType('All Spaces')}
+                  className="hover:text-red-600 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
               </span>
             )}
-          </p>
-        </div>
-
-        {/* Live Search Input */}
-        <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search hall (e.g. SC06, AC 101)"
-            className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors shadow-xs"
-          />
-        </div>
+            {filterDept !== 'All' && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg">
+                Dept: {filterDept}
+                <button
+                  type="button"
+                  onClick={() => setFilterDept('All')}
+                  className="hover:text-red-600 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {filterCapacity !== 'All' && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg">
+                Capacity: {filterCapacity}
+                <button
+                  type="button"
+                  onClick={() => setFilterCapacity('All')}
+                  className="hover:text-red-600 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {searchQuery && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+                Query: &quot;{searchQuery}&quot;
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="hover:text-red-600 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={resetAllFilters}
+              className="text-[11px] font-bold text-blue-600 hover:text-blue-800 underline cursor-pointer ml-1"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Filter Controls: Venue Type & Department Tabs */}
-      <div className="space-y-3 mb-8">
-        {/* Venue Type Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
-            Type:
-          </span>
-          {['All Venues', 'Classrooms', 'Seminar Halls', 'Auditoriums', 'Meeting Rooms'].map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => setFilterType(type)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${filterType === type
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-
-        {/* Department Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
-            Dept:
-          </span>
-          {departments.map((dept) => (
-            <button
-              key={dept}
-              type="button"
-              onClick={() => setFilterDept(dept)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${filterDept === dept
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-            >
-              {dept}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Venues Grid / States */}
+      {/* 3. Venues Content: Loading, Empty, Grid or List */}
       {isLoading ? (
         <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
           <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
           <p className="text-slate-600 text-sm font-semibold">Loading campus venues...</p>
         </div>
-      ) : filteredVenues.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-slate-500 text-sm font-semibold">
-            {venues.length === 0
-              ? 'No venues found. Please make sure your Supabase project is active and seeded.'
-              : 'No halls found matching your filter.'}
+      ) : sortedVenues.length === 0 ? (
+        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-slate-200/90 shadow-2xs max-w-lg mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+            <Search className="w-7 h-7 stroke-[1.5]" />
+          </div>
+          <h3 className="text-base font-bold text-slate-900 mb-1">
+            No campus venues match your search
+          </h3>
+          <p className="text-xs text-slate-500 mb-6 leading-relaxed max-w-xs mx-auto">
+            Try adjusting your search query, selecting another department, or clearing the capacity filter.
           </p>
+          <button
+            type="button"
+            onClick={resetAllFilters}
+            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset All Filters</span>
+          </button>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredVenues.map((venue, idx) => (
-            <div
-              key={venue.id || idx}
-              className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-2 mb-3">
-                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
-                    {venue.new_hall_name || 'Passage Hall'}
-                  </span>
-                  <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-                    {venue.benches} Benches ({venue.capacity || venue.benches * 2} Capacity)
-                  </span>
+      ) : viewMode === 'grid' ? (
+        /* GRID VIEW */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {sortedVenues.map((venue, idx) => {
+            const venueImage = getVenueImageUrl(venue)
+            const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            return (
+              <div
+                key={venue.id || idx}
+                onClick={() => onSelectVenue(venue)}
+                className="group bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
+              >
+                {/* Image Banner */}
+                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={venueImage}
+                    alt={venue.old_hall_name || venue.new_hall_name}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null
+                      e.currentTarget.src = '/coep_building.png'
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                  />
+                  {/* Gradient Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/15 to-transparent pointer-events-none" />
+
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3">
+                    <span className="text-xs font-black tracking-wide text-white bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs">
+                      {venue.new_hall_name || 'Passage Hall'}
+                    </span>
+                  </div>
+                  <div className="absolute top-3 right-3">
+                    <span className="text-[11px] font-bold text-slate-100 bg-slate-900/75 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10">
+                      {venue.type || 'Hall'}
+                    </span>
+                  </div>
+
+                  {/* Bottom Image Info */}
+                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
+                    <span className="font-bold text-slate-100 text-[11px] flex items-center gap-1.5 drop-shadow-sm">
+                      <Users className="w-3.5 h-3.5 text-blue-300" />
+                      {capacity} Seats
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-300 drop-shadow-sm">
+                      {venue.benches} Benches
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="font-bold text-slate-900 text-base mb-1">
-                  {venue.old_hall_name || venue.new_hall_name}
-                </h3>
-                <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-                  <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span className="truncate">{venue.department}</span>
-                </p>
-              </div>
+                {/* Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3
+                      className="font-bold text-slate-900 text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors"
+                      title={venue.old_hall_name || venue.new_hall_name}
+                    >
+                      {venue.old_hall_name || venue.new_hall_name}
+                    </h3>
+                    <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-3">
+                      <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate">{venue.department}</span>
+                    </p>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  Available
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onSelectVenue(venue)}
-                  className="group text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-                >
-                  <span>Book Slot</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </button>
+                    {/* Features list */}
+                    {venue.features && venue.features.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {venue.features.slice(0, 3).map((feat, i) => (
+                          <span
+                            key={i}
+                            className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md"
+                          >
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      Available
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onSelectVenue(venue)
+                      }}
+                      className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md"
+                    >
+                      <span>Book Slot</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
+        </div>
+      ) : (
+        /* COMPACT LIST VIEW */
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs divide-y divide-slate-100 overflow-hidden">
+          {sortedVenues.map((venue, idx) => {
+            const venueImage = getVenueImageUrl(venue)
+            const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            return (
+              <div
+                key={venue.id || idx}
+                onClick={() => onSelectVenue(venue)}
+                className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-blue-50/30 transition-colors cursor-pointer group"
+              >
+                <div className="flex items-start sm:items-center gap-4 flex-1">
+                  <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
+                    <img
+                      src={venueImage}
+                      alt={venue.old_hall_name || venue.new_hall_name}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null
+                        e.currentTarget.src = '/coep_building.png'
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute top-1 left-1">
+                      <span className="text-[10px] font-black text-white bg-slate-900/80 px-1.5 py-0.2 rounded">
+                        {venue.new_hall_name}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                        {venue.old_hall_name || venue.new_hall_name}
+                      </h3>
+                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                        {venue.type}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                      <Building className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{venue.department}</span>
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      <span className="text-[11px] font-semibold text-slate-600">
+                        <strong>{capacity}</strong> Seats ({venue.benches} Benches)
+                      </span>
+                      {venue.features && venue.features.slice(0, 2).map((f, i) => (
+                        <span
+                          key={i}
+                          className="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded"
+                        >
+                          {f}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 self-end md:self-auto shrink-0">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onSelectVenue(venue)
+                    }}
+                    className="px-4 py-2 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-xs hover:shadow-md"
+                  >
+                    <span>Book Slot</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
   )
 }
 
+const sampleVenuesFallback = [
+  // --- Civil Engineering Classrooms ---
+  {
+    id: 'vn-ce-sc06',
+    new_hall_name: 'SC06',
+    old_hall_name: 'South Classroom 06',
+    department: 'Civil Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Sound System']
+  },
+  {
+    id: 'vn-ce-sc07',
+    new_hall_name: 'SC07',
+    old_hall_name: 'South Classroom 07',
+    department: 'Civil Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Sound System']
+  },
+  {
+    id: 'vn-ce-nc16',
+    new_hall_name: 'NC16',
+    old_hall_name: 'New Classroom Complex 16',
+    department: 'Civil Engineering',
+    type: 'Classrooms',
+    benches: 45,
+    capacity: 90,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Interactive Screen', 'Sound System', 'Wi-Fi 6']
+  },
+  {
+    id: 'vn-ce-sc20',
+    new_hall_name: 'SC20',
+    old_hall_name: 'South Classroom 20',
+    department: 'Civil Engineering',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Dual Podium']
+  },
+  {
+    id: 'vn-ce-sc21',
+    new_hall_name: 'SC21',
+    old_hall_name: 'South Classroom 21',
+    department: 'Civil Engineering',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Audio System']
+  },
+
+  // --- Academics Complex Classrooms: NC01 - NC14 ---
+  ...['NC01', 'NC02', 'NC03', 'NC04', 'NC05', 'NC06', 'NC07', 'NC08', 'NC09', 'NC10', 'NC11', 'NC12', 'NC13', 'NC14'].map((code) => ({
+    id: `vn-ac-${code.toLowerCase()}`,
+    new_hall_name: code,
+    old_hall_name: `Academic Complex ${code}`,
+    department: 'Academics Complex',
+    type: 'Classrooms',
+    benches: 45,
+    capacity: 90,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Interactive Screen', 'Central AC', 'Motorized Screen', 'Digital Podium']
+  })),
+
+  // --- Electrical Engineering Classrooms ---
+  {
+    id: 'vn-ee-sc01',
+    new_hall_name: 'SC01',
+    old_hall_name: 'South Classroom 01',
+    department: 'Electrical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Board', 'Audio System', 'Projector']
+  },
+  {
+    id: 'vn-ee-sc02',
+    new_hall_name: 'SC02',
+    old_hall_name: 'South Classroom 02',
+    department: 'Electrical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Board', 'Audio System', 'Projector']
+  },
+  {
+    id: 'vn-ee-sc03',
+    new_hall_name: 'SC03',
+    old_hall_name: 'South Classroom 03',
+    department: 'Electrical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Board', 'Audio System', 'Projector']
+  },
+  {
+    id: 'vn-ee-st06',
+    new_hall_name: 'ST06',
+    old_hall_name: 'South Tutorial Hall 06',
+    department: 'Electrical Engineering',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Whiteboard', 'Overhead Projector', 'Wi-Fi 6']
+  },
+
+  // --- Electronics and Telecommunication Engineering Classrooms ---
+  {
+    id: 'vn-entc-nc22',
+    new_hall_name: 'NC22',
+    old_hall_name: 'New Classroom Complex 22',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Interactive Board', 'Air Conditioned', 'Audio System']
+  },
+  {
+    id: 'vn-entc-nt10',
+    new_hall_name: 'NT10',
+    old_hall_name: 'New Tutorial Hall 10',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Interactive Display', 'LAN Port', 'Whiteboard']
+  },
+  {
+    id: 'vn-entc-nc23',
+    new_hall_name: 'NC23',
+    old_hall_name: 'New Classroom Complex 23',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Interactive Board', 'Air Conditioned', 'Audio System']
+  },
+  {
+    id: 'vn-entc-nc24',
+    new_hall_name: 'NC24',
+    old_hall_name: 'New Classroom Complex 24',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Smart Interactive Board', 'Air Conditioned', 'Audio System']
+  },
+  {
+    id: 'vn-entc-nt11',
+    new_hall_name: 'NT11',
+    old_hall_name: 'New Tutorial Hall 11',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Interactive Screen', 'LAN Port', 'Whiteboard']
+  },
+
+  // --- Mechanical Engineering Classrooms ---
+  {
+    id: 'vn-me-nc18',
+    new_hall_name: 'NC18',
+    old_hall_name: 'New Classroom Complex 18',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-me-nc19',
+    new_hall_name: 'NC19',
+    old_hall_name: 'New Classroom Complex 19',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-me-nc20',
+    new_hall_name: 'NC20',
+    old_hall_name: 'New Classroom Complex 20',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-me-nc21',
+    new_hall_name: 'NC21',
+    old_hall_name: 'New Classroom Complex 21',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-me-nt06',
+    new_hall_name: 'NT06',
+    old_hall_name: 'New Tutorial Hall 06',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Whiteboard', 'Overhead Projector', 'Audio System']
+  },
+  {
+    id: 'vn-me-nd01',
+    new_hall_name: 'ND01',
+    old_hall_name: 'North Drawing Hall 01',
+    department: 'Mechanical Engineering',
+    type: 'Classrooms',
+    benches: 90,
+    capacity: 180,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
+    features: ['High-Ceiling Hall', 'Dual Projectors', 'PA Sound System']
+  },
+
+  // --- Metallurgy and Materials Science Classrooms ---
+  {
+    id: 'vn-mme-sc14',
+    new_hall_name: 'SC14',
+    old_hall_name: 'South Classroom 14',
+    department: 'Metallurgy and Materials Science',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Audio System']
+  },
+  {
+    id: 'vn-mme-sc15',
+    new_hall_name: 'SC15',
+    old_hall_name: 'South Classroom 15',
+    department: 'Metallurgy and Materials Science',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Audio System']
+  },
+  {
+    id: 'vn-mme-sc16',
+    new_hall_name: 'SC16',
+    old_hall_name: 'South Classroom 16',
+    department: 'Metallurgy and Materials Science',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Overhead Projector', 'Whiteboard', 'Audio System']
+  },
+
+  // --- Management Classrooms ---
+  {
+    id: 'vn-mgmt-sc17',
+    new_hall_name: 'SC17',
+    old_hall_name: 'South Classroom 17',
+    department: 'Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Executive Desks', 'Projection Display', 'Air Conditioned']
+  },
+  {
+    id: 'vn-mgmt-sc18',
+    new_hall_name: 'SC18',
+    old_hall_name: 'South Classroom 18',
+    department: 'Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Executive Desks', 'Projection Display', 'Air Conditioned']
+  },
+  {
+    id: 'vn-mgmt-sc19',
+    new_hall_name: 'SC19',
+    old_hall_name: 'South Classroom 19',
+    department: 'Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Executive Desks', 'Projection Display', 'Air Conditioned']
+  },
+
+  // --- Manufacturing Engineering and Industrial Management Classrooms ---
+  {
+    id: 'vn-mfg-sc10',
+    new_hall_name: 'SC10',
+    old_hall_name: 'South Classroom 10',
+    department: 'Manufacturing Engineering and Industrial Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-mfg-sc11',
+    new_hall_name: 'SC11',
+    old_hall_name: 'South Classroom 11',
+    department: 'Manufacturing Engineering and Industrial Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-mfg-sc12',
+    new_hall_name: 'SC12',
+    old_hall_name: 'South Classroom 12',
+    department: 'Manufacturing Engineering and Industrial Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+  {
+    id: 'vn-mfg-sc13',
+    new_hall_name: 'SC13',
+    old_hall_name: 'South Classroom 13',
+    department: 'Manufacturing Engineering and Industrial Management',
+    type: 'Classrooms',
+    benches: 35,
+    capacity: 70,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Tiered Seating', 'Overhead Projector', 'Whiteboard']
+  },
+
+  // --- Computer New Building Classrooms ---
+  {
+    id: 'vn-cnb-nc27',
+    new_hall_name: 'NC-27',
+    old_hall_name: 'Computer New Building 27',
+    department: 'Computer New Building',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['High-speed Wi-Fi', 'Dual Displays', 'Central AC']
+  },
+  {
+    id: 'vn-cnb-nc28',
+    new_hall_name: 'NC-28',
+    old_hall_name: 'Computer New Building 28',
+    department: 'Computer New Building',
+    type: 'Classrooms',
+    benches: 40,
+    capacity: 80,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['High-speed Wi-Fi', 'Dual Displays', 'Central AC']
+  },
+  {
+    id: 'vn-cnb-p1',
+    new_hall_name: 'Near NC-27 Passage-1',
+    old_hall_name: 'Computer New Building Passage Hall 01',
+    department: 'Computer New Building',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Projector Display', 'Whiteboard', 'Wi-Fi 6']
+  },
+  {
+    id: 'vn-cnb-p2',
+    new_hall_name: 'Near NC-27 Passage-2',
+    old_hall_name: 'Computer New Building Passage Hall 02',
+    department: 'Computer New Building',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Projector Display', 'Whiteboard', 'Wi-Fi 6']
+  },
+
+  // --- Specialized Campus Venues ---
+  {
+    id: 'vn-bhau-aud',
+    new_hall_name: 'BHAU Aud',
+    old_hall_name: 'BHAU Institute Main Auditorium',
+    department: 'BHAU Institute',
+    type: 'Auditoriums',
+    benches: 125,
+    capacity: 250,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
+    features: ['Acoustic Paneling', 'Stage Lighting', 'Dolby PA System']
+  },
+  {
+    id: 'vn-comp-sh',
+    new_hall_name: 'COMP SH',
+    old_hall_name: 'Computer Department Seminar Hall',
+    department: 'Computer Engineering',
+    type: 'Seminar Halls',
+    benches: 60,
+    capacity: 120,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
+    features: ['Video Conferencing', 'Dual HD Displays', 'Central AC']
+  },
+  {
+    id: 'vn-mr-04',
+    new_hall_name: 'MR 04',
+    old_hall_name: 'Main Building Meeting Room 04',
+    department: 'Central Estate & Infrastructure',
+    type: 'Meeting Rooms',
+    benches: 12,
+    capacity: 24,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    features: ['Conference Table', 'Executive Seating', 'Display Screen']
+  },
+  {
+    id: 'vn-entc-mr',
+    new_hall_name: 'ENTC MR',
+    old_hall_name: 'ENTC Department Conference Room',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Meeting Rooms',
+    benches: 15,
+    capacity: 30,
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    features: ['High-speed Wi-Fi', 'HDMI Connectivity', 'Speakerphone']
+  }
+]
+
 export default function App() {
-  const [venues, setVenues] = useState([])
-  const [isLoadingVenues, setIsLoadingVenues] = useState(true)
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('locus-theme')
+      if (saved) return saved
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+    return 'light'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+    try {
+      localStorage.setItem('locus-theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
+  const [venues, setVenues] = useState(sampleVenuesFallback)
+  const [isLoadingVenues, setIsLoadingVenues] = useState(false)
   const [activeTab, setActiveTab] = useState('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -1582,11 +2759,11 @@ export default function App() {
           return
         }
 
-        if (data) {
+        if (data && data.length > 0) {
           setVenues(data)
         }
       } catch (err) {
-        console.error('Supabase fetch failed:', err)
+        console.warn('Supabase fetch failed, using fallback venues:', err)
       } finally {
         setIsLoadingVenues(false)
       }
@@ -1923,7 +3100,7 @@ const handleNavClick = (tab) => {
                     {/* Animated Birds flying behind the building tower */}
                     <FlyingBirds />
                     <img
-                      src="/coep_building.png"
+                      src={theme === 'dark' ? '/coep_building_night.png' : '/coep_building.png'}
                       alt="COEP Technological University Main Building"
                       className="relative z-20 w-full h-full object-contain object-right max-h-[580px]"
                     />
@@ -2084,7 +3261,7 @@ const handleNavClick = (tab) => {
                   <div className="block lg:hidden mt-4 w-full relative overflow-hidden">
                     <FlyingBirds />
                     <img
-                      src="/coep_building.png"
+                      src={theme === 'dark' ? '/coep_building_night.png' : '/coep_building.png'}
                       alt="COEP Technological University Main Building"
                       className="relative z-20 w-full h-auto object-contain max-h-[360px] mx-auto select-none pointer-events-none"
                     />
@@ -2194,22 +3371,22 @@ const handleNavClick = (tab) => {
   }
 
   return (
-    <div className="min-h-screen bg-[rgb(249,248,246)] flex flex-col font-['Plus_Jakarta_Sans',sans-serif] overflow-x-hidden">
+    <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''} bg-[rgb(249,248,246)] dark:bg-[#0b0f19] text-slate-800 dark:text-slate-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] overflow-x-hidden transition-colors duration-300`}>
       {/* 1. Header / Navbar */}
-      <header className="sticky top-0 z-50 bg-[rgb(249,248,246)]/95 backdrop-blur-md border-b border-slate-200/80">
+      <header className="sticky top-0 z-50 bg-[rgb(249,248,246)]/95 dark:bg-[#0b0f19]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between">
           <div onClick={() => handleNavClick('home')}>
             <LocusLogo size="default" />
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-xs sm:text-sm font-semibold text-slate-600">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
             <button
               type="button"
               onClick={() => handleNavClick('home')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'home'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
-                : 'hover:text-slate-900'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
                 }`}
             >
               Home
@@ -2218,8 +3395,8 @@ const handleNavClick = (tab) => {
               type="button"
               onClick={() => handleNavClick('venues')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'venues'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
-                : 'hover:text-slate-900'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
                 }`}
             >
               Venues
@@ -2228,8 +3405,8 @@ const handleNavClick = (tab) => {
               type="button"
               onClick={() => handleNavClick('events')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'events'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
-                : 'hover:text-slate-900'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
                 }`}
             >
               Events
@@ -2238,8 +3415,8 @@ const handleNavClick = (tab) => {
               type="button"
               onClick={() => handleNavClick('about')}
               className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'about'
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 font-bold'
-                : 'hover:text-slate-900'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
                 }`}
             >
               About
@@ -2319,6 +3496,21 @@ const handleNavClick = (tab) => {
 
           {/* Desktop Auth Controls */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle Dark Mode"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-600" />
+              )}
+            </button>
+
             {currentUser ? (
               <div className="flex items-center gap-2">
                 <button
@@ -2331,14 +3523,14 @@ const handleNavClick = (tab) => {
                     else if (role === 'Security Guard') handleNavClick('security')
                     else handleNavClick('student')
                   }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-800 font-semibold transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-semibold transition-colors cursor-pointer"
                 >
                   <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
                     {currentUser.name ? currentUser.name.charAt(0) : 'U'}
                   </div>
                   <div className="text-left">
                     <div className="font-bold leading-tight">{currentUser.name}</div>
-                    <div className="text-[10px] text-slate-500">{currentUser.role}</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">{currentUser.role}</div>
                   </div>
                 </button>
                 <button
@@ -2352,7 +3544,7 @@ const handleNavClick = (tab) => {
                     }
                     handleNavClick('home')
                   }}
-                  className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -2369,8 +3561,22 @@ const handleNavClick = (tab) => {
             )}
           </div>
 
-          {/* Mobile Hamburger Toggle */}
+          {/* Mobile Right Controls */}
           <div className="flex md:hidden items-center gap-2">
+            {/* Mobile Theme Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Toggle Dark Mode"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-600" />
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => handleNavClick(currentUser ? 'admin' : 'login')}
@@ -2381,7 +3587,7 @@ const handleNavClick = (tab) => {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-colors cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -2391,18 +3597,18 @@ const handleNavClick = (tab) => {
 
         {/* Mobile Dropdown Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-b border-slate-200 bg-[rgb(249,248,246)] px-4 py-4 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-150">
+          <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-[rgb(249,248,246)] dark:bg-[#0b0f19] px-4 py-4 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-150">
             <button
               type="button"
               onClick={() => handleNavClick('home')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'home' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'home' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
             >
               Home
             </button>
             <button
               type="button"
               onClick={() => handleNavClick('venues')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
             >
               Venues Catalog
             </button>
@@ -2410,14 +3616,14 @@ const handleNavClick = (tab) => {
             <button
               type="button"
               onClick={() => handleNavClick('events')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
             >
               Events
             </button>
             <button
               type="button"
               onClick={() => handleNavClick('about')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-slate-100'}`}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
             >
               About
             </button>
@@ -2510,18 +3716,18 @@ const handleNavClick = (tab) => {
       )}
 
       {/* 5. Enhanced Campus Footer */}
-      <footer className="mt-auto border-t border-slate-200/90 bg-[rgb(244,242,238)] text-slate-600">
+      <footer className="mt-auto border-t border-slate-200/90 dark:border-slate-800 bg-[rgb(244,242,238)] dark:bg-[#070b12] text-slate-600 dark:text-slate-400">
         <div className="max-w-7xl mx-auto px-6 pt-14 pb-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200/80">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200/80 dark:border-slate-800/80">
             {/* Brand Column */}
             <div className="lg:col-span-2 space-y-4">
               <div onClick={() => setActiveTab('home')} className="inline-block">
                 <LocusLogo />
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
                 Centralized venue reservation portal for COEP Technological University. Simplifying access to classrooms, auditoriums, and seminar halls across North and South campus.
               </p>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 pt-1">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 pt-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>System Status: All Services Operational</span>
               </div>
@@ -2529,7 +3735,7 @@ const handleNavClick = (tab) => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-4">
                 Navigation
               </h4>
               <ul className="space-y-2.5 text-xs font-medium">

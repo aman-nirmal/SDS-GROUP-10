@@ -12,7 +12,9 @@ import {
   UserX,
   Download,
   Key,
-  Clock
+  Clock,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 
@@ -203,6 +205,7 @@ const INITIAL_VENUES = [
     capacity: 180,
     benches: 90,
     status: 'Available',
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
     features: ['Overhead Projector', 'Public Address Mic', 'Air Conditioned']
   },
   {
@@ -213,6 +216,7 @@ const INITIAL_VENUES = [
     capacity: 80,
     benches: 40,
     status: 'Available',
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
     features: ['Smart Interactive Screen', 'Sound System', 'LAN Port']
   },
   {
@@ -223,6 +227,7 @@ const INITIAL_VENUES = [
     capacity: 70,
     benches: 35,
     status: 'Occupied',
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
     features: ['Projector', 'Whiteboard', 'Dual Podium']
   },
   {
@@ -233,6 +238,7 @@ const INITIAL_VENUES = [
     capacity: 250,
     benches: 125,
     status: 'Available',
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
     features: ['Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Green Room']
   },
   {
@@ -243,6 +249,7 @@ const INITIAL_VENUES = [
     capacity: 120,
     benches: 60,
     status: 'Under Maintenance',
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
     features: ['Dual HD Projectors', 'WiFi 6 Access Point', 'Surround Sound']
   }
 ]
@@ -298,6 +305,19 @@ const INITIAL_LOGS = [
 
 export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin }) {
   const [activeSubTab, setActiveSubTab] = useState('users') // 'users' | 'bookings' | 'venues' | 'logs'
+  const [expandedBookingIds, setExpandedBookingIds] = useState(new Set())
+
+  const toggleExpandBooking = (id) => {
+    setExpandedBookingIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
 
   // Users state
   const [users, setUsers] = useState(() => {
@@ -957,99 +977,145 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   No reservations matching current filters.
                 </div>
               ) : (
-                filteredBookings.map((b) => (
-                  <div key={b.id} className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-2 flex-1 min-w-0">
-                      {/* Top: Event Title, Status Badge, Reference ID */}
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
-                            b.status === 'Confirmed'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : b.status === 'Pending'
-                              ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                              : 'bg-slate-100 text-slate-600 border border-slate-200'
-                          }`}
-                        >
-                          {b.status}
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
-                          {b.id}
-                        </span>
-                      </div>
+                filteredBookings.map((b) => {
+                  const isExpanded = expandedBookingIds.has(b.id)
+                  return (
+                    <div key={b.id} className="transition-colors border-b border-slate-100 last:border-b-0">
+                      {/* Clean Summary Row */}
+                      <div className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                        <div className="space-y-1.5 flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
+                                b.status === 'Confirmed'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : b.status === 'Pending'
+                                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
+                              }`}
+                            >
+                              {b.status}
+                            </span>
+                          </div>
 
-                      {/* Clean Details Row */}
-                      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-xs text-slate-500">
-                        <span className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50/70 border border-blue-100 px-2 py-0.5 rounded-md">
-                          <Building className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                          <span>{b.venueName}</span>
-                        </span>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
+                            <span className="font-semibold text-blue-700 flex items-center gap-1.5">
+                              <Building className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                              <span>{b.venueName}</span>
+                            </span>
+                            <span className="flex items-center gap-1.5 text-slate-600">
+                              <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              <span>{b.bookingDate}</span>
+                            </span>
+                            <span className="flex items-center gap-1.5 text-slate-600">
+                              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              <span>{b.timeSlot}</span>
+                            </span>
+                          </div>
+                        </div>
 
-                        <span className="inline-flex items-center gap-1 text-slate-600">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>{b.bookingDate}</span>
-                        </span>
+                        {/* Actions & Expand Details Button */}
+                        <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                          {b.status === 'Pending' ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleApproveBooking(b.id)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Approve</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRejectBooking(b.id)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition-colors cursor-pointer"
+                              >
+                                <XCircle className="w-3.5 h-3.5" />
+                                <span>Reject</span>
+                              </button>
+                            </>
+                          ) : b.status === 'Confirmed' ? (
+                            <button
+                              type="button"
+                              onClick={() => handleRejectBooking(b.id)}
+                              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-600 hover:text-red-700 text-xs font-semibold transition-colors cursor-pointer"
+                            >
+                              Revoke
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleApproveBooking(b.id)}
+                              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 text-xs font-semibold transition-colors cursor-pointer"
+                            >
+                              Re-approve
+                            </button>
+                          )}
 
-                        <span className="inline-flex items-center gap-1 text-slate-600">
-                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>{b.timeSlot}</span>
-                        </span>
-
-                        <span className="inline-flex items-center gap-1 text-slate-600">
-                          <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>{b.attendees} attendees</span>
-                        </span>
-
-                        <span className="text-slate-300">|</span>
-
-                        <span className="text-slate-600">
-                          Organizer: <strong className="font-semibold text-slate-800">{b.applicantName}</strong> ({b.department})
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-                      {b.status === 'Pending' ? (
-                        <>
                           <button
                             type="button"
-                            onClick={() => handleApproveBooking(b.id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                            onClick={() => toggleExpandBooking(b.id)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-medium transition-colors cursor-pointer"
                           >
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Approve</span>
+                            <span>{isExpanded ? 'Less' : 'Details'}</span>
+                            {isExpanded ? (
+                              <ChevronUp className="w-3.5 h-3.5" />
+                            ) : (
+                              <ChevronDown className="w-3.5 h-3.5" />
+                            )}
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => handleRejectBooking(b.id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition-colors cursor-pointer"
-                          >
-                            <XCircle className="w-3.5 h-3.5" />
-                            <span>Reject</span>
-                          </button>
-                        </>
-                      ) : b.status === 'Confirmed' ? (
-                        <button
-                          type="button"
-                          onClick={() => handleRejectBooking(b.id)}
-                          className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-600 hover:text-red-700 text-xs font-semibold transition-colors cursor-pointer"
-                        >
-                          Revoke Approval
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => handleApproveBooking(b.id)}
-                          className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 text-xs font-semibold transition-colors cursor-pointer"
-                        >
-                          Re-approve
-                        </button>
+                        </div>
+                      </div>
+
+                      {/* Expandable Details Drawer */}
+                      {isExpanded && (
+                        <div className="px-5 pb-5 pt-1 bg-slate-50/70 border-t border-slate-100 animate-in fade-in duration-150">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
+                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                Space & Capacity
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{b.venueName}</div>
+                              <div className="text-xs text-slate-500">
+                                Expected: <strong className="text-slate-700">{b.attendees} attendees</strong>
+                              </div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                Scheduled Timing
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{b.bookingDate}</div>
+                              <div className="text-xs text-slate-500">{b.timeSlot}</div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                Organizer Identity
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{b.applicantName}</div>
+                              <div className="text-xs text-slate-500 font-mono text-[11px]">
+                                {b.applicantEmail}
+                              </div>
+                              <div className="text-xs text-slate-500">
+                                {b.department} • <span className="font-semibold text-slate-700">{b.applicantRole}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+                            <span>
+                              Booking Ref: <strong className="font-mono text-slate-600">{b.id}</strong>
+                            </span>
+                            <span>Submitted: {b.submittedAt}</span>
+                          </div>
+                        </div>
                       )}
                     </div>
-                  </div>
-                ))
+                  )
+                })
               )}
             </div>
           </section>
@@ -1070,32 +1136,43 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             <div className="divide-y divide-slate-200">
               {venuesList.map((venue) => (
                 <div key={venue.id} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-slate-900 text-sm">{venue.name}</h3>
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          venue.status === 'Available'
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : venue.status === 'Occupied'
-                            ? 'bg-blue-50 text-blue-700'
-                            : 'bg-amber-50 text-amber-700'
-                        }`}
-                      >
-                        {venue.status}
-                      </span>
-                    </div>
+                  <div className="flex items-start sm:items-center gap-4">
+                    <img
+                      src={venue.image || '/coep_building.png'}
+                      alt={venue.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null
+                        e.currentTarget.src = '/coep_building.png'
+                      }}
+                      className="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0"
+                    />
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-slate-900 text-sm">{venue.name}</h3>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            venue.status === 'Available'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : venue.status === 'Occupied'
+                              ? 'bg-blue-50 text-blue-700'
+                              : 'bg-amber-50 text-amber-700'
+                          }`}
+                        >
+                          {venue.status}
+                        </span>
+                      </div>
 
                     <p className="text-xs text-slate-500">
                       {venue.department} • {venue.type} • Capacity: <strong>{venue.capacity} persons</strong> ({venue.benches} benches)
                     </p>
 
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {venue.features.map((f, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-medium">
-                          {f}
-                        </span>
-                      ))}
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {venue.features.map((f, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-medium">
+                            {f}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
