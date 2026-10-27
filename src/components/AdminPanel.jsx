@@ -251,6 +251,72 @@ const INITIAL_VENUES = [
     status: 'Under Maintenance',
     image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
     features: ['Dual HD Projectors', 'WiFi 6 Access Point', 'Surround Sound']
+  },
+  {
+    id: 'VN-BHAU-CONF',
+    name: 'Bhau Conference Room (2nd Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Room',
+    capacity: 12,
+    benches: 6,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
+    features: ['Conference Table', 'Display Screen', 'High-Speed Wi-Fi', '₹1,180/hr']
+  },
+  {
+    id: 'VN-BHAU-CR1',
+    name: 'Bhau Classroom 1 (Ground Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Classroom',
+    capacity: 60,
+    benches: 30,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['Projector & Screen', 'Whiteboard', 'Sound System', '₹2,360/2 hr']
+  },
+  {
+    id: 'VN-BHAU-MR1',
+    name: 'Bhau Meeting Room 1 (2nd Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Room',
+    capacity: 8,
+    benches: 4,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    features: ['Bhau Startups Only', 'Round Table', 'Whiteboard', '₹1,000/hr']
+  },
+  {
+    id: 'VN-BHAU-MR2',
+    name: 'Bhau Meeting Room 2 (2nd Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Room',
+    capacity: 8,
+    benches: 4,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80',
+    features: ['Bhau Startups Only', 'Smart TV Screen', 'High-Speed Wi-Fi', '₹1,000/hr']
+  },
+  {
+    id: 'VN-BHAU-TERRACE',
+    name: 'Bhau Open Space (Terrace Top Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Open Space',
+    capacity: 25,
+    benches: 12,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
+    features: ['Rooftop View', 'Ambient Lighting', 'Open Air Seating', '₹2,360/hr']
+  },
+  {
+    id: 'VN-BHAU-GROUND',
+    name: 'Bhau Open Space (Ground Floor)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Open Space',
+    capacity: 25,
+    benches: 12,
+    status: 'Available',
+    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+    features: ['Ground Courtyard', 'Open Air Seating', 'Power Outlets', '₹1,770/hr']
   }
 ]
 

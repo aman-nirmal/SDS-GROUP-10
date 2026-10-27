@@ -555,13 +555,21 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md">
                   {venue?.old_hall_name || venue?.new_hall_name}
                 </h2>
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-200 mt-1">
-                  <Building className="w-3.5 h-3.5 text-blue-300 shrink-0" />
-                  <span>{venue?.department || 'COEP Campus'}</span>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-200 mt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-blue-300 shrink-0" />
+                    <span>{venue?.department || 'COEP Campus'}</span>
+                  </span>
                   {venue?.old_hall_name && venue.new_hall_name && (
                     <span>&bull; Hall Code: {venue.new_hall_name}</span>
                   )}
                 </div>
+                {venue?.address && (
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-300 mt-1">
+                    <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                    <span className="truncate">{venue.address}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -576,9 +584,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Benches
+                    {venue?.benches ? 'Benches' : 'Space'}
                   </span>
-                  <span className="font-extrabold text-slate-900 text-sm">{benches} Benches</span>
+                  <span className="font-extrabold text-slate-900 text-sm">
+                    {venue?.benches ? `${benches} Benches` : 'Open Floor'}
+                  </span>
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
@@ -588,14 +598,31 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Status
+                    {venue?.price ? 'Tariff' : 'Status'}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Available Now
-                  </span>
+                  {venue?.price ? (
+                    <span className="font-extrabold text-amber-700 text-xs truncate block" title={venue.price}>
+                      {venue.price}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Available Now
+                    </span>
+                  )}
                 </div>
               </div>
+
+              {/* Terms and Guidelines if applicable */}
+              {venue?.terms && (
+                <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-xs flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-amber-900 block mb-0.5">Booking Terms & Guidelines</span>
+                    <p className="text-amber-800 leading-relaxed text-[11px]">{venue.terms}</p>
+                  </div>
+                </div>
+              )}
 
               {/* 3. Concise Faculty In-Charge */}
               <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
@@ -1562,14 +1589,22 @@ function ComingSoonPage({ title, description, onBackHome }) {
 
 // Full Interactive & Modern Venue Catalog Page
 function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
+  const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All Venues'
+
   const [filterDept, setFilterDept] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterType, setFilterType] = useState(
-    initialType && initialType !== 'All' ? initialType : 'All Spaces'
+  const [filterType, setFilterType] = useState(() =>
+    isAllType(initialType) ? 'All Spaces' : initialType
   )
   const [filterCapacity, setFilterCapacity] = useState('All')
   const [sortBy, setSortBy] = useState('default')
   const [viewMode, setViewMode] = useState('grid') // 'grid' | 'list'
+
+  useEffect(() => {
+    if (initialType !== undefined) {
+      setFilterType(isAllType(initialType) ? 'All Spaces' : initialType)
+    }
+  }, [initialType])
 
   const departments = ['All', ...new Set(venues.map((v) => v.department).filter(Boolean))]
 
@@ -1582,14 +1617,14 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
   ]
 
   const getTypeCount = (type) => {
-    if (type === 'All Spaces') return venues.length
+    if (isAllType(type)) return venues.length
     return venues.filter((v) => v.type === type).length
   }
 
   const isFiltered =
     filterDept !== 'All' ||
     searchQuery.trim() !== '' ||
-    filterType !== 'All Spaces' ||
+    !isAllType(filterType) ||
     filterCapacity !== 'All' ||
     sortBy !== 'default'
 
@@ -1604,7 +1639,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
   const filteredVenues = venues.filter((venue) => {
     const matchesDept = filterDept === 'All' || venue.department === filterDept
     const matchesType =
-      filterType === 'All Spaces' || venue.type === filterType
+      isAllType(filterType) || venue.type === filterType
     const matchesSearch =
       searchQuery.trim() === '' ||
       (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -1829,7 +1864,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
               Active Filters:
             </span>
-            {filterType !== 'All Spaces' && (
+            {!isAllType(filterType) && (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg">
                 Type: {filterType}
                 <button
@@ -1974,10 +2009,19 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                     >
                       {venue.old_hall_name || venue.new_hall_name}
                     </h3>
-                    <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-3">
+                    <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2.5">
                       <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span className="truncate">{venue.department}</span>
                     </p>
+
+                    {/* Price / Tariff Badge */}
+                    {venue.price && (
+                      <div className="mb-2.5">
+                        <span className="inline-block text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
+                          Tariff: {venue.price}
+                        </span>
+                      </div>
+                    )}
 
                     {/* Features list */}
                     {venue.features && venue.features.length > 0 && (
@@ -2056,6 +2100,11 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                       <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
                         {venue.type}
                       </span>
+                      {venue.price && (
+                        <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
+                          {venue.price}
+                        </span>
+                      )}
                     </div>
 
                     <p className="text-xs text-slate-500 flex items-center gap-1.5">
@@ -2588,6 +2637,108 @@ const sampleVenuesFallback = [
     is_active: true,
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
     features: ['High-speed Wi-Fi', 'HDMI Connectivity', 'Speakerphone']
+  },
+  // --- Bhau Institute of Innovation, Entrepreneurship and Leadership ---
+  {
+    id: 'vn-bhau-auditorium',
+    new_hall_name: 'Bhau Auditorium',
+    old_hall_name: 'Auditorium (Ground Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Auditoriums',
+    benches: 60,
+    capacity: 120,
+    price: '₹2,950 / hr (incl. GST)',
+    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
+    features: ['120 Seats', 'Air Conditioned', 'Stage & Sound System', '₹2,950/hr']
+  },
+  {
+    id: 'vn-bhau-conference-room',
+    new_hall_name: 'Bhau Conference Room',
+    old_hall_name: 'Conference Room (2nd Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Rooms',
+    benches: 6,
+    capacity: 12,
+    price: '₹1,180 / hr (incl. 18% GST)',
+    address: '2nd Floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    terms: 'Available for Bhau Startups and outsiders. Max 2 hours at a time, 1 hr gap between bookings, max 12 hrs/week. Eatables not allowed.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
+    features: ['12 Seats', 'Conference Table', 'Display Screen', '₹1,180/hr']
+  },
+  {
+    id: 'vn-bhau-classroom-1',
+    new_hall_name: 'Bhau Classroom 1',
+    old_hall_name: 'Classroom 1 (Ground Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Classrooms',
+    benches: 30,
+    capacity: 60,
+    price: '₹2,360 / 2 hr (incl. 18% GST)',
+    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    features: ['60 Seats', 'Projector & Screen', 'Whiteboard', '₹2,360/2 hr']
+  },
+  {
+    id: 'vn-bhau-meeting-room-1',
+    new_hall_name: 'Bhau Meeting Room 1',
+    old_hall_name: 'Meeting Room 1 (Second Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Rooms',
+    benches: 4,
+    capacity: 8,
+    price: '₹1,000 / hr (Bhau Startups)',
+    address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
+    terms: 'Only for Bhau Startups. Max 2 hours at a time, 1 hr gap, max 7 days in advance, max 12 hrs/week. Eatables not allowed.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    features: ['8 Seats', 'For Bhau Startups', 'Discussion Table', '₹1,000/hr']
+  },
+  {
+    id: 'vn-bhau-meeting-room-2',
+    new_hall_name: 'Bhau Meeting Room 2',
+    old_hall_name: 'Meeting Room 2 (Second Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Meeting Rooms',
+    benches: 4,
+    capacity: 8,
+    price: '₹1,000 / hr (incl. 18% GST, Bhau Startups)',
+    address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    terms: 'Only for Bhau Startups. Max 2 hours at a time, 1 hr gap, max 7 days in advance, max 12 hrs/week. Eatables not allowed.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80',
+    features: ['8 Seats', 'For Bhau Startups', 'Smart Screen', '₹1,000/hr']
+  },
+  {
+    id: 'vn-bhau-open-space-terrace',
+    new_hall_name: 'Bhau Open Space (Terrace)',
+    old_hall_name: 'Open Space Terrace (Top Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Seminar Halls',
+    benches: 12,
+    capacity: 25,
+    price: '₹2,360 / hr',
+    address: 'Top floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
+    features: ['25 Persons', 'Top Floor Terrace', 'Scenic Riverbank View', '₹2,360/hr']
+  },
+  {
+    id: 'vn-bhau-open-space-ground',
+    new_hall_name: 'Bhau Open Space (Ground)',
+    old_hall_name: 'Open Space Ground (Ground Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Seminar Halls',
+    benches: 12,
+    capacity: 25,
+    price: '₹1,770 / hr (incl. 18% GST)',
+    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+    features: ['25 Persons', 'Ground Courtyard', 'Open Air Seating', '₹1,770/hr']
   }
 ]
 
@@ -2682,7 +2833,7 @@ export default function App() {
     }
   })
 
-  const [selectedType, setSelectedType] = useState('All Venues')
+  const [selectedType, setSelectedType] = useState('All Spaces')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
@@ -2821,6 +2972,10 @@ const handleNavClick = (tab) => {
     window.location.pathname
   )
 
+  if (tab === 'venues') {
+    setSelectedType('All Spaces')
+  }
+
   setActiveTab(tab)
   setIsMobileMenuOpen(false)
 }
@@ -2830,7 +2985,7 @@ const handleNavClick = (tab) => {
   }
 
   const venueTypes = [
-    'All Venues',
+    'All Spaces',
     'Classrooms',
     'Seminar Halls',
     'Auditoriums',
@@ -3788,7 +3943,11 @@ const handleNavClick = (tab) => {
                   <li key={cat}>
                     <button
                       type="button"
-                      onClick={() => setSelectedVenueForBooking(cat)}
+                      onClick={() => {
+                        setSelectedType(cat)
+                        setActiveTab('venues')
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }}
                       className="hover:text-blue-600 transition-colors cursor-pointer"
                     >
                       {cat}
@@ -4365,6 +4524,9 @@ export function LoginForm({ onLoginSuccess }) {
                   disabled={isVerifying}
                   className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-blue-500 transition-colors"
                 />
+                <p className="text-[11px] text-slate-500 text-center mt-1.5">
+                  Universal test code: <strong className="font-mono text-blue-600">123456</strong>
+                </p>
               </div>
 
               <button
