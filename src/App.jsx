@@ -39,6 +39,7 @@ import {
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
+import About from './components/About';
 import AdminPanel from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
 import FacultyPortal from './components/FacultyPortal'
@@ -620,11 +621,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(venue?.features || [
-                     'Overhead Projector',
-                     'PA Sound System',
-                     'Air Conditioned',
-                     'Wi-Fi 6'
-                   ]).map((feat, i) => (
+                    'Overhead Projector',
+                    'PA Sound System',
+                    'Air Conditioned',
+                    'Wi-Fi 6'
+                  ]).map((feat, i) => (
                     <span
                       key={i}
                       className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700"
@@ -703,11 +704,10 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                             key={i}
                             type="button"
                             onClick={() => setSelectedSlot(slot.time)}
-                            className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${
-                              isSelected
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                                : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
-                            }`}
+                            className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${isSelected
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
+                              }`}
                           >
                             <span className="dark:text-slate-100">{slot.time}</span>
                             {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
@@ -1128,23 +1128,21 @@ function EventsCalendarView({ events = [], onExploreVenues }) {
                   key={dayNum}
                   type="button"
                   onClick={() => setSelectedDate(dateStr)}
-                  className={`min-h-[72px] sm:min-h-[88px] p-2 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between border ${
-                    isSelected
-                      ? 'border-blue-600 bg-blue-50/60 dark:bg-blue-950/40 shadow-xs ring-2 ring-blue-500/20'
-                      : hasEvents
+                  className={`min-h-[72px] sm:min-h-[88px] p-2 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between border ${isSelected
+                    ? 'border-blue-600 bg-blue-50/60 dark:bg-blue-950/40 shadow-xs ring-2 ring-blue-500/20'
+                    : hasEvents
                       ? 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-xs'
                       : 'border-slate-100 dark:border-slate-800/80 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between w-full">
                     <span
-                      className={`text-xs font-bold ${
-                        isSelected
-                          ? 'text-blue-600 dark:text-blue-400'
-                          : hasEvents
+                      className={`text-xs font-bold ${isSelected
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : hasEvents
                           ? 'text-slate-900 dark:text-white'
                           : 'text-slate-600 dark:text-slate-400'
-                      }`}
+                        }`}
                     >
                       {dayNum}
                     </span>
@@ -1363,11 +1361,10 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
             <button
               type="button"
               onClick={() => setViewMode('grid')}
-              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                viewMode === 'grid'
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${viewMode === 'grid'
+                ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
               <span>Cards</span>
@@ -1375,11 +1372,10 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
             <button
               type="button"
               onClick={() => setViewMode('calendar')}
-              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                viewMode === 'calendar'
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${viewMode === 'calendar'
+                ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
             >
               <CalendarDays className="w-3.5 h-3.5" />
               <span>Calendar</span>
@@ -1404,22 +1400,21 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
 
       {/* Filter Tabs (Grid Mode Only) */}
       {viewMode === 'grid' && (
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none">
-        {categories.map((category) => (
-          <button
-            key={category}
-            type="button"
-            onClick={() => setActiveCategory(category)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeCategory === category
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none">
+          {categories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => setActiveCategory(category)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${activeCategory === category
                 ? 'bg-blue-600 text-white shadow-xs'
                 : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+                }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Calendar or Cards View */}
@@ -1539,7 +1534,7 @@ function ComingSoonPage({ title, description, onBackHome }) {
         <Clock className="w-8 h-8 stroke-[1.75]" />
       </div>
       <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2">
-        Under Development
+        Under Developmentf
       </span>
       <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
         {title}
@@ -1705,17 +1700,15 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 key={type}
                 type="button"
                 onClick={() => setFilterType(type)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xs'
-                    : 'bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${isActive
+                  ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xs'
+                  : 'bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
+                  }`}
               >
                 <span>{type}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                  }`}
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    }`}
                 >
                   {count}
                 </span>
@@ -1798,11 +1791,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                  viewMode === 'grid'
-                    ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'grid'
+                  ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
                 title="Grid Cards"
               >
                 <LayoutGrid className="w-4 h-4" />
@@ -1810,11 +1802,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
               <button
                 type="button"
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'list'
+                  ? 'bg-white dark:bg-slate-700 shadow-2xs text-blue-600 dark:text-blue-400'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
                 title="Compact List"
               >
                 <List className="w-4 h-4" />
@@ -2625,53 +2616,53 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-  const handlePopState = (event) => {
-    const tab = event.state?.activeTab
+    const handlePopState = (event) => {
+      const tab = event.state?.activeTab
 
-    const validTabs = [
-      'home',
-      'venues',
-      'events',
-      'my-bookings',
-      'about',
-      'login',
-      'guest',
-      'faculty',
-      'student',
-      'club',
-      'admin',
-      'security'
-    ]
+      const validTabs = [
+        'home',
+        'venues',
+        'events',
+        'my-bookings',
+        'about',
+        'login',
+        'guest',
+        'faculty',
+        'student',
+        'club',
+        'admin',
+        'security'
+      ]
 
-    const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
-    let isAuthed = false
-    try {
-      isAuthed = !!localStorage.getItem('locus_auth_user')
-    } catch {
-      isAuthed = false
-    }
+      const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+      let isAuthed = false
+      try {
+        isAuthed = !!localStorage.getItem('locus_auth_user')
+      } catch {
+        isAuthed = false
+      }
 
-    if (protectedTabs.includes(tab) && !isAuthed) {
-      setActiveTab('login')
+      if (protectedTabs.includes(tab) && !isAuthed) {
+        setActiveTab('login')
+        setIsMobileMenuOpen(false)
+        return
+      }
+
+      if (validTabs.includes(tab)) {
+        setActiveTab(tab)
+      } else {
+        setActiveTab('home')
+      }
+
       setIsMobileMenuOpen(false)
-      return
     }
 
-    if (validTabs.includes(tab)) {
-      setActiveTab(tab)
-    } else {
-      setActiveTab('home')
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
     }
-
-    setIsMobileMenuOpen(false)
-  }
-
-  window.addEventListener('popstate', handlePopState)
-
-  return () => {
-    window.removeEventListener('popstate', handlePopState)
-  }
-}, [])
+  }, [])
 
   const [currentUser, setCurrentUser] = useState(() => {
     try {
@@ -2801,29 +2792,29 @@ export default function App() {
     loadEvents()
   }, [])
 
-const handleNavClick = (tab) => {
-  const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
-  if (protectedTabs.includes(tab) && !currentUser) {
-    setActiveTab('login')
-    window.history.pushState({ activeTab: 'login' }, '', window.location.pathname)
+  const handleNavClick = (tab) => {
+    const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+    if (protectedTabs.includes(tab) && !currentUser) {
+      setActiveTab('login')
+      window.history.pushState({ activeTab: 'login' }, '', window.location.pathname)
+      setIsMobileMenuOpen(false)
+      return
+    }
+
+    if (tab === activeTab) {
+      setIsMobileMenuOpen(false)
+      return
+    }
+
+    window.history.pushState(
+      { activeTab: tab },
+      '',
+      window.location.pathname
+    )
+
+    setActiveTab(tab)
     setIsMobileMenuOpen(false)
-    return
   }
-
-  if (tab === activeTab) {
-    setIsMobileMenuOpen(false)
-    return
-  }
-
-  window.history.pushState(
-    { activeTab: tab },
-    '',
-    window.location.pathname
-  )
-
-  setActiveTab(tab)
-  setIsMobileMenuOpen(false)
-}
 
   const handleAddBooking = (newBooking) => {
     setUserBookings((prev) => [newBooking, ...prev])
@@ -2896,13 +2887,8 @@ const handleNavClick = (tab) => {
           />
         )
       case 'about':
-        return (
-          <ComingSoonPage
-            title="About LOCUS"
-            description="The centralized campus infrastructure and venue reservation portal built for COEP Technological University."
-            onBackHome={() => setActiveTab('home')}
-          />
-        )
+        return (<About onBackHome={() => setActiveTab('home')} />)
+
       case 'login':
         return (
           <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
@@ -3876,10 +3862,10 @@ const handleNavClick = (tab) => {
 function MicrosoftLogo({ className = 'w-4 h-4' }) {
   return (
     <svg className={className} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1 1H10V10H1V1Z" fill="#F25022"/>
-      <path d="M11 1H20V10H11V1Z" fill="#7FBA00"/>
-      <path d="M1 11H10V20H1V11Z" fill="#00A4EF"/>
-      <path d="M11 11H20V20H11V11Z" fill="#FFB900"/>
+      <path d="M1 1H10V10H1V1Z" fill="#F25022" />
+      <path d="M11 1H20V10H11V1Z" fill="#7FBA00" />
+      <path d="M1 11H10V20H1V11Z" fill="#00A4EF" />
+      <path d="M11 11H20V20H11V11Z" fill="#FFB900" />
     </svg>
   )
 }
@@ -3887,11 +3873,11 @@ function MicrosoftLogo({ className = 'w-4 h-4' }) {
 function OutlookLogo({ className = 'w-4 h-4' }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14.5 3H21.5C22.0523 3 22.5 3.44772 22.5 4V20C22.5 20.5523 22.0523 21 21.5 21H14.5V3Z" fill="#0078D4"/>
-      <path d="M14.5 12L22.5 7V17L14.5 12Z" fill="#005A9E"/>
-      <path d="M1.5 6C1.5 4.89543 2.39543 4 3.5 4H14.5V20H3.5C2.39543 20 1.5 19.1046 1.5 18V6Z" fill="#0078D4"/>
-      <circle cx="8" cy="12" r="3.5" fill="white"/>
-      <circle cx="8" cy="12" r="2" fill="#0078D4"/>
+      <path d="M14.5 3H21.5C22.0523 3 22.5 3.44772 22.5 4V20C22.5 20.5523 22.0523 21 21.5 21H14.5V3Z" fill="#0078D4" />
+      <path d="M14.5 12L22.5 7V17L14.5 12Z" fill="#005A9E" />
+      <path d="M1.5 6C1.5 4.89543 2.39543 4 3.5 4H14.5V20H3.5C2.39543 20 1.5 19.1046 1.5 18V6Z" fill="#0078D4" />
+      <circle cx="8" cy="12" r="3.5" fill="white" />
+      <circle cx="8" cy="12" r="2" fill="#0078D4" />
     </svg>
   )
 }
@@ -4181,11 +4167,10 @@ export function LoginForm({ onLoginSuccess }) {
             setAuthMethod('password')
             setErrorMessage('')
           }}
-          className={`py-2 rounded-lg transition-all cursor-pointer ${
-            authMethod === 'password'
-              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-          }`}
+          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'password'
+            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            }`}
         >
           University Password
         </button>
@@ -4195,11 +4180,10 @@ export function LoginForm({ onLoginSuccess }) {
             setAuthMethod('otp')
             setErrorMessage('')
           }}
-          className={`py-2 rounded-lg transition-all cursor-pointer ${
-            authMethod === 'otp'
-              ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-          }`}
+          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'otp'
+            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            }`}
         >
           Email OTP
         </button>
