@@ -168,7 +168,7 @@ export default function StudentPortal({
 
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 My Bookings
@@ -199,7 +199,7 @@ export default function StudentPortal({
           </div>
 
           {/* Navigation Tabs & Inlined Filter Bar */}
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-1">
               <button
                 type="button"
@@ -250,8 +250,8 @@ export default function StudentPortal({
 
         {/* Tab 1: Campus Venue Reservations */}
         {activeTab === 'venues' && (
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-            <div className="space-y-3">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+            <div className="space-y-4">
               {filteredVenueBookings.map((b) => {
                 const isPending = b.status === 'Pending' || b.status === 'Pending Sanction'
                 const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
@@ -260,90 +260,96 @@ export default function StudentPortal({
                 return (
                   <div
                     key={b.id || b.ref}
-                    className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+                    className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                      {/* Left: Details */}
-                      <div className="space-y-2 flex-1 min-w-0">
-                        {/* Top Meta Line: ID, Status, Attendees */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                      {/* Left Column (7 cols): Details */}
+                      <div className="md:col-span-7 space-y-2">
+                        {/* Top Meta Line: ID, Department, Attendees */}
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                             {b.id || b.ref}
                           </span>
-
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold inline-flex items-center gap-1 ${
-                              isConfirmed
-                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                                : isPending
-                                ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                                : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
-                            }`}
-                          >
-                            {isConfirmed && <Check className="w-3 h-3" />}
-                            {isPending && <Clock className="w-3 h-3" />}
-                            {isCancelled && <X className="w-3 h-3" />}
-                            <span>{isPending ? 'Pending Approval' : isConfirmed ? 'Approved' : 'Cancelled'}</span>
+                          <span className="text-slate-300 dark:text-slate-700">•</span>
+                          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                            {b.department || 'COEP Tech'}
                           </span>
-
                           {(b.attendees || b.capacity) && (
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <Users className="w-3 h-3 text-slate-400" />
-                              <span>{b.attendees || b.capacity} Attendees</span>
-                            </span>
+                            <>
+                              <span className="text-slate-300 dark:text-slate-700">•</span>
+                              <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                <Users className="w-3 h-3 text-slate-400" />
+                                <span>{b.attendees || b.capacity} Attendees</span>
+                              </span>
+                            </>
                           )}
                         </div>
 
                         {/* Venue Title & Purpose */}
                         <div>
-                          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                             {b.venueName || b.venue}
                           </h3>
-                          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
+                          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
                             {b.purpose}
                           </p>
                         </div>
 
-                        {/* Date, Time Slot, and Department / Reviewer */}
-                        <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-slate-500 dark:text-slate-400 pt-0.5">
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                            <span className="font-semibold text-slate-800 dark:text-slate-200">
-                              {b.bookingDate || b.date}
-                            </span>
+                        {b.facultyInCharge && (
+                          <div className="text-xs text-blue-600 dark:text-blue-400 font-medium pt-0.5 flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-blue-500" />
+                            <span>Faculty Reviewer: {b.facultyInCharge}</span>
                           </div>
+                        )}
+                      </div>
 
-                          <div className="flex items-center gap-1.5">
+                      {/* Right Column (5 cols): Date, Time, Status & Action */}
+                      <div className="md:col-span-5 flex flex-col md:items-end justify-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 md:pl-6">
+                        {/* Status Pill */}
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
+                            isConfirmed
+                              ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                              : isPending
+                              ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                              : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
+                          }`}
+                        >
+                          {isConfirmed && <Check className="w-3.5 h-3.5" />}
+                          {isPending && <Clock className="w-3.5 h-3.5" />}
+                          {isCancelled && <X className="w-3.5 h-3.5" />}
+                          <span>{isPending ? 'Pending Approval' : isConfirmed ? 'Approved' : 'Cancelled'}</span>
+                        </span>
+
+                        {/* Date & Time */}
+                        <div className="text-left md:text-right space-y-0.5">
+                          <div className="flex items-center md:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                            <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                            <span>{b.bookingDate || b.date}</span>
+                          </div>
+                          <div className="flex items-center md:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                             <Clock className="w-3.5 h-3.5 text-slate-400" />
                             <span>{b.timeSlot || b.slot}</span>
                           </div>
-
-                          {(b.department || b.facultyInCharge) && (
-                            <div className="flex items-center gap-1.5">
-                              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                              <span>
-                                {b.department || 'COEP Tech'}
-                                {b.facultyInCharge ? ` • Reviewer: ${b.facultyInCharge}` : ''}
-                              </span>
-                            </div>
-                          )}
                         </div>
-                      </div>
 
-                      {/* Right: Actions */}
-                      {!isCancelled && (
-                        <div className="shrink-0 pt-1 sm:pt-0">
+                        {/* Action or Inactive State */}
+                        {!isCancelled ? (
                           <button
                             type="button"
                             onClick={() => handleCancelVenueBooking(b.id || b.ref)}
-                            className="px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                            className="px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs mt-0.5"
                             title="Cancel Reservation"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
-                            <span>Cancel</span>
+                            <span>Cancel Booking</span>
                           </button>
-                        </div>
-                      )}
+                        ) : (
+                          <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-800/60 px-2.5 py-1 rounded-lg border border-slate-100 dark:border-slate-800 mt-0.5 inline-block">
+                            Booking Inactive
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )
@@ -372,67 +378,77 @@ export default function StudentPortal({
 
         {/* Tab 2: Passes */}
         {activeTab === 'passes' && (
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-            <div className="space-y-3">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+            <div className="space-y-4">
               {passes.map((b) => (
                 <div
                   key={b.id}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="space-y-2 flex-1 min-w-0">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                    {/* Left Column (7 cols): Pass Details */}
+                    <div className="md:col-span-7 space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                           {b.id}
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
-                          <Check className="w-3 h-3" />
-                          <span>{b.status}</span>
+                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <Users className="w-3 h-3 text-slate-400" />
+                          <span>Team of {b.attendees}</span>
                         </span>
                       </div>
 
                       <div>
-                        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                           {b.venue}
                         </h3>
-                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
                           {b.purpose}
                         </p>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-slate-500 dark:text-slate-400 pt-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                          <span className="font-semibold text-slate-800 dark:text-slate-200">{b.date}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{b.timeSlot}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-slate-400" />
-                          <span>Team of {b.attendees}</span>
-                        </div>
+                      <div className="font-mono text-[11px] text-blue-600 dark:text-blue-400 font-semibold">
+                        {b.digitalPassCode}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 shrink-0 pt-1 sm:pt-0">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedPass(b)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
-                      >
-                        <QrCode className="w-3.5 h-3.5" />
-                        <span>View Pass</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePass(b.id)}
-                        className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
-                        title="Cancel Pass"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    {/* Right Column (5 cols): Date, Time, Status & Action */}
+                    <div className="md:col-span-5 flex flex-col md:items-end justify-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 md:pl-6">
+                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5" />
+                        <span>{b.status}</span>
+                      </span>
+
+                      <div className="text-left md:text-right space-y-0.5">
+                        <div className="flex items-center md:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                          <span>{b.date}</span>
+                        </div>
+                        <div className="flex items-center md:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{b.timeSlot}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPass(b)}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
+                        >
+                          <QrCode className="w-3.5 h-3.5" />
+                          <span>View Pass</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePass(b.id)}
+                          className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                          title="Cancel Pass"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
