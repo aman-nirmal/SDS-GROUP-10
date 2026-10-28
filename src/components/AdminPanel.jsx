@@ -11,7 +11,8 @@ import {
   UserCheck,
   UserX,
   Download,
-  Key,
+  Upload,
+  FileSpreadsheet,
   Clock,
   ChevronDown,
   ChevronUp,
@@ -347,6 +348,12 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     role: 'Faculty',
     department: 'Computer Engineering'
   })
+
+  // CSV Import State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [importPreview, setImportPreview] = useState([])
+  const [importFileName, setImportFileName] = useState('')
+  const [isImportDragging, setIsImportDragging] = useState(false)
 
   const [notification, setNotification] = useState('')
 
@@ -699,14 +706,13 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
   // Export Users CSV
   const handleExportUsersCSV = () => {
-    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Department', 'Auth Provider', 'Status', 'Created At']
+    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Department', 'Status', 'Created At']
     const rows = users.map((u) => [
       u.id,
       `"${u.name}"`,
       u.email,
       u.role,
       `"${u.department}"`,
-      `"${u.authProvider}"`,
       u.status,
       u.createdAt
     ])
@@ -720,6 +726,116 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     link.click()
     document.body.removeChild(link)
     showNotification('Users CSV export downloaded successfully!')
+  }
+
+  // Download Sample Template CSV for Directory Import
+  const handleDownloadSampleCSV = () => {
+    const headers = ['Full Name', 'University Email', 'Role', 'Department']
+    const sampleRows = [
+      ['Rohan Deshmukh', 'rohan.deshmukh@coeptech.ac.in', 'Student', 'Computer Engineering'],
+      ['Dr. Anita Rao', 'anita.rao@coeptech.ac.in', 'Faculty', 'Electrical Engineering'],
+      ['Robotics Club Lead', 'robotics@coeptech.ac.in', 'Club Lead', 'Student Affairs'],
+      ['Campus Estate Admin', 'estate.admin@coeptech.ac.in', 'Administrator', 'Central Estate']
+    ]
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...sampleRows.map((e) => e.map((val) => `"${val}"`).join(','))].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', 'sample_directory_users.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  // Parse CSV File into User Objects
+  const processCSVText = (text, fileName) => {
+    try {
+      const lines = text.split(/\r\n|\n/).filter((l) => l.trim().length > 0)
+      if (lines.length < 2) {
+        showNotification('CSV must have a header row and at least 1 record.')
+        return
+      }
+
+      const headerCols = lines[0].split(',').map((h) => h.replace(/^["']|["']$/g, '').trim().toLowerCase())
+      const nameIdx = headerCols.findIndex((h) => h.includes('name'))
+      const emailIdx = headerCols.findIndex((h) => h.includes('email'))
+      const roleIdx = headerCols.findIndex((h) => h.includes('role'))
+      const deptIdx = headerCols.findIndex((h) => h.includes('dept') || h.includes('department'))
+
+      const parsed = []
+      const timestamp = Date.now()
+      for (let i = 1; i < lines.length; i++) {
+        const rawRow = lines[i].trim()
+        if (!rawRow) continue
+        const matches = rawRow.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || rawRow.split(',')
+        const cols = matches.map((c) => c.replace(/^["']|["']$/g, '').trim())
+
+        const name = nameIdx !== -1 && cols[nameIdx] ? cols[nameIdx] : (cols[0] || '').trim()
+        const email = emailIdx !== -1 && cols[emailIdx] ? cols[emailIdx] : (cols[1] || '').trim()
+        const rawRole = roleIdx !== -1 && cols[roleIdx] ? cols[roleIdx] : (cols[2] || 'Student').trim()
+        const department = deptIdx !== -1 && cols[deptIdx] ? cols[deptIdx] : (cols[3] || 'General Academic').trim()
+
+        let role = 'Student'
+        const lr = rawRole.toLowerCase()
+        if (lr.includes('admin')) role = 'Administrator'
+        else if (lr.includes('fac') || lr.includes('prof') || lr.includes('teach')) role = 'Faculty'
+        else if (lr.includes('club') || lr.includes('lead') || lr.includes('society')) role = 'Club Lead'
+        else if (lr.includes('guard') || lr.includes('sec')) role = 'Security Guard'
+        else if (lr.includes('stud')) role = 'Student'
+
+        if (name && email) {
+          parsed.push({
+            id: `USR-${timestamp}-${i}`,
+            name,
+            email,
+            role,
+            department: department || 'General Academic',
+            status: 'Active',
+            lastActive: 'Just imported',
+            createdAt: new Date().toISOString().slice(0, 10)
+          })
+        }
+      }
+
+      if (parsed.length === 0) {
+        showNotification('No valid user records found in CSV.')
+        return
+      }
+
+      setImportFileName(fileName)
+      setImportPreview(parsed)
+    } catch {
+      showNotification('Failed to parse CSV file. Please check format.')
+    }
+  }
+
+  const handleCSVFileInput = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (evt) => {
+      if (typeof evt.target?.result === 'string') {
+        processCSVText(evt.target.result, file.name)
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  const handleCommitImport = () => {
+    if (importPreview.length === 0) return
+    setUsers((prev) => [...importPreview, ...prev])
+    addLog(`Imported ${importPreview.length} users into directory via CSV`, 'Directory Import', 'success')
+    showNotification(`Successfully imported ${importPreview.length} users into the directory!`)
+    setImportPreview([])
+    setImportFileName('')
+    setIsImportModalOpen(false)
+  }
+
+  const handleCancelImport = () => {
+    setImportPreview([])
+    setImportFileName('')
+    setIsImportModalOpen(false)
   }
 
   // Quick Stats
@@ -777,6 +893,15 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <span>Back to Campus</span>
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setIsImportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-850 shadow-2xs"
+              title="Import users from CSV file"
+            >
+              <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>Import CSV</span>
+            </button>
             <button
               type="button"
               onClick={handleExportUsersCSV}
@@ -932,36 +1057,94 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             ===================================================================== */}
         {activeSubTab === 'users' && (
           <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden">
-            {/* Unified Search & Filter Toolbar */}
+            {/* Directory Selection Tabs Sub-Bar */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>Institutional Directory</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                    {filteredUsers.length} {filteredUsers.length === 1 ? 'member' : 'members'}
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Browse and manage directories for students, faculty, student clubs, and campus administrators.
+                </p>
+              </div>
+
+              {/* Directory Segmented Filter Tabs */}
+              <div className="flex items-center p-1 rounded-xl bg-slate-200/70 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 gap-1 overflow-x-auto scrollbar-none">
+                {[
+                  { id: 'All', label: 'All Directory', count: stats.totalUsers },
+                  { id: 'Student', label: 'Students', count: stats.students },
+                  { id: 'Faculty', label: 'Faculty', count: stats.faculty },
+                  { id: 'Club Lead', label: 'Clubs', count: stats.clubLeads },
+                  { id: 'Administrator', label: 'Admins', count: stats.admins },
+                ].map((dir) => (
+                  <button
+                    key={dir.id}
+                    type="button"
+                    onClick={() => setUserRoleFilter(dir.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      userRoleFilter === dir.id
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs border border-slate-200/70 dark:border-slate-600'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{dir.label}</span>
+                    <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                      userRoleFilter === dir.id
+                        ? 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    }`}>
+                      {dir.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Unified Search & Quick Actions Toolbar */}
             <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-              <div className="relative flex-1 max-w-sm">
+              <div className="relative flex-1 max-w-md">
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  placeholder="Search by name, email, or department..."
+                  placeholder={`Search ${userRoleFilter === 'All' ? 'directory' : userRoleFilter.toLowerCase() + 's'} by name, email, department...`}
                   className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/80 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
                 />
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Filter:</span>
-                <select
-                  value={userRoleFilter}
-                  onChange={(e) => setUserRoleFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-xs font-bold transition-colors cursor-pointer"
+                  title="Import users from CSV"
                 >
-                  <option value="All">All Roles ({users.length})</option>
-                  <option value="Administrator">Administrator ({stats.admins})</option>
-                  <option value="Faculty">Faculty ({stats.faculty})</option>
-                  <option value="Club Lead">Club Lead ({stats.clubLeads})</option>
-                  <option value="Student">Student ({stats.students})</option>
-                  <option value="Security Guard">Security Guard ({stats.securityGuards})</option>
-                </select>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Import CSV</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportUsersCSV}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                  title="Export current directory as CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                  <span>Export</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAddUserModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add User</span>
+                </button>
               </div>
             </div>
-
 
             {/* Users Table */}
             <div className="overflow-x-auto">
@@ -972,7 +1155,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     <th className="py-3 px-4">University Email</th>
                     <th className="py-3 px-4">Role</th>
                     <th className="py-3 px-4">Department</th>
-                    <th className="py-3 px-4">Auth Method</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
@@ -980,8 +1162,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="py-12 text-center text-slate-500 dark:text-slate-400">
-                        No users matching "{userSearch}" found.
+                      <td colSpan="6" className="py-12 text-center text-slate-500 dark:text-slate-400">
+                        No directory users matching "{userSearch}" found.
                       </td>
                     </tr>
                   ) : (
@@ -1029,13 +1211,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
                         <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">
                           {user.department}
-                        </td>
-
-                        <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
-                          <span className="inline-flex items-center gap-1">
-                            <Key className="w-3 h-3 text-slate-400 dark:text-slate-500" />
-                            {user.authProvider}
-                          </span>
                         </td>
 
                         <td className="py-3.5 px-4">
@@ -1512,6 +1687,183 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL: IMPORT DIRECTORY USERS VIA CSV
+          ===================================================================== */}
+      {isImportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-5">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <Upload className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Import Directory Users</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Bulk add students, faculty, club leads, and admins via CSV
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelImport}
+                className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer p-1 rounded-lg"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Template Download Prompt */}
+            <div className="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 flex items-center justify-between gap-3">
+              <div className="text-xs text-blue-900 dark:text-blue-200">
+                <span className="font-bold">Required CSV columns:</span> Full Name, University Email, Role, Department.
+              </div>
+              <button
+                type="button"
+                onClick={handleDownloadSampleCSV}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 font-bold text-[11px] whitespace-nowrap transition-colors cursor-pointer shadow-2xs shrink-0"
+              >
+                <Download className="w-3 h-3" />
+                <span>Sample CSV</span>
+              </button>
+            </div>
+
+            {/* File Dropzone */}
+            <div
+              onDragOver={(e) => {
+                e.preventDefault()
+                setIsImportDragging(true)
+              }}
+              onDragLeave={() => setIsImportDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault()
+                setIsImportDragging(false)
+                const file = e.dataTransfer.files?.[0]
+                if (file) {
+                  const reader = new FileReader()
+                  reader.onload = (evt) => {
+                    if (typeof evt.target?.result === 'string') {
+                      processCSVText(evt.target.result, file.name)
+                    }
+                  }
+                  reader.readAsText(file)
+                }
+              }}
+              onClick={() => document.getElementById('admin-csv-import-input')?.click()}
+              className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2 ${
+                isImportDragging
+                  ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/50'
+                  : importPreview.length > 0
+                  ? 'border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/40 dark:bg-emerald-950/20'
+                  : 'border-slate-300 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600 bg-slate-50/50 dark:bg-slate-800/40'
+              }`}
+            >
+              <input
+                id="admin-csv-import-input"
+                type="file"
+                accept=".csv,text/csv"
+                className="hidden"
+                onChange={handleCSVFileInput}
+              />
+              <FileSpreadsheet
+                className={`w-10 h-10 ${
+                  importPreview.length > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-500 dark:text-blue-400'
+                }`}
+              />
+              {importPreview.length > 0 ? (
+                <div>
+                  <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>{importFileName || 'File selected'}</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    {importPreview.length} valid user records parsed and ready. Click to re-upload.
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    Click to select CSV file or drag and drop
+                  </div>
+                  <div className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                    Standard comma-separated format (.csv)
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Preview of Parsed Users */}
+            {importPreview.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">
+                    Preview ({importPreview.length} {importPreview.length === 1 ? 'user' : 'users'})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImportPreview([])
+                      setImportFileName('')
+                    }}
+                    className="text-[11px] text-red-600 hover:text-red-700 dark:text-red-400 font-semibold cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="max-h-36 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                  {importPreview.slice(0, 5).map((user, idx) => (
+                    <div key={idx} className="p-2 flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-800 dark:text-slate-200 truncate">{user.name}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">{user.email}</div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                          {user.role}
+                        </span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[120px] truncate">
+                          {user.department}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  {importPreview.length > 5 && (
+                    <div className="p-2 text-center text-[10px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-50/60 dark:bg-slate-800/40">
+                      + {importPreview.length - 5} more records to import
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Modal Actions */}
+            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={handleCancelImport}
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCommitImport}
+                disabled={importPreview.length === 0}
+                className={`px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer ${
+                  importPreview.length > 0
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                }`}
+              >
+                Confirm Import {importPreview.length > 0 ? `(${importPreview.length} Users)` : ''}
+              </button>
+            </div>
           </div>
         </div>
       )}
