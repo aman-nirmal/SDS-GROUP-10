@@ -27,6 +27,7 @@ import {
   INITIAL_ADMIN_VENUES,
 } from './admin/mockAdminData'
 import { importedCampusUsers } from '../data/importedCampusUsers'
+import { importedFacultyUsers } from '../data/importedFacultyUsers'
 import {
   usersApi,
   bookingsApi,
@@ -38,6 +39,7 @@ import {
 
 // Initial institutional users store
 const INITIAL_USERS = [
+  ...importedFacultyUsers,
   ...importedCampusUsers,
   {
     id: 'USR-001',

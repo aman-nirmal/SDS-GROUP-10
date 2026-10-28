@@ -670,10 +670,19 @@ class DataStore {
 
     if (supabase) {
       try {
-        const [usersRes, profilesRes] = await Promise.all([
-          supabase.from('users').select('*'),
-          supabase.from('profiles').select('*')
-        ])
+        // Fetch all rows from 'users' table respecting Supabase 1,000 row limits
+        let allDbUsers = []
+        let fromIdx = 0
+        const batchStep = 1000
+        while (true) {
+          const { data, error } = await supabase.from('users').select('*').range(fromIdx, fromIdx + batchStep - 1)
+          if (error || !data || data.length === 0) break
+          allDbUsers = allDbUsers.concat(data)
+          if (data.length < batchStep) break
+          fromIdx += batchStep
+        }
+
+        const { data: profileData, error: profileErr } = await supabase.from('profiles').select('*')
 
         const mapTierToRole = (tier) => {
           if (!tier) return 'Student'
@@ -691,25 +700,23 @@ class DataStore {
           emailMap.set(u.email.toLowerCase().trim(), u)
         }
 
-        // 2. Supabase direct users table (1,479+ students and campus directory)
-        if (!usersRes.error && usersRes.data) {
-          for (const u of usersRes.data) {
-            emailMap.set(u.email.toLowerCase().trim(), {
-              id: u.id,
-              name: u.name,
-              email: u.email,
-              role: u.role || 'Student',
-              department: u.department || 'General Academic',
-              status: u.is_active === false ? 'Suspended' : 'Active',
-              lastActive: u.created_at ? u.created_at.slice(0, 10) : 'Active',
-              createdAt: u.created_at ? u.created_at.slice(0, 10) : '2026-10-20'
-            })
-          }
+        // 2. Supabase direct users table (1,785+ students & faculty)
+        for (const u of allDbUsers) {
+          emailMap.set(u.email.toLowerCase().trim(), {
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.role || 'Student',
+            department: u.department || 'General Academic',
+            status: u.is_active === false ? 'Suspended' : 'Active',
+            lastActive: u.created_at ? u.created_at.slice(0, 10) : 'Active',
+            createdAt: u.created_at ? u.created_at.slice(0, 10) : '2026-10-20'
+          })
         }
 
         // 3. Supabase profiles (faculty/admin/coordinators)
-        if (!profilesRes.error && profilesRes.data) {
-          for (const p of profilesRes.data) {
+        if (!profileErr && profileData) {
+          for (const p of profileData) {
             emailMap.set(p.email.toLowerCase().trim(), {
               id: p.id,
               name: p.full_name || p.email.split('@')[0],
