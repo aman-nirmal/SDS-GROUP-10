@@ -174,7 +174,7 @@ export const INITIAL_EVENTS = [
   }
 ]
 
-// In-Memory Persistent Store
+// DataStore with Supabase integration and offline fallback
 class DataStore {
   constructor() {
     this.users = [...INITIAL_ADMIN_USERS]
@@ -188,6 +188,24 @@ class DataStore {
 
   // --- VENUES ---
   async getVenues(filter = {}) {
+    if (supabase) {
+      try {
+        let query = supabase.from('venues').select('*')
+        if (filter.department && filter.department !== 'All') {
+          query = query.ilike('department', `%${filter.department}%`)
+        }
+        if (filter.status && filter.status !== 'All') {
+          query = query.eq('status', filter.status)
+        }
+        const { data, error } = await query
+        if (!error && data && data.length > 0) {
+          return data
+        }
+      } catch (err) {
+        console.warn('[Supabase] venues query failed, falling back to local store:', err.message)
+      }
+    }
+
     let result = [...this.venues]
     if (filter.department && filter.department !== 'All') {
       result = result.filter((v) => v.department.toLowerCase() === filter.department.toLowerCase())
@@ -203,6 +221,14 @@ class DataStore {
   }
 
   async getVenueById(id) {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('venues').select('*').or(`id.eq.${id},code.eq.${id}`).single()
+        if (!error && data) return data
+      } catch {
+        // ignore
+      }
+    }
     return this.venues.find((v) => v.id === id || v.code === id) || null
   }
 
@@ -221,12 +247,29 @@ class DataStore {
       description: data.description || 'Institutional academic venue.',
       createdAt: new Date().toISOString()
     }
+
+    if (supabase) {
+      try {
+        await supabase.from('venues').insert([newVenue])
+      } catch (err) {
+        console.warn('[Supabase] venue insertion error:', err.message)
+      }
+    }
+
     this.venues.unshift(newVenue)
     this.addLog(`Created venue ${newVenue.name} (${newVenue.code})`, 'Venues', 'success')
     return newVenue
   }
 
   async updateVenue(id, updates) {
+    if (supabase) {
+      try {
+        await supabase.from('venues').update(updates).or(`id.eq.${id},code.eq.${id}`)
+      } catch (err) {
+        console.warn('[Supabase] venue update error:', err.message)
+      }
+    }
+
     const idx = this.venues.findIndex((v) => v.id === id || v.code === id)
     if (idx === -1) return null
     this.venues[idx] = { ...this.venues[idx], ...updates }
@@ -235,6 +278,14 @@ class DataStore {
   }
 
   async deleteVenue(id) {
+    if (supabase) {
+      try {
+        await supabase.from('venues').delete().or(`id.eq.${id},code.eq.${id}`)
+      } catch (err) {
+        console.warn('[Supabase] venue delete error:', err.message)
+      }
+    }
+
     const idx = this.venues.findIndex((v) => v.id === id || v.code === id)
     if (idx === -1) return false
     const removed = this.venues.splice(idx, 1)[0]
@@ -244,6 +295,24 @@ class DataStore {
 
   // --- BOOKINGS & CONFLICT RESOLUTION ---
   async getBookings(filter = {}) {
+    if (supabase) {
+      try {
+        let query = supabase.from('bookings').select('*').order('date', { ascending: false })
+        if (filter.status && filter.status !== 'All') {
+          query = query.eq('status', filter.status)
+        }
+        if (filter.userEmail) {
+          query = query.eq('applicantEmail', filter.userEmail.toLowerCase().trim())
+        }
+        const { data, error } = await query
+        if (!error && data && data.length > 0) {
+          return data
+        }
+      } catch (err) {
+        console.warn('[Supabase] bookings query failed, falling back to local store:', err.message)
+      }
+    }
+
     let result = [...this.bookings]
     if (filter.status && filter.status !== 'All') {
       result = result.filter((b) => b.status.toLowerCase() === filter.status.toLowerCase())
@@ -271,10 +340,17 @@ class DataStore {
   }
 
   async getBookingById(id) {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('bookings').select('*').or(`id.eq.${id},ref.eq.${id}`).single()
+        if (!error && data) return data
+      } catch {
+        // ignore
+      }
+    }
     return this.bookings.find((b) => b.id === id || b.ref === id) || null
   }
 
-  // Conflict Detection: checks if venue is already booked for date + overlapping time slot
   checkBookingConflict(venueName, date, timeSlot, excludeId = null) {
     const activeBookings = this.bookings.filter((b) => {
       if (excludeId && (b.id === excludeId || b.ref === excludeId)) return false
@@ -285,7 +361,6 @@ class DataStore {
       )
     })
 
-    // Compare slot text directly or overlaps
     for (const b of activeBookings) {
       if (b.timeSlot === timeSlot) {
         return { hasConflict: true, conflictingBooking: b }
@@ -305,7 +380,6 @@ class DataStore {
       throw err
     }
 
-    const timestamp = Date.now()
     const newBooking = {
       id: `BK-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
       ref: data.ref || `STU-BK-${Math.floor(100 + Math.random() * 900)}`,
@@ -326,6 +400,14 @@ class DataStore {
       notes: data.notes || data.requirements || ''
     }
 
+    if (supabase) {
+      try {
+        await supabase.from('bookings').insert([newBooking])
+      } catch (err) {
+        console.warn('[Supabase] booking insertion error:', err.message)
+      }
+    }
+
     this.bookings.unshift(newBooking)
     this.addLog(
       `Reservation submitted for ${newBooking.venueName} by ${newBooking.applicantName} (${newBooking.date})`,
@@ -336,15 +418,27 @@ class DataStore {
   }
 
   async updateBookingStatus(id, newStatus, reason = '', actor = 'Administrator') {
+    const updates = {
+      status: newStatus,
+      decisionNotes: reason,
+      decidedBy: actor,
+      decidedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
+    }
+
+    if (supabase) {
+      try {
+        await supabase.from('bookings').update(updates).or(`id.eq.${id},ref.eq.${id}`)
+      } catch (err) {
+        console.warn('[Supabase] booking status update error:', err.message)
+      }
+    }
+
     const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
     if (idx === -1) return null
 
     this.bookings[idx] = {
       ...this.bookings[idx],
-      status: newStatus,
-      decisionNotes: reason,
-      decidedBy: actor,
-      decidedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
+      ...updates
     }
 
     this.addLog(
@@ -356,6 +450,14 @@ class DataStore {
   }
 
   async deleteBooking(id) {
+    if (supabase) {
+      try {
+        await supabase.from('bookings').delete().or(`id.eq.${id},ref.eq.${id}`)
+      } catch (err) {
+        console.warn('[Supabase] booking delete error:', err.message)
+      }
+    }
+
     const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
     if (idx === -1) return false
     const removed = this.bookings.splice(idx, 1)[0]
@@ -396,6 +498,21 @@ class DataStore {
 
   // --- USERS & DIRECTORY ---
   async getUsers(filter = {}) {
+    if (supabase) {
+      try {
+        let query = supabase.from('users').select('*')
+        if (filter.role && filter.role !== 'All') {
+          query = query.eq('role', filter.role)
+        }
+        const { data, error } = await query
+        if (!error && data && data.length > 0) {
+          return data
+        }
+      } catch (err) {
+        console.warn('[Supabase] users query failed, falling back to local store:', err.message)
+      }
+    }
+
     let result = [...this.users]
     if (filter.role && filter.role !== 'All') {
       result = result.filter((u) => u.role.toLowerCase() === filter.role.toLowerCase())
@@ -423,6 +540,15 @@ class DataStore {
       lastActive: 'Just registered',
       createdAt: new Date().toISOString().slice(0, 10)
     }
+
+    if (supabase) {
+      try {
+        await supabase.from('users').insert([newUser])
+      } catch (err) {
+        console.warn('[Supabase] user creation error:', err.message)
+      }
+    }
+
     this.users.unshift(newUser)
     this.addLog(`Provisioned campus user ${newUser.name} (${newUser.role})`, 'Directory', 'success')
     return newUser
@@ -440,12 +566,29 @@ class DataStore {
       lastActive: 'Just imported',
       createdAt: new Date().toISOString().slice(0, 10)
     }))
+
+    if (supabase) {
+      try {
+        await supabase.from('users').insert(created)
+      } catch (err) {
+        console.warn('[Supabase] bulk user creation error:', err.message)
+      }
+    }
+
     this.users = [...created, ...this.users]
     this.addLog(`Bulk imported ${created.length} users into directory`, 'Directory', 'success')
     return created
   }
 
   async updateUserRole(id, newRole) {
+    if (supabase) {
+      try {
+        await supabase.from('users').update({ role: newRole }).eq('id', id)
+      } catch (err) {
+        console.warn('[Supabase] update user role error:', err.message)
+      }
+    }
+
     const idx = this.users.findIndex((u) => u.id === id)
     if (idx === -1) return null
     this.users[idx].role = newRole
@@ -454,6 +597,14 @@ class DataStore {
   }
 
   async updateUserStatus(id, newStatus) {
+    if (supabase) {
+      try {
+        await supabase.from('users').update({ status: newStatus }).eq('id', id)
+      } catch (err) {
+        console.warn('[Supabase] update user status error:', err.message)
+      }
+    }
+
     const idx = this.users.findIndex((u) => u.id === id)
     if (idx === -1) return null
     this.users[idx].status = newStatus
@@ -462,6 +613,14 @@ class DataStore {
   }
 
   async deleteUser(id) {
+    if (supabase) {
+      try {
+        await supabase.from('users').delete().eq('id', id)
+      } catch (err) {
+        console.warn('[Supabase] delete user error:', err.message)
+      }
+    }
+
     const idx = this.users.findIndex((u) => u.id === id)
     if (idx === -1) return false
     const removed = this.users.splice(idx, 1)[0]
@@ -471,6 +630,14 @@ class DataStore {
 
   // --- ROLE REQUESTS ---
   async getRoleRequests() {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('role_requests').select('*').order('submittedAt', { ascending: false })
+        if (!error && data && data.length > 0) return data
+      } catch {
+        // fallback
+      }
+    }
     return [...this.roleRequests]
   }
 
@@ -486,23 +653,46 @@ class DataStore {
       status: 'Pending',
       submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
     }
+
+    if (supabase) {
+      try {
+        await supabase.from('role_requests').insert([newReq])
+      } catch (err) {
+        console.warn('[Supabase] role request insert error:', err.message)
+      }
+    }
+
     this.roleRequests.unshift(newReq)
     this.addLog(`Role upgrade requested by ${newReq.applicantName} for ${newReq.requestedRole}`, 'Role Requests', 'info')
     return newReq
   }
 
   async updateRoleRequest(id, status, reviewedBy = 'Administrator') {
+    const updates = {
+      status,
+      reviewedBy,
+      reviewedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
+    }
+
+    if (supabase) {
+      try {
+        await supabase.from('role_requests').update(updates).eq('id', id)
+      } catch (err) {
+        console.warn('[Supabase] role request update error:', err.message)
+      }
+    }
+
     const idx = this.roleRequests.findIndex((r) => r.id === id)
     if (idx === -1) return null
-    this.roleRequests[idx].status = status
-    this.roleRequests[idx].reviewedBy = reviewedBy
-    this.roleRequests[idx].reviewedAt = new Date().toISOString().replace('T', ' ').slice(0, 16)
+    this.roleRequests[idx] = { ...this.roleRequests[idx], ...updates }
 
-    // If approved, elevate user's role in directory
     if (status === 'Approved') {
       const user = this.users.find((u) => u.email === this.roleRequests[idx].applicantEmail)
       if (user) {
         user.role = this.roleRequests[idx].requestedRole
+        if (supabase) {
+          supabase.from('users').update({ role: user.role }).eq('id', user.id).catch(() => {})
+        }
       }
     }
 
@@ -512,6 +702,14 @@ class DataStore {
 
   // --- TIMETABLE ---
   async getTimetable() {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('timetable').select('*')
+        if (!error && data && data.length > 0) return data
+      } catch {
+        // fallback
+      }
+    }
     return [...this.timetable]
   }
 
@@ -529,6 +727,15 @@ class DataStore {
       semester: data.semester || 'B.Tech Sem VI',
       department: data.department || 'Computer Engineering'
     }
+
+    if (supabase) {
+      try {
+        await supabase.from('timetable').insert([entry])
+      } catch (err) {
+        console.warn('[Supabase] timetable insert error:', err.message)
+      }
+    }
+
     this.timetable.unshift(entry)
     this.addLog(`Created timetable block "${entry.title}" in ${entry.venueName}`, 'Timetable', 'info')
     return entry
@@ -539,12 +746,29 @@ class DataStore {
       id: `TT-${Date.now()}-${idx}`,
       ...e
     }))
+
+    if (supabase) {
+      try {
+        await supabase.from('timetable').insert(created)
+      } catch (err) {
+        console.warn('[Supabase] bulk timetable insert error:', err.message)
+      }
+    }
+
     this.timetable = [...created, ...this.timetable]
     this.addLog(`Imported ${created.length} academic timetable entries`, 'Timetable Import', 'success')
     return created
   }
 
   async deleteTimetableEntry(id) {
+    if (supabase) {
+      try {
+        await supabase.from('timetable').delete().eq('id', id)
+      } catch (err) {
+        console.warn('[Supabase] timetable delete error:', err.message)
+      }
+    }
+
     const idx = this.timetable.findIndex((t) => t.id === id)
     if (idx === -1) return false
     const removed = this.timetable.splice(idx, 1)[0]
@@ -554,6 +778,14 @@ class DataStore {
 
   // --- LOGS ---
   async getLogs(limit = 100) {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('audit_logs').select('*').order('timestamp', { ascending: false }).limit(limit)
+        if (!error && data && data.length > 0) return data
+      } catch {
+        // fallback
+      }
+    }
     return this.logs.slice(0, limit)
   }
 
@@ -567,6 +799,11 @@ class DataStore {
       severity,
       ip
     }
+
+    if (supabase) {
+      supabase.from('audit_logs').insert([log]).catch(() => {})
+    }
+
     this.logs.unshift(log)
     if (this.logs.length > 500) this.logs.pop()
     return log
@@ -574,6 +811,14 @@ class DataStore {
 
   // --- EVENTS ---
   async getEvents() {
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('events').select('*').order('event_date', { ascending: true })
+        if (!error && data && data.length > 0) return data
+      } catch {
+        // fallback
+      }
+    }
     return [...this.events]
   }
 }
