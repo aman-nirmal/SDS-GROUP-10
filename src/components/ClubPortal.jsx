@@ -3,7 +3,12 @@ import {
   Trophy,
   Plus,
   Trash2,
-  XCircle
+  XCircle,
+  Calendar,
+  Clock,
+  Users,
+  Check,
+  Inbox
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 
@@ -90,7 +95,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
       <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Club Bookings
@@ -103,7 +108,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
             >
               <Plus className="w-4 h-4" />
               <span>Book Event Venue</span>
@@ -111,72 +116,102 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
           </div>
         </div>
 
-        {/* Content Table */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
-            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-900 dark:text-white">Registered Club Events ({bookings.length})</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Major festival allocations and auditorium reservations.</p>
-              </div>
+        {/* Content Feed */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <div>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">Registered Club Events ({bookings.length})</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Major festival allocations and auditorium reservations.</p>
             </div>
+          </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-300 font-bold uppercase tracking-wider text-[11px]">
-                  <tr>
-                    <th className="py-3 px-4">Booking ID</th>
-                    <th className="py-3 px-4">Venue</th>
-                    <th className="py-3 px-4">Event Title</th>
-                    <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Slot</th>
-                    <th className="py-3 px-4">Estimated Crowd</th>
-                    <th className="py-3 px-4">Gymkhana Approval</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {bookings.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">{b.id}</td>
-                      <td className="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{b.venue}</td>
-                      <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.title}</td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.date}</td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.timeSlot}</td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.attendees} attendees</td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                            b.status === 'Approved'
-                              ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                              : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                          }`}
-                        >
-                          {b.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(b.id)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
-                          title="Withdraw Proposal"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {bookings.length === 0 && (
-                    <tr>
-                      <td colSpan={8} className="py-8 text-center text-slate-400 dark:text-slate-500">
-                        No active event proposals.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+          <div className="space-y-4">
+            {bookings.map((b) => (
+              <div
+                key={b.id}
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start lg:items-center">
+                  {/* Left Column (7 cols): Venue & Title */}
+                  <div className="lg:col-span-7 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        {b.id}
+                      </span>
+                      <span className="text-slate-300 dark:text-slate-700">•</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{b.attendees} attendees</span>
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                        {b.venue}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                        {b.title}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right Column (5 cols): Schedule, Status & Action */}
+                  <div className="lg:col-span-5 flex flex-col lg:items-end justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 w-full">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
+                        b.status === 'Approved'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                          : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                      }`}
+                    >
+                      {b.status === 'Approved' ? <Check className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                      <span>{b.status}</span>
+                    </span>
+
+                    <div className="text-left lg:text-right space-y-0.5">
+                      <div className="flex items-center lg:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        <span>{b.date}</span>
+                      </div>
+                      <div className="flex items-center lg:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{b.timeSlot}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-1">
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(b.id)}
+                        className="px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                        title="Withdraw Proposal"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Withdraw Proposal</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {bookings.length === 0 && (
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 py-12 px-6 text-center text-slate-400 shadow-2xs">
+                <Trophy className="w-9 h-9 mx-auto mb-2 opacity-40 text-slate-400" />
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-200">No active event proposals</p>
+                <p className="text-xs text-slate-400 mt-1 mb-4 max-w-sm mx-auto">
+                  Submit a venue reservation for upcoming festivals, workshops, or club competitions.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Book Event Venue</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
