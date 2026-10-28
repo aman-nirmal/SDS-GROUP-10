@@ -199,7 +199,22 @@ class DataStore {
         }
         const { data, error } = await query
         if (!error && data && data.length > 0) {
-          return data
+          return data.map((v) => ({
+            id: v.id,
+            code: v.code || v.new_hall_name || v.old_hall_name || `VN-${v.id.toString().slice(0, 4)}`,
+            name: v.name || `${v.new_hall_name || v.old_hall_name || 'Venue'} (${v.department || 'Campus'})`,
+            new_hall_name: v.new_hall_name,
+            old_hall_name: v.old_hall_name,
+            department: v.department || 'General Campus',
+            category: v.type || v.category || 'Classrooms',
+            type: v.type || 'Classrooms',
+            capacity: v.capacity || (v.benches ? v.benches * 2 : 60),
+            status: v.status || 'Available',
+            isActive: v.is_active !== false,
+            features: Array.isArray(v.features) && v.features.length > 0 ? v.features : ['Air Conditioned', 'Projector'],
+            image: v.image || '/campus.jpeg',
+            description: v.description || `COEP Technological University venue in ${v.department}`
+          }))
         }
       } catch (err) {
         console.warn('[Supabase] venues query failed, falling back to local store:', err.message)
@@ -297,16 +312,62 @@ class DataStore {
   async getBookings(filter = {}) {
     if (supabase) {
       try {
-        let query = supabase.from('bookings').select('*').order('date', { ascending: false })
+        let query = supabase.from('bookings').select('*').order('booking_date', { ascending: false })
         if (filter.status && filter.status !== 'All') {
-          query = query.eq('status', filter.status)
+          const dbStatus = filter.status === 'Approved' ? 'Confirmed' : filter.status
+          query = query.eq('status', dbStatus)
         }
         if (filter.userEmail) {
-          query = query.eq('applicantEmail', filter.userEmail.toLowerCase().trim())
+          query = query.eq('applicant_email', filter.userEmail.toLowerCase().trim())
         }
         const { data, error } = await query
         if (!error && data && data.length > 0) {
-          return data
+          const mapped = data.map((b) => ({
+            id: b.id,
+            ref: b.booking_ref || `LOCUS-${b.id.toString().slice(0, 6)}`,
+            venueId: b.venue_id || `VN-${b.venue_name || 'GEN'}`,
+            venueName: b.venue_name || 'Academic Hall',
+            venue: b.venue_name || 'Academic Hall',
+            applicantName: b.applicant_name || 'Campus Member',
+            applicantEmail: b.applicant_email || `${(b.applicant_name || 'user').toLowerCase().replace(/\s+/g, '.')}@coeptech.ac.in`,
+            applicantRole: b.user_role || (b.club_name ? 'Club Lead' : (b.applicant_name && b.applicant_name.toLowerCase().includes('prof') ? 'Faculty' : 'Student')),
+            department: b.department || 'Academics Complex',
+            clubName: b.club_name || null,
+            bookingType: b.booking_type || 'Workshop',
+            purpose: b.purpose || b.event_title || b.description || 'Institutional Campus Activity',
+            date: b.booking_date,
+            bookingDate: b.booking_date,
+            timeSlot: b.time_slot,
+            attendees: Number(b.attendees) || 50,
+            status: b.status || 'Confirmed',
+            priority: b.priority || 'Normal',
+            submittedAt: b.created_at ? b.created_at.replace('T', ' ').slice(0, 16) : new Date().toISOString().slice(0, 16),
+            notes: b.description || b.notes || b.faculty_remarks || '',
+            passCode: b.pass_code || b.booking_ref || `COEP-PASS-${b.id.toString().slice(0, 6)}`,
+            isApproved: b.is_approved !== false
+          })).filter((b) => !b.ref.startsWith('T-'))
+
+          // Also include any local pending bookings not yet on remote
+          const remoteRefs = new Set(mapped.map((m) => m.ref))
+          const localExtra = this.bookings.filter((b) => !remoteRefs.has(b.ref))
+          let combined = [...mapped, ...localExtra]
+
+          if (filter.venueName) {
+            combined = combined.filter((b) => b.venueName.toLowerCase().includes(filter.venueName.toLowerCase()))
+          }
+          if (filter.date) {
+            combined = combined.filter((b) => b.date === filter.date)
+          }
+          if (filter.search) {
+            const q = filter.search.toLowerCase()
+            combined = combined.filter(
+              (b) =>
+                b.purpose?.toLowerCase().includes(q) ||
+                b.applicantName?.toLowerCase().includes(q) ||
+                b.venueName?.toLowerCase().includes(q)
+            )
+          }
+          return combined
         }
       } catch (err) {
         console.warn('[Supabase] bookings query failed, falling back to local store:', err.message)
@@ -342,8 +403,37 @@ class DataStore {
   async getBookingById(id) {
     if (supabase) {
       try {
-        const { data, error } = await supabase.from('bookings').select('*').or(`id.eq.${id},ref.eq.${id}`).single()
-        if (!error && data) return data
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .or(`id.eq.${id},booking_ref.eq.${id}`)
+          .single()
+        if (!error && data) {
+          return {
+            id: data.id,
+            ref: data.booking_ref,
+            venueId: data.venue_id || `VN-${data.venue_name}`,
+            venueName: data.venue_name,
+            venue: data.venue_name,
+            applicantName: data.applicant_name,
+            applicantEmail: data.applicant_email || `${(data.applicant_name || 'user').toLowerCase().replace(/\s+/g, '.')}@coeptech.ac.in`,
+            applicantRole: data.user_role || (data.club_name ? 'Club Lead' : 'Student'),
+            department: data.department,
+            clubName: data.club_name,
+            bookingType: data.booking_type || 'Workshop',
+            purpose: data.purpose || data.event_title || data.description,
+            date: data.booking_date,
+            bookingDate: data.booking_date,
+            timeSlot: data.time_slot,
+            attendees: Number(data.attendees) || 50,
+            status: data.status,
+            priority: data.priority || 'Normal',
+            submittedAt: data.created_at ? data.created_at.replace('T', ' ').slice(0, 16) : '',
+            notes: data.description || '',
+            passCode: data.pass_code || data.booking_ref,
+            isApproved: data.is_approved !== false
+          }
+        }
       } catch {
         // ignore
       }
@@ -380,9 +470,19 @@ class DataStore {
       throw err
     }
 
+    const validBookingTypes = ['Lecture', 'Workshop', 'Club Event', 'Seminar', 'Competition']
+    let bookingType = 'Workshop'
+    if (data.bookingType && validBookingTypes.includes(data.bookingType)) {
+      bookingType = data.bookingType
+    } else if (data.applicantRole === 'Faculty') {
+      bookingType = 'Lecture'
+    } else if (data.applicantRole === 'Club Lead' || data.clubName) {
+      bookingType = 'Club Event'
+    }
+
     const newBooking = {
       id: `BK-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
-      ref: data.ref || `STU-BK-${Math.floor(100 + Math.random() * 900)}`,
+      ref: data.ref || `LOCUS-${Math.floor(100000 + Math.random() * 900000)}`,
       venueId: data.venueId || 'VN-GEN',
       venueName: venueName,
       venue: venueName,
@@ -390,6 +490,8 @@ class DataStore {
       applicantEmail: data.applicantEmail || 'student@coeptech.ac.in',
       applicantRole: data.applicantRole || 'Student',
       department: data.department || 'Computer Engineering',
+      clubName: data.clubName || null,
+      bookingType,
       purpose: data.purpose || data.title || 'Academic Activity',
       date: data.date,
       timeSlot: data.timeSlot,
@@ -402,7 +504,29 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('bookings').insert([newBooking])
+        const supabaseBooking = {
+          booking_ref: newBooking.ref,
+          booking_type: bookingType,
+          venue_name: newBooking.venueName,
+          applicant_name: newBooking.applicantName,
+          applicant_email: newBooking.applicantEmail,
+          user_role: newBooking.applicantRole,
+          department: newBooking.department,
+          club_name: newBooking.clubName,
+          event_title: newBooking.purpose,
+          purpose: newBooking.purpose,
+          description: newBooking.notes || `Reservation for ${newBooking.venueName}`,
+          booking_date: newBooking.date,
+          time_slot: newBooking.timeSlot,
+          attendees: newBooking.attendees,
+          status: newBooking.status === 'Approved' ? 'Confirmed' : newBooking.status,
+          is_approved: newBooking.status === 'Confirmed' || newBooking.status === 'Approved',
+          pass_code: newBooking.ref
+        }
+        const { data: inserted, error: insErr } = await supabase.from('bookings').insert([supabaseBooking]).select()
+        if (!insErr && inserted && inserted[0]) {
+          newBooking.id = inserted[0].id
+        }
       } catch (err) {
         console.warn('[Supabase] booking insertion error:', err.message)
       }
@@ -418,6 +542,9 @@ class DataStore {
   }
 
   async updateBookingStatus(id, newStatus, reason = '', actor = 'Administrator') {
+    const dbStatus = newStatus === 'Approved' ? 'Confirmed' : newStatus
+    const isApproved = dbStatus === 'Confirmed'
+
     const updates = {
       status: newStatus,
       decisionNotes: reason,
@@ -427,18 +554,25 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('bookings').update(updates).or(`id.eq.${id},ref.eq.${id}`)
+        await supabase
+          .from('bookings')
+          .update({
+            status: dbStatus,
+            is_approved: isApproved,
+            faculty_remarks: reason
+          })
+          .or(`id.eq.${id},booking_ref.eq.${id}`)
       } catch (err) {
         console.warn('[Supabase] booking status update error:', err.message)
       }
     }
 
     const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
-    if (idx === -1) return null
-
-    this.bookings[idx] = {
-      ...this.bookings[idx],
-      ...updates
+    if (idx !== -1) {
+      this.bookings[idx] = {
+        ...this.bookings[idx],
+        ...updates
+      }
     }
 
     this.addLog(
@@ -446,28 +580,30 @@ class DataStore {
       'Sanctions',
       newStatus === 'Confirmed' || newStatus === 'Approved' ? 'success' : 'warning'
     )
-    return this.bookings[idx]
+    return this.bookings[idx] || { id, ...updates }
   }
 
   async deleteBooking(id) {
     if (supabase) {
       try {
-        await supabase.from('bookings').delete().or(`id.eq.${id},ref.eq.${id}`)
+        await supabase.from('bookings').delete().or(`id.eq.${id},booking_ref.eq.${id}`)
       } catch (err) {
         console.warn('[Supabase] booking delete error:', err.message)
       }
     }
 
     const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
-    if (idx === -1) return false
+    if (idx === -1) return true
     const removed = this.bookings.splice(idx, 1)[0]
     this.addLog(`Booking ${id} (${removed.venueName}) deleted`, 'Bookings', 'warning')
     return true
   }
 
   // --- PASS VERIFICATION (FOR SECURITY PORTAL) ---
-  verifyPass(passCode) {
+  async verifyPass(passCode) {
     const code = (passCode || '').trim().toUpperCase()
+
+    // 1. Check in-memory first
     const booking = this.bookings.find(
       (b) =>
         (b.ref && b.ref.toUpperCase() === code) ||
@@ -493,27 +629,89 @@ class DataStore {
       }
     }
 
+    // 2. Query Supabase directly
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .or(`booking_ref.ilike.%${code}%,pass_code.ilike.%${code}%`)
+          .limit(1)
+
+        if (!error && data && data.length > 0) {
+          const b = data[0]
+          const isValid = b.status === 'Confirmed' || b.is_approved === true
+          return {
+            isValid,
+            passId: `COEP-PASS-${b.booking_ref || b.id}`,
+            bookingId: b.booking_ref || b.id,
+            holderName: b.applicant_name,
+            role: b.user_role || (b.club_name ? 'Club Lead' : 'Student'),
+            department: b.department,
+            venue: b.venue_name,
+            purpose: b.purpose || b.event_title || b.description,
+            date: b.booking_date,
+            timeSlot: b.time_slot,
+            attendees: b.attendees,
+            status: isValid ? 'Valid' : b.status
+          }
+        }
+      } catch (err) {
+        console.warn('[Supabase] verifyPass query error:', err.message)
+      }
+    }
+
     return null
   }
 
   // --- USERS & DIRECTORY ---
   async getUsers(filter = {}) {
+    let combinedUsers = [...this.users]
+
     if (supabase) {
       try {
-        let query = supabase.from('users').select('*')
-        if (filter.role && filter.role !== 'All') {
-          query = query.eq('role', filter.role)
-        }
-        const { data, error } = await query
+        const { data, error } = await supabase.from('profiles').select('*')
         if (!error && data && data.length > 0) {
-          return data
+          const mapTierToRole = (tier) => {
+            if (!tier) return 'Student'
+            const t = tier.toLowerCase()
+            if (t.includes('admin') || t.includes('site')) return 'Administrator'
+            if (t.includes('faculty') || t.includes('prof') || t.includes('teacher')) return 'Faculty'
+            if (t.includes('club') || t.includes('org') || t.includes('sec')) return 'Club Lead'
+            return 'Student'
+          }
+
+          const profileUsers = data.map((p) => ({
+            id: p.id,
+            name: p.full_name || p.email.split('@')[0],
+            email: p.email,
+            role: mapTierToRole(p.role_tier),
+            roleTier: p.role_tier,
+            department: p.department || 'Academics Complex',
+            status: 'Active',
+            lastActive: p.created_at ? p.created_at.slice(0, 10) : 'Active',
+            createdAt: p.created_at ? p.created_at.slice(0, 10) : '2026-10-20'
+          }))
+
+          // Merge with this.users ensuring uniqueness by email
+          const emailMap = new Map()
+          for (const u of profileUsers) {
+            emailMap.set(u.email.toLowerCase().trim(), u)
+          }
+          for (const u of this.users) {
+            const key = u.email.toLowerCase().trim()
+            if (!emailMap.has(key)) {
+              emailMap.set(key, u)
+            }
+          }
+          combinedUsers = Array.from(emailMap.values())
         }
       } catch (err) {
-        console.warn('[Supabase] users query failed, falling back to local store:', err.message)
+        console.warn('[Supabase] profiles query failed, falling back to local store:', err.message)
       }
     }
 
-    let result = [...this.users]
+    let result = combinedUsers
     if (filter.role && filter.role !== 'All') {
       result = result.filter((u) => u.role.toLowerCase() === filter.role.toLowerCase())
     }
@@ -814,9 +1012,24 @@ class DataStore {
     if (supabase) {
       try {
         const { data, error } = await supabase.from('events').select('*').order('event_date', { ascending: true })
-        if (!error && data && data.length > 0) return data
-      } catch {
-        // fallback
+        if (!error && data && data.length > 0) {
+          return data.map((e) => ({
+            id: e.id,
+            title: e.title,
+            organizer: e.organizer,
+            club_name: e.club_name,
+            department: e.department,
+            category: e.category,
+            venue_name: e.venue_name,
+            event_date: e.event_date,
+            time_slot: e.time_slot,
+            expected_attendees: e.attendees || e.expected_attendees || 50,
+            description: e.description,
+            status: e.status || 'Confirmed'
+          }))
+        }
+      } catch (err) {
+        console.warn('[Supabase] events query failed:', err.message)
       }
     }
     return [...this.events]

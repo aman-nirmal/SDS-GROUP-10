@@ -95,7 +95,7 @@ export async function deleteBooking(req, res, next) {
 export async function verifyPass(req, res, next) {
   try {
     const { passCode } = req.params
-    const pass = dataStore.verifyPass(passCode)
+    const pass = await dataStore.verifyPass(passCode)
     if (!pass) {
       return res.status(404).json({
         success: false,
