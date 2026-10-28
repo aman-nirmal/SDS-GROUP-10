@@ -25,9 +25,8 @@ import RoleRequests from './admin/RoleRequests'
 import AdminTimetable from './admin/AdminTimetable'
 import {
   INITIAL_ADMIN_VENUES,
-  INITIAL_ROLE_REQUESTS,
-  INITIAL_TIMETABLE_ENTRIES
 } from './admin/mockAdminData'
+import { importedCampusUsers } from '../data/importedCampusUsers'
 import {
   usersApi,
   bookingsApi,
@@ -39,6 +38,7 @@ import {
 
 // Initial institutional users store
 const INITIAL_USERS = [
+  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',
