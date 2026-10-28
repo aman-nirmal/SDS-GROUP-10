@@ -247,14 +247,9 @@ export default function FacultyPortal({
                         </div>
 
                         <div>
-                          <div className="flex flex-wrap items-baseline gap-2">
-                            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                              {b.venueName || b.venue}
-                            </h3>
-                            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                              • {b.department || 'COEP Tech'}
-                            </span>
-                          </div>
+                          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                            {b.venueName || b.venue}
+                          </h3>
                           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
                             {b.purpose}
                           </p>
@@ -345,9 +340,6 @@ export default function FacultyPortal({
                           </div>
                           <div className="text-xs font-bold text-slate-900 dark:text-white">
                             {b.submittedAt || `${b.bookingDate || b.date} • Standard Submission`}
-                          </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">
-                            Department: {b.department || 'COEP Tech'}
                           </div>
                         </div>
                       </div>

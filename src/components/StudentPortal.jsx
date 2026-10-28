@@ -265,14 +265,10 @@ export default function StudentPortal({
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
                       {/* Left Column (7 cols): Details */}
                       <div className="md:col-span-7 space-y-2">
-                        {/* Top Meta Line: ID, Department, Attendees */}
+                        {/* Top Meta Line: ID & Attendees */}
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                             {b.id || b.ref}
-                          </span>
-                          <span className="text-slate-300 dark:text-slate-700">•</span>
-                          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                            {b.department || 'COEP Tech'}
                           </span>
                           {(b.attendees || b.capacity) && (
                             <>
