@@ -3638,16 +3638,6 @@ export default function App() {
             >
               Events
             </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('about')}
-              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'about'
-                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                : 'hover:text-slate-900 dark:hover:text-white'
-                }`}
-            >
-              About
-            </button>
 
             <button
               type="button"

@@ -130,12 +130,12 @@ export default function StudentPortal({
       timeSlot: '02:00 PM - 04:00 PM',
       attendees: 2
     })
-    showToast(`Study pass issued for ${form.venue}`)
+    showToast(`Pass issued for ${form.venue}`)
   }
 
   const handleDeletePass = (id) => {
     setPasses(passes.filter((p) => p.id !== id))
-    showToast('Study room booking cancelled.', 'warning')
+    showToast('Pass cancelled.', 'warning')
   }
 
   const handleCancelVenueBooking = (bookingId) => {
@@ -174,7 +174,7 @@ export default function StudentPortal({
                 My Bookings
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                View and manage your venue bookings, approval status, and study passes.
+                View and manage your venue bookings, approval status, and passes.
               </p>
             </div>
 
@@ -193,7 +193,7 @@ export default function StudentPortal({
                 onClick={() => setIsModalOpen(true)}
                 className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
               >
-                <span>Book Study Room</span>
+                <span>Get a Pass</span>
               </button>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function StudentPortal({
                   : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300'
               }`}
             >
-              Study Room Passes ({passes.length})
+              Passes ({passes.length})
             </button>
           </div>
         </div>
@@ -358,15 +358,15 @@ export default function StudentPortal({
           </div>
         )}
 
-        {/* Tab 2: Study Rooms & Digital Passes */}
+        {/* Tab 2: Passes */}
         {activeTab === 'passes' && (
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
               <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-bold text-slate-900 dark:text-white">Study Room Passes ({passes.length})</h2>
+                  <h2 className="text-sm font-bold text-slate-900 dark:text-white">Passes ({passes.length})</h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Show your pass or QR code at the desk or library turnstile for quick entry.
+                    Show your pass or QR code at security checkpoints, desk, or turnstiles for entry.
                   </p>
                 </div>
 
@@ -376,7 +376,7 @@ export default function StudentPortal({
                   className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Book Study Room</span>
+                  <span>Get a Pass</span>
                 </button>
               </div>
 
@@ -427,15 +427,15 @@ export default function StudentPortal({
                 {passes.length === 0 && (
                   <div className="p-12 text-center text-slate-400 dark:text-slate-500 text-xs">
                     <QrCode className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-semibold text-slate-600 dark:text-slate-300">You have no active study room passes.</p>
-                    <p className="text-xs text-slate-400 mt-1 mb-4">Book library discussion pods or computer lab seats.</p>
+                    <p className="font-semibold text-slate-600 dark:text-slate-300">You have no active passes.</p>
+                    <p className="text-xs text-slate-400 mt-1 mb-4">Get entry passes for labs, workstations, discussion rooms, or campus facilities.</p>
                     <button
                       type="button"
                       onClick={() => setIsModalOpen(true)}
-                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
-                      <span>Book Study Room</span>
+                      <span>Get a Pass</span>
                     </button>
                   </div>
                 )}
@@ -444,12 +444,12 @@ export default function StudentPortal({
           </div>
         )}
 
-        {/* Modal: Book Study Room */}
+        {/* Modal: Get Campus Pass */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
             <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Book Study Pod / Lab Space</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Get Campus Pass</h3>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -462,12 +462,12 @@ export default function StudentPortal({
               <form onSubmit={handleCreatePass} className="space-y-3.5 text-xs">
                 <div>
                   <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Study Facility
+                    Facility / Space
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
                   >
                     <option value="Central Library Discussion Room A">Central Library Discussion Room A (Ground Floor)</option>
                     <option value="Central Library Discussion Room B">Central Library Discussion Room B (1st Floor)</option>
@@ -478,15 +478,15 @@ export default function StudentPortal({
 
                 <div>
                   <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Academic Purpose / Study Topic
+                    Purpose
                   </label>
                   <input
                     type="text"
                     required
                     value={form.purpose}
                     onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-                    placeholder="e.g. Capstone Project Team Coding"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                    placeholder="e.g. Capstone project coding, lab practical, team meeting"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -500,7 +500,7 @@ export default function StudentPortal({
                       required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                     />
                   </div>
 
@@ -511,7 +511,7 @@ export default function StudentPortal({
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
                     >
                       <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
                       <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
@@ -531,7 +531,7 @@ export default function StudentPortal({
                     max="8"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -545,9 +545,9 @@ export default function StudentPortal({
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
                   >
-                    Issue Digital Pass
+                    Issue Pass
                   </button>
                 </div>
               </form>
