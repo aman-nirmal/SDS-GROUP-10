@@ -14,9 +14,19 @@ import {
   Key,
   Clock,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  CalendarDays,
+  ArrowLeft
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import AdminVenues from './admin/AdminVenues'
+import RoleRequests from './admin/RoleRequests'
+import AdminTimetable from './admin/AdminTimetable'
+import {
+  INITIAL_ADMIN_VENUES,
+  INITIAL_ROLE_REQUESTS,
+  INITIAL_TIMETABLE_ENTRIES
+} from './admin/mockAdminData'
 
 // Initial institutional users store
 const INITIAL_USERS = [
@@ -195,131 +205,6 @@ export const INITIAL_BOOKINGS = [
   }
 ]
 
-// Initial campus venues list
-const INITIAL_VENUES = [
-  {
-    id: 'VN-1',
-    name: 'ND01 (North Drawing Hall)',
-    department: 'General Engineering',
-    type: 'Drawing Hall / Auditorium',
-    capacity: 180,
-    benches: 90,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
-    features: ['Overhead Projector', 'Public Address Mic', 'Air Conditioned']
-  },
-  {
-    id: 'VN-2',
-    name: 'NC24 (New Classroom Complex)',
-    department: 'Electronics & Telecommunication',
-    type: 'Classroom',
-    capacity: 80,
-    benches: 40,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    features: ['Smart Interactive Screen', 'Sound System', 'LAN Port']
-  },
-  {
-    id: 'VN-3',
-    name: 'SC10 (South Classroom Complex)',
-    department: 'Mechanical Engineering',
-    type: 'Classroom',
-    capacity: 70,
-    benches: 35,
-    status: 'Occupied',
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    features: ['Projector', 'Whiteboard', 'Dual Podium']
-  },
-  {
-    id: 'VN-4',
-    name: 'BHAU Institute Main Auditorium',
-    department: 'BHAU Incubation',
-    type: 'Auditorium',
-    capacity: 250,
-    benches: 125,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
-    features: ['Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Green Room']
-  },
-  {
-    id: 'VN-5',
-    name: 'Computer Department Seminar Hall',
-    department: 'Computer Engineering',
-    type: 'Seminar Hall',
-    capacity: 120,
-    benches: 60,
-    status: 'Under Maintenance',
-    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
-    features: ['Dual HD Projectors', 'WiFi 6 Access Point', 'Surround Sound']
-  },
-  {
-    id: 'VN-BHAU-CONF',
-    name: 'Bhau Conference Room (2nd Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Meeting Room',
-    capacity: 12,
-    benches: 6,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
-    features: ['Conference Table', 'Display Screen', 'High-Speed Wi-Fi', '₹1,180/hr']
-  },
-  {
-    id: 'VN-BHAU-CR1',
-    name: 'Bhau Classroom 1 (Ground Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Classroom',
-    capacity: 60,
-    benches: 30,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    features: ['Projector & Screen', 'Whiteboard', 'Sound System', '₹2,360/2 hr']
-  },
-  {
-    id: 'VN-BHAU-MR1',
-    name: 'Bhau Meeting Room 1 (2nd Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Meeting Room',
-    capacity: 8,
-    benches: 4,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-    features: ['Bhau Startups Only', 'Round Table', 'Whiteboard', '₹1,000/hr']
-  },
-  {
-    id: 'VN-BHAU-MR2',
-    name: 'Bhau Meeting Room 2 (2nd Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Meeting Room',
-    capacity: 8,
-    benches: 4,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80',
-    features: ['Bhau Startups Only', 'Smart TV Screen', 'High-Speed Wi-Fi', '₹1,000/hr']
-  },
-  {
-    id: 'VN-BHAU-TERRACE',
-    name: 'Bhau Open Space (Terrace Top Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Open Space',
-    capacity: 25,
-    benches: 12,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
-    features: ['Rooftop View', 'Ambient Lighting', 'Open Air Seating', '₹2,360/hr']
-  },
-  {
-    id: 'VN-BHAU-GROUND',
-    name: 'Bhau Open Space (Ground Floor)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Open Space',
-    capacity: 25,
-    benches: 12,
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-    features: ['Ground Courtyard', 'Open Air Seating', 'Power Outlets', '₹1,770/hr']
-  }
-]
-
 // Initial audit & security event logs
 const INITIAL_LOGS = [
   {
@@ -405,13 +290,36 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     }
   })
 
+  // Approvals view toggle ('bookings' | 'role_requests')
+  const [approvalsView, setApprovalsView] = useState('bookings')
+
   // Venues state
   const [venuesList, setVenuesList] = useState(() => {
     try {
       const stored = localStorage.getItem('locus_admin_venues')
-      return stored ? JSON.parse(stored) : INITIAL_VENUES
+      return stored ? JSON.parse(stored) : INITIAL_ADMIN_VENUES
     } catch {
-      return INITIAL_VENUES
+      return INITIAL_ADMIN_VENUES
+    }
+  })
+
+  // Role change requests state
+  const [roleRequests, setRoleRequests] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_admin_role_requests')
+      return stored ? JSON.parse(stored) : INITIAL_ROLE_REQUESTS
+    } catch {
+      return INITIAL_ROLE_REQUESTS
+    }
+  })
+
+  // Timetable schedules & physical blocks state
+  const [timetable, setTimetable] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_admin_timetable')
+      return stored ? JSON.parse(stored) : INITIAL_TIMETABLE_ENTRIES
+    } catch {
+      return INITIAL_TIMETABLE_ENTRIES
     }
   })
 
@@ -482,6 +390,24 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       // ignore
     }
   }, [logs])
+
+  // Persist role requests to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('locus_admin_role_requests', JSON.stringify(roleRequests))
+    } catch {
+      // ignore
+    }
+  }, [roleRequests])
+
+  // Persist timetable to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('locus_admin_timetable', JSON.stringify(timetable))
+    } catch {
+      // ignore
+    }
+  }, [timetable])
 
   // Append new audit log helper
   const addLog = useCallback((action, module = 'General', severity = 'info') => {
@@ -635,18 +561,140 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
   }
 
   // Handlers for Venues
-  const handleToggleVenueStatus = (venueId) => {
+  const handleAddVenue = (venueData) => {
+    const newId = `VN-${Date.now().toString().slice(-4)}`
+    const newVenue = { ...venueData, id: newId }
+    setVenuesList((prev) => [newVenue, ...prev])
+    addLog(`Added campus venue "${newVenue.name}" (${newVenue.code || newId})`, 'Venues', 'success')
+    showNotification(`Venue "${newVenue.name}" added successfully.`)
+  }
+
+  const handleUpdateVenue = (venueData) => {
+    setVenuesList((prev) =>
+      prev.map((v) => (v.id === venueData.id ? { ...v, ...venueData } : v))
+    )
+    addLog(`Updated venue attributes for "${venueData.name}"`, 'Venues', 'info')
+    showNotification(`Updated venue "${venueData.name}".`)
+  }
+
+  const handleDeleteVenue = (venueId) => {
+    const target = venuesList.find((v) => v.id === venueId)
+    setVenuesList((prev) => prev.filter((v) => v.id !== venueId))
+    if (target) {
+      addLog(`Removed venue "${target.name}" from catalog`, 'Venues', 'warning')
+      showNotification(`Venue "${target.name}" removed.`)
+    }
+  }
+
+  const handleToggleVenueActive = (venueId) => {
     setVenuesList((prev) =>
       prev.map((v) => {
         if (v.id === venueId) {
-          const nextStatus = v.status === 'Available' ? 'Under Maintenance' : 'Available'
-          addLog(`Venue ${v.name} status updated to ${nextStatus}`, 'Infrastructure', 'info')
-          showNotification(`${v.name} is now marked ${nextStatus}`)
+          const next = !v.isActive
+          addLog(`Venue "${v.name}" status changed to ${next ? 'Active' : 'Inactive'}`, 'Venues', 'info')
+          showNotification(`Venue "${v.name}" marked ${next ? 'Active' : 'Inactive'}.`)
+          return { ...v, isActive: next }
+        }
+        return v
+      })
+    )
+  }
+
+  const handleToggleVenueMaintenance = (venueId) => {
+    setVenuesList((prev) =>
+      prev.map((v) => {
+        if (v.id === venueId) {
+          const nextStatus = v.status === 'Under Maintenance' ? 'Available' : 'Under Maintenance'
+          addLog(`Venue "${v.name}" availability changed to ${nextStatus}`, 'Venues', nextStatus === 'Under Maintenance' ? 'warning' : 'success')
+          showNotification(`Venue "${v.name}" is now ${nextStatus}.`)
           return { ...v, status: nextStatus }
         }
         return v
       })
     )
+  }
+
+  // Handlers for Role Change Requests
+  const handleApproveRoleRequest = (requestId, notes) => {
+    const req = roleRequests.find((r) => r.id === requestId)
+    if (!req) return
+
+    setRoleRequests((prev) =>
+      prev.map((r) =>
+        r.id === requestId
+          ? {
+              ...r,
+              status: 'Approved',
+              reviewedAt: new Date().toISOString().slice(0, 10),
+              approvalNotes: notes || ''
+            }
+          : r
+      )
+    )
+
+    // Update user's role in users store
+    setUsers((prev) =>
+      prev.map((u) => {
+        if (u.email.toLowerCase() === req.userEmail.toLowerCase()) {
+          return { ...u, role: req.requestedRole }
+        }
+        return u
+      })
+    )
+
+    addLog(
+      `Approved role elevation for ${req.userName} (${req.userEmail}) from ${req.currentRole} to ${req.requestedRole}`,
+      'Role Elevation',
+      'success'
+    )
+    showNotification(`Role request for ${req.userName} approved!`)
+  }
+
+  const handleRejectRoleRequest = (requestId, rejectionReason) => {
+    const req = roleRequests.find((r) => r.id === requestId)
+    if (!req) return
+
+    setRoleRequests((prev) =>
+      prev.map((r) =>
+        r.id === requestId
+          ? {
+              ...r,
+              status: 'Rejected',
+              reviewedAt: new Date().toISOString().slice(0, 10),
+              rejectionReason: rejectionReason || 'Criteria not met.'
+            }
+          : r
+      )
+    )
+
+    addLog(
+      `Rejected role request for ${req.userName} (${req.userEmail}) to ${req.requestedRole}: ${rejectionReason}`,
+      'Role Elevation',
+      'warning'
+    )
+    showNotification(`Role request for ${req.userName} rejected.`)
+  }
+
+  // Handlers for Timetable & Blocking
+  const handleAddTimetableEntry = (newBlock) => {
+    setTimetable((prev) => [newBlock, ...prev])
+    addLog(`Created timetable block "${newBlock.title}" in ${newBlock.venueName}`, 'Timetable', 'info')
+    showNotification(`Time slot blocked in ${newBlock.venueName}.`)
+  }
+
+  const handleDeleteTimetableEntry = (entryId) => {
+    const target = timetable.find((t) => t.id === entryId)
+    setTimetable((prev) => prev.filter((t) => t.id !== entryId))
+    if (target) {
+      addLog(`Removed timetable block "${target.title}" in ${target.venueName}`, 'Timetable', 'info')
+      showNotification('Timetable block removed.')
+    }
+  }
+
+  const handleImportTimetable = (newEntries) => {
+    setTimetable((prev) => [...newEntries, ...prev])
+    addLog(`Imported ${newEntries.length} academic timetable blocks`, 'Timetable Import', 'success')
+    showNotification(`Imported ${newEntries.length} timetable records successfully!`)
   }
 
   // Export Users CSV
@@ -676,6 +724,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
   // Quick Stats
   const stats = useMemo(() => {
+    const pendingBookingsCount = bookings.filter((b) => b.status === 'Pending').length
+    const pendingRoleRequestsCount = roleRequests.filter((r) => r.status === 'Pending').length
     return {
       totalUsers: users.length,
       admins: users.filter((u) => u.role === 'Administrator').length,
@@ -683,12 +733,16 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       clubLeads: users.filter((u) => u.role === 'Club Lead').length,
       students: users.filter((u) => u.role === 'Student').length,
       securityGuards: users.filter((u) => u.role === 'Security Guard').length,
-      pendingBookings: bookings.filter((b) => b.status === 'Pending').length,
+      pendingBookings: pendingBookingsCount,
+      pendingRoleRequests: pendingRoleRequestsCount,
+      totalPendingApprovals: pendingBookingsCount + pendingRoleRequestsCount,
       confirmedBookings: bookings.filter((b) => b.status === 'Confirmed').length,
       totalVenues: venuesList.length,
-      availableVenues: venuesList.filter((v) => v.status === 'Available').length
+      activeVenues: venuesList.filter((v) => v.isActive).length,
+      availableVenues: venuesList.filter((v) => v.status === 'Available').length,
+      scheduledBlocks: timetable.length
     }
-  }, [users, bookings, venuesList])
+  }, [users, bookings, venuesList, roleRequests, timetable])
 
   return (
     <ProtectedGate
@@ -698,26 +752,37 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
-      <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-20">
+      <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-20">
       {/* Sleek Admin Header */}
-      <div className="bg-white border-b border-slate-200/90 shadow-2xs">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200/90 dark:border-slate-800 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Campus Administration
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Identity provisioning, space allocation reviews, and security audit records.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
+            {onBackHome && (
+              <button
+                type="button"
+                onClick={onBackHome}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-850 shadow-2xs"
+                title="Return to campus home"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                <span>Back to Campus</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={handleExportUsersCSV}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer bg-white shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-850 shadow-2xs"
             >
-              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span>Export CSV</span>
             </button>
             <button
@@ -733,19 +798,19 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
         {/* Clean Segmented Pill Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3.5">
-          <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/70 gap-1 overflow-x-auto max-w-full scrollbar-none">
+          <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 gap-1 overflow-x-auto max-w-full scrollbar-none">
             <button
               type="button"
               onClick={() => setActiveSubTab('users')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeSubTab === 'users'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs border border-slate-200/60 dark:border-slate-600'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
               <span>Directory</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 text-slate-700 font-bold">{stats.totalUsers}</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold">{stats.totalUsers}</span>
             </button>
 
             <button
@@ -753,14 +818,14 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
               onClick={() => setActiveSubTab('bookings')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeSubTab === 'bookings'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs border border-slate-200/60 dark:border-slate-600'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>Approvals</span>
-              {stats.pendingBookings > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">{stats.pendingBookings}</span>
+              {stats.totalPendingApprovals > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">{stats.totalPendingApprovals}</span>
               )}
             </button>
 
@@ -769,13 +834,27 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
               onClick={() => setActiveSubTab('venues')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeSubTab === 'venues'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs border border-slate-200/60 dark:border-slate-600'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Building className="w-3.5 h-3.5" />
               <span>Venues</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 text-slate-700 font-bold">{stats.totalVenues}</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold">{stats.totalVenues}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('timetable')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeSubTab === 'timetable'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs border border-slate-200/60 dark:border-slate-600'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <CalendarDays className="w-3.5 h-3.5" />
+              <span>Timetable</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold">{stats.scheduledBlocks}</span>
             </button>
 
             <button
@@ -783,8 +862,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
               onClick={() => setActiveSubTab('logs')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeSubTab === 'logs'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs border border-slate-200/60 dark:border-slate-600'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
@@ -805,44 +884,44 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-5">
         {/* Compact Modern Stat Tiles */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Users</div>
-              <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalUsers}</div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Users</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white mt-0.5">{stats.totalUsers}</div>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Pending Reviews</div>
-              <div className="text-xl font-black text-amber-600 mt-0.5">{stats.pendingBookings}</div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pending Reviews</div>
+              <div className="text-xl font-black text-amber-600 dark:text-amber-400 mt-0.5">{stats.pendingBookings}</div>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Active Bookings</div>
-              <div className="text-xl font-black text-emerald-600 mt-0.5">{stats.confirmedBookings}</div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Active Bookings</div>
+              <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{stats.confirmedBookings}</div>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
               <Building className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Venues Listed</div>
-              <div className="text-xl font-black text-slate-900 mt-0.5">
-                {stats.availableVenues} <span className="text-xs font-bold text-slate-400">/ {stats.totalVenues}</span>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Venues Listed</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white mt-0.5">
+                {stats.availableVenues} <span className="text-xs font-bold text-slate-400 dark:text-slate-500">/ {stats.totalVenues}</span>
               </div>
             </div>
           </div>
@@ -852,26 +931,26 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 1: USERS & ROLES
             ===================================================================== */}
         {activeSubTab === 'users' && (
-          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+          <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden">
             {/* Unified Search & Filter Toolbar */}
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
               <div className="relative flex-1 max-w-sm">
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
                   placeholder="Search by name, email, or department..."
-                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-slate-50/60 text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/80 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
                 />
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500 whitespace-nowrap">Filter:</span>
+                <span className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Filter:</span>
                 <select
                   value={userRoleFilter}
                   onChange={(e) => setUserRoleFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
+                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
                 >
                   <option value="All">All Roles ({users.length})</option>
                   <option value="Administrator">Administrator ({stats.admins})</option>
@@ -887,7 +966,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             {/* Users Table */}
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px]">
+                <thead className="bg-slate-100/75 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">User</th>
                     <th className="py-3 px-4">University Email</th>
@@ -898,29 +977,29 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="py-12 text-center text-slate-500">
+                      <td colSpan="7" className="py-12 text-center text-slate-500 dark:text-slate-400">
                         No users matching "{userSearch}" found.
                       </td>
                     </tr>
                   ) : (
                     filteredUsers.map((user) => (
-                      <tr key={user.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="py-3.5 px-4 font-semibold text-slate-900">
+                      <tr key={user.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-black text-xs flex items-center justify-center shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-xs flex items-center justify-center shrink-0">
                               {user.name.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-bold text-slate-900">{user.name}</div>
-                              <div className="text-[10px] text-slate-400 font-mono">{user.id}</div>
+                              <div className="font-bold text-slate-900 dark:text-white">{user.name}</div>
+                              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">{user.id}</div>
                             </div>
                           </div>
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-700 font-mono text-[11px]">
+                        <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-mono text-[11px]">
                           {user.email}
                         </td>
 
@@ -930,14 +1009,14 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             onChange={(e) => handleChangeUserRole(user.id, e.target.value)}
                             className={`px-2 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors ${
                               user.role === 'Administrator'
-                                ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
                                 : user.role === 'Faculty'
-                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
                                 : user.role === 'Club Lead'
-                                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
                                 : user.role === 'Security Guard'
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : 'bg-slate-100 text-slate-700 border-slate-200'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                             }`}
                           >
                             <option value="Administrator">Administrator</option>
@@ -948,13 +1027,13 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           </select>
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-600 font-medium">
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">
                           {user.department}
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-500 text-[11px]">
+                        <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
                           <span className="inline-flex items-center gap-1">
-                            <Key className="w-3 h-3 text-slate-400" />
+                            <Key className="w-3 h-3 text-slate-400 dark:text-slate-500" />
                             {user.authProvider}
                           </span>
                         </td>
@@ -965,8 +1044,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             onClick={() => handleToggleUserStatus(user.id)}
                             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold cursor-pointer transition-colors ${
                               user.status === 'Active'
-                                ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-                                : 'bg-red-50 text-red-700 hover:bg-red-100'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800'
+                                : 'bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/60 border border-red-200 dark:border-red-800'
                             }`}
                             title="Click to toggle account status"
                           >
@@ -980,7 +1059,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <button
                               type="button"
                               onClick={() => handleToggleUserStatus(user.id)}
-                              className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
                               title={user.status === 'Active' ? 'Suspend Account' : 'Activate Account'}
                             >
                               {user.status === 'Active' ? <UserX className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
@@ -988,7 +1067,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <button
                               type="button"
                               onClick={() => handleDeleteUser(user.id)}
-                              className="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/50 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
                               title="Delete Account"
                             >
                               <XCircle className="w-3.5 h-3.5" />
@@ -1008,25 +1087,74 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             TAB 2: CAMPUS BOOKINGS & APPROVAL WORKFLOW
             ===================================================================== */}
         {activeSubTab === 'bookings' && (
-          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          <div className="space-y-4">
+            {/* Approvals Category Switcher */}
+            <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-2 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 text-xs font-bold gap-1">
+                <button
+                  type="button"
+                  onClick={() => setApprovalsView('bookings')}
+                  className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-2 ${
+                    approvalsView === 'bookings'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Venue Reservations</span>
+                  {stats.pendingBookings > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">
+                      {stats.pendingBookings}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setApprovalsView('role_requests')}
+                  className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-2 ${
+                    approvalsView === 'role_requests'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>Role Change Requests</span>
+                  {stats.pendingRoleRequests > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">
+                      {stats.pendingRoleRequests}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {approvalsView === 'role_requests' ? (
+              <RoleRequests
+                roleRequests={roleRequests}
+                onApproveRequest={handleApproveRoleRequest}
+                onRejectRequest={handleRejectRoleRequest}
+              />
+            ) : (
+          <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
               <div className="relative flex-1 max-w-sm">
                 <input
                   type="text"
                   value={bookingSearch}
                   onChange={(e) => setBookingSearch(e.target.value)}
                   placeholder="Search bookings or venues..."
-                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-slate-50/60 text-xs font-medium placeholder-slate-400 outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/80 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
                 />
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500">Status:</span>
+                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Status:</span>
                 <select
                   value={bookingStatusFilter}
                   onChange={(e) => setBookingStatusFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none focus:border-blue-500 cursor-pointer"
+                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
                 >
                   <option value="All">All ({bookings.length})</option>
                   <option value="Pending">Pending ({stats.pendingBookings})</option>
@@ -1037,44 +1165,44 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             </div>
 
             {/* Bookings List */}
-            <div className="divide-y divide-slate-200">
+            <div className="divide-y divide-slate-200 dark:divide-slate-800">
               {filteredBookings.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 text-xs">
+                <div className="p-12 text-center text-slate-500 dark:text-slate-400 text-xs">
                   No reservations matching current filters.
                 </div>
               ) : (
                 filteredBookings.map((b) => {
                   const isExpanded = expandedBookingIds.has(b.id)
                   return (
-                    <div key={b.id} className="transition-colors border-b border-slate-100 last:border-b-0">
+                    <div key={b.id} className="transition-colors border-b border-slate-100 dark:border-slate-800 last:border-b-0">
                       {/* Clean Summary Row */}
-                      <div className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                      <div className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors">
                         <div className="space-y-1.5 flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-sm font-bold text-slate-900">{b.purpose}</h3>
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white">{b.purpose}</h3>
                             <span
                               className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
                                 b.status === 'Confirmed'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                                   : b.status === 'Pending'
-                                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
+                                  ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
                               }`}
                             >
                               {b.status}
                             </span>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-                            <span className="font-semibold text-blue-700 flex items-center gap-1.5">
-                              <Building className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                            <span className="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
+                              <Building className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
                               <span>{b.venueName}</span>
                             </span>
-                            <span className="flex items-center gap-1.5 text-slate-600">
+                            <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                               <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                               <span>{b.bookingDate}</span>
                             </span>
-                            <span className="flex items-center gap-1.5 text-slate-600">
+                            <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                               <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                               <span>{b.timeSlot}</span>
                             </span>
@@ -1096,7 +1224,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                               <button
                                 type="button"
                                 onClick={() => handleRejectBooking(b.id)}
-                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition-colors cursor-pointer"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-700 dark:text-red-300 font-bold text-xs transition-colors cursor-pointer"
                               >
                                 <XCircle className="w-3.5 h-3.5" />
                                 <span>Reject</span>
@@ -1106,7 +1234,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <button
                               type="button"
                               onClick={() => handleRejectBooking(b.id)}
-                              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-600 hover:text-red-700 text-xs font-semibold transition-colors cursor-pointer"
+                              className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/60 text-slate-600 dark:text-slate-300 hover:text-red-700 dark:hover:text-red-300 text-xs font-semibold transition-colors cursor-pointer"
                             >
                               Revoke
                             </button>
@@ -1114,7 +1242,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <button
                               type="button"
                               onClick={() => handleApproveBooking(b.id)}
-                              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 text-xs font-semibold transition-colors cursor-pointer"
+                              className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold transition-colors cursor-pointer"
                             >
                               Re-approve
                             </button>
@@ -1123,7 +1251,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           <button
                             type="button"
                             onClick={() => toggleExpandBooking(b.id)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-medium transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-medium transition-colors cursor-pointer"
                           >
                             <span>{isExpanded ? 'Less' : 'Details'}</span>
                             {isExpanded ? (
@@ -1137,43 +1265,43 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
                       {/* Expandable Details Drawer */}
                       {isExpanded && (
-                        <div className="px-5 pb-5 pt-1 bg-slate-50/70 border-t border-slate-100 animate-in fade-in duration-150">
+                        <div className="px-5 pb-5 pt-1 bg-slate-50/70 dark:bg-slate-800/40 border-t border-slate-100 dark:border-slate-800 animate-in fade-in duration-150">
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
-                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Space & Capacity
                               </div>
-                              <div className="text-xs font-bold text-slate-900">{b.venueName}</div>
-                              <div className="text-xs text-slate-500">
-                                Expected: <strong className="text-slate-700">{b.attendees} attendees</strong>
+                              <div className="text-xs font-bold text-slate-900 dark:text-white">{b.venueName}</div>
+                              <div className="text-xs text-slate-500 dark:text-slate-300">
+                                Expected: <strong className="text-slate-700 dark:text-slate-200">{b.attendees} attendees</strong>
                               </div>
                             </div>
 
-                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Scheduled Timing
                               </div>
-                              <div className="text-xs font-bold text-slate-900">{b.bookingDate}</div>
-                              <div className="text-xs text-slate-500">{b.timeSlot}</div>
+                              <div className="text-xs font-bold text-slate-900 dark:text-white">{b.bookingDate}</div>
+                              <div className="text-xs text-slate-500 dark:text-slate-300">{b.timeSlot}</div>
                             </div>
 
-                            <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Organizer Identity
                               </div>
-                              <div className="text-xs font-bold text-slate-900">{b.applicantName}</div>
-                              <div className="text-xs text-slate-500 font-mono text-[11px]">
+                              <div className="text-xs font-bold text-slate-900 dark:text-white">{b.applicantName}</div>
+                              <div className="text-xs text-slate-500 dark:text-slate-300 font-mono text-[11px]">
                                 {b.applicantEmail}
                               </div>
-                              <div className="text-xs text-slate-500">
-                                {b.department} • <span className="font-semibold text-slate-700">{b.applicantRole}</span>
+                              <div className="text-xs text-slate-500 dark:text-slate-300">
+                                {b.department} • <span className="font-semibold text-slate-700 dark:text-slate-200">{b.applicantRole}</span>
                               </div>
                             </div>
                           </div>
 
-                          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+                          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
                             <span>
-                              Booking Ref: <strong className="font-mono text-slate-600">{b.id}</strong>
+                              Booking Ref: <strong className="font-mono text-slate-600 dark:text-slate-300">{b.id}</strong>
                             </span>
                             <span>Submitted: {b.submittedAt}</span>
                           </div>
@@ -1185,91 +1313,49 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
               )}
             </div>
           </section>
+            )}
+          </div>
         )}
 
         {/* =====================================================================
-            TAB 3: VENUES INVENTORY
+            TAB 3: VENUES INVENTORY (ENHANCED TABLE & ACTIONS)
             ===================================================================== */}
         {activeSubTab === 'venues' && (
-          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-900">Facilities & Spaces</h2>
-                <p className="text-xs text-slate-500">Real-time availability and maintenance states.</p>
-              </div>
-            </div>
+          <AdminVenues
+            venues={venuesList}
+            bookings={bookings}
+            onAddVenue={handleAddVenue}
+            onUpdateVenue={handleUpdateVenue}
+            onDeleteVenue={handleDeleteVenue}
+            onToggleActive={handleToggleVenueActive}
+            onToggleMaintenance={handleToggleVenueMaintenance}
+            onBlockVenue={() => setActiveSubTab('timetable')}
+          />
+        )}
 
-            <div className="divide-y divide-slate-200">
-              {venuesList.map((venue) => (
-                <div key={venue.id} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-start sm:items-center gap-4">
-                    <img
-                      src={venue.image || '/coep_building.png'}
-                      alt={venue.name}
-                      onError={(e) => {
-                        e.currentTarget.onerror = null
-                        e.currentTarget.src = '/coep_building.png'
-                      }}
-                      className="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0"
-                    />
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-slate-900 text-sm">{venue.name}</h3>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            venue.status === 'Available'
-                              ? 'bg-emerald-50 text-emerald-700'
-                              : venue.status === 'Occupied'
-                              ? 'bg-blue-50 text-blue-700'
-                              : 'bg-amber-50 text-amber-700'
-                          }`}
-                        >
-                          {venue.status}
-                        </span>
-                      </div>
-
-                    <p className="text-xs text-slate-500">
-                      {venue.department} • {venue.type} • Capacity: <strong>{venue.capacity} persons</strong> ({venue.benches} benches)
-                    </p>
-
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {venue.features.map((f, i) => (
-                          <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-medium">
-                            {f}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="shrink-0 self-end sm:self-auto">
-                    <button
-                      type="button"
-                      onClick={() => handleToggleVenueStatus(venue.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer border ${
-                        venue.status === 'Available'
-                          ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
-                          : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
-                      }`}
-                    >
-                      {venue.status === 'Available' ? 'Flag for Maintenance' : 'Mark Available'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+        {/* =====================================================================
+            TAB 4: TIMETABLE & PHYSICAL SPACE BLOCKING
+            ===================================================================== */}
+        {activeSubTab === 'timetable' && (
+          <AdminTimetable
+            timetable={timetable}
+            bookings={bookings}
+            venues={venuesList}
+            onAddTimetableEntry={handleAddTimetableEntry}
+            onDeleteTimetableEntry={handleDeleteTimetableEntry}
+            onImportTimetable={handleImportTimetable}
+          />
         )}
 
         {/* =====================================================================
             TAB 4: SECURITY AUDIT LOGS
             ===================================================================== */}
         {activeSubTab === 'logs' && (
-          <section className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+          <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold text-slate-900">Security & Access Logs</h2>
-                <p className="text-xs text-slate-500">Authentication audit records.</p>
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white">Security & Access Logs</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Authentication audit records.</p>
               </div>
 
               <button
@@ -1278,7 +1364,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   setLogs([])
                   showNotification('Audit log records cleared.')
                 }}
-                className="text-xs font-semibold text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                className="text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
               >
                 Clear Logs
               </button>
@@ -1286,7 +1372,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px]">
+                <thead className="bg-slate-100/75 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="py-3 px-4">Timestamp</th>
                     <th className="py-3 px-4">Actor</th>
@@ -1295,19 +1381,19 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     <th className="py-3 px-4">IP / Node</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 font-mono text-[11px]">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-mono text-[11px]">
                   {logs.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="py-12 text-center text-slate-500 font-sans">
+                      <td colSpan="5" className="py-12 text-center text-slate-500 dark:text-slate-400 font-sans">
                         Audit trail is empty.
                       </td>
                     </tr>
                   ) : (
                     logs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{log.timestamp}</td>
-                        <td className="py-3 px-4 font-bold text-slate-800">{log.actor}</td>
-                        <td className="py-3 px-4 text-slate-900 font-sans font-medium">
+                      <tr key={log.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="py-3 px-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">{log.timestamp}</td>
+                        <td className="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">{log.actor}</td>
+                        <td className="py-3 px-4 text-slate-900 dark:text-slate-100 font-sans font-medium">
                           <span
                             className={`inline-block w-2 h-2 rounded-full mr-2 ${
                               log.severity === 'success'
@@ -1319,8 +1405,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           ></span>
                           {log.action}
                         </td>
-                        <td className="py-3 px-4 text-slate-500 font-sans">{log.module}</td>
-                        <td className="py-3 px-4 text-slate-400 text-[10px]">{log.ip}</td>
+                        <td className="py-3 px-4 text-slate-500 dark:text-slate-400 font-sans">{log.module}</td>
+                        <td className="py-3 px-4 text-slate-400 dark:text-slate-500 text-[10px]">{log.ip}</td>
                       </tr>
                     ))
                   )}
@@ -1335,14 +1421,14 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
           MODAL: ADD NEW CAMPUS USER
           ===================================================================== */}
       {isAddUserModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <h3 className="text-base font-extrabold text-slate-900">Provision Campus User</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Provision Campus User</h3>
               <button
                 type="button"
                 onClick={() => setIsAddUserModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -1350,7 +1436,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Full Name
                 </label>
                 <input
@@ -1359,12 +1445,12 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   value={newUserForm.name}
                   onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })}
                   placeholder="e.g. Prof. Rajesh Sharma"
-                  className="w-full h-10 px-3 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-blue-500"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-xs font-medium outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Institutional Email
                 </label>
                 <input
@@ -1373,19 +1459,19 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   value={newUserForm.email}
                   onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
                   placeholder="name@coeptech.ac.in"
-                  className="w-full h-10 px-3 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-blue-500"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-xs font-medium outline-none focus:border-blue-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Role
                   </label>
                   <select
                     value={newUserForm.role}
                     onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
                   >
                     <option value="Administrator">Administrator</option>
                     <option value="Faculty">Faculty</option>
@@ -1396,7 +1482,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Department
                   </label>
                   <input
@@ -1405,7 +1491,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     value={newUserForm.department}
                     onChange={(e) => setNewUserForm({ ...newUserForm, department: e.target.value })}
                     placeholder="Computer Engineering"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-blue-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-xs font-medium outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -1414,7 +1500,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <button
                   type="button"
                   onClick={() => setIsAddUserModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>

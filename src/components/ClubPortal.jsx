@@ -87,19 +87,19 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
-      <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-16">
+      <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
         {/* Header */}
-        <div className="bg-white border-b border-slate-200">
+        <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 mb-2">
                 <Trophy className="w-3.5 h-3.5" />
                 <span>Club Secretariat</span>
               </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Fest & Auditorium Management
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 {currentUser?.name || 'Club Lead'} • {currentUser?.department || 'Student Gymkhana'}
               </p>
             </div>
@@ -117,17 +117,17 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
 
         {/* Content Table */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold text-slate-900">Registered Club Events ({bookings.length})</h2>
-                <p className="text-xs text-slate-500">Major festival allocations and auditorium reservations.</p>
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white">Registered Club Events ({bookings.length})</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Major festival allocations and auditorium reservations.</p>
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-300 font-bold uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3 px-4">Booking ID</th>
                     <th className="py-3 px-4">Venue</th>
@@ -139,21 +139,21 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {bookings.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{b.id}</td>
-                      <td className="py-3.5 px-4 font-semibold text-slate-800">{b.venue}</td>
-                      <td className="py-3.5 px-4 text-slate-700 font-medium">{b.title}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{b.date}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{b.timeSlot}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{b.attendees} attendees</td>
+                    <tr key={b.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors">
+                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">{b.id}</td>
+                      <td className="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{b.venue}</td>
+                      <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.title}</td>
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.date}</td>
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.timeSlot}</td>
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.attendees} attendees</td>
                       <td className="py-3.5 px-4">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                             b.status === 'Approved'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-amber-50 text-amber-700 border border-amber-200'
+                              ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                              : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                           }`}
                         >
                           {b.status}
@@ -163,7 +163,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                         <button
                           type="button"
                           onClick={() => handleDelete(b.id)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                           title="Withdraw Proposal"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                   ))}
                   {bookings.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center text-slate-400">
+                      <td colSpan={8} className="py-8 text-center text-slate-400 dark:text-slate-500">
                         No active event proposals.
                       </td>
                     </tr>
@@ -187,13 +187,13 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
         {/* Modal: Submit Event Proposal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <h3 className="text-base font-bold text-slate-900">Submit Event Proposal</h3>
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Submit Event Proposal</h3>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -201,13 +201,13 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Event Venue
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-amber-500 cursor-pointer"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500 cursor-pointer"
                   >
                     <option value="BHAU Main Auditorium">BHAU Main Auditorium (250 Seats)</option>
                     <option value="Open Air Theatre (OAT)">Open Air Theatre (OAT)</option>
@@ -217,7 +217,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Event / Festival Name
                   </label>
                   <input
@@ -226,13 +226,13 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
                     placeholder="e.g. Impressions '26: Annual Inter-College Cultural Fest"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-amber-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Event Date
                     </label>
                     <input
@@ -240,18 +240,18 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                       required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-amber-500"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Time Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-amber-500 cursor-pointer"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500 cursor-pointer"
                     >
                       <option value="08:00 AM - 01:00 PM">08:00 AM - 01:00 PM</option>
                       <option value="01:00 PM - 06:00 PM">01:00 PM - 06:00 PM</option>
@@ -262,7 +262,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Expected Footfall
                   </label>
                   <input
@@ -271,7 +271,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                     max="1500"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-amber-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
                   />
                 </div>
 
@@ -279,13 +279,13 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700 cursor-pointer"
+                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer shadow-sm"
+                    className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
                   >
                     Submit for Approval
                   </button>

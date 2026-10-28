@@ -191,7 +191,7 @@ export default function FacultyPortal({
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
-      <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-16">
+      <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
         {/* Toast Notification */}
         {notification && (
           <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-2xl animate-in slide-in-from-top duration-200 border border-slate-700">
@@ -205,17 +205,17 @@ export default function FacultyPortal({
         )}
 
         {/* Header */}
-        <div className="bg-white border-b border-slate-200">
+        <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200 mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 mb-2">
                 <GraduationCap className="w-3.5 h-3.5" />
                 <span>Faculty & HOD Workspace</span>
               </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Academic Hall Clearances & Reservations
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 {currentUser?.name || 'Faculty Member'} • {currentUser?.department || 'Computer Engineering'}
               </p>
             </div>
@@ -233,14 +233,14 @@ export default function FacultyPortal({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-2 border-t border-slate-100">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setActiveTab('requests')}
               className={`py-3.5 px-4 text-xs font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
                 activeTab === 'requests'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300'
               }`}
             >
               <Inbox className="w-4 h-4" />
@@ -257,8 +257,8 @@ export default function FacultyPortal({
               onClick={() => setActiveTab('my-lectures')}
               className={`py-3.5 px-4 text-xs font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
                 activeTab === 'my-lectures'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300'
               }`}
             >
               <Calendar className="w-4 h-4" />
@@ -271,21 +271,21 @@ export default function FacultyPortal({
         {activeTab === 'requests' && (
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
             {/* Filter bar */}
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-              <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+              <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-sm font-bold text-slate-900">
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                       Incoming Venue Sanctions ({filteredRequests.length})
                     </h2>
                     {pendingRequestsCount > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                         <Clock className="w-3 h-3" />
                         {pendingRequestsCount} Pending Action
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Review and sanction student projects, technical clubs, and academic seminar reservations.
                   </p>
                 </div>
@@ -296,14 +296,14 @@ export default function FacultyPortal({
                     onClick={() => setFilterDepartmentOnly(!filterDepartmentOnly)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
                       filterDepartmentOnly
-                        ? 'bg-blue-50 text-blue-700 border-blue-200'
-                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                     }`}
                   >
                     {filterDepartmentOnly ? `${currentUser?.department || 'My Department'} Only` : 'All Departments'}
                   </button>
 
-                  <div className="flex items-center rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+                  <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-50 dark:bg-slate-800">
                     {['All', 'Pending', 'Confirmed', 'Rejected'].map((status) => (
                       <button
                         key={status}
@@ -311,8 +311,8 @@ export default function FacultyPortal({
                         onClick={() => setRequestStatusFilter(status)}
                         className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-colors cursor-pointer ${
                           requestStatusFilter === status
-                            ? 'bg-white text-slate-900 shadow-2xs'
-                            : 'text-slate-500 hover:text-slate-900'
+                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
                         {status}
@@ -325,7 +325,7 @@ export default function FacultyPortal({
               {/* Table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px]">
                     <tr>
                       <th className="py-3 px-4">Booking Ref</th>
                       <th className="py-3 px-4">Requested Venue</th>
@@ -337,48 +337,48 @@ export default function FacultyPortal({
                       <th className="py-3 px-4 text-right">Faculty Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                     {filteredRequests.map((b) => {
                       const isPending = b.status === 'Pending' || b.status === 'Pending Sanction'
                       const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
                       const isRejected = b.status === 'Rejected' || b.status === 'Cancelled'
 
                       return (
-                        <tr key={b.id || b.ref} className="hover:bg-slate-50/60 transition-colors">
-                          <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
+                        <tr key={b.id || b.ref} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors">
+                          <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">
                             {b.id || b.ref}
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="font-bold text-slate-900">{b.venueName || b.venue}</div>
-                            <div className="text-[11px] text-slate-500">{b.department || 'COEP Tech'}</div>
+                            <div className="font-bold text-slate-900 dark:text-white">{b.venueName || b.venue}</div>
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400">{b.department || 'COEP Tech'}</div>
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="font-semibold text-slate-800">{b.applicantName || 'Student'}</div>
+                            <div className="font-semibold text-slate-800 dark:text-slate-200">{b.applicantName || 'Student'}</div>
                             <div className="text-[11px] text-slate-400">
-                              <span className="inline-block px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium mr-1">
+                              <span className="inline-block px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium mr-1">
                                 {b.applicantRole || 'Student'}
                               </span>
                               {b.applicantEmail}
                             </div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-700 max-w-xs truncate" title={b.purpose}>
+                          <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 max-w-xs truncate" title={b.purpose}>
                             {b.purpose}
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="font-medium text-slate-800">{b.bookingDate || b.date}</div>
-                            <div className="text-[11px] text-slate-500">{b.timeSlot || b.slot}</div>
+                            <div className="font-medium text-slate-800 dark:text-slate-200">{b.bookingDate || b.date}</div>
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400">{b.timeSlot || b.slot}</div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-600 font-medium">
+                          <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-medium">
                             {b.attendees || b.capacity || 50} pax
                           </td>
                           <td className="py-3.5 px-4">
                             <span
                               className={`px-2.5 py-1 rounded-full text-[10px] font-bold inline-flex items-center gap-1 ${
                                 isConfirmed
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                                   : isPending
-                                  ? 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse'
-                                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+                                  ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 animate-pulse'
+                                  : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
                               }`}
                             >
                               {isConfirmed && <Check className="w-3 h-3" />}
@@ -402,7 +402,7 @@ export default function FacultyPortal({
                                 <button
                                   type="button"
                                   onClick={() => handleUpdateStatus(b.id || b.ref, 'Rejected')}
-                                  className="px-2 py-1.5 rounded-lg border border-rose-300 hover:bg-rose-50 text-rose-600 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                                  className="px-2 py-1.5 rounded-lg border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
                                   title="Reject Request"
                                 >
                                   <X className="w-3.5 h-3.5" />
@@ -422,7 +422,7 @@ export default function FacultyPortal({
                       <tr>
                         <td colSpan={8} className="py-12 text-center text-slate-400">
                           <Inbox className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                          <p className="font-semibold text-slate-600">No requests found in this view.</p>
+                          <p className="font-semibold text-slate-600 dark:text-slate-300">No requests found in this view.</p>
                           <p className="text-xs text-slate-400 mt-1">
                             {filterDepartmentOnly
                               ? 'Try clicking "All Departments" to see all campus booking requests.'
@@ -441,13 +441,13 @@ export default function FacultyPortal({
         {/* Tab 2: Faculty Scheduled Lectures */}
         {activeTab === 'my-lectures' && (
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-              <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+              <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-bold text-slate-900">
+                  <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                     My Scheduled Lectures & Labs ({facultyLectures.length})
                   </h2>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Your scheduled academic classes, research evaluations, and departmental lectures.
                   </p>
                 </div>
@@ -455,7 +455,7 @@ export default function FacultyPortal({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Lecture</span>
@@ -464,7 +464,7 @@ export default function FacultyPortal({
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px]">
                     <tr>
                       <th className="py-3 px-4">Booking ID</th>
                       <th className="py-3 px-4">Venue</th>
@@ -476,21 +476,21 @@ export default function FacultyPortal({
                       <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                     {facultyLectures.map((b) => (
-                      <tr key={b.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{b.id}</td>
-                        <td className="py-3.5 px-4 font-semibold text-slate-800">{b.venueName || b.venue}</td>
-                        <td className="py-3.5 px-4 text-slate-600">{b.purpose}</td>
-                        <td className="py-3.5 px-4 font-medium text-slate-600">{b.bookingDate || b.date}</td>
-                        <td className="py-3.5 px-4 font-medium text-slate-600">{b.timeSlot || b.slot}</td>
-                        <td className="py-3.5 px-4 text-slate-600">{b.attendees} students</td>
+                      <tr key={b.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">{b.id}</td>
+                        <td className="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{b.venueName || b.venue}</td>
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">{b.purpose}</td>
+                        <td className="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-400">{b.bookingDate || b.date}</td>
+                        <td className="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-400">{b.timeSlot || b.slot}</td>
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">{b.attendees} students</td>
                         <td className="py-3.5 px-4">
                           <span
                             className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                               b.status === 'Confirmed'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                                : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                             }`}
                           >
                             {b.status}
@@ -500,7 +500,7 @@ export default function FacultyPortal({
                           <button
                             type="button"
                             onClick={() => handleDelete(b.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
                             title="Cancel Reservation"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -525,13 +525,13 @@ export default function FacultyPortal({
         {/* Modal: Reserve Hall */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <h3 className="text-base font-bold text-slate-900">Reserve Lecture Hall</h3>
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Reserve Lecture Hall</h3>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -539,13 +539,13 @@ export default function FacultyPortal({
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Hall / Classroom
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-blue-500 cursor-pointer"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
                   >
                     <option value="ND01 (North Drawing Hall)">ND01 (North Drawing Hall)</option>
                     <option value="Computer Department Seminar Hall">Computer Department Seminar Hall</option>
@@ -557,7 +557,7 @@ export default function FacultyPortal({
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Subject / Academic Purpose
                   </label>
                   <input
@@ -566,13 +566,13 @@ export default function FacultyPortal({
                     value={form.purpose}
                     onChange={(e) => setForm({ ...form, purpose: e.target.value })}
                     placeholder="e.g. Distributed Operating Systems - Lecture 12"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-blue-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Date
                     </label>
                     <input
@@ -580,18 +580,18 @@ export default function FacultyPortal({
                       required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-blue-500"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                       Time Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-blue-500 cursor-pointer"
+                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
                     >
                       <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                       <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
@@ -603,7 +603,7 @@ export default function FacultyPortal({
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
                     Expected Class Strength
                   </label>
                   <input
@@ -612,7 +612,7 @@ export default function FacultyPortal({
                     max="300"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 font-medium outline-none focus:border-blue-500"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -620,13 +620,13 @@ export default function FacultyPortal({
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
+                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
                   >
                     Confirm Lecture
                   </button>
