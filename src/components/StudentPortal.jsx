@@ -4,7 +4,11 @@ import {
   Plus,
   QrCode,
   Trash2,
-  XCircle
+  XCircle,
+  Building,
+  Users,
+  Lock,
+  CheckCircle2
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { bookingsApi } from '../lib/bookingsApi'
@@ -61,9 +65,16 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
     loadStudentBookings()
   }, [currentUser])
 
+  const canBook = currentUser?.role === 'Administrator' || currentUser?.hasBookingPermission
+
   const handleCreateBooking = async (e) => {
     e.preventDefault()
     if (!form.purpose.trim() || isSubmitting) return
+
+    if (!canBook) {
+      alert('You do not have permission to book this venue. Venue reservation is restricted to Faculty, Club Leads, and Administrators.')
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -191,6 +202,85 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
               )}
             </div>
           </div>
+
+          {/* Campus Venues Directory (Browse-Only for Students) */}
+          <div className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Building className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>Campus Spaces & Venues Catalog</span>
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Real-time venue availability across departments. Booking is reserved for authorized faculty and club leads.
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full self-start sm:self-auto flex items-center gap-1.5">
+                <Lock className="w-3 h-3 text-amber-500" />
+                <span>Student View Only</span>
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 sm:p-5">
+              {/* Cognizant Lab Card */}
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">COG-LAB</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Available</span>
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Cognizant Lab</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Computer Engineering • Computer New Building
+                  </p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2">
+                    A computer laboratory for technical workshops, programming sessions, academic activities, and approved technical events.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                    <Users className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Capacity: 400 Seats</span>
+                  </span>
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500 italic">
+                    Faculty / Club Booking Only
+                  </span>
+                </div>
+              </div>
+
+              {/* Mini Auditorium Card */}
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-xs font-mono font-bold text-purple-600 dark:text-purple-400">MINI-AUD</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Available</span>
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Mini Auditorium</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Academics Complex • Main Heritage Building
+                  </p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2">
+                    A mini auditorium for academic presentations, departmental events, seminars, and student activities.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                    <Users className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Capacity: 275 Seats</span>
+                  </span>
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500 italic">
+                    Faculty / Club Booking Only
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Create Booking Modal */}
@@ -281,6 +371,13 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                   />
                 </div>
 
+                {!canBook && (
+                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-[11px] leading-relaxed">
+                    <span className="font-bold block">Permission Restricted:</span>
+                    You do not have permission to book this venue. Venue reservation is restricted to Faculty, Club Leads, and Administrators.
+                  </div>
+                )}
+
                 <div className="pt-2 flex gap-2">
                   <button
                     type="button"
@@ -289,13 +386,23 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                   >
                     Cancel
                   </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
-                  >
-                    {isSubmitting ? 'Reserving...' : 'Confirm Reservation'}
-                  </button>
+                  {canBook ? (
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
+                    >
+                      {isSubmitting ? 'Reserving...' : 'Confirm Reservation'}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="flex-1 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs cursor-not-allowed"
+                    >
+                      Booking Restricted
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

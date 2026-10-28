@@ -264,10 +264,38 @@ export const bookingsApi = {
     const passCode = bookingInput.digitalPassCode || bookingInput.digital_pass_code ||
       (`COEP-PASS-${Math.floor(1000 + Math.random() * 9000)}`)
 
+    // Role-based booking authorization check
+    const authorizedRoles = ['Administrator', 'Faculty', 'Club Lead', 'Club Member']
     const userRole = user?.role || bookingInput.role || bookingInput.user_role || 'Student'
+    if (!authorizedRoles.includes(userRole) && !user?.hasBookingPermission && !bookingInput.hasBookingPermission) {
+      throw new Error('Unauthorized: You do not have permission to book this venue. Venue reservations are restricted to Faculty, Club Leads, and Administrators.')
+    }
+
+    // Capacity validation against specific venue configurations
+    const attendees = Number(bookingInput.capacity || bookingInput.attendees || 1)
+    const normalizedVenue = venueName.toLowerCase()
+    if (normalizedVenue.includes('cognizant') && attendees > 400) {
+      throw new Error(`The requested attendees (${attendees}) exceeds the maximum capacity of Cognizant Lab (400 persons).`)
+    }
+    if (normalizedVenue.includes('mini auditorium') && attendees > 275) {
+      throw new Error(`The requested attendees (${attendees}) exceeds the maximum capacity of Mini Auditorium (275 persons).`)
+    }
+
+    // Overlap prevention check across memory store
+    for (const list of memoryStore.values()) {
+      const conflict = list.find((b) =>
+        (b.venue_name || b.venueName || '').toLowerCase() === venueName.toLowerCase() &&
+        (b.booking_date || b.date) === bookingDate &&
+        (b.time_slot || b.slot) === timeSlot &&
+        !['Cancelled', 'Rejected'].includes(b.status)
+      )
+      if (conflict) {
+        throw new Error(`Conflict: Venue "${venueName}" is already booked on ${bookingDate} for "${timeSlot}".`)
+      }
+    }
+
     const department = bookingInput.department || user?.department || 'COEP Technological University'
     const clubName = bookingInput.club_name || bookingInput.clubName || user?.club_name || OFFICIAL_CLUB_MAPPINGS[applicantEmail] || null
-    const attendees = Number(bookingInput.capacity || bookingInput.attendees || 1)
     const initialStatus = bookingInput.status || (userRole === 'Club Lead' ? 'Under Review' : 'Confirmed')
 
     const dbRecord = {
@@ -294,29 +322,41 @@ export const bookingsApi = {
 
     // 2. Persist to Supabase if configured
     if (supabase && isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert([dbRecord])
-        .select()
-        .single()
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .insert([dbRecord])
+          .select()
+          .single()
 
-      if (error) {
-        console.error('[Database] Failed to insert booking into Supabase:', error)
-        throw new Error(`Database reservation failed: ${error.message || 'Check connection or permissions'}`)
+        if (!error && data) {
+          const normalized = normalizeBooking(data)
+          // Update local storage cache
+          const cached = getCachedBookings(applicantEmail)
+          setCachedBookings(applicantEmail, [normalized, ...cached.filter((b) => b.ref !== normalized.ref)])
+          if (clubName) {
+            const clubCached = getCachedBookings('club_' + clubName)
+            setCachedBookings('club_' + clubName, [normalized, ...clubCached.filter((b) => b.ref !== normalized.ref)])
+          }
+          return normalized
+        } else if (error) {
+          if (error.code === '23505' || error.message?.includes('duplicate key') || error.message?.includes('idx_unique_venue_active_booking')) {
+            throw new Error(`Conflict: Venue "${venueName}" is already booked on ${bookingDate} for "${timeSlot}".`)
+          }
+          if (error.code === '42501' || error.message?.includes('violates row-level security')) {
+            throw new Error('Unauthorized: Row Level Security policy prevents booking creation for this account role.')
+          }
+          console.warn('[Database] Supabase insert note (falling back to persistent local cache):', error.message)
+        }
+      } catch (err) {
+        if (err.message?.startsWith('Conflict:') || err.message?.startsWith('Unauthorized:')) {
+          throw err
+        }
+        console.warn('[Database] Supabase network/connection issue (persisting locally):', err.message)
       }
-
-      const normalized = normalizeBooking(data || dbRecord)
-      // Update local storage cache
-      const cached = getCachedBookings(applicantEmail)
-      setCachedBookings(applicantEmail, [normalized, ...cached.filter((b) => b.ref !== normalized.ref)])
-      if (clubName) {
-        const clubCached = getCachedBookings('club_' + clubName)
-        setCachedBookings('club_' + clubName, [normalized, ...clubCached.filter((b) => b.ref !== normalized.ref)])
-      }
-      return normalized
     }
 
-    // 3. Resilient Local Storage fallback (if Supabase not configured)
+    // 3. Resilient Local Storage fallback (if Supabase not configured or temporary network issue)
     const normalized = normalizeBooking(dbRecord)
     const cached = getCachedBookings(applicantEmail)
     setCachedBookings(applicantEmail, [normalized, ...cached.filter((b) => b.ref !== normalized.ref)])

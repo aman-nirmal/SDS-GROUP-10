@@ -49,6 +49,8 @@ import FacultyPortal from './components/FacultyPortal'
 import StudentPortal from './components/StudentPortal'
 import ClubPortal from './components/ClubPortal'
 import SecurityPortal from './components/SecurityPortal'
+import CampusEventNotificationPanel from './components/CampusEventNotificationPanel'
+import ForgotPasswordModal from './components/ForgotPasswordModal'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -432,6 +434,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
+  const isAuthorizedRole = Boolean(
+    currentUser &&
+    ['Administrator', 'Faculty', 'Club Lead', 'Club Member'].includes(currentUser.role)
+  )
+
   const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
   const venuePhoto = getVenueImageUrl(venue)
   const faculty = getVenueFaculty(venue)
@@ -441,6 +448,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!applicantName || !eventPurpose || isSubmitting) return
+
+    if (!isAuthorizedRole) {
+      setSubmitError('You do not have permission to book this venue. Venue reservation is restricted to Faculty, Club Leads, and Administrators.')
+      return
+    }
 
     setIsSubmitting(true)
     setSubmitError('')
@@ -803,6 +815,19 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                     </span>
                   </div>
 
+                  {/* Role Restriction Banner for Students & Guests */}
+                  {!isAuthorizedRole && (
+                    <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-start gap-2.5">
+                      <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold block mb-0.5">Booking Restricted</span>
+                        <span>
+                          You do not have permission to book this venue. Venue reservation is restricted to Faculty, Club Leads, and Administrators. You may view venue capacity and schedules.
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Error Banner */}
                   {submitError && (
                     <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
@@ -818,25 +843,37 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                       onClick={onClose}
                       className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer"
                     >
-                      Cancel
+                      {isAuthorizedRole ? 'Cancel' : 'Close Preview'}
                     </button>
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Confirming Reservation...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Confirm Reservation</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </>
-                      )}
-                    </button>
+                    {isAuthorizedRole ? (
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>Confirming Reservation...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Confirm Reservation</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="flex-1 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-bold text-xs cursor-not-allowed inline-flex items-center justify-center gap-2"
+                        title="You do not have permission to book this venue."
+                      >
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Booking Restricted</span>
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>
@@ -1701,12 +1738,24 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
     'Classrooms',
     'Seminar Halls',
     'Auditoriums',
-    'Meeting Rooms'
+    'Meeting Rooms',
+    'Labs'
   ]
+
+  const matchesTypeFilter = (venueType, filter) => {
+    if (filter === 'All Spaces') return true
+    if (venueType === filter) return true
+    if (filter === 'Labs' && (venueType === 'Lab' || venueType === 'Labs')) return true
+    if (filter === 'Auditoriums' && (venueType === 'Auditorium' || venueType === 'Auditoriums')) return true
+    if (filter === 'Classrooms' && (venueType === 'Classroom' || venueType === 'Classrooms')) return true
+    if (filter === 'Seminar Halls' && (venueType === 'Seminar Hall' || venueType === 'Seminar Halls')) return true
+    if (filter === 'Meeting Rooms' && (venueType === 'Meeting Room' || venueType === 'Meeting Rooms')) return true
+    return false
+  }
 
   const getTypeCount = (type) => {
     if (type === 'All Spaces') return venues.length
-    return venues.filter((v) => v.type === type).length
+    return venues.filter((v) => matchesTypeFilter(v.type, type)).length
   }
 
   const isFiltered =
@@ -1726,13 +1775,16 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 
   const filteredVenues = venues.filter((venue) => {
     const matchesDept = filterDept === 'All' || venue.department === filterDept
-    const matchesType =
-      filterType === 'All Spaces' || venue.type === filterType
+    const matchesType = matchesTypeFilter(venue.type, filterType)
+    const q = searchQuery.trim().toLowerCase()
     const matchesSearch =
-      searchQuery.trim() === '' ||
-      (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (venue.department && venue.department.toLowerCase().includes(searchQuery.toLowerCase()))
+      q === '' ||
+      (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(q)) ||
+      (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(q)) ||
+      (venue.department && venue.department.toLowerCase().includes(q)) ||
+      (venue.code && venue.code.toLowerCase().includes(q)) ||
+      (venue.building && venue.building.toLowerCase().includes(q)) ||
+      (venue.type && venue.type.toLowerCase().includes(q))
 
     const cap = venue.capacity || (venue.benches ? venue.benches * 2 : 0)
     let matchesCap = true
@@ -2221,6 +2273,39 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
 }
 
 const sampleVenuesFallback = [
+  // --- New Additions: Cognizant Lab & Mini Auditorium ---
+  {
+    id: 'vn-cog-lab',
+    code: 'COG-LAB',
+    new_hall_name: 'Cognizant Lab',
+    old_hall_name: 'COG-LAB (Computer Dept)',
+    department: 'Computer Engineering',
+    building: 'Computer New Building',
+    type: 'Lab',
+    benches: 200,
+    capacity: 400,
+    is_active: true,
+    status: 'Available',
+    image: '/coep_building.png',
+    description: 'A computer laboratory for technical workshops, programming sessions, academic activities, and approved technical events.',
+    features: ['High-End Workstations', 'LAN & High-Speed Wi-Fi', 'Smart Projectors', 'Central AC', 'Surround Sound']
+  },
+  {
+    id: 'vn-mini-aud',
+    code: 'MINI-AUD',
+    new_hall_name: 'Mini Auditorium',
+    old_hall_name: 'MINI-AUD (Heritage Wing)',
+    department: 'Academics Complex',
+    building: 'Main Heritage Building',
+    type: 'Auditorium',
+    benches: 138,
+    capacity: 275,
+    is_active: true,
+    status: 'Available',
+    image: '/coep_building.png',
+    description: 'A mini auditorium for academic presentations, departmental events, seminars, and student activities.',
+    features: ['Stage Lighting', 'Acoustic Treatment', 'Dolby Acoustics', 'Dual Mics', 'Overhead Projector', 'Central AC']
+  },
   // --- Civil Engineering Classrooms ---
   {
     id: 'vn-ce-sc06',
@@ -2995,14 +3080,10 @@ export default function App() {
   }
 
   const handleAddBooking = async (newBooking) => {
-    const user = currentUser || {
-      id: 'GUEST-' + Math.floor(1000 + Math.random() * 9000),
-      name: newBooking.applicantName,
-      email: newBooking.applicantEmail || `${newBooking.applicantName.toLowerCase().replace(/\s+/g, '.')}@coeptech.ac.in`,
-      role: 'Student',
-      department: newBooking.department
+    if (!currentUser || !['Administrator', 'Faculty', 'Club Lead', 'Club Member'].includes(currentUser.role)) {
+      throw new Error('You do not have permission to book this venue. Venue reservation is restricted to Faculty, Club Leads, and Administrators.')
     }
-    const saved = await bookingsApi.createBooking(newBooking, user)
+    const saved = await bookingsApi.createBooking(newBooking, currentUser)
     setUserBookings((prev) => [saved, ...prev.filter((b) => b.ref !== saved.ref && b.id !== saved.id)])
     return saved
   }
@@ -3025,7 +3106,8 @@ export default function App() {
     'Classrooms',
     'Seminar Halls',
     'Auditoriums',
-    'Meeting Rooms'
+    'Meeting Rooms',
+    'Labs'
   ]
 
   const popularTypes = [
@@ -3052,6 +3134,12 @@ export default function App() {
       title: 'Meeting Rooms',
       description: 'Focused spaces for club meetings, faculty discussions, and interviews.',
       count: '8 Venues'
+    },
+    {
+      icon: Monitor,
+      title: 'Labs',
+      description: 'Advanced computing labs and technical workshop spaces including Cognizant Lab.',
+      count: '6 Venues'
     }
   ]
 
@@ -3930,6 +4018,12 @@ export default function App() {
         />
       )}
 
+      {/* 4. Automatic Campus Event Notification Popup */}
+      <CampusEventNotificationPanel
+        onNavigateToEvents={() => handleNavClick('events')}
+        onSelectVenue={(venue) => setSelectedVenueForBooking(venue)}
+      />
+
       {/* 5. Enhanced Campus Footer */}
       <footer className="mt-auto border-t border-slate-200/90 dark:border-slate-800 bg-[rgb(244,242,238)] dark:bg-[#070b12] text-slate-600 dark:text-slate-400">
         <div className="max-w-7xl mx-auto px-6 pt-14 pb-10">
@@ -4166,12 +4260,13 @@ const OFFICIAL_COEP_ACCOUNTS = [
 
 export function LoginForm({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
-  const [authMethod, setAuthMethod] = useState('password') // 'password' | 'otp'
+  const [authMethod] = useState('password') // 'password'
   const [password, setPassword] = useState('')
   const [role] = useState('Student')
   const [errorMessage, setErrorMessage] = useState('')
   const [successNotice, setSuccessNotice] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false)
 
   // OTP flow states
   const [otpCode, setOtpCode] = useState('')
@@ -4399,33 +4494,22 @@ export function LoginForm({ onLoginSuccess }) {
         </span>
       </div>
 
-      {/* Auth Method Toggle */}
-      <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 text-xs font-bold">
+      {/* Sign In Options Bar with Dedicated Forgot Password Entry Point */}
+      <div className="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl mb-4 border border-slate-200/80 dark:border-slate-700/80 text-xs">
+        <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+          <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+          <span>University Credentials</span>
+        </span>
         <button
           type="button"
           onClick={() => {
-            setAuthMethod('password')
+            setIsForgotPasswordOpen(true)
             setErrorMessage('')
+            setSuccessNotice('')
           }}
-          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'password'
-            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-            }`}
+          className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer"
         >
-          University Password
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setAuthMethod('otp')
-            setErrorMessage('')
-          }}
-          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'otp'
-            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-            }`}
-        >
-          Email OTP
+          Forgot Password?
         </button>
       </div>
 
@@ -4478,12 +4562,25 @@ export function LoginForm({ onLoginSuccess }) {
           </div>
 
           <div>
-            <label
-              htmlFor="password-input"
-              className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
-            >
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label
+                htmlFor="password-input"
+                className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"
+              >
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsForgotPasswordOpen(true)
+                  setErrorMessage('')
+                  setSuccessNotice('')
+                }}
+                className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+            </div>
             <input
               id="password-input"
               type="password"
@@ -4622,6 +4719,19 @@ export function LoginForm({ onLoginSuccess }) {
             </form>
           )}
         </div>
+      )}
+
+      {/* Dedicated 4-Step Password Recovery Modal */}
+      {isForgotPasswordOpen && (
+        <ForgotPasswordModal
+          isOpen={isForgotPasswordOpen}
+          initialEmail={email}
+          onClose={() => setIsForgotPasswordOpen(false)}
+          onPasswordResetSuccess={(resetEmail) => {
+            setEmail(resetEmail)
+            setSuccessNotice('Your password has been reset successfully. Please log in with your new password.')
+          }}
+        />
       )}
     </div>
   )

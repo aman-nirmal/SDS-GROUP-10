@@ -94,6 +94,36 @@ export const INITIAL_ADMIN_USERS = [
 
 export const INITIAL_ADMIN_VENUES = [
   {
+    id: 'VN-COG-LAB',
+    code: 'COG-LAB',
+    name: 'Cognizant Lab',
+    department: 'Computer Engineering',
+    building: 'Computer New Building',
+    type: 'Lab',
+    capacity: 400,
+    benches: 200,
+    isActive: true,
+    status: 'Available',
+    description: 'A computer laboratory for technical workshops, programming sessions, academic activities, and approved technical events.',
+    features: ['High-End Workstations', 'LAN & High-Speed Wi-Fi', 'Smart Projectors', 'Central AC', 'Surround Sound'],
+    image: '/coep_building.png'
+  },
+  {
+    id: 'VN-MINI-AUD',
+    code: 'MINI-AUD',
+    name: 'Mini Auditorium',
+    department: 'Academics Complex',
+    building: 'Main Heritage Building',
+    type: 'Auditorium',
+    capacity: 275,
+    benches: 138,
+    isActive: true,
+    status: 'Available',
+    description: 'A mini auditorium for academic presentations, departmental events, seminars, and student activities.',
+    features: ['Stage Lighting', 'Acoustic Treatment', 'Dolby Acoustics', 'Dual Mics', 'Overhead Projector', 'Central AC'],
+    image: '/coep_building.png'
+  },
+  {
     id: 'VN-1',
     code: 'ND01',
     name: 'North Drawing Hall (ND01)',

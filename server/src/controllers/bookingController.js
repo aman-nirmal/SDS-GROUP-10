@@ -76,6 +76,46 @@ export const bookingController = {
         })
       }
 
+      // Role-based booking authorization check (Backend & Database enforcement)
+      const authorizedRoles = ['Administrator', 'Faculty', 'Club Lead', 'Club Member']
+      const effectiveRole = userRole || 'Student'
+      if (!authorizedRoles.includes(effectiveRole) && !req.body.hasBookingPermission) {
+        return res.status(403).json({
+          error: 'Unauthorized: You do not have permission to book this venue. Venue reservations are restricted to Faculty, Club Leads, and Administrators.'
+        })
+      }
+
+      // Check venue capacity constraints
+      const attendeeCount = Number(capacity) || 1
+      const normalizedVenue = venueName.trim().toLowerCase()
+      if (normalizedVenue.includes('cognizant') && attendeeCount > 400) {
+        return res.status(400).json({
+          error: 'Requested attendees exceed Cognizant Lab maximum capacity of 400 persons.'
+        })
+      }
+      if (normalizedVenue.includes('mini auditorium') && attendeeCount > 275) {
+        return res.status(400).json({
+          error: 'Requested attendees exceed Mini Auditorium maximum capacity of 275 persons.'
+        })
+      }
+
+      // Check for overlapping confirmed or approved reservations
+      if (supabase) {
+        const { data: overlapping } = await supabase
+          .from('bookings')
+          .select('id, booking_ref, status')
+          .ilike('venue_name', `%${venueName.trim()}%`)
+          .eq('booking_date', bookingDate)
+          .eq('time_slot', timeSlot)
+          .in('status', ['Confirmed', 'Approved', 'Under Review'])
+
+        if (overlapping && overlapping.length > 0) {
+          return res.status(409).json({
+            error: `Conflict: Venue "${venueName}" is already reserved for ${bookingDate} during slot "${timeSlot}". Please choose another slot or space.`
+          })
+        }
+      }
+
       const refCode = 'LOCUS-' + Math.floor(100000 + Math.random() * 900000)
       const passCode = `COEP-PASS-${Math.floor(1000 + Math.random() * 9000)}`
 

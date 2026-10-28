@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { bookingsApi } from '../lib/bookingsApi'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 import AdminVenues from './admin/AdminVenues'
 import RoleRequests from './admin/RoleRequests'
 import AdminTimetable from './admin/AdminTimetable'
@@ -321,11 +322,57 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
   const [venuesList, setVenuesList] = useState(() => {
     try {
       const stored = localStorage.getItem('locus_admin_venues')
-      return stored ? JSON.parse(stored) : INITIAL_ADMIN_VENUES
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const existingCodes = new Set(parsed.map((v) => v.code || v.id))
+          const missingInitial = INITIAL_ADMIN_VENUES.filter(
+            (v) => !existingCodes.has(v.code) && !existingCodes.has(v.id)
+          )
+          return [...missingInitial, ...parsed]
+        }
+      }
+      return INITIAL_ADMIN_VENUES
     } catch {
       return INITIAL_ADMIN_VENUES
     }
   })
+
+  // Synchronize venues from Supabase database
+  useEffect(() => {
+    async function loadSupabaseVenues() {
+      if (supabase && isSupabaseConfigured) {
+        try {
+          const { data, error } = await supabase
+            .from('venues')
+            .select('*')
+            .order('new_hall_name', { ascending: true })
+
+          if (!error && data && data.length > 0) {
+            const mapped = data.map((v) => ({
+              id: v.id,
+              code: v.code || v.old_hall_name || v.id,
+              name: v.new_hall_name,
+              department: v.department,
+              building: v.building || 'Campus Complex',
+              type: v.type || 'Auditorium',
+              capacity: v.capacity || (v.benches ? v.benches * 2 : 60),
+              benches: v.benches || Math.round((v.capacity || 60) / 2),
+              isActive: v.is_active !== false,
+              status: v.status || (v.is_active ? 'Available' : 'Blocked'),
+              description: v.description || '',
+              features: Array.isArray(v.features) ? v.features : [],
+              image: v.image || '/coep_building.png'
+            }))
+            setVenuesList(mapped)
+          }
+        } catch (err) {
+          console.warn('[AdminPanel] Could not sync venues from Supabase:', err)
+        }
+      }
+    }
+    loadSupabaseVenues()
+  }, [])
 
   // Role change requests state
   const [roleRequests, setRoleRequests] = useState(() => {
@@ -596,37 +643,102 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     )
   }
 
-  // Handlers for Venues
-  const handleAddVenue = (venueData) => {
+  // Handlers for Venues (Integrated with Supabase persistence)
+  const handleAddVenue = async (venueData) => {
     const newId = `VN-${Date.now().toString().slice(-4)}`
     const newVenue = { ...venueData, id: newId }
     setVenuesList((prev) => [newVenue, ...prev])
     addLog(`Added campus venue "${newVenue.name}" (${newVenue.code || newId})`, 'Venues', 'success')
     showNotification(`Venue "${newVenue.name}" added successfully.`)
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const venuePayload = {
+          code: newVenue.code || newId,
+          new_hall_name: newVenue.name,
+          old_hall_name: newVenue.code || newVenue.name,
+          department: newVenue.department,
+          building: newVenue.building || 'Campus Complex',
+          type: newVenue.type || 'Auditorium',
+          benches: Number(newVenue.benches) || Math.round((Number(newVenue.capacity) || 60) / 2),
+          is_active: newVenue.isActive !== false,
+          status: newVenue.status || 'Available',
+          description: newVenue.description || '',
+          features: newVenue.features || [],
+          image: newVenue.image || '/coep_building.png'
+        }
+
+        // Try inserting with capacity if non-generated, or omit if generated
+        let { error } = await supabase.from('venues').insert([{ ...venuePayload, id: newId, capacity: Number(newVenue.capacity) || 60 }])
+        if (error && error.message?.includes('generated column')) {
+          await supabase.from('venues').insert([{ ...venuePayload, id: newId }])
+        }
+      } catch (err) {
+        console.warn('[AdminPanel] Supabase insert venue error:', err)
+      }
+    }
   }
 
-  const handleUpdateVenue = (venueData) => {
+  const handleUpdateVenue = async (venueData) => {
     setVenuesList((prev) =>
       prev.map((v) => (v.id === venueData.id ? { ...v, ...venueData } : v))
     )
     addLog(`Updated venue attributes for "${venueData.name}"`, 'Venues', 'info')
     showNotification(`Updated venue "${venueData.name}".`)
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const updatePayload = {
+          code: venueData.code,
+          new_hall_name: venueData.name,
+          department: venueData.department,
+          building: venueData.building,
+          type: venueData.type,
+          benches: Number(venueData.benches) || Math.round((Number(venueData.capacity) || 60) / 2),
+          is_active: venueData.isActive !== false,
+          status: venueData.status,
+          description: venueData.description,
+          features: venueData.features
+        }
+
+        let { error } = await supabase.from('venues').update({
+          ...updatePayload,
+          capacity: Number(venueData.capacity)
+        }).eq('id', venueData.id)
+
+        if (error && error.message?.includes('generated column')) {
+          await supabase.from('venues').update(updatePayload).eq('id', venueData.id)
+        }
+      } catch (err) {
+        console.warn('[AdminPanel] Supabase update venue error:', err)
+      }
+    }
   }
 
-  const handleDeleteVenue = (venueId) => {
+  const handleDeleteVenue = async (venueId) => {
     const target = venuesList.find((v) => v.id === venueId)
     setVenuesList((prev) => prev.filter((v) => v.id !== venueId))
     if (target) {
       addLog(`Removed venue "${target.name}" from catalog`, 'Venues', 'warning')
       showNotification(`Venue "${target.name}" removed.`)
     }
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('venues').delete().eq('id', venueId)
+      } catch (err) {
+        console.warn('[AdminPanel] Supabase delete venue error:', err)
+      }
+    }
   }
 
-  const handleToggleVenueActive = (venueId) => {
+  const handleToggleVenueActive = async (venueId) => {
+    let nextState = true
     setVenuesList((prev) =>
       prev.map((v) => {
         if (v.id === venueId) {
           const next = !v.isActive
+          nextState = next
           addLog(`Venue "${v.name}" status changed to ${next ? 'Active' : 'Inactive'}`, 'Venues', 'info')
           showNotification(`Venue "${v.name}" marked ${next ? 'Active' : 'Inactive'}.`)
           return { ...v, isActive: next }
@@ -634,13 +746,22 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         return v
       })
     )
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('venues').update({ is_active: nextState }).eq('id', venueId)
+      } catch (err) {
+        console.warn('[AdminPanel] Supabase toggle active error:', err)
+      }
+    }
   }
 
-  const handleToggleVenueMaintenance = (venueId) => {
+  const handleToggleVenueMaintenance = async (venueId) => {
+    let nextStatus = 'Available'
     setVenuesList((prev) =>
       prev.map((v) => {
         if (v.id === venueId) {
-          const nextStatus = v.status === 'Under Maintenance' ? 'Available' : 'Under Maintenance'
+          nextStatus = v.status === 'Under Maintenance' ? 'Available' : 'Under Maintenance'
           addLog(`Venue "${v.name}" availability changed to ${nextStatus}`, 'Venues', nextStatus === 'Under Maintenance' ? 'warning' : 'success')
           showNotification(`Venue "${v.name}" is now ${nextStatus}.`)
           return { ...v, status: nextStatus }
@@ -648,6 +769,14 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         return v
       })
     )
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('venues').update({ status: nextStatus }).eq('id', venueId)
+      } catch (err) {
+        console.warn('[AdminPanel] Supabase toggle maintenance error:', err)
+      }
+    }
   }
 
   // Handlers for Role Change Requests

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { bookingsApi, normalizeBooking, OFFICIAL_CLUB_MAPPINGS } from '../src/lib/bookingsApi.js'
-import { isSupabaseConfigured, SUPABASE_URL } from '../src/lib/supabase.js'
+import { bookingsApi, normalizeBooking } from '../src/lib/bookingsApi.js'
+import { SUPABASE_URL } from '../src/lib/supabase.js'
 
 test('Supabase Configuration Check', () => {
   assert.equal(SUPABASE_URL, 'https://ozdthbfemtuaefrrxwnm.supabase.co')
@@ -98,6 +98,7 @@ test('Lifecycle: Create booking, persist, and retrieve by authorized account', a
     name: 'Aman Nirmal',
     email: 'student@coeptech.ac.in',
     role: 'Student',
+    hasBookingPermission: true,
     department: 'Computer Engineering'
   }
 
@@ -134,7 +135,8 @@ test('Authorization: User A cannot see User B private bookings', async () => {
     id: 'USR-B',
     name: 'Student B',
     email: 'student.b@coeptech.ac.in',
-    role: 'Student'
+    role: 'Student',
+    hasBookingPermission: true
   }
 
   // Create booking for user B
@@ -224,7 +226,8 @@ test('Security Gate Pass: Verification of digital pass codes', async () => {
     id: 'STU-99',
     name: 'Gaurang Gohil',
     email: 'gaurang@coeptech.ac.in',
-    role: 'Student'
+    role: 'Student',
+    hasBookingPermission: true
   }
 
   const booking = await bookingsApi.createBooking({

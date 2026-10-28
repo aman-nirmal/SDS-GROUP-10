@@ -7,12 +7,26 @@ export const SUPABASE_URL =
 
 function getAnonKey() {
   const envKey = metaEnv.VITE_SUPABASE_ANON_KEY
-  if (envKey && envKey.trim() && envKey !== 'your-anon-key') {
+  if (
+    envKey &&
+    typeof envKey === 'string' &&
+    envKey.trim() &&
+    !envKey.startsWith('your-') &&
+    !envKey.includes('placeholder') &&
+    envKey !== 'undefined' &&
+    envKey.length > 20
+  ) {
     return envKey.trim()
   }
   if (typeof window !== 'undefined') {
     const stored = window.localStorage.getItem('locus_supabase_anon_key')
-    if (stored && stored.trim()) {
+    if (
+      stored &&
+      typeof stored === 'string' &&
+      stored.trim() &&
+      !stored.startsWith('your-') &&
+      stored.length > 20
+    ) {
       return stored.trim()
     }
   }

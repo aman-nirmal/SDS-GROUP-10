@@ -232,6 +232,8 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
                     className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   >
+                    <option value="Mini Auditorium">Mini Auditorium (Academics Complex - 275 Seats)</option>
+                    <option value="Cognizant Lab">Cognizant Lab (Computer Dept - 400 Seats)</option>
                     <option value="ND01 (North Drawing Hall)">ND01 (North Drawing Hall)</option>
                     <option value="Computer Department Seminar Hall">Computer Department Seminar Hall</option>
                     <option value="NC24 Classroom">NC24 Classroom</option>
