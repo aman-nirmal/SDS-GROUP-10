@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   BookOpen,
   Plus,
@@ -7,6 +7,7 @@ import {
   XCircle
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi } from '../lib/bookingsApi'
 
 const INITIAL_STUDENT_BOOKINGS = [
   {
@@ -34,6 +35,7 @@ const INITIAL_STUDENT_BOOKINGS = [
 export default function StudentPortal({ currentUser, onNavigateLogin }) {
   const [bookings, setBookings] = useState(INITIAL_STUDENT_BOOKINGS)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedPass, setSelectedPass] = useState(null)
   const [form, setForm] = useState({
     venue: 'Central Library Discussion Room A',
@@ -43,35 +45,60 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
     attendees: 2
   })
 
-  const handleCreateBooking = (e) => {
-    e.preventDefault()
-    if (!form.purpose.trim()) return
-
-    const randomNum = Math.floor(1000 + Math.random() * 9000)
-    const newBooking = {
-      id: `STU-BK-${Math.floor(100 + Math.random() * 900)}`,
-      venue: form.venue,
-      purpose: form.purpose,
-      date: form.date,
-      timeSlot: form.timeSlot,
-      attendees: Number(form.attendees),
-      status: 'Approved',
-      digitalPassCode: `COEP-STU-${randomNum}-PASS`
+  useEffect(() => {
+    async function loadStudentBookings() {
+      if (currentUser?.email) {
+        try {
+          const data = await bookingsApi.fetchUserBookings(currentUser)
+          if (data && data.length > 0) {
+            setBookings(data)
+          }
+        } catch (err) {
+          console.warn('[StudentPortal] Could not load bookings from Supabase:', err)
+        }
+      }
     }
+    loadStudentBookings()
+  }, [currentUser])
 
-    setBookings([newBooking, ...bookings])
-    setIsModalOpen(false)
-    setForm({
-      venue: 'Central Library Discussion Room A',
-      purpose: '',
-      date: '2026-10-25',
-      timeSlot: '02:00 PM - 04:00 PM',
-      attendees: 2
-    })
+  const handleCreateBooking = async (e) => {
+    e.preventDefault()
+    if (!form.purpose.trim() || isSubmitting) return
+
+    setIsSubmitting(true)
+    try {
+      const saved = await bookingsApi.createBooking({
+        venueName: form.venue,
+        purpose: form.purpose,
+        date: form.date,
+        slot: form.timeSlot,
+        capacity: Number(form.attendees),
+        status: 'Approved'
+      }, currentUser)
+
+      setBookings((prev) => [saved, ...prev.filter((b) => b.id !== saved.id && b.ref !== saved.ref)])
+      setIsModalOpen(false)
+      setForm({
+        venue: 'Central Library Discussion Room A',
+        purpose: '',
+        date: '2026-10-25',
+        timeSlot: '02:00 PM - 04:00 PM',
+        attendees: 2
+      })
+    } catch (err) {
+      alert(err.message || 'Failed to reserve study space.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
-  const handleDelete = (id) => {
-    setBookings(bookings.filter((b) => b.id !== id))
+  const handleDelete = async (id) => {
+    try {
+      await bookingsApi.cancelBooking(id, currentUser)
+    } catch (err) {
+      console.warn('Could not cancel booking in database:', err)
+    }
+    setBookings((prev) => prev.filter((b) => b.id !== id && b.ref !== id))
   }
 
   return (
@@ -98,65 +125,57 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                 {currentUser?.name || 'Aman Nirmal'} • {currentUser?.department || 'Computer Engineering'}
               </p>
             </div>
-
             <button
-              type="button"
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs transition-colors"
             >
               <Plus className="w-4 h-4" />
-              <span>Book Study Room</span>
+              <span>Book Discussion Room</span>
             </button>
           </div>
         </div>
 
-        {/* Bookings List */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+        {/* Content */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
             <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-slate-900 dark:text-white">My Study Room Passes ({bookings.length})</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Show your digital confirmation pass at the security desk or library gate.</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Digital permits for library study cubicles and computer lab workstations.</p>
               </div>
             </div>
 
             <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {bookings.map((b) => (
-                <div
-                  key={b.id}
-                  className="p-4 sm:p-5 hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                >
+                <div key={b.id || b.ref} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{b.id}</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      <span className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">{b.id || b.ref}</span>
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">{b.venue || b.venueName}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                         {b.status}
                       </span>
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{b.venue}</span>
                     </div>
-
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">{b.purpose}</h3>
-
-                    <div className="flex flex-wrap items-center gap-x-4 text-xs text-slate-500 dark:text-slate-400">
-                      <span>Date: <strong className="text-slate-700 dark:text-slate-200">{b.date}</strong></span>
-                      <span>Slot: <strong className="text-slate-700 dark:text-slate-200">{b.timeSlot}</strong></span>
-                      <span>Team: <strong className="text-slate-700 dark:text-slate-200">{b.attendees} persons</strong></span>
+                    <p className="text-xs text-slate-600 dark:text-slate-300">{b.purpose}</p>
+                    <div className="text-[11px] text-slate-400 dark:text-slate-500 flex flex-wrap gap-x-3">
+                      <span>{b.date || b.bookingDate}</span>
+                      <span>•</span>
+                      <span>{b.timeSlot || b.slot}</span>
+                      <span>•</span>
+                      <span>{b.attendees || b.capacity || 1} Person(s)</span>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2 shrink-0">
                     <button
-                      type="button"
                       onClick={() => setSelectedPass(b)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
+                      className="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
                     >
                       <QrCode className="w-3.5 h-3.5" />
-                      <span>View QR Gate Pass</span>
+                      <span>View Pass</span>
                     </button>
                     <button
-                      type="button"
-                      onClick={() => handleDelete(b.id)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                      onClick={() => handleDelete(b.id || b.ref)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
                       title="Cancel Booking"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -164,25 +183,25 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
                   </div>
                 </div>
               ))}
+
               {bookings.length === 0 && (
-                <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-xs">
-                  You have no active study room reservations.
+                <div className="py-12 text-center text-xs text-slate-400 dark:text-slate-500">
+                  No active study passes found. Click "Book Discussion Room" to reserve your spot.
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Modal: Book Study Room */}
+        {/* Create Booking Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Book Study Pod / Lab Space</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Reserve Campus Study Space</h3>
                 <button
-                  type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -190,93 +209,92 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Study Facility
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Select Study Venue
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                    className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   >
-                    <option value="Central Library Discussion Room A">Central Library Discussion Room A (4 Seats)</option>
-                    <option value="Central Library Discussion Room B">Central Library Discussion Room B (6 Seats)</option>
-                    <option value="Turing Computing Lab">Turing Computing Lab</option>
-                    <option value="PG Research Study Pod 3">PG Research Study Pod 3</option>
+                    <option value="Central Library Discussion Room A">Central Library Discussion Room A</option>
+                    <option value="Central Library Discussion Room B">Central Library Discussion Room B</option>
+                    <option value="Turing Computer Lab (Workstation 14-16)">Turing Computer Lab (Workstation 14-16)</option>
+                    <option value="Mechanical Dept CAD/CAM Terminal 04">Mechanical Dept CAD/CAM Terminal 04</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Study Topic / Project Goal
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Academic Purpose / Topic *
                   </label>
                   <input
                     type="text"
                     required
                     value={form.purpose}
                     onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-                    placeholder="e.g. Distributed Consensus Systems Capstone"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                    placeholder="e.g. Distributed Systems Lab Prep"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Date
                     </label>
                     <input
                       type="date"
-                      required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                      className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                      Time Slot
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                      Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                      className="w-full h-9 px-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     >
-                      <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                      <option value="08:30 AM - 10:30 AM">08:30 AM - 10:30 AM</option>
+                      <option value="10:30 AM - 12:30 PM">10:30 AM - 12:30 PM</option>
                       <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
                       <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
-                      <option value="06:00 PM - 08:00 PM">06:00 PM - 08:00 PM</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Team Members
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Student Group Size
                   </label>
                   <input
                     type="number"
                     min="1"
-                    max="8"
+                    max="6"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-indigo-500"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="pt-2 flex items-center justify-end gap-2">
+                <div className="pt-2 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
+                    className="flex-1 h-9 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
+                    disabled={isSubmitting}
+                    className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
                   >
-                    Issue Digital Pass
+                    {isSubmitting ? 'Reserving...' : 'Confirm Reservation'}
                   </button>
                 </div>
               </form>
@@ -284,35 +302,47 @@ export default function StudentPortal({ currentUser, onNavigateLogin }) {
           </div>
         )}
 
-        {/* Modal: View Digital Pass Slip */}
+        {/* View Digital QR Pass Modal */}
         {selectedPass && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-center space-y-4">
-              <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center animate-in fade-in zoom-in-95 duration-200 text-slate-900 dark:text-slate-100">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-3">
                 <QrCode className="w-7 h-7" />
               </div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 block mb-1">
+                Official Access Permit
+              </span>
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-1">
+                {selectedPass.venue || selectedPass.venueName}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">{selectedPass.purpose}</p>
 
-              <div>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                  {selectedPass.status} Gate Pass
-                </span>
-                <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-2">{selectedPass.venue}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{selectedPass.purpose}</p>
-              </div>
-
-              <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs text-left space-y-1 font-mono text-slate-700 dark:text-slate-300">
-                <div>Pass Code: <strong className="text-indigo-700 dark:text-indigo-400">{selectedPass.digitalPassCode}</strong></div>
-                <div>Slot: {selectedPass.date} • {selectedPass.timeSlot}</div>
-                <div>Team: {selectedPass.attendees} Persons</div>
-                <div>Applicant: {currentUser?.name || 'Aman Nirmal'}</div>
+              {/* Digital Pass Card */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-left text-xs space-y-2 mb-4">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Pass Code:</span>
+                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">{selectedPass.digitalPassCode || selectedPass.passId}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Student:</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{currentUser?.name || selectedPass.applicantName || 'Aman Nirmal'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Date & Slot:</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedPass.date || selectedPass.bookingDate} ({selectedPass.timeSlot || selectedPass.slot})</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Status:</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">Valid Entry</span>
+                </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => setSelectedPass(null)}
-                className="w-full h-10 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition-colors border border-transparent dark:border-slate-700"
+                className="w-full h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-xs transition-colors"
               >
-                Done
+                Close Pass
               </button>
             </div>
           </div>

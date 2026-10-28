@@ -8,6 +8,7 @@ import {
   ShieldAlert
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi } from '../lib/bookingsApi'
 
 // Verified Institutional Database
 const KNOWN_PASS_DATABASE = {
@@ -122,10 +123,33 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
     }
   }, [cameraActive])
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     if (e) e.preventDefault()
     const code = passCodeInput.trim()
     if (!code) return
+
+    try {
+      const dbResult = await bookingsApi.verifyPass(code)
+      if (dbResult && dbResult.valid && dbResult.booking) {
+        const bk = dbResult.booking
+        setVerificationResult({
+          passId: bk.digitalPassCode || bk.ref || code,
+          bookingId: bk.ref || bk.id,
+          holderName: bk.applicantName,
+          role: bk.role,
+          department: bk.department,
+          venue: bk.venueName,
+          purpose: bk.purpose,
+          date: bk.date,
+          timeSlot: bk.slot,
+          attendees: bk.capacity || 1,
+          status: 'Valid'
+        })
+        return
+      }
+    } catch (err) {
+      console.warn('Database pass verification failed:', err)
+    }
 
     const match = KNOWN_PASS_DATABASE[code]
 

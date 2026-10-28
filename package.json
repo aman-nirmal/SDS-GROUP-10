@@ -1,13 +1,14 @@
 {
-  "name": "temp-app",
+  "name": "locus-venue-booking",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "server": "node server/src/index.js",
     "server:dev": "node --watch server/src/index.js",
     "build": "vite build",
+    "test": "node --test test/*.test.js",
     "lint": "oxlint",
     "preview": "vite preview"
   },

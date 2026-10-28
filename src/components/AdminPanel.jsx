@@ -17,6 +17,7 @@ import {
   ChevronUp
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi } from '../lib/bookingsApi'
 
 // Initial institutional users store
 const INITIAL_USERS = [
@@ -339,6 +340,24 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     }
   })
 
+  // Synchronize bookings with Supabase database
+  useEffect(() => {
+    async function loadAdminBookings() {
+      try {
+        const data = await bookingsApi.fetchUserBookings({
+          role: 'Administrator',
+          email: currentUser?.email || 'admin@coeptech.ac.in'
+        })
+        if (data && data.length > 0) {
+          setBookings(data)
+        }
+      } catch (err) {
+        console.warn('[AdminPanel] Could not fetch bookings from Supabase:', err)
+      }
+    }
+    loadAdminBookings()
+  }, [currentUser])
+
   // Venues state
   const [venuesList, setVenuesList] = useState(() => {
     try {
@@ -542,12 +561,18 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
   }
 
   // Handlers for Booking Approvals
-  const handleApproveBooking = (bookingId) => {
+  const handleApproveBooking = async (bookingId) => {
+    try {
+      await bookingsApi.updateBookingStatus(bookingId, 'Confirmed', currentUser)
+    } catch (err) {
+      console.warn('Database approve sync error:', err)
+    }
+
     setBookings((prev) =>
       prev.map((b) => {
-        if (b.id === bookingId) {
-          addLog(`Approved campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'success')
-          showNotification(`Reservation ${b.id} confirmed successfully!`)
+        if (b.id === bookingId || b.ref === bookingId) {
+          addLog(`Approved campus reservation ${b.id || b.ref} for venue ${b.venueName}`, 'Bookings', 'success')
+          showNotification(`Reservation ${b.id || b.ref} confirmed successfully!`)
           return { ...b, status: 'Confirmed' }
         }
         return b
@@ -555,13 +580,19 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     )
   }
 
-  const handleRejectBooking = (bookingId) => {
+  const handleRejectBooking = async (bookingId) => {
+    try {
+      await bookingsApi.updateBookingStatus(bookingId, 'Rejected', currentUser)
+    } catch (err) {
+      console.warn('Database reject sync error:', err)
+    }
+
     setBookings((prev) =>
       prev.map((b) => {
-        if (b.id === bookingId) {
-          addLog(`Rejected campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'warning')
-          showNotification(`Reservation ${b.id} rejected.`)
-          return { ...b, status: 'Cancelled' }
+        if (b.id === bookingId || b.ref === bookingId) {
+          addLog(`Rejected campus reservation ${b.id || b.ref} for venue ${b.venueName}`, 'Bookings', 'warning')
+          showNotification(`Reservation ${b.id || b.ref} rejected.`)
+          return { ...b, status: 'Rejected' }
         }
         return b
       })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   GraduationCap,
   Plus,
@@ -6,6 +6,7 @@ import {
   XCircle
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi } from '../lib/bookingsApi'
 
 const INITIAL_FACULTY_BOOKINGS = [
   {
@@ -40,6 +41,7 @@ const INITIAL_FACULTY_BOOKINGS = [
 export default function FacultyPortal({ currentUser, onNavigateLogin }) {
   const [bookings, setBookings] = useState(INITIAL_FACULTY_BOOKINGS)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     venue: 'ND01 (North Drawing Hall)',
     purpose: '',
@@ -48,33 +50,60 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
     attendees: 60
   })
 
-  const handleCreateBooking = (e) => {
-    e.preventDefault()
-    if (!form.purpose.trim()) return
-
-    const newBooking = {
-      id: `FAC-BK-${Math.floor(100 + Math.random() * 900)}`,
-      venue: form.venue,
-      purpose: form.purpose,
-      date: form.date,
-      timeSlot: form.timeSlot,
-      attendees: Number(form.attendees),
-      status: 'Confirmed'
+  useEffect(() => {
+    async function loadFacultyBookings() {
+      if (currentUser?.email) {
+        try {
+          const data = await bookingsApi.fetchUserBookings(currentUser)
+          if (data && data.length > 0) {
+            setBookings(data)
+          }
+        } catch (err) {
+          console.warn('[FacultyPortal] Could not load bookings from Supabase:', err)
+        }
+      }
     }
+    loadFacultyBookings()
+  }, [currentUser])
 
-    setBookings([newBooking, ...bookings])
-    setIsModalOpen(false)
-    setForm({
-      venue: 'ND01 (North Drawing Hall)',
-      purpose: '',
-      date: '2026-10-29',
-      timeSlot: '10:00 AM - 12:00 PM',
-      attendees: 60
-    })
+  const handleCreateBooking = async (e) => {
+    e.preventDefault()
+    if (!form.purpose.trim() || isSubmitting) return
+
+    setIsSubmitting(true)
+    try {
+      const saved = await bookingsApi.createBooking({
+        venueName: form.venue,
+        purpose: form.purpose,
+        date: form.date,
+        slot: form.timeSlot,
+        capacity: Number(form.attendees),
+        status: 'Confirmed'
+      }, currentUser)
+
+      setBookings((prev) => [saved, ...prev.filter((b) => b.id !== saved.id && b.ref !== saved.ref)])
+      setIsModalOpen(false)
+      setForm({
+        venue: 'ND01 (North Drawing Hall)',
+        purpose: '',
+        date: '2026-10-29',
+        timeSlot: '10:00 AM - 12:00 PM',
+        attendees: 60
+      })
+    } catch (err) {
+      alert(err.message || 'Failed to reserve academic hall.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
-  const handleDelete = (id) => {
-    setBookings(bookings.filter((b) => b.id !== id))
+  const handleDelete = async (id) => {
+    try {
+      await bookingsApi.cancelBooking(id, currentUser)
+    } catch (err) {
+      console.warn('Could not cancel booking in database:', err)
+    }
+    setBookings((prev) => prev.filter((b) => b.id !== id && b.ref !== id))
   }
 
   return (
@@ -98,70 +127,67 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                 Academic Hall Reservations
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                {currentUser?.name || 'Faculty Member'} • {currentUser?.department || 'Computer Engineering'}
+                {currentUser?.name || 'Dr. V. K. Kulkarni'} • {currentUser?.department || 'Computer Engineering'}
               </p>
             </div>
-
             <button
-              type="button"
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs transition-colors"
             >
               <Plus className="w-4 h-4" />
-              <span>Reserve Lecture Hall</span>
+              <span>Schedule Lecture / Viva</span>
             </button>
           </div>
         </div>
 
-        {/* Content Table */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs">
+        {/* Content */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
             <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-slate-900 dark:text-white">Scheduled Sessions ({bookings.length})</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Your upcoming lectures and department sessions.</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Classrooms and departmental seminar rooms reserved for academic evaluation.</p>
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-300 font-bold uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
                   <tr>
                     <th className="py-3 px-4">Booking ID</th>
                     <th className="py-3 px-4">Venue</th>
-                    <th className="py-3 px-4">Subject / Purpose</th>
-                    <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Slot</th>
-                    <th className="py-3 px-4">Class Size</th>
+                    <th className="py-3 px-4">Academic Session</th>
+                    <th className="py-3 px-4">Date & Slot</th>
+                    <th className="py-3 px-4">Batch Size</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {bookings.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">{b.id}</td>
-                      <td className="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{b.venue}</td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.purpose}</td>
-                      <td className="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-300">{b.date}</td>
-                      <td className="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-300">{b.timeSlot}</td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{b.attendees} students</td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                            b.status === 'Confirmed'
-                              ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                              : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                          }`}
-                        >
+                    <tr key={b.id || b.ref} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">{b.id || b.ref}</td>
+                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{b.venue || b.venueName}</td>
+                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.purpose}</td>
+                      <td className="py-3 px-4 text-slate-500 dark:text-slate-400">
+                        <div>{b.date || b.bookingDate}</div>
+                        <div className="text-[11px] text-slate-400 dark:text-slate-500">{b.timeSlot || b.slot}</div>
+                      </td>
+                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.attendees || b.capacity || 1} Students</td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          b.status === 'Confirmed' || b.status === 'Approved'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                            : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${b.status === 'Confirmed' || b.status === 'Approved' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                           {b.status}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-3 px-4 text-right">
                         <button
-                          type="button"
-                          onClick={() => handleDelete(b.id)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                          onClick={() => handleDelete(b.id || b.ref)}
+                          className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
                           title="Cancel Reservation"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -171,8 +197,8 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                   ))}
                   {bookings.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center text-slate-400 dark:text-slate-500">
-                        No active lecture hall reservations.
+                      <td colSpan={7} className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+                        No scheduled academic reservations found. Click "Schedule Lecture / Viva" to allocate a venue.
                       </td>
                     </tr>
                   )}
@@ -182,16 +208,15 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
           </div>
         </div>
 
-        {/* Modal: Reserve Hall */}
+        {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Reserve Lecture Hall</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Schedule Lecture or Department Viva</h3>
                 <button
-                  type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -199,57 +224,55 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Hall / Classroom
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Select Lecture Hall / Room
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
+                    className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   >
                     <option value="ND01 (North Drawing Hall)">ND01 (North Drawing Hall)</option>
                     <option value="Computer Department Seminar Hall">Computer Department Seminar Hall</option>
-                    <option value="NC24 Smart Classroom">NC24 Smart Classroom</option>
-                    <option value="BHAU Auditorium">BHAU Auditorium</option>
+                    <option value="NC24 Classroom">NC24 Classroom</option>
+                    <option value="Electrical Machines Lab A">Electrical Machines Lab A</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Subject / Academic Purpose
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Session Purpose / Subject *
                   </label>
                   <input
                     type="text"
                     required
                     value={form.purpose}
                     onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-                    placeholder="e.g. Distributed Operating Systems - Lecture 12"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
+                    placeholder="e.g. Distributed Systems Final Evaluation"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Date
                     </label>
                     <input
                       type="date"
-                      required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
+                      className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Time Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500 cursor-pointer"
+                      className="w-full h-9 px-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     >
                       <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                       <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
@@ -260,32 +283,31 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Expected Class Strength
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Expected Class Capacity
                   </label>
                   <input
                     type="number"
-                    min="1"
-                    max="300"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-blue-500"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="pt-2 flex items-center justify-end gap-2">
+                <div className="pt-2 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
+                    className="flex-1 h-9 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
+                    disabled={isSubmitting}
+                    className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
                   >
-                    Confirm Reservation
+                    {isSubmitting ? 'Reserving...' : 'Confirm Reservation'}
                   </button>
                 </div>
               </form>

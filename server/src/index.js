@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { config } from './config/env.js'
 import authRoutes from './routes/authRoutes.js'
+import bookingRoutes from './routes/bookingRoutes.js'
 import { supabase } from './config/supabase.js'
 
 const app = express()
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
 app.get('/api/health', (req, res) => {
   return res.json({
     status: 'healthy',
-    service: 'LOCUS Authentication API Service',
+    service: 'LOCUS Venue & Booking API Service',
     university: 'COEP Technological University',
     database: supabase ? 'Supabase PostgreSQL (Connected)' : 'Local Auth Fallback Mode',
     timestamp: new Date().toISOString()
@@ -36,6 +37,9 @@ app.get('/api/health', (req, res) => {
 
 // Mount Authentication Module
 app.use('/api/auth', authRoutes)
+
+// Mount Bookings Module
+app.use('/api/bookings', bookingRoutes)
 
 // 404 Route Handler
 app.use((req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   MapPin,
   Calendar,
@@ -112,6 +112,7 @@ function VenueTypeCard({ icon: Icon, title, description, count }) {
 }
 
 import { supabase } from './lib/supabase'
+import { bookingsApi } from './lib/bookingsApi'
 
 // Custom Calendar Picker matching Website Design System
 function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
@@ -415,16 +416,18 @@ export const classroomTimeSlots = [
 ]
 
 // Complete Interactive Venue Booking Modal Component with Full Venue Specs & Faculty In-Charge
-function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
+function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
   const [date, setDate] = useState(defaultDate || '2026-10-16')
   const [selectedSlot, setSelectedSlot] = useState('12:30 PM - 01:30 PM')
   const [showSchedule, setShowSchedule] = useState(false)
-  const [applicantName, setApplicantName] = useState('')
-  const [department, setDepartment] = useState(venue?.department || 'Computer Engineering')
+  const [applicantName, setApplicantName] = useState(currentUser?.name || '')
+  const [department, setDepartment] = useState(venue?.department || currentUser?.department || 'Computer Engineering')
   const [eventPurpose, setEventPurpose] = useState('')
   const [attendees, setAttendees] = useState(venue?.benches ? venue.benches * 2 : 50)
   const [submitted, setSubmitted] = useState(false)
   const [bookingRef, setBookingRef] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
   const venuePhoto = getVenueImageUrl(venue)
@@ -432,28 +435,47 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
   const capacity = venue?.capacity || (venue?.benches ? venue.benches * 2 : 60)
   const benches = venue?.benches || Math.round(capacity / 2)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!applicantName || !eventPurpose) return
+    if (!applicantName || !eventPurpose || isSubmitting) return
 
-    const refNumber = 'LOCUS-' + Math.floor(100000 + Math.random() * 900000)
-    setBookingRef(refNumber)
-    setSubmitted(true)
+    setIsSubmitting(true)
+    setSubmitError('')
 
-    if (onSubmitBooking) {
-      onSubmitBooking({
-        ref: refNumber,
+    try {
+      const email = currentUser?.email ||
+        (applicantName.toLowerCase().replace(/[^a-z0-9]/g, '.') + '@coeptech.ac.in')
+
+      const bookingPayload = {
         venueName: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
         oldName: venue?.old_hall_name,
         department,
         applicantName,
+        applicantEmail: email,
         date,
         slot: selectedSlot,
         purpose: eventPurpose,
         capacity: attendees,
         facultyInCharge: faculty.name,
         status: 'Confirmed'
-      })
+      }
+
+      let generatedRef = 'LOCUS-' + Math.floor(100000 + Math.random() * 900000)
+
+      if (onSubmitBooking) {
+        const result = await onSubmitBooking(bookingPayload)
+        if (result && (result.ref || result.booking_ref)) {
+          generatedRef = result.ref || result.booking_ref
+        }
+      }
+
+      setBookingRef(generatedRef)
+      setSubmitted(true)
+    } catch (err) {
+      console.error('Booking submission error:', err)
+      setSubmitError(err.message || 'Database booking submission failed. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -778,6 +800,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                     </span>
                   </div>
 
+                  {/* Error Banner */}
+                  {submitError && (
+                    <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
                   {/* Submit / Cancel Buttons */}
                   <div className="pt-3 flex items-center gap-3">
                     <button
@@ -789,10 +819,20 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                      disabled={isSubmitting}
+                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
                     >
-                      <span>Confirm Reservation</span>
-                      <ArrowRight className="w-4 h-4" />
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Confirming Reservation...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Confirm Reservation</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
@@ -806,40 +846,25 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
 }
 
 // Interactive My Bookings Page Component
-function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
+function MyBookingsPage({
+  bookings = [],
+  isLoading = false,
+  error = null,
+  onRefresh,
+  onCancelBooking,
+  onBackHome,
+  onExploreVenues,
+  currentUser
+}) {
   const [activeFilter, setActiveFilter] = useState('All')
 
-  const sampleDefaultBookings = [
-    {
-      ref: 'LOCUS-482910',
-      venueName: 'NC01',
-      oldName: 'AC 101',
-      department: 'Academics Complex',
-      applicantName: 'Prof. Aniket Joshi',
-      date: '2026-10-18',
-      slot: '09:00 AM - 11:00 AM',
-      purpose: 'End-Sem Project Viva & Evaluation',
-      capacity: 72,
-      status: 'Confirmed'
-    },
-    {
-      ref: 'LOCUS-319502',
-      venueName: 'NC-27',
-      oldName: 'Computer Dept Hall A',
-      department: 'Computer New Building',
-      applicantName: 'CS Student Chapter',
-      date: '2026-10-21',
-      slot: '02:00 PM - 04:00 PM',
-      purpose: 'Technical Seminar on Distributed Systems',
-      capacity: 80,
-      status: 'Confirmed'
-    }
-  ]
-
-  const allBookings = bookings.length > 0 ? bookings : sampleDefaultBookings
+  const allBookings = Array.isArray(bookings) ? bookings : []
 
   const filteredBookings = allBookings.filter((b) => {
     if (activeFilter === 'All') return true
+    if (activeFilter === 'Confirmed') return b.status === 'Confirmed' || b.status === 'Approved'
+    if (activeFilter === 'Pending') return b.status === 'Pending' || b.status === 'Under Review'
+    if (activeFilter === 'Cancelled') return b.status === 'Cancelled' || b.status === 'Rejected'
     return b.status === activeFilter
   })
 
@@ -856,11 +881,27 @@ function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
             <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
             <span>Back to Home</span>
           </button>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            My Venue Bookings
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Track your slot confirmations, approved timings, and reservation slips across campus.
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              My Venue Bookings
+            </h1>
+            {onRefresh && (
+              <button
+                type="button"
+                onClick={onRefresh}
+                title="Refresh Bookings from Supabase"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-blue-600' : ''}`} />
+              </button>
+            )}
+          </div>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            {currentUser?.email ? (
+              <span>Account: <strong className="text-slate-700 dark:text-slate-300">{currentUser.email}</strong> • {currentUser.role}</span>
+            ) : (
+              <span>Track your slot confirmations, approved timings, and reservation slips across campus.</span>
+            )}
           </p>
         </div>
 
@@ -874,88 +915,172 @@ function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
         </button>
       </div>
 
+      {/* Error state alert */}
+      {error && (
+        <div className="mb-6 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
+            <span>Could not refresh reservations from database: {error}</span>
+          </div>
+          {onRefresh && (
+            <button
+              type="button"
+              onClick={onRefresh}
+              className="px-3 py-1 rounded-lg bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 transition-colors cursor-pointer"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Status Filter Tabs */}
-      <div className="flex items-center gap-2 mb-6 border-b border-slate-200/80 pb-3">
-        {['All', 'Confirmed', 'Pending'].map((status) => (
+      <div className="flex items-center gap-2 mb-6 border-b border-slate-200/80 dark:border-slate-800 pb-3 overflow-x-auto">
+        {['All', 'Confirmed', 'Pending', 'Cancelled'].map((status) => (
           <button
             key={status}
             type="button"
             onClick={() => setActiveFilter(status)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${activeFilter === status
-              ? 'bg-blue-600 text-white shadow-xs'
-              : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-              }`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 ${
+              activeFilter === status
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+            }`}
           >
             {status}
           </button>
         ))}
       </div>
 
-      {/* Bookings List */}
-      <div className="space-y-4">
-        {filteredBookings.map((b) => (
-          <div
-            key={b.ref}
-            className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5"
-          >
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
-                  {b.ref}
-                </span>
-                <span className="text-xs font-bold text-slate-900">
-                  {b.venueName}
-                </span>
-                {b.oldName && (
-                  <span className="text-xs text-slate-400">
-                    ({b.oldName})
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="text-center py-20 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-slate-600 dark:text-slate-300 text-sm font-semibold">Loading your reservations from Supabase...</p>
+        </div>
+      ) : (
+        /* Bookings List */
+        <div className="space-y-4">
+          {filteredBookings.map((b) => {
+            const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
+            const isPending = b.status === 'Pending' || b.status === 'Under Review'
+            const isCancelled = b.status === 'Cancelled' || b.status === 'Rejected'
+
+            return (
+              <div
+                key={b.ref || b.id}
+                className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5"
+              >
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-lg border border-blue-200/50 dark:border-blue-800/50">
+                      {b.ref || b.booking_ref}
+                    </span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                      {b.venueName || b.venue_name}
+                    </span>
+                    {(b.oldName || b.old_venue_name) && (
+                      <span className="text-xs text-slate-400">
+                        ({b.oldName || b.old_venue_name})
+                      </span>
+                    )}
+                    {b.club_name && (
+                      <span className="text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                        {b.club_name}
+                      </span>
+                    )}
+                    <span
+                      className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                        isConfirmed
+                          ? 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800'
+                          : isPending
+                          ? 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800'
+                          : 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800'
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          isConfirmed ? 'bg-emerald-500' : isPending ? 'bg-amber-500' : 'bg-rose-500'
+                        }`}
+                      ></span>
+                      {b.status}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                    {b.purpose || b.title}
+                  </h3>
+
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                      {formatDateDisplay(b.date || b.booking_date)}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      {b.slot || b.time_slot}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Building className="w-3.5 h-3.5 text-slate-400" />
+                      {b.department}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" />
+                      {b.applicantName || b.applicant_name} ({b.capacity || b.attendees || 1} cap)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-3 md:pt-0 border-t md:border-0 border-slate-100 dark:border-slate-800">
+                  {onCancelBooking && !isCancelled && (
+                    <button
+                      type="button"
+                      onClick={() => onCancelBooking(b.ref || b.id)}
+                      className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-800 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      Cancel Reservation
+                    </button>
+                  )}
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4" />
+                    COEP Admin Verified
                   </span>
-                )}
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  {b.status}
-                </span>
+                </div>
               </div>
+            )
+          })}
 
-              <h3 className="font-bold text-slate-900 text-base">
-                {b.purpose}
-              </h3>
-
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                  {formatDateDisplay(b.date)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
-                  {b.slot}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Building className="w-3.5 h-3.5 text-slate-400" />
-                  {b.department}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-slate-400" />
-                  {b.applicantName} ({b.capacity} cap)
-                </span>
-              </div>
+          {filteredBookings.length === 0 && (
+            <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+              {allBookings.length === 0 ? (
+                <div className="space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+                    <Calendar className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
+                    No Reservations Yet
+                  </h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs max-w-sm mx-auto">
+                    You have not reserved any venues. Check venue availability across campus to book a classroom, hall, or lab.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={onExploreVenues}
+                    className="mt-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shadow-xs"
+                  >
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span>Explore & Reserve Venues</span>
+                  </button>
+                </div>
+              ) : (
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-semibold">
+                  No bookings found with status "{activeFilter}".
+                </p>
+              )}
             </div>
-
-            <div className="flex items-center gap-3 pt-3 md:pt-0 border-t md:border-0 border-slate-100">
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4" />
-                COEP Admin Verified
-              </span>
-            </div>
-          </div>
-        ))}
-
-        {filteredBookings.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-            <p className="text-slate-500 text-sm font-semibold">No bookings found for this filter.</p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -2680,6 +2805,34 @@ export default function App() {
   const [selectedVenueForBooking, setSelectedVenueForBooking] = useState(null)
 
   const [userBookings, setUserBookings] = useState([])
+  const [isLoadingBookings, setIsLoadingBookings] = useState(false)
+  const [bookingsError, setBookingsError] = useState(null)
+
+  const loadUserBookings = useCallback(async (userToLoad = currentUser) => {
+    if (!userToLoad || !userToLoad.email) {
+      setUserBookings([])
+      return
+    }
+    try {
+      setIsLoadingBookings(true)
+      setBookingsError(null)
+      const data = await bookingsApi.fetchUserBookings(userToLoad)
+      setUserBookings(data)
+    } catch (err) {
+      console.warn('[LOCUS] Error fetching user bookings:', err)
+      setBookingsError(err.message || 'Could not fetch bookings')
+    } finally {
+      setIsLoadingBookings(false)
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    if (currentUser) {
+      loadUserBookings(currentUser)
+    } else {
+      setUserBookings([])
+    }
+  }, [currentUser, loadUserBookings])
 
   const sampleEventsFallback = [
     {
@@ -2816,8 +2969,30 @@ export default function App() {
     setIsMobileMenuOpen(false)
   }
 
-  const handleAddBooking = (newBooking) => {
-    setUserBookings((prev) => [newBooking, ...prev])
+  const handleAddBooking = async (newBooking) => {
+    const user = currentUser || {
+      id: 'GUEST-' + Math.floor(1000 + Math.random() * 9000),
+      name: newBooking.applicantName,
+      email: newBooking.applicantEmail || `${newBooking.applicantName.toLowerCase().replace(/\s+/g, '.')}@coeptech.ac.in`,
+      role: 'Student',
+      department: newBooking.department
+    }
+    const saved = await bookingsApi.createBooking(newBooking, user)
+    setUserBookings((prev) => [saved, ...prev.filter((b) => b.ref !== saved.ref && b.id !== saved.id)])
+    return saved
+  }
+
+  const handleCancelBooking = async (bookingRef) => {
+    try {
+      await bookingsApi.cancelBooking(bookingRef, currentUser)
+      if (currentUser) {
+        await loadUserBookings(currentUser)
+      } else {
+        setUserBookings((prev) => prev.filter((b) => b.ref !== bookingRef && b.id !== bookingRef))
+      }
+    } catch (err) {
+      console.warn('Failed to cancel booking:', err)
+    }
   }
 
   const venueTypes = [
@@ -2882,8 +3057,13 @@ export default function App() {
         return (
           <MyBookingsPage
             bookings={userBookings}
+            isLoading={isLoadingBookings}
+            error={bookingsError}
+            onRefresh={() => loadUserBookings(currentUser)}
+            onCancelBooking={handleCancelBooking}
             onBackHome={() => setActiveTab('home')}
             onExploreVenues={() => setActiveTab('venues')}
+            currentUser={currentUser}
           />
         )
       case 'about':
@@ -3694,9 +3874,10 @@ export default function App() {
               }
           }
           defaultDate={selectedDate}
+          currentUser={currentUser}
           onClose={() => setSelectedVenueForBooking(null)}
-          onSubmitBooking={(bookingData) => {
-            handleAddBooking(bookingData)
+          onSubmitBooking={async (bookingData) => {
+            return await handleAddBooking(bookingData)
           }}
         />
       )}
@@ -3905,6 +4086,7 @@ const OFFICIAL_COEP_ACCOUNTS = [
     password: 'Password@123',
     name: 'MindSpark Secretarial Lead',
     department: 'Technical Events Secretariat',
+    club_name: 'MindSpark',
     id: 'CLUB-MS-26'
   },
   {
@@ -4030,6 +4212,7 @@ export function LoginForm({ onLoginSuccess }) {
         email: matchedAccount.email,
         role: matchedAccount.role,
         department: matchedAccount.department,
+        club_name: matchedAccount.club_name || null,
         authProvider: 'password',
         authenticatedAt: new Date().toISOString()
       }
