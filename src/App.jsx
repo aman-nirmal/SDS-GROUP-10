@@ -35,8 +35,11 @@ import {
   Sparkles,
   Check,
   Sun,
-  Moon
+  Moon,
+  User
 } from 'lucide-react'
+import UserProfileModal from './components/UserProfileModal'
+import { INITIAL_ROLE_REQUESTS } from './components/admin/mockAdminData'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
 import About from './components/About';
@@ -2798,6 +2801,28 @@ export default function App() {
     }
   })
 
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const [roleRequests, setRoleRequests] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_admin_role_requests')
+      return stored ? JSON.parse(stored) : INITIAL_ROLE_REQUESTS
+    } catch {
+      return INITIAL_ROLE_REQUESTS
+    }
+  })
+
+  const handleUserSubmitRoleRequest = (newRequest) => {
+    setRoleRequests((prev) => {
+      const updated = [newRequest, ...prev]
+      try {
+        localStorage.setItem('locus_admin_role_requests', JSON.stringify(updated))
+      } catch {
+        // ignore
+      }
+      return updated
+    })
+  }
+
   const [selectedType, setSelectedType] = useState('All Venues')
   const [selectedDate, setSelectedDate] = useState('')
   const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
@@ -3701,6 +3726,15 @@ export default function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setIsProfileModalOpen(true)}
+                  className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                  title="Profile & Role Change Requests"
+                  aria-label="Profile and Role Change Requests"
+                >
+                  <User className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     setCurrentUser(null)
                     try {
@@ -3793,6 +3827,20 @@ export default function App() {
             >
               About
             </button>
+
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsProfileModalOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+              >
+                <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <span>Profile & Role Requests</span>
+              </button>
+            )}
 
             {currentUser && currentUser.role === 'Student' && (
               <button
@@ -4036,6 +4084,15 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* User Profile & Role Elevation Requests Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentUser={currentUser}
+        roleRequests={roleRequests}
+        onSubmitRequest={handleUserSubmitRoleRequest}
+      />
     </div>
   )
 }
