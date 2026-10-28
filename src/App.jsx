@@ -2937,8 +2937,10 @@ export default function App() {
       try {
         setIsLoadingVenues(true)
         const res = await venuesApi.getAll()
-        if (res.venues && res.venues.length > 0) {
-          setVenues(res.venues)
+        const venueList = res?.venues || (Array.isArray(res) ? res : [])
+        if (venueList.length > 0) {
+          setVenues(venueList)
+          setIsLoadingVenues(false)
           return
         }
       } catch (err) {
@@ -2975,15 +2977,20 @@ export default function App() {
       try {
         setIsLoadingEvents(true)
         const res = await eventsApi.getAll()
-        if (res.events && res.events.length > 0) {
-          setEvents(res.events)
+        const eventList = res?.events || (Array.isArray(res) ? res : [])
+        if (eventList.length > 0) {
+          setEvents(eventList)
+          setIsLoadingEvents(false)
           return
         }
       } catch (err) {
         console.warn('Backend events fetch failed, trying supabase/fallback:', err)
       }
 
-      if (!supabase) return
+      if (!supabase) {
+        setIsLoadingEvents(false)
+        return
+      }
 
       try {
         const { data, error } = await supabase

@@ -209,6 +209,7 @@ class DataStore {
             category: v.type || v.category || 'Classrooms',
             type: v.type || 'Classrooms',
             capacity: v.capacity || (v.benches ? v.benches * 2 : 60),
+            benches: v.benches || (v.capacity ? Math.floor(v.capacity / 2) : 30),
             status: v.status || 'Available',
             isActive: v.is_active !== false,
             features: Array.isArray(v.features) && v.features.length > 0 ? v.features : ['Air Conditioned', 'Projector'],
