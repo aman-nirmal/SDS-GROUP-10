@@ -122,7 +122,7 @@ const INITIAL_USERS = [
 ]
 
 // Initial campus reservation requests
-const INITIAL_BOOKINGS = [
+export const INITIAL_BOOKINGS = [
   {
     id: 'COEP-BK-8950',
     venueName: 'ND01 (North Drawing Hall)',

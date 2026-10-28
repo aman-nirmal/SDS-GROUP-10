@@ -39,7 +39,7 @@ import {
 } from 'lucide-react'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
 import { authApi } from './lib/api'
-import AdminPanel from './components/AdminPanel'
+import AdminPanel, { INITIAL_BOOKINGS } from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
 import FacultyPortal from './components/FacultyPortal'
 import StudentPortal from './components/StudentPortal'
@@ -414,12 +414,12 @@ export const classroomTimeSlots = [
 ]
 
 // Complete Interactive Venue Booking Modal Component with Full Venue Specs & Faculty In-Charge
-function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
+function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
   const [date, setDate] = useState(defaultDate || '2026-10-16')
   const [selectedSlot, setSelectedSlot] = useState('12:30 PM - 01:30 PM')
   const [showSchedule, setShowSchedule] = useState(false)
-  const [applicantName, setApplicantName] = useState('')
-  const [department, setDepartment] = useState(venue?.department || 'Computer Engineering')
+  const [applicantName, setApplicantName] = useState(currentUser?.name || '')
+  const [department, setDepartment] = useState(venue?.department || currentUser?.department || 'Computer Engineering')
   const [eventPurpose, setEventPurpose] = useState('')
   const [attendees, setAttendees] = useState(venue?.benches ? venue.benches * 2 : 50)
   const [submitted, setSubmitted] = useState(false)
@@ -441,17 +441,25 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
 
     if (onSubmitBooking) {
       onSubmitBooking({
+        id: refNumber,
         ref: refNumber,
         venueName: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
+        venue: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
         oldName: venue?.old_hall_name,
         department,
         applicantName,
+        applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
+        applicantRole: currentUser?.role || 'Student',
         date,
+        bookingDate: date,
         slot: selectedSlot,
+        timeSlot: selectedSlot,
         purpose: eventPurpose,
-        capacity: attendees,
+        capacity: Number(attendees) || 50,
+        attendees: Number(attendees) || 50,
         facultyInCharge: faculty.name,
-        status: 'Confirmed'
+        status: 'Pending',
+        submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       })
     }
   }
@@ -467,18 +475,18 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
       >
         {submitted ? (
           <div className="p-8 text-center py-10">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-xs">
+            <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-4 shadow-xs">
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
-            <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">
-              Reservation Confirmed
+            <span className="text-[11px] font-bold text-amber-600 uppercase tracking-widest block mb-1">
+              Forwarded to Faculty Review Queue
             </span>
             <h3 className="text-2xl font-black text-slate-900 mb-2">
-              Slot Reserved Successfully!
+              Sanction Request Logged!
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed max-w-md mx-auto">
-              Your venue reservation for <strong className="text-slate-900">{venueTitle}</strong> on{' '}
-              <strong className="text-slate-900">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been registered.
+              Your venue reservation request for <strong className="text-slate-900">{venueTitle}</strong> on{' '}
+              <strong className="text-slate-900">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the departmental faculty in-charge for review and sanction.
             </p>
 
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-left mb-6 space-y-3 max-w-lg mx-auto">
@@ -488,21 +496,21 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking }) {
               </div>
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 font-medium">Applicant:</span>
-                <span className="font-semibold text-slate-800">{applicantName}</span>
+                <span className="font-semibold text-slate-800">{applicantName} ({currentUser?.role || 'Student'})</span>
               </div>
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 font-medium">Department:</span>
                 <span className="font-semibold text-slate-800">{department}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Faculty In-Charge Notified:</span>
+                <span className="text-slate-500 font-medium">Faculty In-Charge Assigned:</span>
                 <span className="font-bold text-blue-700">{faculty.name} ({faculty.email})</span>
               </div>
               <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200/80">
                 <span className="text-slate-500 font-medium">Status:</span>
-                <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  Official Request Logged
+                <span className="inline-flex items-center gap-1.5 font-bold text-amber-600">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                  Pending Faculty Sanction
                 </span>
               </div>
             </div>
@@ -2839,6 +2847,15 @@ export default function App() {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [selectedVenueForBooking, setSelectedVenueForBooking] = useState(null)
 
+  const [campusBookings, setCampusBookings] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_admin_bookings')
+      return stored ? JSON.parse(stored) : INITIAL_BOOKINGS
+    } catch {
+      return INITIAL_BOOKINGS
+    }
+  })
+
   const [userBookings, setUserBookings] = useState([])
 
   const sampleEventsFallback = [
@@ -2980,7 +2997,31 @@ const handleNavClick = (tab) => {
   setIsMobileMenuOpen(false)
 }
 
+  const handleUpdateBookingStatus = (bookingId, newStatus) => {
+    setCampusBookings((prev) => {
+      const updated = prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
+      try {
+        localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+      } catch {
+        // ignore
+      }
+      return updated
+    })
+    setUserBookings((prev) =>
+      prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
+    )
+  }
+
   const handleAddBooking = (newBooking) => {
+    setCampusBookings((prev) => {
+      const updated = [newBooking, ...prev]
+      try {
+        localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+      } catch {
+        // ignore
+      }
+      return updated
+    })
     setUserBookings((prev) => [newBooking, ...prev])
   }
 
@@ -3045,7 +3086,7 @@ const handleNavClick = (tab) => {
       case 'my-bookings':
         return (
           <MyBookingsPage
-            bookings={userBookings}
+            bookings={campusBookings}
             onBackHome={() => setActiveTab('home')}
             onExploreVenues={() => setActiveTab('venues')}
           />
@@ -3132,6 +3173,9 @@ const handleNavClick = (tab) => {
           <FacultyPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
+            bookings={campusBookings}
+            onUpdateStatus={handleUpdateBookingStatus}
+            onAddBooking={handleAddBooking}
           />
         )
       case 'student':
@@ -3863,6 +3907,7 @@ const handleNavClick = (tab) => {
               }
           }
           defaultDate={selectedDate}
+          currentUser={currentUser}
           onClose={() => setSelectedVenueForBooking(null)}
           onSubmitBooking={(bookingData) => {
             handleAddBooking(bookingData)

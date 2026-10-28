@@ -1,44 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   GraduationCap,
   Plus,
   Trash2,
-  XCircle
+  XCircle,
+  CheckCircle2,
+  Clock,
+  Check,
+  X,
+  Inbox,
+  Calendar,
+  Users,
+  Building2,
+  AlertCircle
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { INITIAL_BOOKINGS } from './AdminPanel'
 
-const INITIAL_FACULTY_BOOKINGS = [
-  {
-    id: 'FAC-BK-101',
-    venue: 'ND01 (North Drawing Hall)',
-    purpose: 'End-Semester Department Research & Capstone Viva',
-    date: '2026-10-28',
-    timeSlot: '09:00 AM - 11:00 AM',
-    attendees: 120,
-    status: 'Confirmed'
-  },
-  {
-    id: 'FAC-BK-102',
-    venue: 'Computer Department Seminar Hall',
-    purpose: 'Guest Lecture: Scalable Deep Learning Architectures',
-    date: '2026-10-31',
-    timeSlot: '02:00 PM - 04:00 PM',
-    attendees: 80,
-    status: 'Confirmed'
-  },
-  {
-    id: 'FAC-BK-103',
-    venue: 'NC24 Classroom',
-    purpose: 'Special Remedial Lecture: Distributed Operating Systems',
-    date: '2026-11-04',
-    timeSlot: '04:00 PM - 06:00 PM',
-    attendees: 60,
-    status: 'Pending'
-  }
-]
+export default function FacultyPortal({
+  currentUser,
+  onNavigateLogin,
+  bookings: propBookings,
+  onUpdateStatus,
+  onAddBooking
+}) {
+  // Local bookings fallback if prop not provided
+  const [localBookings, setLocalBookings] = useState(() => {
+    if (propBookings && propBookings.length > 0) return propBookings
+    try {
+      const stored = localStorage.getItem('locus_admin_bookings')
+      return stored ? JSON.parse(stored) : INITIAL_BOOKINGS
+    } catch {
+      return INITIAL_BOOKINGS
+    }
+  })
 
-export default function FacultyPortal({ currentUser, onNavigateLogin }) {
-  const [bookings, setBookings] = useState(INITIAL_FACULTY_BOOKINGS)
+  // Keep local bookings in sync when propBookings updates
+  useEffect(() => {
+    if (propBookings && propBookings.length > 0) {
+      setLocalBookings(propBookings)
+    }
+  }, [propBookings])
+
+  const activeBookingsList = propBookings || localBookings
+
+  const [activeTab, setActiveTab] = useState('requests') // 'requests' | 'my-lectures'
+  const [filterDepartmentOnly, setFilterDepartmentOnly] = useState(true)
+  const [requestStatusFilter, setRequestStatusFilter] = useState('All') // 'All' | 'Pending' | 'Confirmed' | 'Rejected'
+  const [notification, setNotification] = useState(null)
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [form, setForm] = useState({
     venue: 'ND01 (North Drawing Hall)',
@@ -48,21 +58,77 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
     attendees: 60
   })
 
+  const showToast = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification(null), 4000)
+  }
+
+  // Handle approving or rejecting an incoming request
+  const handleUpdateStatus = (bookingId, newStatus) => {
+    if (onUpdateStatus) {
+      onUpdateStatus(bookingId, newStatus)
+    } else {
+      setLocalBookings((prev) => {
+        const updated = prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
+        try {
+          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+        } catch {
+          // ignore
+        }
+        return updated
+      })
+    }
+
+    const targetBooking = activeBookingsList.find((b) => b.id === bookingId)
+    const venueName = targetBooking?.venueName || targetBooking?.venue || 'Venue'
+
+    if (newStatus === 'Confirmed') {
+      showToast(`Sanctioned & Approved: ${venueName} for ${targetBooking?.applicantName || 'Student'}`, 'success')
+    } else if (newStatus === 'Rejected' || newStatus === 'Cancelled') {
+      showToast(`Declined request for ${venueName}`, 'warning')
+    }
+  }
+
+  // Handle creating a new faculty lecture booking
   const handleCreateBooking = (e) => {
     e.preventDefault()
     if (!form.purpose.trim()) return
 
+    const newId = `COEP-FAC-${Math.floor(1000 + Math.random() * 9000)}`
     const newBooking = {
-      id: `FAC-BK-${Math.floor(100 + Math.random() * 900)}`,
+      id: newId,
+      ref: newId,
+      venueName: form.venue,
       venue: form.venue,
+      applicantName: currentUser?.name || 'Dr. V. K. Kulkarni',
+      applicantEmail: currentUser?.email || 'faculty@coeptech.ac.in',
+      applicantRole: 'Faculty',
+      department: currentUser?.department || 'Computer Engineering',
       purpose: form.purpose,
+      bookingDate: form.date,
       date: form.date,
       timeSlot: form.timeSlot,
+      slot: form.timeSlot,
       attendees: Number(form.attendees),
-      status: 'Confirmed'
+      capacity: Number(form.attendees),
+      status: 'Confirmed',
+      submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
 
-    setBookings([newBooking, ...bookings])
+    if (onAddBooking) {
+      onAddBooking(newBooking)
+    } else {
+      setLocalBookings((prev) => {
+        const updated = [newBooking, ...prev]
+        try {
+          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+        } catch {
+          // ignore
+        }
+        return updated
+      })
+    }
+
     setIsModalOpen(false)
     setForm({
       venue: 'ND01 (North Drawing Hall)',
@@ -71,116 +137,390 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
       timeSlot: '10:00 AM - 12:00 PM',
       attendees: 60
     })
+    showToast(`Lecture Hall Reserved: ${form.venue}`, 'success')
   }
 
   const handleDelete = (id) => {
-    setBookings(bookings.filter((b) => b.id !== id))
+    handleUpdateStatus(id, 'Cancelled')
   }
+
+  // Department requests: requests submitted by students, clubs, or external applicants
+  const departmentRequests = activeBookingsList.filter((b) => {
+    const isStudentOrClub = b.applicantRole !== 'Faculty'
+    if (!isStudentOrClub) return false
+
+    if (filterDepartmentOnly && currentUser?.department) {
+      const deptMatches =
+        b.department?.toLowerCase() === currentUser.department.toLowerCase() ||
+        b.facultyInCharge?.toLowerCase().includes(currentUser.name?.toLowerCase()) ||
+        b.venueName?.toLowerCase().includes('computer')
+      return deptMatches
+    }
+    return true
+  })
+
+  // Pending count for badge
+  const pendingRequestsCount = departmentRequests.filter(
+    (b) => b.status === 'Pending' || b.status === 'Pending Sanction'
+  ).length
+
+  // Filtered requests by status
+  const filteredRequests = departmentRequests.filter((b) => {
+    if (requestStatusFilter === 'All') return true
+    if (requestStatusFilter === 'Pending') {
+      return b.status === 'Pending' || b.status === 'Pending Sanction'
+    }
+    return b.status === requestStatusFilter
+  })
+
+  // Faculty's own scheduled sessions
+  const facultyLectures = activeBookingsList.filter((b) => {
+    return (
+      b.applicantRole === 'Faculty' ||
+      b.applicantEmail === currentUser?.email ||
+      b.id?.startsWith('FAC-BK') ||
+      b.id?.startsWith('COEP-FAC')
+    )
+  })
 
   return (
     <ProtectedGate
       allowedRoles={['Faculty', 'Administrator']}
       portalName="Faculty Academic Portal"
-      portalDescription="Classroom and lecture hall scheduling for COEP faculty members."
+      portalDescription="Classroom, lab, and departmental venue clearances for COEP faculty members."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
       <div className="w-full min-h-screen bg-slate-50 text-slate-900 pb-16">
+        {/* Toast Notification */}
+        {notification && (
+          <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-2xl animate-in slide-in-from-top duration-200 border border-slate-700">
+            {notification.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-amber-400" />
+            )}
+            <span>{notification.message}</span>
+          </div>
+        )}
+
         {/* Header */}
         <div className="bg-white border-b border-slate-200">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200 mb-2">
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span>Faculty Workspace</span>
+                <span>Faculty & HOD Workspace</span>
               </div>
               <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                Academic Hall Reservations
+                Academic Hall Clearances & Reservations
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                 {currentUser?.name || 'Faculty Member'} • {currentUser?.department || 'Computer Engineering'}
               </p>
             </div>
 
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Reserve Lecture Hall</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation Tabs */}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-2 border-t border-slate-100">
             <button
               type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              onClick={() => setActiveTab('requests')}
+              className={`py-3.5 px-4 text-xs font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
+                activeTab === 'requests'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Reserve Lecture Hall</span>
+              <Inbox className="w-4 h-4" />
+              <span>Department Venue Requests</span>
+              {pendingRequestsCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white">
+                  {pendingRequestsCount} pending
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('my-lectures')}
+              className={`py-3.5 px-4 text-xs font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
+                activeTab === 'my-lectures'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>My Scheduled Lectures ({facultyLectures.length})</span>
             </button>
           </div>
         </div>
 
-        {/* Content Table */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-900">Scheduled Sessions ({bookings.length})</h2>
-                <p className="text-xs text-slate-500">Your upcoming lectures and department sessions.</p>
+        {/* Tab 1: Department Requests & Clearances */}
+        {activeTab === 'requests' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+            {/* Filter bar */}
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
+              <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-sm font-bold text-slate-900">
+                      Incoming Venue Sanctions ({filteredRequests.length})
+                    </h2>
+                    {pendingRequestsCount > 0 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        <Clock className="w-3 h-3" />
+                        {pendingRequestsCount} Pending Action
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Review and sanction student projects, technical clubs, and academic seminar reservations.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFilterDepartmentOnly(!filterDepartmentOnly)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                      filterDepartmentOnly
+                        ? 'bg-blue-50 text-blue-700 border-blue-200'
+                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    {filterDepartmentOnly ? `${currentUser?.department || 'My Department'} Only` : 'All Departments'}
+                  </button>
+
+                  <div className="flex items-center rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+                    {['All', 'Pending', 'Confirmed', 'Rejected'].map((status) => (
+                      <button
+                        key={status}
+                        type="button"
+                        onClick={() => setRequestStatusFilter(status)}
+                        className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-colors cursor-pointer ${
+                          requestStatusFilter === status
+                            ? 'bg-white text-slate-900 shadow-2xs'
+                            : 'text-slate-500 hover:text-slate-900'
+                        }`}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th className="py-3 px-4">Booking Ref</th>
+                      <th className="py-3 px-4">Requested Venue</th>
+                      <th className="py-3 px-4">Applicant & Role</th>
+                      <th className="py-3 px-4">Event Purpose</th>
+                      <th className="py-3 px-4">Date & Slot</th>
+                      <th className="py-3 px-4">Attendees</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Faculty Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredRequests.map((b) => {
+                      const isPending = b.status === 'Pending' || b.status === 'Pending Sanction'
+                      const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
+                      const isRejected = b.status === 'Rejected' || b.status === 'Cancelled'
+
+                      return (
+                        <tr key={b.id || b.ref} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
+                            {b.id || b.ref}
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-slate-900">{b.venueName || b.venue}</div>
+                            <div className="text-[11px] text-slate-500">{b.department || 'COEP Tech'}</div>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <div className="font-semibold text-slate-800">{b.applicantName || 'Student'}</div>
+                            <div className="text-[11px] text-slate-400">
+                              <span className="inline-block px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium mr-1">
+                                {b.applicantRole || 'Student'}
+                              </span>
+                              {b.applicantEmail}
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-700 max-w-xs truncate" title={b.purpose}>
+                            {b.purpose}
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <div className="font-medium text-slate-800">{b.bookingDate || b.date}</div>
+                            <div className="text-[11px] text-slate-500">{b.timeSlot || b.slot}</div>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-600 font-medium">
+                            {b.attendees || b.capacity || 50} pax
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`px-2.5 py-1 rounded-full text-[10px] font-bold inline-flex items-center gap-1 ${
+                                isConfirmed
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : isPending
+                                  ? 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse'
+                                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              }`}
+                            >
+                              {isConfirmed && <Check className="w-3 h-3" />}
+                              {isPending && <Clock className="w-3 h-3" />}
+                              {isRejected && <X className="w-3 h-3" />}
+                              {b.status}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            {isPending ? (
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateStatus(b.id || b.ref, 'Confirmed')}
+                                  className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+                                  title="Approve and Sanction Venue"
+                                >
+                                  <Check className="w-3.5 h-3.5" />
+                                  <span>Approve</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateStatus(b.id || b.ref, 'Rejected')}
+                                  className="px-2 py-1.5 rounded-lg border border-rose-300 hover:bg-rose-50 text-rose-600 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                                  title="Reject Request"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                  <span>Reject</span>
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-end gap-1 text-[11px] text-slate-400 font-medium">
+                                <span>Sanction complete</span>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                    {filteredRequests.length === 0 && (
+                      <tr>
+                        <td colSpan={8} className="py-12 text-center text-slate-400">
+                          <Inbox className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                          <p className="font-semibold text-slate-600">No requests found in this view.</p>
+                          <p className="text-xs text-slate-400 mt-1">
+                            {filterDepartmentOnly
+                              ? 'Try clicking "All Departments" to see all campus booking requests.'
+                              : 'New student submissions will appear here automatically.'}
+                          </p>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
+          </div>
+        )}
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-                  <tr>
-                    <th className="py-3 px-4">Booking ID</th>
-                    <th className="py-3 px-4">Venue</th>
-                    <th className="py-3 px-4">Subject / Purpose</th>
-                    <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Slot</th>
-                    <th className="py-3 px-4">Class Size</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {bookings.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{b.id}</td>
-                      <td className="py-3.5 px-4 font-semibold text-slate-800">{b.venue}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{b.purpose}</td>
-                      <td className="py-3.5 px-4 font-medium text-slate-600">{b.date}</td>
-                      <td className="py-3.5 px-4 font-medium text-slate-600">{b.timeSlot}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{b.attendees} students</td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                            b.status === 'Confirmed'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-amber-50 text-amber-700 border border-amber-200'
-                          }`}
-                        >
-                          {b.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(b.id)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                          title="Cancel Reservation"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {bookings.length === 0 && (
+        {/* Tab 2: Faculty Scheduled Lectures */}
+        {activeTab === 'my-lectures' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
+              <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900">
+                    My Scheduled Lectures & Labs ({facultyLectures.length})
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Your scheduled academic classes, research evaluations, and departmental lectures.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Lecture</span>
+                </button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
                     <tr>
-                      <td colSpan={8} className="py-8 text-center text-slate-400">
-                        No active lecture hall reservations.
-                      </td>
+                      <th className="py-3 px-4">Booking ID</th>
+                      <th className="py-3 px-4">Venue</th>
+                      <th className="py-3 px-4">Subject / Purpose</th>
+                      <th className="py-3 px-4">Date</th>
+                      <th className="py-3 px-4">Slot</th>
+                      <th className="py-3 px-4">Class Size</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {facultyLectures.map((b) => (
+                      <tr key={b.id} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{b.id}</td>
+                        <td className="py-3.5 px-4 font-semibold text-slate-800">{b.venueName || b.venue}</td>
+                        <td className="py-3.5 px-4 text-slate-600">{b.purpose}</td>
+                        <td className="py-3.5 px-4 font-medium text-slate-600">{b.bookingDate || b.date}</td>
+                        <td className="py-3.5 px-4 font-medium text-slate-600">{b.timeSlot || b.slot}</td>
+                        <td className="py-3.5 px-4 text-slate-600">{b.attendees} students</td>
+                        <td className="py-3.5 px-4">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                              b.status === 'Confirmed'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}
+                          >
+                            {b.status}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(b.id)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                            title="Cancel Reservation"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {facultyLectures.length === 0 && (
+                      <tr>
+                        <td colSpan={8} className="py-8 text-center text-slate-400">
+                          No active lecture hall reservations.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Modal: Reserve Hall */}
         {isModalOpen && (
@@ -210,7 +550,9 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                     <option value="ND01 (North Drawing Hall)">ND01 (North Drawing Hall)</option>
                     <option value="Computer Department Seminar Hall">Computer Department Seminar Hall</option>
                     <option value="NC24 Smart Classroom">NC24 Smart Classroom</option>
-                    <option value="BHAU Auditorium">BHAU Auditorium</option>
+                    <option value="Auditorium (Bhau Institute)">Auditorium (Bhau Institute)</option>
+                    <option value="Conference Room (Bhau Institute)">Conference Room (Bhau Institute)</option>
+                    <option value="Classroom 1 (Bhau Institute)">Classroom 1 (Bhau Institute)</option>
                   </select>
                 </div>
 
@@ -253,6 +595,7 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                     >
                       <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                       <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                      <option value="12:30 PM - 01:30 PM">12:30 PM - 01:30 PM</option>
                       <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
                       <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
                     </select>
@@ -265,7 +608,7 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                   </label>
                   <input
                     type="number"
-                    min="1"
+                    min="5"
                     max="300"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
@@ -277,15 +620,15 @@ export default function FacultyPortal({ currentUser, onNavigateLogin }) {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700 cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer shadow-sm"
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer"
                   >
-                    Confirm Reservation
+                    Confirm Lecture
                   </button>
                 </div>
               </form>
