@@ -1256,7 +1256,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           <select
                             value={user.role}
                             onChange={(e) => handleChangeUserRole(user.id, e.target.value)}
-                            className={`px-2 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors ${
+                            className={`pl-2.5 pr-7 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors select-compact ${
                               user.role === 'Administrator'
                                 ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
                                 : user.role === 'Faculty'
@@ -1406,7 +1406,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <select
                   value={bookingStatusFilter}
                   onChange={(e) => setBookingStatusFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
+                  className="h-9 pl-3 pr-8.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
                 >
                   <option value="All">All ({bookings.length})</option>
                   <option value="Pending">Pending ({stats.pendingBookings})</option>
@@ -1723,7 +1723,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   <select
                     value={newUserForm.role}
                     onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
+                    className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
                   >
                     <option value="Administrator">Administrator</option>
                     <option value="Faculty">Faculty</option>
