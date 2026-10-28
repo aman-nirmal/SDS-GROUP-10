@@ -670,44 +670,63 @@ class DataStore {
 
     if (supabase) {
       try {
-        const { data, error } = await supabase.from('profiles').select('*')
-        if (!error && data && data.length > 0) {
-          const mapTierToRole = (tier) => {
-            if (!tier) return 'Student'
-            const t = tier.toLowerCase()
-            if (t.includes('admin') || t.includes('site')) return 'Administrator'
-            if (t.includes('faculty') || t.includes('prof') || t.includes('teacher')) return 'Faculty'
-            if (t.includes('club') || t.includes('org') || t.includes('sec')) return 'Club Lead'
-            return 'Student'
-          }
+        const [usersRes, profilesRes] = await Promise.all([
+          supabase.from('users').select('*'),
+          supabase.from('profiles').select('*')
+        ])
 
-          const profileUsers = data.map((p) => ({
-            id: p.id,
-            name: p.full_name || p.email.split('@')[0],
-            email: p.email,
-            role: mapTierToRole(p.role_tier),
-            roleTier: p.role_tier,
-            department: p.department || 'Academics Complex',
-            status: 'Active',
-            lastActive: p.created_at ? p.created_at.slice(0, 10) : 'Active',
-            createdAt: p.created_at ? p.created_at.slice(0, 10) : '2026-10-20'
-          }))
-
-          // Merge with this.users ensuring uniqueness by email
-          const emailMap = new Map()
-          for (const u of profileUsers) {
-            emailMap.set(u.email.toLowerCase().trim(), u)
-          }
-          for (const u of this.users) {
-            const key = u.email.toLowerCase().trim()
-            if (!emailMap.has(key)) {
-              emailMap.set(key, u)
-            }
-          }
-          combinedUsers = Array.from(emailMap.values())
+        const mapTierToRole = (tier) => {
+          if (!tier) return 'Student'
+          const t = tier.toLowerCase()
+          if (t.includes('admin') || t.includes('site')) return 'Administrator'
+          if (t.includes('faculty') || t.includes('prof') || t.includes('teacher')) return 'Faculty'
+          if (t.includes('club') || t.includes('org') || t.includes('sec')) return 'Club Lead'
+          return 'Student'
         }
+
+        const emailMap = new Map()
+
+        // 1. In-memory defaults
+        for (const u of this.users) {
+          emailMap.set(u.email.toLowerCase().trim(), u)
+        }
+
+        // 2. Supabase direct users table (1,479+ students and campus directory)
+        if (!usersRes.error && usersRes.data) {
+          for (const u of usersRes.data) {
+            emailMap.set(u.email.toLowerCase().trim(), {
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              role: u.role || 'Student',
+              department: u.department || 'General Academic',
+              status: u.is_active === false ? 'Suspended' : 'Active',
+              lastActive: u.created_at ? u.created_at.slice(0, 10) : 'Active',
+              createdAt: u.created_at ? u.created_at.slice(0, 10) : '2026-10-20'
+            })
+          }
+        }
+
+        // 3. Supabase profiles (faculty/admin/coordinators)
+        if (!profilesRes.error && profilesRes.data) {
+          for (const p of profilesRes.data) {
+            emailMap.set(p.email.toLowerCase().trim(), {
+              id: p.id,
+              name: p.full_name || p.email.split('@')[0],
+              email: p.email,
+              role: mapTierToRole(p.role_tier),
+              roleTier: p.role_tier,
+              department: p.department || 'Academics Complex',
+              status: 'Active',
+              lastActive: p.created_at ? p.created_at.slice(0, 10) : 'Active',
+              createdAt: p.created_at ? p.created_at.slice(0, 10) : '2026-10-20'
+            })
+          }
+        }
+
+        combinedUsers = Array.from(emailMap.values())
       } catch (err) {
-        console.warn('[Supabase] profiles query failed, falling back to local store:', err.message)
+        console.warn('[Supabase] users/profiles query failed, falling back to local store:', err.message)
       }
     }
 
