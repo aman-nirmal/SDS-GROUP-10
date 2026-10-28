@@ -221,8 +221,11 @@ export default function FacultyPortal({
                       : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                   }`}
                 >
-                  {/* Card Header (Summary Row) */}
-                  <div className="p-5 sm:p-6">
+                  {/* Card Header (Clickable Summary Row) */}
+                  <div
+                    onClick={() => toggleExpand(bookingId)}
+                    className="p-5 sm:p-6 cursor-pointer hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors select-none"
+                  >
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start lg:items-center">
                       {/* Left: Metadata, Venue, and Purpose preview */}
                       <div className="lg:col-span-7 space-y-2">
@@ -288,7 +291,10 @@ export default function FacultyPortal({
 
                         <button
                           type="button"
-                          onClick={() => toggleExpand(bookingId)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleExpand(bookingId)
+                          }}
                           className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 pt-1 cursor-pointer transition-colors"
                         >
                           <span>{isExpanded ? 'Hide Details' : 'Review Details'}</span>
