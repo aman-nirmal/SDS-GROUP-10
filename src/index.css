@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-slate-850: #151d2f;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -155,3 +159,20 @@
 }
 
 
+
+/* Additional dark mode utility overrides ensuring no glaring white elements */
+.dark .bg-white {
+  background-color: #101726;
+  color: #f1f5f9;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-50\/75,
+.dark .bg-slate-50\/80,
+.dark .bg-slate-100\/75 {
+  background-color: #151d2f;
+}
+
+.dark .bg-slate-850 {
+  background-color: #151d2f;
+}

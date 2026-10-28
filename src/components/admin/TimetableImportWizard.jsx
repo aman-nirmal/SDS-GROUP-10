@@ -421,7 +421,7 @@ export default function TimetableImportWizard({
         </div>
 
         {/* Step Indicator Bar */}
-        <div className="bg-slate-50 dark:bg-slate-850 px-5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs">
+        <div className="bg-slate-50 dark:bg-slate-800/80 px-5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs">
           {['1. Upload', '2. Mapping', '3. Preview', '4. Confirm', '5. Done'].map((stepName, i) => {
             const stepNum = i + 1
             const isCompleted = stepNum < currentStep
@@ -466,7 +466,7 @@ export default function TimetableImportWizard({
                 className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all ${
                   isDragging
                     ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/30'
-                    : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 bg-slate-50/50 dark:bg-slate-850/50'
+                    : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 bg-slate-50/50 dark:bg-slate-900/50'
                 }`}
               >
                 <UploadCloud className="w-12 h-12 text-blue-500 mx-auto mb-3" />
@@ -502,7 +502,7 @@ export default function TimetableImportWizard({
               )}
 
               {file && (
-                <div className="p-4 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <div className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center shrink-0">
                       <FileSpreadsheet className="w-5 h-5" />
@@ -538,7 +538,7 @@ export default function TimetableImportWizard({
             <div className="space-y-4">
               {/* Sheet selector */}
               {workbook && workbook.SheetNames.length > 1 && (
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3">
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <Layers className="w-4 h-4 text-blue-500" />
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
@@ -579,7 +579,7 @@ export default function TimetableImportWizard({
                 {REQUIRED_FIELDS.map((field) => (
                   <div
                     key={field.key}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-1.5"
+                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 space-y-1.5"
                   >
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-900 dark:text-white">
@@ -648,7 +648,7 @@ export default function TimetableImportWizard({
               <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
                 <div className="overflow-x-auto max-h-[380px]">
                   <table className="w-full text-left text-xs border-collapse">
-                    <thead className="bg-slate-50 dark:bg-slate-850 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                    <thead className="bg-slate-100/75 dark:bg-slate-800/70 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-700 text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                       <tr>
                         <th className="p-3 text-center">Include</th>
                         <th className="p-3">Status</th>
@@ -664,8 +664,8 @@ export default function TimetableImportWizard({
                         return (
                           <tr
                             key={r.rowIndex}
-                            className={`hover:bg-slate-50/60 dark:hover:bg-slate-850/60 transition-colors ${
-                              r.isExcluded ? 'opacity-40 bg-slate-100/50 dark:bg-slate-850/30' : ''
+                            className={`hover:bg-slate-50/60 dark:hover:bg-slate-800/60 transition-colors ${
+                              r.isExcluded ? 'opacity-40 bg-slate-100/50 dark:bg-slate-900/40' : ''
                             }`}
                           >
                             <td className="p-3 text-center">
@@ -822,21 +822,21 @@ export default function TimetableImportWizard({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg mx-auto text-left">
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800">
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">Schedules Imported</span>
                   <div className="text-xl font-black text-emerald-600 dark:text-emerald-400">
                     {importSummary.importedCount}
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800">
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">Records Skipped</span>
                   <div className="text-xl font-black text-slate-700 dark:text-slate-300">
                     {importSummary.skippedCount}
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800">
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">Conflicts Flagged</span>
                   <div className="text-xl font-black text-amber-600 dark:text-amber-400">
                     {importSummary.conflictsCount}
@@ -859,7 +859,7 @@ export default function TimetableImportWizard({
         </div>
 
         {/* Wizard Footer Navigation */}
-        <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+        <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
           {currentStep > 1 && currentStep < 5 ? (
             <button
               type="button"

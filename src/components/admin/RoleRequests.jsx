@@ -306,7 +306,7 @@ export default function RoleRequests({
                     </div>
 
                     {/* Justification quote */}
-                    <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-850 p-3 rounded-xl border border-slate-200/70 dark:border-slate-800 leading-relaxed">
+                    <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/70 dark:border-slate-800 leading-relaxed">
                       <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 flex items-center gap-1">
                         <FileText className="w-3 h-3" />
                         <span>Applicant Justification</span>
@@ -424,7 +424,7 @@ export default function RoleRequests({
 
             <div className="p-5 space-y-4 overflow-y-auto max-h-[75vh]">
               {/* Applicant Card */}
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-2">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-sm text-slate-900 dark:text-white">
@@ -489,7 +489,7 @@ export default function RoleRequests({
             </div>
 
             {/* Modal Actions */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={() => setSelectedRequest(null)}
@@ -555,7 +555,7 @@ export default function RoleRequests({
               </div>
             </div>
 
-            <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-850 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1">
+            <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1">
               <div>
                 Target User: <strong className="text-slate-900 dark:text-white">{actionConfirm.request.userName}</strong> ({actionConfirm.request.userEmail})
               </div>
