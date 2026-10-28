@@ -8,7 +8,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0002",
@@ -19,7 +20,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0003",
@@ -30,7 +32,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0004",
@@ -41,7 +44,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0005",
@@ -52,7 +56,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0006",
@@ -63,7 +68,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0007",
@@ -74,7 +80,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0008",
@@ -85,7 +92,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0009",
@@ -96,7 +104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0010",
@@ -107,7 +116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0011",
@@ -118,7 +128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0012",
@@ -129,7 +140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0013",
@@ -140,7 +152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0014",
@@ -151,7 +164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0015",
@@ -162,7 +176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0016",
@@ -173,7 +188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0017",
@@ -184,7 +200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0018",
@@ -195,7 +212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0019",
@@ -206,7 +224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0020",
@@ -217,7 +236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0021",
@@ -228,7 +248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0022",
@@ -239,7 +260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0023",
@@ -250,7 +272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0024",
@@ -261,7 +284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0025",
@@ -272,7 +296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0026",
@@ -283,7 +308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0027",
@@ -294,7 +320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0028",
@@ -305,7 +332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0029",
@@ -316,7 +344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0030",
@@ -327,7 +356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0031",
@@ -338,7 +368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0032",
@@ -349,7 +380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0033",
@@ -360,7 +392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0034",
@@ -371,7 +404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0035",
@@ -382,7 +416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0036",
@@ -393,7 +428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0037",
@@ -404,7 +440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0038",
@@ -415,7 +452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0039",
@@ -426,7 +464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0040",
@@ -437,7 +476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0041",
@@ -448,7 +488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0042",
@@ -459,7 +500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0043",
@@ -470,7 +512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0044",
@@ -481,7 +524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0045",
@@ -492,7 +536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0046",
@@ -503,7 +548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0047",
@@ -514,7 +560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0048",
@@ -525,7 +572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0049",
@@ -536,7 +584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0050",
@@ -547,7 +596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0051",
@@ -558,7 +608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0052",
@@ -569,7 +620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0053",
@@ -580,7 +632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0054",
@@ -591,7 +644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0055",
@@ -602,7 +656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0056",
@@ -613,7 +668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0057",
@@ -624,7 +680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0058",
@@ -635,7 +692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0059",
@@ -646,7 +704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0060",
@@ -657,7 +716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0061",
@@ -668,7 +728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0062",
@@ -679,7 +740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0063",
@@ -690,7 +752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0064",
@@ -701,7 +764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0065",
@@ -712,7 +776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0066",
@@ -723,7 +788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0067",
@@ -734,7 +800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0068",
@@ -745,7 +812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0069",
@@ -756,7 +824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0070",
@@ -767,7 +836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0071",
@@ -778,7 +848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0072",
@@ -789,7 +860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0073",
@@ -800,7 +872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0074",
@@ -811,7 +884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0075",
@@ -822,7 +896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0076",
@@ -833,7 +908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0077",
@@ -844,7 +920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0078",
@@ -855,7 +932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0079",
@@ -866,7 +944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0080",
@@ -877,7 +956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0081",
@@ -888,7 +968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0082",
@@ -899,7 +980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0083",
@@ -910,7 +992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0084",
@@ -921,7 +1004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0085",
@@ -932,7 +1016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0086",
@@ -943,7 +1028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0087",
@@ -954,7 +1040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0088",
@@ -965,7 +1052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0089",
@@ -976,7 +1064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0090",
@@ -987,7 +1076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0091",
@@ -998,7 +1088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0092",
@@ -1009,7 +1100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0093",
@@ -1020,7 +1112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0094",
@@ -1031,7 +1124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0095",
@@ -1042,7 +1136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0096",
@@ -1053,7 +1148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0097",
@@ -1064,7 +1160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0098",
@@ -1075,7 +1172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0099",
@@ -1086,7 +1184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0100",
@@ -1097,7 +1196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0101",
@@ -1108,7 +1208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0102",
@@ -1119,7 +1220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0103",
@@ -1130,7 +1232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0104",
@@ -1141,7 +1244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0105",
@@ -1152,7 +1256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0106",
@@ -1163,7 +1268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0107",
@@ -1174,7 +1280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0108",
@@ -1185,7 +1292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0109",
@@ -1196,7 +1304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0110",
@@ -1207,7 +1316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0111",
@@ -1218,7 +1328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0112",
@@ -1229,7 +1340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0113",
@@ -1240,7 +1352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0114",
@@ -1251,7 +1364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0115",
@@ -1262,7 +1376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0116",
@@ -1273,7 +1388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0117",
@@ -1284,7 +1400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0118",
@@ -1295,7 +1412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0119",
@@ -1306,7 +1424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0120",
@@ -1317,7 +1436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0121",
@@ -1328,7 +1448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0122",
@@ -1339,7 +1460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0123",
@@ -1350,7 +1472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0124",
@@ -1361,7 +1484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0125",
@@ -1372,7 +1496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0126",
@@ -1383,7 +1508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0127",
@@ -1394,7 +1520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0128",
@@ -1405,7 +1532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0129",
@@ -1416,7 +1544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0130",
@@ -1427,7 +1556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0131",
@@ -1438,7 +1568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0132",
@@ -1449,7 +1580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0133",
@@ -1460,7 +1592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0134",
@@ -1471,7 +1604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0135",
@@ -1482,7 +1616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0136",
@@ -1493,7 +1628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0137",
@@ -1504,7 +1640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0138",
@@ -1515,7 +1652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0139",
@@ -1526,7 +1664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0140",
@@ -1537,7 +1676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0141",
@@ -1548,7 +1688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0142",
@@ -1559,7 +1700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0143",
@@ -1570,7 +1712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0144",
@@ -1581,7 +1724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0145",
@@ -1592,7 +1736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0146",
@@ -1603,7 +1748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0147",
@@ -1614,7 +1760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0148",
@@ -1625,7 +1772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0149",
@@ -1636,7 +1784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0150",
@@ -1647,7 +1796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0151",
@@ -1658,7 +1808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0152",
@@ -1669,7 +1820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0153",
@@ -1680,7 +1832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0154",
@@ -1691,7 +1844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0155",
@@ -1702,7 +1856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0156",
@@ -1713,7 +1868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0157",
@@ -1724,7 +1880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0158",
@@ -1735,7 +1892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0159",
@@ -1746,7 +1904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0160",
@@ -1757,7 +1916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0161",
@@ -1768,7 +1928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0162",
@@ -1779,7 +1940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0163",
@@ -1790,7 +1952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0164",
@@ -1801,7 +1964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0165",
@@ -1812,7 +1976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0166",
@@ -1823,7 +1988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0167",
@@ -1834,7 +2000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0168",
@@ -1845,7 +2012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0169",
@@ -1856,7 +2024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0170",
@@ -1867,7 +2036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0171",
@@ -1878,7 +2048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0172",
@@ -1889,7 +2060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0173",
@@ -1900,7 +2072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0174",
@@ -1911,7 +2084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0175",
@@ -1922,7 +2096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0176",
@@ -1933,7 +2108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0177",
@@ -1944,7 +2120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0178",
@@ -1955,7 +2132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0179",
@@ -1966,7 +2144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0180",
@@ -1977,7 +2156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0181",
@@ -1988,7 +2168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0182",
@@ -1999,7 +2180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0183",
@@ -2010,7 +2192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0184",
@@ -2021,7 +2204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0185",
@@ -2032,7 +2216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0186",
@@ -2043,7 +2228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0187",
@@ -2054,7 +2240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0188",
@@ -2065,7 +2252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0189",
@@ -2076,7 +2264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0190",
@@ -2087,7 +2276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0191",
@@ -2098,7 +2288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0192",
@@ -2109,7 +2300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0193",
@@ -2120,7 +2312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0194",
@@ -2131,7 +2324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0195",
@@ -2142,7 +2336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0196",
@@ -2153,7 +2348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0197",
@@ -2164,7 +2360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0198",
@@ -2175,7 +2372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0199",
@@ -2186,7 +2384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0200",
@@ -2197,7 +2396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0201",
@@ -2208,7 +2408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0202",
@@ -2219,7 +2420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0203",
@@ -2230,7 +2432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0204",
@@ -2241,7 +2444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0205",
@@ -2252,7 +2456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0206",
@@ -2263,7 +2468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0207",
@@ -2274,7 +2480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0208",
@@ -2285,7 +2492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0209",
@@ -2296,7 +2504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0210",
@@ -2307,7 +2516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0211",
@@ -2318,7 +2528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0212",
@@ -2329,7 +2540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0213",
@@ -2340,7 +2552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0214",
@@ -2351,7 +2564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0215",
@@ -2362,7 +2576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0216",
@@ -2373,7 +2588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0217",
@@ -2384,7 +2600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0218",
@@ -2395,7 +2612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0219",
@@ -2406,7 +2624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0220",
@@ -2417,7 +2636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0221",
@@ -2428,7 +2648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0222",
@@ -2439,7 +2660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0223",
@@ -2450,7 +2672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0224",
@@ -2461,7 +2684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0225",
@@ -2472,7 +2696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0226",
@@ -2483,7 +2708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0227",
@@ -2494,7 +2720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0228",
@@ -2505,7 +2732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0229",
@@ -2516,7 +2744,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0230",
@@ -2527,7 +2756,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0231",
@@ -2538,7 +2768,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0232",
@@ -2549,7 +2780,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0233",
@@ -2560,7 +2792,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0234",
@@ -2571,7 +2804,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0235",
@@ -2582,7 +2816,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0236",
@@ -2593,7 +2828,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0237",
@@ -2604,7 +2840,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0238",
@@ -2615,7 +2852,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0239",
@@ -2626,7 +2864,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0240",
@@ -2637,7 +2876,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0241",
@@ -2648,7 +2888,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0242",
@@ -2659,7 +2900,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0243",
@@ -2670,7 +2912,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0244",
@@ -2681,7 +2924,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0245",
@@ -2692,7 +2936,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0246",
@@ -2703,7 +2948,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0247",
@@ -2714,7 +2960,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0248",
@@ -2725,7 +2972,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0249",
@@ -2736,7 +2984,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0250",
@@ -2747,7 +2996,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0251",
@@ -2758,7 +3008,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0252",
@@ -2769,7 +3020,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0253",
@@ -2780,7 +3032,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0254",
@@ -2791,7 +3044,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0255",
@@ -2802,7 +3056,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0256",
@@ -2813,7 +3068,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0257",
@@ -2824,7 +3080,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0258",
@@ -2835,7 +3092,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0259",
@@ -2846,7 +3104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0260",
@@ -2857,7 +3116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0261",
@@ -2868,7 +3128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0262",
@@ -2879,7 +3140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0263",
@@ -2890,7 +3152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0264",
@@ -2901,7 +3164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0265",
@@ -2912,7 +3176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0266",
@@ -2923,7 +3188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0267",
@@ -2934,7 +3200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0268",
@@ -2945,7 +3212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0269",
@@ -2956,7 +3224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0270",
@@ -2967,7 +3236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0271",
@@ -2978,7 +3248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0272",
@@ -2989,7 +3260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0273",
@@ -3000,7 +3272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0274",
@@ -3011,7 +3284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0275",
@@ -3022,7 +3296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0276",
@@ -3033,7 +3308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0277",
@@ -3044,7 +3320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0278",
@@ -3055,7 +3332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0279",
@@ -3066,7 +3344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0280",
@@ -3077,7 +3356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0281",
@@ -3088,7 +3368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0282",
@@ -3099,7 +3380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0283",
@@ -3110,7 +3392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0284",
@@ -3121,7 +3404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0285",
@@ -3132,7 +3416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0286",
@@ -3143,7 +3428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0287",
@@ -3154,7 +3440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0288",
@@ -3165,7 +3452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0289",
@@ -3176,7 +3464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0290",
@@ -3187,7 +3476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0291",
@@ -3198,7 +3488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0292",
@@ -3209,7 +3500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0293",
@@ -3220,7 +3512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0294",
@@ -3231,7 +3524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0295",
@@ -3242,7 +3536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0296",
@@ -3253,7 +3548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0297",
@@ -3264,7 +3560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0298",
@@ -3275,7 +3572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0299",
@@ -3286,7 +3584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0300",
@@ -3297,7 +3596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0301",
@@ -3308,7 +3608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0302",
@@ -3319,7 +3620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0303",
@@ -3330,7 +3632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0304",
@@ -3341,7 +3644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0305",
@@ -3352,7 +3656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0306",
@@ -3363,7 +3668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0307",
@@ -3374,7 +3680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0308",
@@ -3385,7 +3692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0309",
@@ -3396,7 +3704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0310",
@@ -3407,7 +3716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0311",
@@ -3418,7 +3728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0312",
@@ -3429,7 +3740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0313",
@@ -3440,7 +3752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0314",
@@ -3451,7 +3764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0315",
@@ -3462,7 +3776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0316",
@@ -3473,7 +3788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0317",
@@ -3484,7 +3800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0318",
@@ -3495,7 +3812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0319",
@@ -3506,7 +3824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0320",
@@ -3517,7 +3836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0321",
@@ -3528,7 +3848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0322",
@@ -3539,7 +3860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0323",
@@ -3550,7 +3872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0324",
@@ -3561,7 +3884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0325",
@@ -3572,7 +3896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0326",
@@ -3583,7 +3908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0327",
@@ -3594,7 +3920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0328",
@@ -3605,7 +3932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0329",
@@ -3616,7 +3944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0330",
@@ -3627,7 +3956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0331",
@@ -3638,7 +3968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0332",
@@ -3649,7 +3980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0333",
@@ -3660,7 +3992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0334",
@@ -3671,7 +4004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0335",
@@ -3682,7 +4016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0336",
@@ -3693,7 +4028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0337",
@@ -3704,7 +4040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0338",
@@ -3715,7 +4052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0339",
@@ -3726,7 +4064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0340",
@@ -3737,7 +4076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0341",
@@ -3748,7 +4088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0342",
@@ -3759,7 +4100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0343",
@@ -3770,7 +4112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0344",
@@ -3781,7 +4124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0345",
@@ -3792,7 +4136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0346",
@@ -3803,7 +4148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0347",
@@ -3814,7 +4160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0348",
@@ -3825,7 +4172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0349",
@@ -3836,7 +4184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0350",
@@ -3847,7 +4196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0351",
@@ -3858,7 +4208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0352",
@@ -3869,7 +4220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0353",
@@ -3880,7 +4232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0354",
@@ -3891,7 +4244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0355",
@@ -3902,7 +4256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0356",
@@ -3913,7 +4268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0357",
@@ -3924,7 +4280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0358",
@@ -3935,7 +4292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0359",
@@ -3946,7 +4304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0360",
@@ -3957,7 +4316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0361",
@@ -3968,7 +4328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0362",
@@ -3979,7 +4340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0363",
@@ -3990,7 +4352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0364",
@@ -4001,7 +4364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0365",
@@ -4012,7 +4376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0366",
@@ -4023,7 +4388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0367",
@@ -4034,7 +4400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0368",
@@ -4045,7 +4412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0369",
@@ -4056,7 +4424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0370",
@@ -4067,7 +4436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0371",
@@ -4078,7 +4448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0372",
@@ -4089,7 +4460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0373",
@@ -4100,7 +4472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0374",
@@ -4111,7 +4484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0375",
@@ -4122,7 +4496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0376",
@@ -4133,7 +4508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0377",
@@ -4144,7 +4520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0378",
@@ -4155,7 +4532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0379",
@@ -4166,7 +4544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0380",
@@ -4177,7 +4556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0381",
@@ -4188,7 +4568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0382",
@@ -4199,7 +4580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0383",
@@ -4210,7 +4592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0384",
@@ -4221,7 +4604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0385",
@@ -4232,7 +4616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0386",
@@ -4243,7 +4628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0387",
@@ -4254,7 +4640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0388",
@@ -4265,7 +4652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0389",
@@ -4276,7 +4664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0390",
@@ -4287,7 +4676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0391",
@@ -4298,7 +4688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0392",
@@ -4309,7 +4700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0393",
@@ -4320,7 +4712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0394",
@@ -4331,7 +4724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0395",
@@ -4342,7 +4736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0396",
@@ -4353,7 +4748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0397",
@@ -4364,7 +4760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0398",
@@ -4375,7 +4772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0399",
@@ -4386,7 +4784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0400",
@@ -4397,7 +4796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0401",
@@ -4408,7 +4808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0402",
@@ -4419,7 +4820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0403",
@@ -4430,7 +4832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0404",
@@ -4441,7 +4844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0405",
@@ -4452,7 +4856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0406",
@@ -4463,7 +4868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0407",
@@ -4474,7 +4880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0408",
@@ -4485,7 +4892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0409",
@@ -4496,7 +4904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0410",
@@ -4507,7 +4916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0411",
@@ -4518,7 +4928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0412",
@@ -4529,7 +4940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0413",
@@ -4540,7 +4952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0414",
@@ -4551,7 +4964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0415",
@@ -4562,7 +4976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0416",
@@ -4573,7 +4988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0417",
@@ -4584,7 +5000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0418",
@@ -4595,7 +5012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0419",
@@ -4606,7 +5024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0420",
@@ -4617,7 +5036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0421",
@@ -4628,7 +5048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0422",
@@ -4639,7 +5060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0423",
@@ -4650,7 +5072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0424",
@@ -4661,7 +5084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0425",
@@ -4672,7 +5096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0426",
@@ -4683,7 +5108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0427",
@@ -4694,7 +5120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0428",
@@ -4705,7 +5132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0429",
@@ -4716,7 +5144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0430",
@@ -4727,7 +5156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0431",
@@ -4738,7 +5168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0432",
@@ -4749,7 +5180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0433",
@@ -4760,7 +5192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0434",
@@ -4771,7 +5204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0435",
@@ -4782,7 +5216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0436",
@@ -4793,7 +5228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0437",
@@ -4804,7 +5240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0438",
@@ -4815,7 +5252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0439",
@@ -4826,7 +5264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0440",
@@ -4837,7 +5276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0441",
@@ -4848,7 +5288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0442",
@@ -4859,7 +5300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0443",
@@ -4870,7 +5312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0444",
@@ -4881,7 +5324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0445",
@@ -4892,7 +5336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0446",
@@ -4903,7 +5348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0447",
@@ -4914,7 +5360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0448",
@@ -4925,7 +5372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0449",
@@ -4936,7 +5384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0450",
@@ -4947,7 +5396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0451",
@@ -4958,7 +5408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0452",
@@ -4969,7 +5420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0453",
@@ -4980,7 +5432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0454",
@@ -4991,7 +5444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0455",
@@ -5002,7 +5456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0456",
@@ -5013,7 +5468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0457",
@@ -5024,7 +5480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0458",
@@ -5035,7 +5492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0459",
@@ -5046,7 +5504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0460",
@@ -5057,7 +5516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0461",
@@ -5068,7 +5528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0462",
@@ -5079,7 +5540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0463",
@@ -5090,7 +5552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0464",
@@ -5101,7 +5564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0465",
@@ -5112,7 +5576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0466",
@@ -5123,7 +5588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0467",
@@ -5134,7 +5600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0468",
@@ -5145,7 +5612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0469",
@@ -5156,7 +5624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0470",
@@ -5167,7 +5636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0471",
@@ -5178,7 +5648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0472",
@@ -5189,7 +5660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0473",
@@ -5200,7 +5672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0474",
@@ -5211,7 +5684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0475",
@@ -5222,7 +5696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0476",
@@ -5233,7 +5708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0477",
@@ -5244,7 +5720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0478",
@@ -5255,7 +5732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0479",
@@ -5266,7 +5744,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0480",
@@ -5277,7 +5756,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0481",
@@ -5288,7 +5768,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0482",
@@ -5299,7 +5780,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0483",
@@ -5310,7 +5792,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0484",
@@ -5321,7 +5804,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0485",
@@ -5332,7 +5816,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0486",
@@ -5343,7 +5828,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0487",
@@ -5354,7 +5840,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0488",
@@ -5365,7 +5852,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0489",
@@ -5376,7 +5864,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0490",
@@ -5387,7 +5876,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0491",
@@ -5398,7 +5888,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0492",
@@ -5409,7 +5900,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0493",
@@ -5420,7 +5912,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0494",
@@ -5431,7 +5924,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0495",
@@ -5442,7 +5936,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0496",
@@ -5453,7 +5948,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0497",
@@ -5464,7 +5960,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0498",
@@ -5475,7 +5972,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0499",
@@ -5486,7 +5984,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0500",
@@ -5497,7 +5996,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0501",
@@ -5508,7 +6008,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0502",
@@ -5519,7 +6020,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0503",
@@ -5530,7 +6032,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0504",
@@ -5541,7 +6044,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0505",
@@ -5552,7 +6056,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0506",
@@ -5563,7 +6068,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0507",
@@ -5574,7 +6080,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0508",
@@ -5585,7 +6092,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0509",
@@ -5596,7 +6104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0510",
@@ -5607,7 +6116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0511",
@@ -5618,7 +6128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0512",
@@ -5629,7 +6140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0513",
@@ -5640,7 +6152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0514",
@@ -5651,7 +6164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0515",
@@ -5662,7 +6176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0516",
@@ -5673,7 +6188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0517",
@@ -5684,7 +6200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0518",
@@ -5695,7 +6212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0519",
@@ -5706,7 +6224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0520",
@@ -5717,7 +6236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0521",
@@ -5728,7 +6248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0522",
@@ -5739,7 +6260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0523",
@@ -5750,7 +6272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0524",
@@ -5761,7 +6284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0525",
@@ -5772,7 +6296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0526",
@@ -5783,7 +6308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0527",
@@ -5794,7 +6320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0528",
@@ -5805,7 +6332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0529",
@@ -5816,7 +6344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0530",
@@ -5827,7 +6356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0531",
@@ -5838,7 +6368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0532",
@@ -5849,7 +6380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0533",
@@ -5860,7 +6392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0534",
@@ -5871,7 +6404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0535",
@@ -5882,7 +6416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0536",
@@ -5893,7 +6428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0537",
@@ -5904,7 +6440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0538",
@@ -5915,7 +6452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0539",
@@ -5926,7 +6464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0540",
@@ -5937,7 +6476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0541",
@@ -5948,7 +6488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0542",
@@ -5959,7 +6500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0543",
@@ -5970,7 +6512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0544",
@@ -5981,7 +6524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0545",
@@ -5992,7 +6536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0546",
@@ -6003,7 +6548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0547",
@@ -6014,7 +6560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0548",
@@ -6025,7 +6572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0549",
@@ -6036,7 +6584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0550",
@@ -6047,7 +6596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0551",
@@ -6058,7 +6608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0552",
@@ -6069,7 +6620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0553",
@@ -6080,7 +6632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0554",
@@ -6091,7 +6644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0555",
@@ -6102,7 +6656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0556",
@@ -6113,7 +6668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0557",
@@ -6124,7 +6680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0558",
@@ -6135,7 +6692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0559",
@@ -6146,7 +6704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0560",
@@ -6157,7 +6716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0561",
@@ -6168,7 +6728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0562",
@@ -6179,7 +6740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0563",
@@ -6190,7 +6752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0564",
@@ -6201,7 +6764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0565",
@@ -6212,7 +6776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0566",
@@ -6223,7 +6788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0567",
@@ -6234,7 +6800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0568",
@@ -6245,7 +6812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0569",
@@ -6256,7 +6824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0570",
@@ -6267,7 +6836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0571",
@@ -6278,7 +6848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0572",
@@ -6289,7 +6860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0573",
@@ -6300,7 +6872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0574",
@@ -6311,7 +6884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0575",
@@ -6322,7 +6896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0576",
@@ -6333,7 +6908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0577",
@@ -6344,7 +6920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0578",
@@ -6355,7 +6932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0579",
@@ -6366,7 +6944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0580",
@@ -6377,7 +6956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0581",
@@ -6388,7 +6968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0582",
@@ -6399,7 +6980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0583",
@@ -6410,7 +6992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0584",
@@ -6421,7 +7004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0585",
@@ -6432,7 +7016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0586",
@@ -6443,7 +7028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0587",
@@ -6454,7 +7040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0588",
@@ -6465,7 +7052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0589",
@@ -6476,7 +7064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0590",
@@ -6487,7 +7076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0591",
@@ -6498,7 +7088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0592",
@@ -6509,7 +7100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0593",
@@ -6520,7 +7112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0594",
@@ -6531,7 +7124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0595",
@@ -6542,7 +7136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0596",
@@ -6553,7 +7148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0597",
@@ -6564,7 +7160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0598",
@@ -6575,7 +7172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0599",
@@ -6586,7 +7184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0600",
@@ -6597,7 +7196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0601",
@@ -6608,7 +7208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0602",
@@ -6619,7 +7220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0603",
@@ -6630,7 +7232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0604",
@@ -6641,7 +7244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0605",
@@ -6652,7 +7256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0606",
@@ -6663,7 +7268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0607",
@@ -6674,7 +7280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0608",
@@ -6685,7 +7292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0609",
@@ -6696,7 +7304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0610",
@@ -6707,7 +7316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0611",
@@ -6718,7 +7328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0612",
@@ -6729,7 +7340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0613",
@@ -6740,7 +7352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0614",
@@ -6751,7 +7364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0615",
@@ -6762,7 +7376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0616",
@@ -6773,7 +7388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0617",
@@ -6784,7 +7400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0618",
@@ -6795,7 +7412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0619",
@@ -6806,7 +7424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0620",
@@ -6817,7 +7436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0621",
@@ -6828,7 +7448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0622",
@@ -6839,7 +7460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0623",
@@ -6850,7 +7472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0624",
@@ -6861,7 +7484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0625",
@@ -6872,7 +7496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0626",
@@ -6883,7 +7508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0627",
@@ -6894,7 +7520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0628",
@@ -6905,7 +7532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0629",
@@ -6916,7 +7544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0630",
@@ -6927,7 +7556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0631",
@@ -6938,7 +7568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0632",
@@ -6949,7 +7580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0633",
@@ -6960,7 +7592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0634",
@@ -6971,7 +7604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0635",
@@ -6982,7 +7616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0636",
@@ -6993,7 +7628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0637",
@@ -7004,7 +7640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0638",
@@ -7015,7 +7652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0639",
@@ -7026,7 +7664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0640",
@@ -7037,7 +7676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0641",
@@ -7048,7 +7688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0642",
@@ -7059,7 +7700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0643",
@@ -7070,7 +7712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0644",
@@ -7081,7 +7724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0645",
@@ -7092,7 +7736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0646",
@@ -7103,7 +7748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0647",
@@ -7114,7 +7760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0648",
@@ -7125,7 +7772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0649",
@@ -7136,7 +7784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0650",
@@ -7147,7 +7796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0651",
@@ -7158,7 +7808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0652",
@@ -7169,7 +7820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0653",
@@ -7180,7 +7832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0654",
@@ -7191,7 +7844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0655",
@@ -7202,7 +7856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0656",
@@ -7213,7 +7868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0657",
@@ -7224,7 +7880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0658",
@@ -7235,7 +7892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0659",
@@ -7246,7 +7904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0660",
@@ -7257,7 +7916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0661",
@@ -7268,7 +7928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0662",
@@ -7279,7 +7940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0663",
@@ -7290,7 +7952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0664",
@@ -7301,7 +7964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0665",
@@ -7312,7 +7976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0666",
@@ -7323,7 +7988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0667",
@@ -7334,7 +8000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0668",
@@ -7345,7 +8012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0669",
@@ -7356,7 +8024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0670",
@@ -7367,7 +8036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0671",
@@ -7378,7 +8048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0672",
@@ -7389,7 +8060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0673",
@@ -7400,7 +8072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0674",
@@ -7411,7 +8084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0675",
@@ -7422,7 +8096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0676",
@@ -7433,7 +8108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0677",
@@ -7444,7 +8120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0678",
@@ -7455,7 +8132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0679",
@@ -7466,7 +8144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0680",
@@ -7477,7 +8156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0681",
@@ -7488,7 +8168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0682",
@@ -7499,7 +8180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0683",
@@ -7510,7 +8192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0684",
@@ -7521,7 +8204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0685",
@@ -7532,7 +8216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0686",
@@ -7543,7 +8228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0687",
@@ -7554,7 +8240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0688",
@@ -7565,7 +8252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0689",
@@ -7576,7 +8264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0690",
@@ -7587,7 +8276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0691",
@@ -7598,7 +8288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0692",
@@ -7609,7 +8300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0693",
@@ -7620,7 +8312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0694",
@@ -7631,7 +8324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0695",
@@ -7642,7 +8336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0696",
@@ -7653,7 +8348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0697",
@@ -7664,7 +8360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0698",
@@ -7675,7 +8372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0699",
@@ -7686,7 +8384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0700",
@@ -7697,7 +8396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0701",
@@ -7708,7 +8408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0702",
@@ -7719,7 +8420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0703",
@@ -7730,7 +8432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0704",
@@ -7741,7 +8444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0705",
@@ -7752,7 +8456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0706",
@@ -7763,7 +8468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0707",
@@ -7774,7 +8480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0708",
@@ -7785,7 +8492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0709",
@@ -7796,7 +8504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0710",
@@ -7807,7 +8516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0711",
@@ -7818,7 +8528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0712",
@@ -7829,7 +8540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0713",
@@ -7840,7 +8552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0714",
@@ -7851,7 +8564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0715",
@@ -7862,7 +8576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0716",
@@ -7873,7 +8588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0717",
@@ -7884,7 +8600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0718",
@@ -7895,7 +8612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0719",
@@ -7906,7 +8624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0720",
@@ -7917,7 +8636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0721",
@@ -7928,7 +8648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0722",
@@ -7939,7 +8660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0723",
@@ -7950,7 +8672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0724",
@@ -7961,7 +8684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0725",
@@ -7972,7 +8696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0726",
@@ -7983,7 +8708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0727",
@@ -7994,7 +8720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0728",
@@ -8005,7 +8732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0729",
@@ -8016,7 +8744,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0730",
@@ -8027,7 +8756,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0731",
@@ -8038,7 +8768,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0732",
@@ -8049,7 +8780,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0733",
@@ -8060,7 +8792,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0734",
@@ -8071,7 +8804,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0735",
@@ -8082,7 +8816,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0736",
@@ -8093,7 +8828,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0737",
@@ -8104,7 +8840,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0738",
@@ -8115,7 +8852,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0739",
@@ -8126,7 +8864,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0740",
@@ -8137,7 +8876,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0741",
@@ -8148,7 +8888,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0742",
@@ -8159,7 +8900,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0743",
@@ -8170,7 +8912,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0744",
@@ -8181,7 +8924,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0745",
@@ -8192,7 +8936,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0746",
@@ -8203,7 +8948,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0747",
@@ -8214,7 +8960,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0748",
@@ -8225,7 +8972,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0749",
@@ -8236,7 +8984,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0750",
@@ -8247,7 +8996,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0751",
@@ -8258,7 +9008,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0752",
@@ -8269,7 +9020,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0753",
@@ -8280,7 +9032,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0754",
@@ -8291,7 +9044,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0755",
@@ -8302,7 +9056,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0756",
@@ -8313,7 +9068,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0757",
@@ -8324,7 +9080,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0758",
@@ -8335,7 +9092,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0759",
@@ -8346,7 +9104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0760",
@@ -8357,7 +9116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0761",
@@ -8368,7 +9128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0762",
@@ -8379,7 +9140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0763",
@@ -8390,7 +9152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0764",
@@ -8401,7 +9164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0765",
@@ -8412,7 +9176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0766",
@@ -8423,7 +9188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0767",
@@ -8434,7 +9200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0768",
@@ -8445,7 +9212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0769",
@@ -8456,7 +9224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0770",
@@ -8467,7 +9236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0771",
@@ -8478,7 +9248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0772",
@@ -8489,7 +9260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0773",
@@ -8500,7 +9272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0774",
@@ -8511,7 +9284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0775",
@@ -8522,7 +9296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0776",
@@ -8533,7 +9308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0777",
@@ -8544,7 +9320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0778",
@@ -8555,7 +9332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0779",
@@ -8566,7 +9344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0780",
@@ -8577,7 +9356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0781",
@@ -8588,7 +9368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0782",
@@ -8599,7 +9380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0783",
@@ -8610,7 +9392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0784",
@@ -8621,7 +9404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0785",
@@ -8632,7 +9416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0786",
@@ -8643,7 +9428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0787",
@@ -8654,7 +9440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0788",
@@ -8665,7 +9452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0789",
@@ -8676,7 +9464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0790",
@@ -8687,7 +9476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0791",
@@ -8698,7 +9488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0792",
@@ -8709,7 +9500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0793",
@@ -8720,7 +9512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0794",
@@ -8731,7 +9524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0795",
@@ -8742,7 +9536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0796",
@@ -8753,7 +9548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0797",
@@ -8764,7 +9560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0798",
@@ -8775,7 +9572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0799",
@@ -8786,7 +9584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0800",
@@ -8797,7 +9596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0801",
@@ -8808,7 +9608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0802",
@@ -8819,7 +9620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0803",
@@ -8830,7 +9632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0804",
@@ -8841,7 +9644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0805",
@@ -8852,7 +9656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0806",
@@ -8863,7 +9668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0807",
@@ -8874,7 +9680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0808",
@@ -8885,7 +9692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0809",
@@ -8896,7 +9704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0810",
@@ -8907,7 +9716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0811",
@@ -8918,7 +9728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0812",
@@ -8929,7 +9740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0813",
@@ -8940,7 +9752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0814",
@@ -8951,7 +9764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0815",
@@ -8962,7 +9776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0816",
@@ -8973,7 +9788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0817",
@@ -8984,7 +9800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0818",
@@ -8995,7 +9812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0819",
@@ -9006,7 +9824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0820",
@@ -9017,7 +9836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0821",
@@ -9028,7 +9848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0822",
@@ -9039,7 +9860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0823",
@@ -9050,7 +9872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0824",
@@ -9061,7 +9884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0825",
@@ -9072,7 +9896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0826",
@@ -9083,7 +9908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0827",
@@ -9094,7 +9920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0828",
@@ -9105,7 +9932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0829",
@@ -9116,7 +9944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0830",
@@ -9127,7 +9956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0831",
@@ -9138,7 +9968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0832",
@@ -9149,7 +9980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0833",
@@ -9160,7 +9992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0834",
@@ -9171,7 +10004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0835",
@@ -9182,7 +10016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0836",
@@ -9193,7 +10028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0837",
@@ -9204,7 +10040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0838",
@@ -9215,7 +10052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0839",
@@ -9226,7 +10064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0840",
@@ -9237,7 +10076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0841",
@@ -9248,7 +10088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0842",
@@ -9259,7 +10100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0843",
@@ -9270,7 +10112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0844",
@@ -9281,7 +10124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0845",
@@ -9292,7 +10136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0846",
@@ -9303,7 +10148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0847",
@@ -9314,7 +10160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0848",
@@ -9325,7 +10172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0849",
@@ -9336,7 +10184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0850",
@@ -9347,7 +10196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0851",
@@ -9358,7 +10208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0852",
@@ -9369,7 +10220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0853",
@@ -9380,7 +10232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0854",
@@ -9391,7 +10244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0855",
@@ -9402,7 +10256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0856",
@@ -9413,7 +10268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0857",
@@ -9424,7 +10280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0858",
@@ -9435,7 +10292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0859",
@@ -9446,7 +10304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0860",
@@ -9457,7 +10316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0861",
@@ -9468,7 +10328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0862",
@@ -9479,7 +10340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0863",
@@ -9490,7 +10352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0864",
@@ -9501,7 +10364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0865",
@@ -9512,7 +10376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0866",
@@ -9523,7 +10388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0867",
@@ -9534,7 +10400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0868",
@@ -9545,7 +10412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0869",
@@ -9556,7 +10424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0870",
@@ -9567,7 +10436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0871",
@@ -9578,7 +10448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0872",
@@ -9589,7 +10460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0873",
@@ -9600,7 +10472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0874",
@@ -9611,7 +10484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0875",
@@ -9622,7 +10496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0876",
@@ -9633,7 +10508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0877",
@@ -9644,7 +10520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0878",
@@ -9655,7 +10532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0879",
@@ -9666,7 +10544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0880",
@@ -9677,7 +10556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0881",
@@ -9688,7 +10568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0882",
@@ -9699,7 +10580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0883",
@@ -9710,7 +10592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0884",
@@ -9721,7 +10604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0885",
@@ -9732,7 +10616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0886",
@@ -9743,7 +10628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0887",
@@ -9754,7 +10640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0888",
@@ -9765,7 +10652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0889",
@@ -9776,7 +10664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0890",
@@ -9787,7 +10676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0891",
@@ -9798,7 +10688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0892",
@@ -9809,7 +10700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0893",
@@ -9820,7 +10712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0894",
@@ -9831,7 +10724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0895",
@@ -9842,7 +10736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0896",
@@ -9853,7 +10748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0897",
@@ -9864,7 +10760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0898",
@@ -9875,7 +10772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0899",
@@ -9886,7 +10784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0900",
@@ -9897,7 +10796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0901",
@@ -9908,7 +10808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0902",
@@ -9919,7 +10820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0903",
@@ -9930,7 +10832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0904",
@@ -9941,7 +10844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0905",
@@ -9952,7 +10856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0906",
@@ -9963,7 +10868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0907",
@@ -9974,7 +10880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0908",
@@ -9985,7 +10892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0909",
@@ -9996,7 +10904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0910",
@@ -10007,7 +10916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0911",
@@ -10018,7 +10928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0912",
@@ -10029,7 +10940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0913",
@@ -10040,7 +10952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0914",
@@ -10051,7 +10964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0915",
@@ -10062,7 +10976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0916",
@@ -10073,7 +10988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0917",
@@ -10084,7 +11000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0918",
@@ -10095,7 +11012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0919",
@@ -10106,7 +11024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0920",
@@ -10117,7 +11036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0921",
@@ -10128,7 +11048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0922",
@@ -10139,7 +11060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0923",
@@ -10150,7 +11072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0924",
@@ -10161,7 +11084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0925",
@@ -10172,7 +11096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0926",
@@ -10183,7 +11108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0927",
@@ -10194,7 +11120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0928",
@@ -10205,7 +11132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0929",
@@ -10216,7 +11144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0930",
@@ -10227,7 +11156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0931",
@@ -10238,7 +11168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0932",
@@ -10249,7 +11180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0933",
@@ -10260,7 +11192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0934",
@@ -10271,7 +11204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0935",
@@ -10282,7 +11216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0936",
@@ -10293,7 +11228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0937",
@@ -10304,7 +11240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0938",
@@ -10315,7 +11252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0939",
@@ -10326,7 +11264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0940",
@@ -10337,7 +11276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0941",
@@ -10348,7 +11288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0942",
@@ -10359,7 +11300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0943",
@@ -10370,7 +11312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0944",
@@ -10381,7 +11324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0945",
@@ -10392,7 +11336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0946",
@@ -10403,7 +11348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0947",
@@ -10414,7 +11360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0948",
@@ -10425,7 +11372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0949",
@@ -10436,7 +11384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0950",
@@ -10447,7 +11396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0951",
@@ -10458,7 +11408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0952",
@@ -10469,7 +11420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0953",
@@ -10480,7 +11432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0954",
@@ -10491,7 +11444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0955",
@@ -10502,7 +11456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0956",
@@ -10513,7 +11468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0957",
@@ -10524,7 +11480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0958",
@@ -10535,7 +11492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0959",
@@ -10546,7 +11504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0960",
@@ -10557,7 +11516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0961",
@@ -10568,7 +11528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0962",
@@ -10579,7 +11540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0963",
@@ -10590,7 +11552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0964",
@@ -10601,7 +11564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0965",
@@ -10612,7 +11576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0966",
@@ -10623,7 +11588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0967",
@@ -10634,7 +11600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0968",
@@ -10645,7 +11612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0969",
@@ -10656,7 +11624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0970",
@@ -10667,7 +11636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0971",
@@ -10678,7 +11648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0972",
@@ -10689,7 +11660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0973",
@@ -10700,7 +11672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0974",
@@ -10711,7 +11684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0975",
@@ -10722,7 +11696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0976",
@@ -10733,7 +11708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0977",
@@ -10744,7 +11720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0978",
@@ -10755,7 +11732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0979",
@@ -10766,7 +11744,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0980",
@@ -10777,7 +11756,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0981",
@@ -10788,7 +11768,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0982",
@@ -10799,7 +11780,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0983",
@@ -10810,7 +11792,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0984",
@@ -10821,7 +11804,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0985",
@@ -10832,7 +11816,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0986",
@@ -10843,7 +11828,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0987",
@@ -10854,7 +11840,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0988",
@@ -10865,7 +11852,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0989",
@@ -10876,7 +11864,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0990",
@@ -10887,7 +11876,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0991",
@@ -10898,7 +11888,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0992",
@@ -10909,7 +11900,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0993",
@@ -10920,7 +11912,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0994",
@@ -10931,7 +11924,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0995",
@@ -10942,7 +11936,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0996",
@@ -10953,7 +11948,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0997",
@@ -10964,7 +11960,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0998",
@@ -10975,7 +11972,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-0999",
@@ -10986,7 +11984,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1000",
@@ -10997,7 +11996,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1001",
@@ -11008,7 +12008,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1002",
@@ -11019,7 +12020,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1003",
@@ -11030,7 +12032,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1004",
@@ -11041,7 +12044,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1005",
@@ -11052,7 +12056,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1006",
@@ -11063,7 +12068,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1007",
@@ -11074,7 +12080,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1008",
@@ -11085,7 +12092,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1009",
@@ -11096,7 +12104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1010",
@@ -11107,7 +12116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1011",
@@ -11118,7 +12128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1012",
@@ -11129,7 +12140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1013",
@@ -11140,7 +12152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1014",
@@ -11151,7 +12164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1015",
@@ -11162,7 +12176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1016",
@@ -11173,7 +12188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1017",
@@ -11184,7 +12200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1018",
@@ -11195,7 +12212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1019",
@@ -11206,7 +12224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1020",
@@ -11217,7 +12236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1021",
@@ -11228,7 +12248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1022",
@@ -11239,7 +12260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1023",
@@ -11250,7 +12272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1024",
@@ -11261,7 +12284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1025",
@@ -11272,7 +12296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1026",
@@ -11283,7 +12308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1027",
@@ -11294,7 +12320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1028",
@@ -11305,7 +12332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1029",
@@ -11316,7 +12344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1030",
@@ -11327,7 +12356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1031",
@@ -11338,7 +12368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1032",
@@ -11349,7 +12380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1033",
@@ -11360,7 +12392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1034",
@@ -11371,7 +12404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1035",
@@ -11382,7 +12416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1036",
@@ -11393,7 +12428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1037",
@@ -11404,7 +12440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1038",
@@ -11415,7 +12452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1039",
@@ -11426,7 +12464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1040",
@@ -11437,7 +12476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1041",
@@ -11448,7 +12488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1042",
@@ -11459,7 +12500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1043",
@@ -11470,7 +12512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1044",
@@ -11481,7 +12524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1045",
@@ -11492,7 +12536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1046",
@@ -11503,7 +12548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1047",
@@ -11514,7 +12560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1048",
@@ -11525,7 +12572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1049",
@@ -11536,7 +12584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1050",
@@ -11547,7 +12596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1051",
@@ -11558,7 +12608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1052",
@@ -11569,7 +12620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1053",
@@ -11580,7 +12632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1054",
@@ -11591,7 +12644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1055",
@@ -11602,7 +12656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1056",
@@ -11613,7 +12668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1057",
@@ -11624,7 +12680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1058",
@@ -11635,7 +12692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1059",
@@ -11646,7 +12704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1060",
@@ -11657,7 +12716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1061",
@@ -11668,7 +12728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1062",
@@ -11679,7 +12740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1063",
@@ -11690,7 +12752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1064",
@@ -11701,7 +12764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1065",
@@ -11712,7 +12776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1066",
@@ -11723,7 +12788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1067",
@@ -11734,7 +12800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1068",
@@ -11745,7 +12812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1069",
@@ -11756,7 +12824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1070",
@@ -11767,7 +12836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1071",
@@ -11778,7 +12848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1072",
@@ -11789,7 +12860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1073",
@@ -11800,7 +12872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1074",
@@ -11811,7 +12884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1075",
@@ -11822,7 +12896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1076",
@@ -11833,7 +12908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1077",
@@ -11844,7 +12920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1078",
@@ -11855,7 +12932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1079",
@@ -11866,7 +12944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1080",
@@ -11877,7 +12956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1081",
@@ -11888,7 +12968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1082",
@@ -11899,7 +12980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1083",
@@ -11910,7 +12992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1084",
@@ -11921,7 +13004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1085",
@@ -11932,7 +13016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1086",
@@ -11943,7 +13028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1087",
@@ -11954,7 +13040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1088",
@@ -11965,7 +13052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1089",
@@ -11976,7 +13064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1090",
@@ -11987,7 +13076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1091",
@@ -11998,7 +13088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1092",
@@ -12009,7 +13100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1093",
@@ -12020,7 +13112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1094",
@@ -12031,7 +13124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1095",
@@ -12042,7 +13136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1096",
@@ -12053,7 +13148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1097",
@@ -12064,7 +13160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1098",
@@ -12075,7 +13172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1099",
@@ -12086,7 +13184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1100",
@@ -12097,7 +13196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1101",
@@ -12108,7 +13208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1102",
@@ -12119,7 +13220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1103",
@@ -12130,7 +13232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1104",
@@ -12141,7 +13244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1105",
@@ -12152,7 +13256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1106",
@@ -12163,7 +13268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1107",
@@ -12174,7 +13280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1108",
@@ -12185,7 +13292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1109",
@@ -12196,7 +13304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1110",
@@ -12207,7 +13316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1111",
@@ -12218,7 +13328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1112",
@@ -12229,7 +13340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1113",
@@ -12240,7 +13352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1114",
@@ -12251,7 +13364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1115",
@@ -12262,7 +13376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1116",
@@ -12273,7 +13388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1117",
@@ -12284,7 +13400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1118",
@@ -12295,7 +13412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1119",
@@ -12306,7 +13424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1120",
@@ -12317,7 +13436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1121",
@@ -12328,7 +13448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1122",
@@ -12339,7 +13460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1123",
@@ -12350,7 +13472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1124",
@@ -12361,7 +13484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1125",
@@ -12372,7 +13496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1126",
@@ -12383,7 +13508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1127",
@@ -12394,7 +13520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1128",
@@ -12405,7 +13532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1129",
@@ -12416,7 +13544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1130",
@@ -12427,7 +13556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1131",
@@ -12438,7 +13568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1132",
@@ -12449,7 +13580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1133",
@@ -12460,7 +13592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1134",
@@ -12471,7 +13604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1135",
@@ -12482,7 +13616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1136",
@@ -12493,7 +13628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1137",
@@ -12504,7 +13640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1138",
@@ -12515,7 +13652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1139",
@@ -12526,7 +13664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1140",
@@ -12537,7 +13676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1141",
@@ -12548,7 +13688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1142",
@@ -12559,7 +13700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1143",
@@ -12570,7 +13712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1144",
@@ -12581,7 +13724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1145",
@@ -12592,7 +13736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1146",
@@ -12603,7 +13748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1147",
@@ -12614,7 +13760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1148",
@@ -12625,7 +13772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1149",
@@ -12636,7 +13784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1150",
@@ -12647,7 +13796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1151",
@@ -12658,7 +13808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1152",
@@ -12669,7 +13820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1153",
@@ -12680,7 +13832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1154",
@@ -12691,7 +13844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1155",
@@ -12702,7 +13856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1156",
@@ -12713,7 +13868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1157",
@@ -12724,7 +13880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1158",
@@ -12735,7 +13892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1159",
@@ -12746,7 +13904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1160",
@@ -12757,7 +13916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1161",
@@ -12768,7 +13928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1162",
@@ -12779,7 +13940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1163",
@@ -12790,7 +13952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1164",
@@ -12801,7 +13964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1165",
@@ -12812,7 +13976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1166",
@@ -12823,7 +13988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1167",
@@ -12834,7 +14000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1168",
@@ -12845,7 +14012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1169",
@@ -12856,7 +14024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1170",
@@ -12867,7 +14036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1171",
@@ -12878,7 +14048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1172",
@@ -12889,7 +14060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1173",
@@ -12900,7 +14072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1174",
@@ -12911,7 +14084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1175",
@@ -12922,7 +14096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1176",
@@ -12933,7 +14108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1177",
@@ -12944,7 +14120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1178",
@@ -12955,7 +14132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1179",
@@ -12966,7 +14144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1180",
@@ -12977,7 +14156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1181",
@@ -12988,7 +14168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1182",
@@ -12999,7 +14180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1183",
@@ -13010,7 +14192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1184",
@@ -13021,7 +14204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1185",
@@ -13032,7 +14216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1186",
@@ -13043,7 +14228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1187",
@@ -13054,7 +14240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1188",
@@ -13065,7 +14252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1189",
@@ -13076,7 +14264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1190",
@@ -13087,7 +14276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1191",
@@ -13098,7 +14288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1192",
@@ -13109,7 +14300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1193",
@@ -13120,7 +14312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1194",
@@ -13131,7 +14324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1195",
@@ -13142,7 +14336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1196",
@@ -13153,7 +14348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1197",
@@ -13164,7 +14360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1198",
@@ -13175,7 +14372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1199",
@@ -13186,7 +14384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1200",
@@ -13197,7 +14396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1201",
@@ -13208,7 +14408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1202",
@@ -13219,7 +14420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1203",
@@ -13230,7 +14432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1204",
@@ -13241,7 +14444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1205",
@@ -13252,7 +14456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1206",
@@ -13263,7 +14468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1207",
@@ -13274,7 +14480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1208",
@@ -13285,7 +14492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1209",
@@ -13296,7 +14504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1210",
@@ -13307,7 +14516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1211",
@@ -13318,7 +14528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1212",
@@ -13329,7 +14540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1213",
@@ -13340,7 +14552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1214",
@@ -13351,7 +14564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1215",
@@ -13362,7 +14576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1216",
@@ -13373,7 +14588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1217",
@@ -13384,7 +14600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1218",
@@ -13395,7 +14612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1219",
@@ -13406,7 +14624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1220",
@@ -13417,7 +14636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1221",
@@ -13428,7 +14648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1222",
@@ -13439,7 +14660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1223",
@@ -13450,7 +14672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1224",
@@ -13461,7 +14684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1225",
@@ -13472,7 +14696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1226",
@@ -13483,7 +14708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1227",
@@ -13494,7 +14720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1228",
@@ -13505,7 +14732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1229",
@@ -13516,7 +14744,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1230",
@@ -13527,7 +14756,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1231",
@@ -13538,7 +14768,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1232",
@@ -13549,7 +14780,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1233",
@@ -13560,7 +14792,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1234",
@@ -13571,7 +14804,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1235",
@@ -13582,7 +14816,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1236",
@@ -13593,7 +14828,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1237",
@@ -13604,7 +14840,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1238",
@@ -13615,7 +14852,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1239",
@@ -13626,7 +14864,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1240",
@@ -13637,7 +14876,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1241",
@@ -13648,7 +14888,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1242",
@@ -13659,7 +14900,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1243",
@@ -13670,7 +14912,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1244",
@@ -13681,7 +14924,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1245",
@@ -13692,7 +14936,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1246",
@@ -13703,7 +14948,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1247",
@@ -13714,7 +14960,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1248",
@@ -13725,7 +14972,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1249",
@@ -13736,7 +14984,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1250",
@@ -13747,7 +14996,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1251",
@@ -13758,7 +15008,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1252",
@@ -13769,7 +15020,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1253",
@@ -13780,7 +15032,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1254",
@@ -13791,7 +15044,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1255",
@@ -13802,7 +15056,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1256",
@@ -13813,7 +15068,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1257",
@@ -13824,7 +15080,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1258",
@@ -13835,7 +15092,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1259",
@@ -13846,7 +15104,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1260",
@@ -13857,7 +15116,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1261",
@@ -13868,7 +15128,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1262",
@@ -13879,7 +15140,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1263",
@@ -13890,7 +15152,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1264",
@@ -13901,7 +15164,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1265",
@@ -13912,7 +15176,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1266",
@@ -13923,7 +15188,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1267",
@@ -13934,7 +15200,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1268",
@@ -13945,7 +15212,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1269",
@@ -13956,7 +15224,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1270",
@@ -13967,7 +15236,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1271",
@@ -13978,7 +15248,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1272",
@@ -13989,7 +15260,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1273",
@@ -14000,7 +15272,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1274",
@@ -14011,7 +15284,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1275",
@@ -14022,7 +15296,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1276",
@@ -14033,7 +15308,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1277",
@@ -14044,7 +15320,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1278",
@@ -14055,7 +15332,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1279",
@@ -14066,7 +15344,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1280",
@@ -14077,7 +15356,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1281",
@@ -14088,7 +15368,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1282",
@@ -14099,7 +15380,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1283",
@@ -14110,7 +15392,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1284",
@@ -14121,7 +15404,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1285",
@@ -14132,7 +15416,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1286",
@@ -14143,7 +15428,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1287",
@@ -14154,7 +15440,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1288",
@@ -14165,7 +15452,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1289",
@@ -14176,7 +15464,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1290",
@@ -14187,7 +15476,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1291",
@@ -14198,7 +15488,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1292",
@@ -14209,7 +15500,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1293",
@@ -14220,7 +15512,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1294",
@@ -14231,7 +15524,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1295",
@@ -14242,7 +15536,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1296",
@@ -14253,7 +15548,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1297",
@@ -14264,7 +15560,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1298",
@@ -14275,7 +15572,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1299",
@@ -14286,7 +15584,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1300",
@@ -14297,7 +15596,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1301",
@@ -14308,7 +15608,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1302",
@@ -14319,7 +15620,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1303",
@@ -14330,7 +15632,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1304",
@@ -14341,7 +15644,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1305",
@@ -14352,7 +15656,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1306",
@@ -14363,7 +15668,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1307",
@@ -14374,7 +15680,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1308",
@@ -14385,7 +15692,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1309",
@@ -14396,7 +15704,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1310",
@@ -14407,7 +15716,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1311",
@@ -14418,7 +15728,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1312",
@@ -14429,7 +15740,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1313",
@@ -14440,7 +15752,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1314",
@@ -14451,7 +15764,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1315",
@@ -14462,7 +15776,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1316",
@@ -14473,7 +15788,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1317",
@@ -14484,7 +15800,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1318",
@@ -14495,7 +15812,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1319",
@@ -14506,7 +15824,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1320",
@@ -14517,7 +15836,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1321",
@@ -14528,7 +15848,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1322",
@@ -14539,7 +15860,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1323",
@@ -14550,7 +15872,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1324",
@@ -14561,7 +15884,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1325",
@@ -14572,7 +15896,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1326",
@@ -14583,7 +15908,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1327",
@@ -14594,7 +15920,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1328",
@@ -14605,7 +15932,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1329",
@@ -14616,7 +15944,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1330",
@@ -14627,7 +15956,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1331",
@@ -14638,7 +15968,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1332",
@@ -14649,7 +15980,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1333",
@@ -14660,7 +15992,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1334",
@@ -14671,7 +16004,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1335",
@@ -14682,7 +16016,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1336",
@@ -14693,7 +16028,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1337",
@@ -14704,7 +16040,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1338",
@@ -14715,7 +16052,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1339",
@@ -14726,7 +16064,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1340",
@@ -14737,7 +16076,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1341",
@@ -14748,7 +16088,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1342",
@@ -14759,7 +16100,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1343",
@@ -14770,7 +16112,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1344",
@@ -14781,7 +16124,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1345",
@@ -14792,7 +16136,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1346",
@@ -14803,7 +16148,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1347",
@@ -14814,7 +16160,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1348",
@@ -14825,7 +16172,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1349",
@@ -14836,7 +16184,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1350",
@@ -14847,7 +16196,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1351",
@@ -14858,7 +16208,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1352",
@@ -14869,7 +16220,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1353",
@@ -14880,7 +16232,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1354",
@@ -14891,7 +16244,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1355",
@@ -14902,7 +16256,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1356",
@@ -14913,7 +16268,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1357",
@@ -14924,7 +16280,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1358",
@@ -14935,7 +16292,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1359",
@@ -14946,7 +16304,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1360",
@@ -14957,7 +16316,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1361",
@@ -14968,7 +16328,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1362",
@@ -14979,7 +16340,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1363",
@@ -14990,7 +16352,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1364",
@@ -15001,7 +16364,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1365",
@@ -15012,7 +16376,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1366",
@@ -15023,7 +16388,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1367",
@@ -15034,7 +16400,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1368",
@@ -15045,7 +16412,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1369",
@@ -15056,7 +16424,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1370",
@@ -15067,7 +16436,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1371",
@@ -15078,7 +16448,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1372",
@@ -15089,7 +16460,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1373",
@@ -15100,7 +16472,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1374",
@@ -15111,7 +16484,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1375",
@@ -15122,7 +16496,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1376",
@@ -15133,7 +16508,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1377",
@@ -15144,7 +16520,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1378",
@@ -15155,7 +16532,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1379",
@@ -15166,7 +16544,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1380",
@@ -15177,7 +16556,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1381",
@@ -15188,7 +16568,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1382",
@@ -15199,7 +16580,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1383",
@@ -15210,7 +16592,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1384",
@@ -15221,7 +16604,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1385",
@@ -15232,7 +16616,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1386",
@@ -15243,7 +16628,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1387",
@@ -15254,7 +16640,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1388",
@@ -15265,7 +16652,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1389",
@@ -15276,7 +16664,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1390",
@@ -15287,7 +16676,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1391",
@@ -15298,7 +16688,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1392",
@@ -15309,7 +16700,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1393",
@@ -15320,7 +16712,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1394",
@@ -15331,7 +16724,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1395",
@@ -15342,7 +16736,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1396",
@@ -15353,7 +16748,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1397",
@@ -15364,7 +16760,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1398",
@@ -15375,7 +16772,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1399",
@@ -15386,7 +16784,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1400",
@@ -15397,7 +16796,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1401",
@@ -15408,7 +16808,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1402",
@@ -15419,7 +16820,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1403",
@@ -15430,7 +16832,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1404",
@@ -15441,7 +16844,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1405",
@@ -15452,7 +16856,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1406",
@@ -15463,7 +16868,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1407",
@@ -15474,7 +16880,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1408",
@@ -15485,7 +16892,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1409",
@@ -15496,7 +16904,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1410",
@@ -15507,7 +16916,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1411",
@@ -15518,7 +16928,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1412",
@@ -15529,7 +16940,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1413",
@@ -15540,7 +16952,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1414",
@@ -15551,7 +16964,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1415",
@@ -15562,7 +16976,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1416",
@@ -15573,7 +16988,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1417",
@@ -15584,7 +17000,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1418",
@@ -15595,7 +17012,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1419",
@@ -15606,7 +17024,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1420",
@@ -15617,7 +17036,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1421",
@@ -15628,7 +17048,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1422",
@@ -15639,7 +17060,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1423",
@@ -15650,7 +17072,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1424",
@@ -15661,7 +17084,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1425",
@@ -15672,7 +17096,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1426",
@@ -15683,7 +17108,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1427",
@@ -15694,7 +17120,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1428",
@@ -15705,7 +17132,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1429",
@@ -15716,7 +17144,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1430",
@@ -15727,7 +17156,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1431",
@@ -15738,7 +17168,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1432",
@@ -15749,7 +17180,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1433",
@@ -15760,7 +17192,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1434",
@@ -15771,7 +17204,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1435",
@@ -15782,7 +17216,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1436",
@@ -15793,7 +17228,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1437",
@@ -15804,7 +17240,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1438",
@@ -15815,7 +17252,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1439",
@@ -15826,7 +17264,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1440",
@@ -15837,7 +17276,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1441",
@@ -15848,7 +17288,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1442",
@@ -15859,7 +17300,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1443",
@@ -15870,7 +17312,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1444",
@@ -15881,7 +17324,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1445",
@@ -15892,7 +17336,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1446",
@@ -15903,7 +17348,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1447",
@@ -15914,7 +17360,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1448",
@@ -15925,7 +17372,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1449",
@@ -15936,7 +17384,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1450",
@@ -15947,7 +17396,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1451",
@@ -15958,7 +17408,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1452",
@@ -15969,7 +17420,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1453",
@@ -15980,7 +17432,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1454",
@@ -15991,7 +17444,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1455",
@@ -16002,7 +17456,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1456",
@@ -16013,7 +17468,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1457",
@@ -16024,7 +17480,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1458",
@@ -16035,7 +17492,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1459",
@@ -16046,7 +17504,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1460",
@@ -16057,7 +17516,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1461",
@@ -16068,7 +17528,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1462",
@@ -16079,7 +17540,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1463",
@@ -16090,7 +17552,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1464",
@@ -16101,7 +17564,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1465",
@@ -16112,7 +17576,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1466",
@@ -16123,7 +17588,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1467",
@@ -16134,7 +17600,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1468",
@@ -16145,7 +17612,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1469",
@@ -16156,7 +17624,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1470",
@@ -16167,7 +17636,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1471",
@@ -16178,7 +17648,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1472",
@@ -16189,7 +17660,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1473",
@@ -16200,7 +17672,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1474",
@@ -16211,7 +17684,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1475",
@@ -16222,7 +17696,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1476",
@@ -16233,7 +17708,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1477",
@@ -16244,7 +17720,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1478",
@@ -16255,7 +17732,8 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   },
   {
     "id": "USR-STU-1479",
@@ -16266,6 +17744,7 @@ export const importedCampusUsers = [
     "authProvider": "Microsoft Outlook 365",
     "status": "Active",
     "lastActive": "Registered",
-    "createdAt": "2026-10-20"
+    "createdAt": "2026-10-20",
+    "year": "SY"
   }
-]
+];

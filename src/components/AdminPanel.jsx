@@ -769,12 +769,13 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
   // Export Users CSV
   const handleExportUsersCSV = () => {
-    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Department', 'Status', 'Created At']
+    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Year', 'Department', 'Status', 'Created At']
     const rows = users.map((u) => [
       u.id,
       `"${u.name}"`,
       u.email,
       u.role,
+      u.role === 'Student' ? (u.year || 'SY') : 'N/A',
       `"${u.department}"`,
       u.status,
       u.createdAt
@@ -1219,6 +1220,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     <th className="py-3 px-4">User</th>
                     <th className="py-3 px-4">University Email</th>
                     <th className="py-3 px-4">Role</th>
+                    <th className="py-3 px-4">Year</th>
                     <th className="py-3 px-4">Department</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
@@ -1227,7 +1229,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="py-12 text-center text-slate-500 dark:text-slate-400">
+                      <td colSpan="7" className="py-12 text-center text-slate-500 dark:text-slate-400">
                         No directory users matching "{userSearch}" found.
                       </td>
                     </tr>
@@ -1272,6 +1274,16 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             <option value="Student">Student</option>
                             <option value="Security Guard">Security Guard</option>
                           </select>
+                        </td>
+
+                        <td className="py-3.5 px-4">
+                          {user.role === 'Student' ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                              {user.year || 'SY'}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-500 text-[11px] font-mono">—</span>
+                          )}
                         </td>
 
                         <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">

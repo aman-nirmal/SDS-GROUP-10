@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     role TEXT NOT NULL DEFAULT 'Student' CHECK (role IN ('Student', 'Faculty', 'Club Lead', 'Administrator', 'Security Guard')),
+    year TEXT DEFAULT 'SY',
     department TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'Active' CHECK (status IN ('Active', 'Suspended')),
     last_active TEXT DEFAULT 'Just now',

@@ -707,6 +707,7 @@ class DataStore {
             name: u.name,
             email: u.email,
             role: u.role || 'Student',
+            year: u.year || (u.role === 'Student' ? 'SY' : undefined),
             department: u.department || 'General Academic',
             status: u.is_active === false ? 'Suspended' : 'Active',
             lastActive: u.created_at ? u.created_at.slice(0, 10) : 'Active',
@@ -740,6 +741,9 @@ class DataStore {
     let result = combinedUsers
     if (filter.role && filter.role !== 'All') {
       result = result.filter((u) => u.role.toLowerCase() === filter.role.toLowerCase())
+    }
+    if (filter.year && filter.year !== 'All') {
+      result = result.filter((u) => u.year && u.year.toLowerCase() === filter.year.toLowerCase())
     }
     if (filter.search) {
       const q = filter.search.toLowerCase()
