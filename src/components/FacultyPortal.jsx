@@ -7,7 +7,12 @@ import {
   Inbox,
   Calendar,
   Users,
-  AlertCircle
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
+  Mail,
+  FileText,
+  Building2
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { INITIAL_BOOKINGS } from './AdminPanel'
@@ -40,6 +45,26 @@ export default function FacultyPortal({
 
   const [requestStatusFilter, setRequestStatusFilter] = useState('All') // 'All' | 'Pending' | 'Confirmed' | 'Rejected'
   const [notification, setNotification] = useState(null)
+
+  // Track expanded cards. Default pending requests to expanded so reviewer sees details right away.
+  const [expandedIds, setExpandedIds] = useState(() => {
+    const pending = (propBookings || INITIAL_BOOKINGS)
+      .filter((b) => b.applicantRole !== 'Faculty' && (b.status === 'Pending' || b.status === 'Pending Sanction'))
+      .map((b) => b.id || b.ref)
+    return new Set(pending)
+  })
+
+  const toggleExpand = (id) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
 
   const showToast = (message, type = 'success') => {
     setNotification({ message, type })
@@ -88,6 +113,16 @@ export default function FacultyPortal({
     }
     return b.status === requestStatusFilter
   })
+
+  const allExpanded = filteredRequests.length > 0 && filteredRequests.every((b) => expandedIds.has(b.id || b.ref))
+
+  const toggleAll = () => {
+    if (allExpanded) {
+      setExpandedIds(new Set())
+    } else {
+      setExpandedIds(new Set(filteredRequests.map((b) => b.id || b.ref)))
+    }
+  }
 
   return (
     <ProtectedGate
@@ -156,121 +191,239 @@ export default function FacultyPortal({
                 </span>
               )}
             </div>
+
+            {filteredRequests.length > 0 && (
+              <button
+                type="button"
+                onClick={toggleAll}
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+              >
+                {allExpanded ? 'Collapse All' : 'Expand All'}
+              </button>
+            )}
           </div>
 
           <div className="space-y-4">
             {filteredRequests.map((b) => {
+              const bookingId = b.id || b.ref
+              const isExpanded = expandedIds.has(bookingId)
               const isPending = b.status === 'Pending' || b.status === 'Pending Sanction'
               const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
               const isRejected = b.status === 'Rejected' || b.status === 'Cancelled'
 
               return (
                 <div
-                  key={b.id || b.ref}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+                  key={bookingId}
+                  className={`bg-white dark:bg-slate-900 rounded-2xl border transition-all shadow-2xs ${
+                    isExpanded
+                      ? 'border-blue-300 dark:border-blue-900/60 ring-2 ring-blue-500/10'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  }`}
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start lg:items-center">
-                    {/* Left Column (7 cols): Details */}
-                    <div className="lg:col-span-7 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                          {b.id || b.ref}
-                        </span>
-                        <span className="text-slate-300 dark:text-slate-700">•</span>
-                        <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                          {b.applicantName || 'Student'}
-                        </span>
-                        {b.applicantRole && (
-                          <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
-                            {b.applicantRole}
+                  {/* Card Header (Summary Row) */}
+                  <div className="p-5 sm:p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start lg:items-center">
+                      {/* Left: Metadata, Venue, and Purpose preview */}
+                      <div className="lg:col-span-7 space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                            {bookingId}
                           </span>
-                        )}
-                        <span className="text-slate-300 dark:text-slate-700">•</span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                          <Users className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{b.attendees || b.capacity || 50} attendees</span>
-                        </span>
-                      </div>
-
-                      <div>
-                        <div className="flex flex-wrap items-baseline gap-2">
-                          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                            {b.venueName || b.venue}
-                          </h3>
-                          <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                            • {b.department || 'COEP Tech'}
+                          <span className="text-slate-300 dark:text-slate-700">•</span>
+                          <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                            {b.applicantName || 'Student'}
+                          </span>
+                          {b.applicantRole && (
+                            <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                              {b.applicantRole}
+                            </span>
+                          )}
+                          <span className="text-slate-300 dark:text-slate-700">•</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <Users className="w-3.5 h-3.5 text-slate-400" />
+                            <span>{b.attendees || b.capacity || 50} attendees</span>
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                          {b.purpose}
-                        </p>
-                      </div>
 
-                      {b.applicantEmail && (
-                        <div className="text-[11px] text-slate-400 dark:text-slate-500 font-mono">
-                          {b.applicantEmail}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Right Column (5 cols): Schedule, Status & Actions */}
-                    <div className="lg:col-span-5 flex flex-col lg:items-end justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 w-full">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
-                          isConfirmed
-                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                            : isPending
-                            ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                            : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
-                        }`}
-                      >
-                        {isConfirmed && <Check className="w-3.5 h-3.5" />}
-                        {isPending && <Clock className="w-3.5 h-3.5" />}
-                        {isRejected && <X className="w-3.5 h-3.5" />}
-                        <span>{isPending ? 'Pending' : isConfirmed ? 'Approved' : 'Rejected'}</span>
-                      </span>
-
-                      <div className="text-left lg:text-right space-y-0.5">
-                        <div className="flex items-center lg:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-                          <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                          <span>{b.bookingDate || b.date}</span>
-                        </div>
-                        <div className="flex items-center lg:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-                          <Clock className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{b.timeSlot || b.slot}</span>
+                        <div>
+                          <div className="flex flex-wrap items-baseline gap-2">
+                            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                              {b.venueName || b.venue}
+                            </h3>
+                            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
+                              • {b.department || 'COEP Tech'}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+                            {b.purpose}
+                          </p>
                         </div>
                       </div>
 
-                      {isPending ? (
-                        <div className="flex items-center gap-2 pt-1 w-full lg:w-auto">
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateStatus(b.id || b.ref, 'Confirmed')}
-                            className="flex-1 lg:flex-none px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                      {/* Right: Date, Status & Expand Toggle */}
+                      <div className="lg:col-span-5 flex flex-col lg:items-end justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 w-full">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
+                              isConfirmed
+                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                                : isPending
+                                ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                                : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
+                            }`}
                           >
-                            <Check className="w-4 h-4" />
-                            <span>Approve</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateStatus(b.id || b.ref, 'Rejected')}
-                            className="flex-1 lg:flex-none px-3.5 py-2 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <X className="w-4 h-4" />
-                            <span>Reject</span>
-                          </button>
+                            {isConfirmed && <Check className="w-3.5 h-3.5" />}
+                            {isPending && <Clock className="w-3.5 h-3.5" />}
+                            {isRejected && <X className="w-3.5 h-3.5" />}
+                            <span>{isPending ? 'Pending' : isConfirmed ? 'Approved' : 'Rejected'}</span>
+                          </span>
                         </div>
-                      ) : isConfirmed ? (
-                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1 rounded-lg border border-emerald-200/80 dark:border-emerald-900/50">
-                          Approved
-                        </span>
-                      ) : (
-                        <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-3 py-1 rounded-lg border border-rose-200/80 dark:border-rose-900/50">
-                          Rejected
-                        </span>
-                      )}
+
+                        <div className="text-left lg:text-right space-y-0.5">
+                          <div className="flex items-center lg:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                            <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                            <span>{b.bookingDate || b.date}</span>
+                          </div>
+                          <div className="flex items-center lg:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                            <Clock className="w-3.5 h-3.5 text-slate-400" />
+                            <span>{b.timeSlot || b.slot}</span>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(bookingId)}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 pt-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Hide Details' : 'Review Details'}</span>
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Expanded Container Details */}
+                  {isExpanded && (
+                    <div className="border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 p-5 sm:p-6 rounded-b-2xl space-y-5 animate-in fade-in-50 duration-200">
+                      {/* Grid of Key Request Details */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-1">
+                          <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-blue-500" />
+                            <span>Venue & Attendance</span>
+                          </div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white">
+                            {b.venueName || b.venue}
+                          </div>
+                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                            {b.attendees || b.capacity || 50} Expected Attendees
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-1">
+                          <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <Mail className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>Organizer Contact</span>
+                          </div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white">
+                            {b.applicantName || 'Student'}
+                          </div>
+                          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                            {b.applicantEmail || 'student@coeptech.ac.in'}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-1">
+                          <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-amber-500" />
+                            <span>Submission Info</span>
+                          </div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white">
+                            {b.submittedAt || `${b.bookingDate || b.date} • Standard Submission`}
+                          </div>
+                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                            Department: {b.department || 'COEP Tech'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Full Purpose / Justification */}
+                      <div className="p-4 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-1.5">
+                        <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                          <span>Event Purpose & Requirements</span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                          {b.purpose}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1.5 pt-2">
+                          <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-medium">
+                            Projector & Screen Needed
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-medium">
+                            Audio System & Mic
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-medium">
+                            Standard Class Seating
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Faculty Reviewer Decision Bar */}
+                      {isPending ? (
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/40">
+                          <div className="text-xs text-slate-700 dark:text-slate-300">
+                            <span className="font-bold text-slate-900 dark:text-white">Reviewer Action: </span>
+                            Please confirm room availability and approve or reject this booking request.
+                          </div>
+
+                          <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(bookingId, 'Confirmed')}
+                              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                            >
+                              <Check className="w-4 h-4" />
+                              <span>Approve Request</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(bookingId, 'Rejected')}
+                              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                            >
+                              <X className="w-4 h-4" />
+                              <span>Reject</span>
+                            </button>
+                          </div>
+                        </div>
+                      ) : isConfirmed ? (
+                        <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-xs">
+                          <div className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                            <span className="font-semibold">This booking has been approved. The digital pass is active for the applicant.</span>
+                          </div>
+                          <span className="font-bold uppercase text-[11px] px-2.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-200">
+                            Approved
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-300 text-xs">
+                          <div className="flex items-center gap-2">
+                            <X className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                            <span className="font-semibold">This booking request was rejected. The venue remains available for other bookings.</span>
+                          </div>
+                          <span className="font-bold uppercase text-[11px] px-2.5 py-0.5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-200">
+                            Rejected
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )
             })}
