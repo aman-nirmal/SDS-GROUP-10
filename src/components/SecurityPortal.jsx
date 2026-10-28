@@ -8,6 +8,7 @@ import {
   ShieldAlert
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi, logsApi } from '../lib/api'
 
 // Verified Institutional Database
 const KNOWN_PASS_DATABASE = {
@@ -122,13 +123,34 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
     }
   }, [cameraActive])
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     if (e) e.preventDefault()
     const code = passCodeInput.trim()
     if (!code) return
 
-    const match = KNOWN_PASS_DATABASE[code]
+    try {
+      const res = await bookingsApi.verifyPass(code)
+      if (res.success) {
+        setVerificationResult({
+          passId: res.passId,
+          bookingId: res.bookingId,
+          holderName: res.holderName,
+          role: res.role,
+          department: res.department,
+          venue: res.venue,
+          purpose: res.purpose,
+          date: res.date,
+          timeSlot: res.timeSlot,
+          attendees: res.attendees,
+          status: res.status
+        })
+        return
+      }
+    } catch {
+      // Check local database fallback
+    }
 
+    const match = KNOWN_PASS_DATABASE[code]
     if (match) {
       setVerificationResult(match)
     } else {
@@ -148,6 +170,7 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
   }
 
   const handleAdmit = (pass) => {
+    const checkpointName = activeGate.split(' - ')[0]
     const newEntry = {
       id: `SCN-${Math.floor(100 + Math.random() * 900)}`,
       time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
@@ -155,16 +178,24 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
       name: pass.holderName,
       role: pass.role,
       venue: pass.venue,
-      checkpoint: activeGate.split(' - ')[0],
+      checkpoint: checkpointName,
       status: 'Admitted'
     }
 
     setLogs([newEntry, ...logs])
+    logsApi.create({
+      action: `Admitted ${pass.holderName} (${pass.role}) at ${checkpointName} for ${pass.venue}`,
+      module: 'Security Gate',
+      severity: 'success',
+      actor: currentUser?.name || 'Security Officer'
+    }).catch(console.warn)
+
     setVerificationResult(null)
     setPassCodeInput('')
   }
 
   const handleDeny = (pass) => {
+    const checkpointName = activeGate.split(' - ')[0]
     const newEntry = {
       id: `SCN-${Math.floor(100 + Math.random() * 900)}`,
       time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
@@ -172,11 +203,18 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
       name: pass.holderName,
       role: pass.role,
       venue: pass.venue,
-      checkpoint: activeGate.split(' - ')[0],
+      checkpoint: checkpointName,
       status: 'Denied'
     }
 
     setLogs([newEntry, ...logs])
+    logsApi.create({
+      action: `Denied access to ${pass.holderName} at ${checkpointName} (${pass.venue})`,
+      module: 'Security Gate',
+      severity: 'warning',
+      actor: currentUser?.name || 'Security Officer'
+    }).catch(console.warn)
+
     setVerificationResult(null)
     setPassCodeInput('')
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Trophy,
   Plus,
@@ -11,6 +11,7 @@ import {
   Inbox
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import { bookingsApi } from '../lib/api'
 
 const INITIAL_CLUB_BOOKINGS = [
   {
@@ -54,18 +55,72 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
     requirements: 'Stage PA System + Backup Generator'
   })
 
-  const handleCreateBooking = (e) => {
+  // Load bookings from backend on mount
+  useEffect(() => {
+    async function loadClubBookings() {
+      try {
+        const res = await bookingsApi.getAll()
+        if (res.bookings && res.bookings.length > 0) {
+          const clubBookings = res.bookings.filter(
+            (b) => b.applicantRole === 'Club Lead' || b.id?.startsWith('CLB-') || b.ref?.startsWith('CLB-')
+          )
+          if (clubBookings.length > 0) {
+            setBookings(
+              clubBookings.map((b) => ({
+                id: b.id || b.ref,
+                venue: b.venueName || b.venue,
+                title: b.purpose || b.title,
+                date: b.date,
+                timeSlot: b.timeSlot,
+                attendees: b.attendees,
+                status: b.status === 'Confirmed' ? 'Approved' : b.status === 'Pending' ? 'Under Review' : b.status
+              }))
+            )
+          }
+        }
+      } catch (err) {
+        console.warn('Backend club bookings fetch failed:', err)
+      }
+    }
+    loadClubBookings()
+  }, [])
+
+  const handleCreateBooking = async (e) => {
     e.preventDefault()
     if (!form.title.trim()) return
 
+    const bookingId = `CLB-BK-${Math.floor(100 + Math.random() * 900)}`
     const newBooking = {
-      id: `CLB-BK-${Math.floor(100 + Math.random() * 900)}`,
+      id: bookingId,
       venue: form.venue,
       title: form.title,
       date: form.date,
       timeSlot: form.timeSlot,
       attendees: Number(form.attendees),
       status: 'Under Review'
+    }
+
+    try {
+      await bookingsApi.create({
+        ref: bookingId,
+        venueName: form.venue,
+        venue: form.venue,
+        purpose: form.title,
+        date: form.date,
+        timeSlot: form.timeSlot,
+        attendees: Number(form.attendees),
+        notes: form.requirements,
+        applicantName: currentUser?.name || 'Club Lead',
+        applicantEmail: currentUser?.email || 'mindspark@coeptech.ac.in',
+        applicantRole: 'Club Lead',
+        status: 'Pending'
+      })
+    } catch (err) {
+      console.warn('Backend booking create error in club portal:', err)
+      if (err.status === 409 || err.data?.isConflict) {
+        alert(err.data?.error || err.message)
+        return
+      }
     }
 
     setBookings([newBooking, ...bookings])
@@ -82,6 +137,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
 
   const handleDelete = (id) => {
     setBookings(bookings.filter((b) => b.id !== id))
+    bookingsApi.delete(id).catch(console.warn)
   }
 
   return (

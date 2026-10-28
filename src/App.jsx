@@ -41,7 +41,7 @@ import {
 import UserProfileModal from './components/UserProfileModal'
 import { INITIAL_ROLE_REQUESTS } from './components/admin/mockAdminData'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
-import { authApi } from './lib/api'
+import { authApi, venuesApi, bookingsApi, eventsApi, roleRequestsApi } from './lib/api'
 import About from './components/About'
 import AdminPanel, { INITIAL_BOOKINGS } from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
@@ -2845,7 +2845,7 @@ export default function App() {
     }
   })
 
-  const handleUserSubmitRoleRequest = (newRequest) => {
+  const handleUserSubmitRoleRequest = async (newRequest) => {
     setRoleRequests((prev) => {
       const updated = [newRequest, ...prev]
       try {
@@ -2855,6 +2855,11 @@ export default function App() {
       }
       return updated
     })
+    try {
+      await roleRequestsApi.create(newRequest)
+    } catch (err) {
+      console.warn('Backend role request sync failed:', err)
+    }
   }
 
   const [selectedType, setSelectedType] = useState('All Spaces')
@@ -2929,29 +2934,34 @@ export default function App() {
 
   useEffect(() => {
     async function loadVenues() {
+      try {
+        setIsLoadingVenues(true)
+        const res = await venuesApi.getAll()
+        if (res.venues && res.venues.length > 0) {
+          setVenues(res.venues)
+          return
+        }
+      } catch (err) {
+        console.warn('Backend venues fetch failed, trying supabase/fallback:', err)
+      }
+
       if (!supabase) {
         setIsLoadingVenues(false)
         return
       }
 
       try {
-        setIsLoadingVenues(true)
         const { data, error } = await supabase
           .from('venues')
           .select('*')
           .eq('is_active', true)
           .order('new_hall_name', { ascending: true })
 
-        if (error) {
-          console.error('Could not fetch venues from Supabase:', error.message)
-          return
-        }
-
-        if (data && data.length > 0) {
+        if (!error && data && data.length > 0) {
           setVenues(data)
         }
       } catch (err) {
-        console.warn('Supabase fetch failed, using fallback venues:', err)
+        console.warn('Supabase fetch failed:', err)
       } finally {
         setIsLoadingVenues(false)
       }
@@ -2962,21 +2972,26 @@ export default function App() {
 
   useEffect(() => {
     async function loadEvents() {
+      try {
+        setIsLoadingEvents(true)
+        const res = await eventsApi.getAll()
+        if (res.events && res.events.length > 0) {
+          setEvents(res.events)
+          return
+        }
+      } catch (err) {
+        console.warn('Backend events fetch failed, trying supabase/fallback:', err)
+      }
+
       if (!supabase) return
 
       try {
-        setIsLoadingEvents(true)
         const { data, error } = await supabase
           .from('events')
           .select('*')
           .order('event_date', { ascending: true })
 
-        if (error) {
-          console.warn('Could not fetch events from Supabase, using fallback:', error.message)
-          return
-        }
-
-        if (data && data.length > 0) {
+        if (!error && data && data.length > 0) {
           setEvents(data)
         }
       } catch (err) {
@@ -2987,6 +3002,38 @@ export default function App() {
     }
 
     loadEvents()
+  }, [])
+
+  // Sync Bookings & Role Requests with Backend on Mount
+  useEffect(() => {
+    async function loadBackendData() {
+      try {
+        const [bookingsRes, roleRequestsRes] = await Promise.allSettled([
+          bookingsApi.getAll(),
+          roleRequestsApi.getAll()
+        ])
+        if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.bookings?.length > 0) {
+          setCampusBookings(bookingsRes.value.bookings)
+          try {
+            localStorage.setItem('locus_admin_bookings', JSON.stringify(bookingsRes.value.bookings))
+          } catch {
+            // ignore
+          }
+        }
+        if (roleRequestsRes.status === 'fulfilled' && roleRequestsRes.value?.requests?.length > 0) {
+          setRoleRequests(roleRequestsRes.value.requests)
+          try {
+            localStorage.setItem('locus_admin_role_requests', JSON.stringify(roleRequestsRes.value.requests))
+          } catch {
+            // ignore
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load initial backend bookings or role requests:', err)
+      }
+    }
+
+    loadBackendData()
   }, [])
 
   const handleNavClick = (tab) => {
@@ -3017,7 +3064,7 @@ export default function App() {
     setIsMobileMenuOpen(false)
   }
 
-  const handleUpdateBookingStatus = (bookingId, newStatus) => {
+  const handleUpdateBookingStatus = async (bookingId, newStatus, reason = '') => {
     setCampusBookings((prev) => {
       const updated = prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
       try {
@@ -3030,18 +3077,47 @@ export default function App() {
     setUserBookings((prev) =>
       prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
     )
+
+    try {
+      await bookingsApi.updateStatus(bookingId, newStatus, reason, currentUser?.name || 'Reviewer')
+    } catch (err) {
+      console.warn('Backend booking status update error:', err)
+    }
   }
-  const handleAddBooking = (newBooking) => {
-    setCampusBookings((prev) => {
-      const updated = [newBooking, ...prev]
-      try {
-        localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
-      } catch {
-        // ignore
+
+  const handleAddBooking = async (newBooking) => {
+    try {
+      const res = await bookingsApi.create(newBooking)
+      const created = res.booking || newBooking
+      setCampusBookings((prev) => {
+        const updated = [created, ...prev]
+        try {
+          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+        } catch {
+          // ignore
+        }
+        return updated
+      })
+      setUserBookings((prev) => [created, ...prev])
+      return { success: true, booking: created }
+    } catch (err) {
+      console.warn('Backend booking creation error:', err)
+      if (err.status === 409 || err.data?.isConflict) {
+        alert(err.data?.error || err.message)
+        return { success: false, error: err.message, isConflict: true }
       }
-      return updated
-    })
-    setUserBookings((prev) => [newBooking, ...prev])
+      setCampusBookings((prev) => {
+        const updated = [newBooking, ...prev]
+        try {
+          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
+        } catch {
+          // ignore
+        }
+        return updated
+      })
+      setUserBookings((prev) => [newBooking, ...prev])
+      return { success: true, booking: newBooking }
+    }
   }
 
   const venueTypes = [

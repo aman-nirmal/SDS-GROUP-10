@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { INITIAL_BOOKINGS } from './AdminPanel'
+import { bookingsApi } from '../lib/api'
 
 export default function FacultyPortal({
   currentUser,
@@ -86,6 +87,7 @@ export default function FacultyPortal({
         }
         return updated
       })
+      bookingsApi.updateStatus(bookingId, newStatus, '', currentUser?.name || 'Faculty').catch(console.warn)
     }
 
     const targetBooking = activeBookingsList.find((b) => b.id === bookingId)

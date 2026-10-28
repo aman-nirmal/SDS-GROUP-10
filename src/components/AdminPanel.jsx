@@ -28,6 +28,14 @@ import {
   INITIAL_ROLE_REQUESTS,
   INITIAL_TIMETABLE_ENTRIES
 } from './admin/mockAdminData'
+import {
+  usersApi,
+  bookingsApi,
+  venuesApi,
+  roleRequestsApi,
+  timetableApi,
+  logsApi
+} from '../lib/api'
 
 // Initial institutional users store
 const INITIAL_USERS = [
@@ -416,6 +424,45 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     }
   }, [timetable])
 
+  // Sync initial data from backend API on mount
+  useEffect(() => {
+    async function loadAdminData() {
+      try {
+        const [usersRes, bookingsRes, venuesRes, roleReqsRes, timetableRes, logsRes] = await Promise.allSettled([
+          usersApi.getAll(),
+          bookingsApi.getAll(),
+          venuesApi.getAll(),
+          roleRequestsApi.getAll(),
+          timetableApi.getAll(),
+          logsApi.getAll()
+        ])
+
+        if (usersRes.status === 'fulfilled' && usersRes.value?.users?.length > 0) {
+          setUsers(usersRes.value.users)
+        }
+        if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.bookings?.length > 0) {
+          setBookings(bookingsRes.value.bookings)
+        }
+        if (venuesRes.status === 'fulfilled' && venuesRes.value?.venues?.length > 0) {
+          setVenuesList(venuesRes.value.venues)
+        }
+        if (roleReqsRes.status === 'fulfilled' && roleReqsRes.value?.requests?.length > 0) {
+          setRoleRequests(roleReqsRes.value.requests)
+        }
+        if (timetableRes.status === 'fulfilled' && timetableRes.value?.timetable?.length > 0) {
+          setTimetable(timetableRes.value.timetable)
+        }
+        if (logsRes.status === 'fulfilled' && logsRes.value?.logs?.length > 0) {
+          setLogs(logsRes.value.logs)
+        }
+      } catch (err) {
+        console.warn('Initial admin data fetch from API failed:', err)
+      }
+    }
+
+    loadAdminData()
+  }, [])
+
   // Append new audit log helper
   const addLog = useCallback((action, module = 'General', severity = 'info') => {
     const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19)
@@ -429,6 +476,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       severity
     }
     setLogs((prev) => [newLog, ...prev])
+    logsApi.create(newLog).catch(() => {})
   }, [currentUser])
 
   // Filtered Users
@@ -468,6 +516,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             nextStatus === 'Suspended' ? 'warning' : 'success'
           )
           showNotification(`User ${u.name} is now ${nextStatus}`)
+          usersApi.updateStatus(userId, nextStatus).catch(console.warn)
           return { ...u, status: nextStatus }
         }
         return u
@@ -481,6 +530,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         if (u.id === userId) {
           addLog(`User ${u.email} role elevated to ${newRole}`, 'Access Control', 'info')
           showNotification(`Updated ${u.name}'s role to ${newRole}`)
+          usersApi.updateRole(userId, newRole).catch(console.warn)
           return { ...u, role: newRole }
         }
         return u
@@ -495,6 +545,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       setUsers((prev) => prev.filter((u) => u.id !== userId))
       addLog(`Deleted campus account for ${target.email}`, 'Account Deletion', 'warning')
       showNotification(`Account ${target.email} removed.`)
+      usersApi.delete(userId).catch(console.warn)
     }
   }
 
@@ -522,7 +573,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       email: trimmedEmail,
       role: newUserForm.role,
       department: newUserForm.department,
-      authProvider: 'Microsoft Outlook 365 & Password',
       status: 'Active',
       lastActive: 'Never',
       createdAt: new Date().toISOString().split('T')[0]
@@ -531,6 +581,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setUsers((prev) => [createdUser, ...prev])
     addLog(`Manually provisioned user account for ${trimmedEmail} (${newUserForm.role})`, 'User Provisioning', 'success')
     showNotification(`New ${newUserForm.role} account created for ${createdUser.name}`)
+    usersApi.create(createdUser).catch(console.warn)
     setIsAddUserModalOpen(false)
     setNewUserForm({
       name: '',
@@ -547,6 +598,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         if (b.id === bookingId) {
           addLog(`Approved campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'success')
           showNotification(`Reservation ${b.id} confirmed successfully!`)
+          bookingsApi.updateStatus(bookingId, 'Confirmed', '', currentUser?.name || 'Administrator').catch(console.warn)
           return { ...b, status: 'Confirmed' }
         }
         return b
@@ -560,6 +612,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         if (b.id === bookingId) {
           addLog(`Rejected campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'warning')
           showNotification(`Reservation ${b.id} rejected.`)
+          bookingsApi.updateStatus(bookingId, 'Cancelled', '', currentUser?.name || 'Administrator').catch(console.warn)
           return { ...b, status: 'Cancelled' }
         }
         return b
@@ -574,6 +627,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setVenuesList((prev) => [newVenue, ...prev])
     addLog(`Added campus venue "${newVenue.name}" (${newVenue.code || newId})`, 'Venues', 'success')
     showNotification(`Venue "${newVenue.name}" added successfully.`)
+    venuesApi.create(newVenue).catch(console.warn)
   }
 
   const handleUpdateVenue = (venueData) => {
@@ -582,6 +636,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     )
     addLog(`Updated venue attributes for "${venueData.name}"`, 'Venues', 'info')
     showNotification(`Updated venue "${venueData.name}".`)
+    venuesApi.update(venueData.id, venueData).catch(console.warn)
   }
 
   const handleDeleteVenue = (venueId) => {
@@ -590,6 +645,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     if (target) {
       addLog(`Removed venue "${target.name}" from catalog`, 'Venues', 'warning')
       showNotification(`Venue "${target.name}" removed.`)
+      venuesApi.delete(venueId).catch(console.warn)
     }
   }
 
@@ -655,6 +711,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       'success'
     )
     showNotification(`Role request for ${req.userName} approved!`)
+    roleRequestsApi.updateStatus(requestId, 'Approved', currentUser?.name || 'Administrator').catch(console.warn)
   }
 
   const handleRejectRoleRequest = (requestId, rejectionReason) => {
@@ -680,6 +737,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       'warning'
     )
     showNotification(`Role request for ${req.userName} rejected.`)
+    roleRequestsApi.updateStatus(requestId, 'Rejected', currentUser?.name || 'Administrator').catch(console.warn)
   }
 
   // Handlers for Timetable & Blocking
@@ -687,6 +745,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setTimetable((prev) => [newBlock, ...prev])
     addLog(`Created timetable block "${newBlock.title}" in ${newBlock.venueName}`, 'Timetable', 'info')
     showNotification(`Time slot blocked in ${newBlock.venueName}.`)
+    timetableApi.create(newBlock).catch(console.warn)
   }
 
   const handleDeleteTimetableEntry = (entryId) => {
@@ -695,6 +754,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     if (target) {
       addLog(`Removed timetable block "${target.title}" in ${target.venueName}`, 'Timetable', 'info')
       showNotification('Timetable block removed.')
+      timetableApi.delete(entryId).catch(console.warn)
     }
   }
 
@@ -702,6 +762,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setTimetable((prev) => [...newEntries, ...prev])
     addLog(`Imported ${newEntries.length} academic timetable blocks`, 'Timetable Import', 'success')
     showNotification(`Imported ${newEntries.length} timetable records successfully!`)
+    timetableApi.bulkImport(newEntries).catch(console.warn)
   }
 
   // Export Users CSV
@@ -824,9 +885,11 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
 
   const handleCommitImport = () => {
     if (importPreview.length === 0) return
-    setUsers((prev) => [...importPreview, ...prev])
-    addLog(`Imported ${importPreview.length} users into directory via CSV`, 'Directory Import', 'success')
-    showNotification(`Successfully imported ${importPreview.length} users into the directory!`)
+    const importedList = [...importPreview]
+    setUsers((prev) => [...importedList, ...prev])
+    addLog(`Imported ${importedList.length} users into directory via CSV`, 'Directory Import', 'success')
+    showNotification(`Successfully imported ${importedList.length} users into the directory!`)
+    usersApi.bulkImport(importedList).catch(console.warn)
     setImportPreview([])
     setImportFileName('')
     setIsImportModalOpen(false)

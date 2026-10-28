@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { INITIAL_BOOKINGS } from './AdminPanel'
+import { bookingsApi } from '../lib/api'
 
 const INITIAL_STUDENT_PASSES = [
   {
@@ -121,6 +122,21 @@ export default function StudentPortal({
       digitalPassCode: `COEP-STU-${randomNum}-PASS`
     }
 
+    const newBookingData = {
+      ref: newPass.id,
+      venueName: form.venue,
+      venue: form.venue,
+      purpose: form.purpose,
+      date: form.date,
+      timeSlot: form.timeSlot,
+      attendees: Number(form.attendees),
+      applicantName: currentUser?.name || 'Student Member',
+      applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
+      applicantRole: 'Student',
+      status: 'Confirmed'
+    }
+    bookingsApi.create(newBookingData).catch(console.warn)
+
     setPasses([newPass, ...passes])
     setIsModalOpen(false)
     setForm({
@@ -135,14 +151,16 @@ export default function StudentPortal({
 
   const handleDeletePass = (id) => {
     setPasses(passes.filter((p) => p.id !== id))
+    bookingsApi.updateStatus(id, 'Cancelled', 'Cancelled by student', currentUser?.name || 'Student').catch(console.warn)
     showToast('Pass cancelled.', 'warning')
   }
 
   const handleCancelVenueBooking = (bookingId) => {
     if (onUpdateStatus) {
       onUpdateStatus(bookingId, 'Cancelled')
-      showToast(`Reservation ${bookingId} cancelled.`, 'warning')
     }
+    bookingsApi.updateStatus(bookingId, 'Cancelled', 'Cancelled by student', currentUser?.name || 'Student').catch(console.warn)
+    showToast(`Reservation ${bookingId} cancelled.`, 'warning')
   }
 
   return (

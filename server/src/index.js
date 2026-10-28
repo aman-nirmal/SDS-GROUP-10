@@ -2,6 +2,13 @@ import express from 'express'
 import cors from 'cors'
 import { config } from './config/env.js'
 import authRoutes from './routes/authRoutes.js'
+import venueRoutes from './routes/venueRoutes.js'
+import bookingRoutes from './routes/bookingRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+import roleRequestRoutes from './routes/roleRequestRoutes.js'
+import timetableRoutes from './routes/timetableRoutes.js'
+import logRoutes from './routes/logRoutes.js'
+import eventRoutes from './routes/eventRoutes.js'
 import { supabase } from './config/supabase.js'
 
 const app = express()
@@ -27,15 +34,32 @@ app.use((req, res, next) => {
 app.get('/api/health', (req, res) => {
   return res.json({
     status: 'healthy',
-    service: 'LOCUS Authentication API Service',
+    service: 'LOCUS Central Estate & Campus API Service',
     university: 'COEP Technological University',
-    database: supabase ? 'Supabase PostgreSQL (Connected)' : 'Local Auth Fallback Mode',
+    database: supabase ? 'Supabase PostgreSQL (Connected)' : 'Local Resilient Store Mode',
+    modules: [
+      'auth',
+      'venues',
+      'bookings',
+      'users',
+      'role-requests',
+      'timetable',
+      'logs',
+      'events'
+    ],
     timestamp: new Date().toISOString()
   })
 })
 
-// Mount Authentication Module
+// Mount Application Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/venues', venueRoutes)
+app.use('/api/bookings', bookingRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/role-requests', roleRequestRoutes)
+app.use('/api/timetable', timetableRoutes)
+app.use('/api/logs', logRoutes)
+app.use('/api/events', eventRoutes)
 
 // 404 Route Handler
 app.use((req, res) => {
