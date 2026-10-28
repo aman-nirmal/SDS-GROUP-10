@@ -184,8 +184,8 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
   return (
     <ProtectedGate
       allowedRoles={['Security Guard', 'Administrator']}
-      portalName="Campus Security Clearance Terminal"
-      portalDescription="Visitor verification and digital QR gate pass clearance for campus security personnel."
+      portalName="Gate Scanner"
+      portalDescription="Verify visitor and student entry passes at campus security checkpoints."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
@@ -194,13 +194,12 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-1">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Security Gate Terminal</span>
-              </div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                QR Pass Verification
+                Gate Scanner
               </h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Scan QR passes or enter pass codes to verify student entry.
+              </p>
             </div>
 
             <div className="flex items-center gap-2">

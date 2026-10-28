@@ -2872,6 +2872,10 @@ export default function App() {
     }
   })
 
+  const pendingSanctionsCount = campusBookings.filter(
+    (b) => b.status === 'Pending' || b.status === 'Pending Sanction'
+  ).length
+
   const [userBookings, setUserBookings] = useState([])
 
   const sampleEventsFallback = [
@@ -3099,6 +3103,17 @@ export default function App() {
           />
         )
       case 'my-bookings':
+        if (currentUser && currentUser.role === 'Student') {
+          return (
+            <StudentPortal
+              currentUser={currentUser}
+              onNavigateLogin={() => setActiveTab('login')}
+              campusBookings={campusBookings}
+              onExploreVenues={() => setActiveTab('venues')}
+              onUpdateStatus={handleUpdateBookingStatus}
+            />
+          )
+        }
         return (
           <MyBookingsPage
             bookings={campusBookings}
@@ -3212,6 +3227,9 @@ export default function App() {
           <StudentPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
+            campusBookings={campusBookings}
+            onExploreVenues={() => setActiveTab('venues')}
+            onUpdateStatus={handleUpdateBookingStatus}
           />
         )
       case 'club':
@@ -3631,32 +3649,44 @@ export default function App() {
               About
             </button>
 
-            {/* Role-Specific Portal Links - Rendered only for the user's specific role */}
-            {currentUser && currentUser.role === 'Student' && (
-              <button
-                type="button"
-                onClick={() => handleNavClick('student')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'student'
-                  ? 'text-indigo-600 dark:text-indigo-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 dark:after:bg-indigo-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
-                  }`}
-              >
-                <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Student</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => handleNavClick(currentUser?.role === 'Student' ? 'student' : 'my-bookings')}
+              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'my-bookings' || activeTab === 'student'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+            >
+              <span>My Bookings</span>
+            </button>
 
+            <button
+              type="button"
+              onClick={() => handleNavClick('about')}
+              className={`transition-colors cursor-pointer relative pb-1 ${activeTab === 'about'
+                ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+            >
+              About
+            </button>
+
+            {/* Role-Specific Action Links */}
             {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'faculty'
-                  ? 'text-blue-800 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 dark:after:bg-blue-400 font-bold'
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'faculty'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
                   : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <GraduationCap className="w-3.5 h-3.5 text-blue-700 dark:text-blue-400" />
-                <span>Faculty</span>
+                <span>Approvals</span>
+                {pendingSanctionsCount > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold ml-0.5">
+                    {pendingSanctionsCount}
+                  </span>
+                )}
               </button>
             )}
 
@@ -3664,13 +3694,12 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'club'
-                  ? 'text-amber-700 dark:text-amber-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-amber-700 dark:after:bg-amber-400 font-bold'
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'club'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
                   : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                <span>Club</span>
+                <span>Club Bookings</span>
               </button>
             )}
 
@@ -3678,13 +3707,12 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'security'
-                  ? 'text-emerald-700 dark:text-emerald-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-emerald-700 dark:after:bg-emerald-400 font-bold'
-                  : 'hover:text-emerald-700 dark:hover:text-emerald-400 text-slate-700 dark:text-slate-300'
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'security'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Security</span>
+                <span>Gate Scanner</span>
               </button>
             )}
 
@@ -3692,13 +3720,12 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('admin')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1 ${activeTab === 'admin'
-                  ? 'text-purple-600 dark:text-purple-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-purple-600 dark:after:bg-purple-400 font-bold'
-                  : 'hover:text-purple-600 dark:hover:text-purple-400 text-slate-700 dark:text-slate-300'
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'admin'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                <span>Admin</span>
+                <span>Admin Console</span>
               </button>
             )}
           </nav>
@@ -3846,6 +3873,14 @@ export default function App() {
               About
             </button>
 
+            <button
+              type="button"
+              onClick={() => handleNavClick(currentUser?.role === 'Student' ? 'student' : 'my-bookings')}
+              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'my-bookings' || activeTab === 'student' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+            >
+              My Bookings
+            </button>
+
             {currentUser && (
               <button
                 type="button"
@@ -3860,25 +3895,18 @@ export default function App() {
               </button>
             )}
 
-            {currentUser && currentUser.role === 'Student' && (
-              <button
-                type="button"
-                onClick={() => handleNavClick('student')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'student' ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-              >
-                <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                <span>Student Portal</span>
-              </button>
-            )}
-
             {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <GraduationCap className="w-4 h-4 text-blue-700 dark:text-blue-400" />
-                <span>Faculty Portal</span>
+                <span>Approvals</span>
+                {pendingSanctionsCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500 text-white font-bold">
+                    {pendingSanctionsCount}
+                  </span>
+                )}
               </button>
             )}
 
@@ -3886,10 +3914,9 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'club' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'club' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <Trophy className="w-4 h-4 text-amber-500" />
-                <span>Club Portal</span>
+                Club Bookings
               </button>
             )}
 
@@ -3897,10 +3924,9 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'security' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'security' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Security Terminal</span>
+                Gate Scanner
               </button>
             )}
 
@@ -3908,10 +3934,9 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('admin')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 ${activeTab === 'admin' ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'admin' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <Shield className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                <span>Admin Console</span>
+                Admin Console
               </button>
             )}
           </div>

@@ -186,8 +186,8 @@ export default function FacultyPortal({
   return (
     <ProtectedGate
       allowedRoles={['Faculty', 'Administrator']}
-      portalName="Faculty Academic Portal"
-      portalDescription="Classroom, lab, and departmental venue clearances for COEP faculty members."
+      portalName="Venue Approvals"
+      portalDescription="Review booking requests and manage departmental lecture halls."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
@@ -208,15 +208,11 @@ export default function FacultyPortal({
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 mb-2">
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Faculty & HOD Workspace</span>
-              </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Academic Hall Clearances & Reservations
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Venue Approvals
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                {currentUser?.name || 'Faculty Member'} • {currentUser?.department || 'Computer Engineering'}
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Review booking requests from students and clubs, or schedule lecture halls.
               </p>
             </div>
 
@@ -243,11 +239,10 @@ export default function FacultyPortal({
                   : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300'
               }`}
             >
-              <Inbox className="w-4 h-4" />
-              <span>Department Venue Requests</span>
+              <span>Booking Requests</span>
               {pendingRequestsCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white">
-                  {pendingRequestsCount} pending
+                  {pendingRequestsCount}
                 </span>
               )}
             </button>
@@ -261,8 +256,7 @@ export default function FacultyPortal({
                   : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300'
               }`}
             >
-              <Calendar className="w-4 h-4" />
-              <span>My Scheduled Lectures ({facultyLectures.length})</span>
+              <span>My Lectures ({facultyLectures.length})</span>
             </button>
           </div>
         </div>

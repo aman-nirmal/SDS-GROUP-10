@@ -82,8 +82,8 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
   return (
     <ProtectedGate
       allowedRoles={['Club Lead', 'Administrator']}
-      portalName="Club & Fest Management Portal"
-      portalDescription="Reserve campus auditoriums, open-air theatres, and event venues for official Gymkhana student clubs."
+      portalName="Club Bookings"
+      portalDescription="Reserve auditoriums and event spaces for student clubs."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
@@ -92,25 +92,21 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 mb-2">
-                <Trophy className="w-3.5 h-3.5" />
-                <span>Club Secretariat</span>
-              </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Fest & Auditorium Management
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Club Bookings
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                {currentUser?.name || 'Club Lead'} • {currentUser?.department || 'Student Gymkhana'}
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Reserve campus auditoriums, open-air theatres, and event spaces for student clubs.
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
             >
               <Plus className="w-4 h-4" />
-              <span>Submit Event Proposal</span>
+              <span>Book Event Venue</span>
             </button>
           </div>
         </div>
