@@ -830,8 +830,21 @@ class DataStore {
   async getRoleRequests() {
     if (supabase) {
       try {
-        const { data, error } = await supabase.from('role_requests').select('*').order('submittedAt', { ascending: false })
-        if (!error && data && data.length > 0) return data
+        const { data, error } = await supabase.from('role_requests').select('*')
+        if (!error && data && data.length > 0) {
+          return data.map((r) => ({
+            id: r.id,
+            applicantName: r.applicant_name || r.applicantName,
+            applicantEmail: r.applicant_email || r.applicantEmail,
+            currentRole: r.current_role || r.currentRole || 'Student',
+            requestedRole: r.requested_role || r.requestedRole,
+            department: r.department,
+            justification: r.justification,
+            status: r.status || 'Pending',
+            reviewedBy: r.reviewed_by || r.reviewedBy,
+            submittedAt: r.submitted_at ? r.submitted_at.replace('T', ' ').slice(0, 16) : r.submittedAt
+          }))
+        }
       } catch {
         // fallback
       }
@@ -854,7 +867,17 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('role_requests').insert([newReq])
+        const payload = {
+          id: newReq.id,
+          applicant_name: newReq.applicantName,
+          applicant_email: newReq.applicantEmail,
+          current_role: newReq.currentRole,
+          requested_role: newReq.requestedRole,
+          department: newReq.department,
+          justification: newReq.justification,
+          status: newReq.status
+        }
+        await supabase.from('role_requests').insert([payload])
       } catch (err) {
         console.warn('[Supabase] role request insert error:', err.message)
       }
@@ -874,7 +897,14 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('role_requests').update(updates).eq('id', id)
+        await supabase
+          .from('role_requests')
+          .update({
+            status,
+            reviewed_by: reviewedBy,
+            reviewed_at: new Date().toISOString()
+          })
+          .eq('id', id)
       } catch (err) {
         console.warn('[Supabase] role request update error:', err.message)
       }
@@ -889,7 +919,7 @@ class DataStore {
       if (user) {
         user.role = this.roleRequests[idx].requestedRole
         if (supabase) {
-          supabase.from('users').update({ role: user.role }).eq('id', user.id).catch(() => {})
+          supabase.from('users').update({ role: user.role }).eq('id', user.id).then(null, () => {})
         }
       }
     }
@@ -903,7 +933,21 @@ class DataStore {
     if (supabase) {
       try {
         const { data, error } = await supabase.from('timetable').select('*')
-        if (!error && data && data.length > 0) return data
+        if (!error && data && data.length > 0) {
+          return data.map((t) => ({
+            id: t.id,
+            venueId: t.venue_id || t.venueId,
+            venueName: t.venue_name || t.venueName,
+            title: t.title,
+            courseCode: t.course_code || t.courseCode || 'CS301',
+            dayOfWeek: t.day_of_week || t.dayOfWeek,
+            startTime: t.start_time || t.startTime,
+            endTime: t.end_time || t.endTime,
+            facultyName: t.faculty_name || t.facultyName,
+            semester: t.semester,
+            department: t.department
+          }))
+        }
       } catch {
         // fallback
       }
@@ -928,7 +972,20 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('timetable').insert([entry])
+        const dbPayload = {
+          id: entry.id,
+          venue_id: entry.venueId,
+          venue_name: entry.venueName,
+          title: entry.title,
+          course_code: entry.courseCode,
+          day_of_week: entry.dayOfWeek,
+          start_time: entry.startTime,
+          end_time: entry.endTime,
+          faculty_name: entry.facultyName,
+          semester: entry.semester,
+          department: entry.department
+        }
+        await supabase.from('timetable').insert([dbPayload])
       } catch (err) {
         console.warn('[Supabase] timetable insert error:', err.message)
       }
@@ -947,7 +1004,20 @@ class DataStore {
 
     if (supabase) {
       try {
-        await supabase.from('timetable').insert(created)
+        const dbPayloads = created.map((e) => ({
+          id: e.id,
+          venue_id: e.venueId || e.venue_id,
+          venue_name: e.venueName || e.venue_name,
+          title: e.title,
+          course_code: e.courseCode || e.course_code || 'CS301',
+          day_of_week: e.dayOfWeek || e.day_of_week,
+          start_time: e.startTime || e.start_time,
+          end_time: e.endTime || e.end_time,
+          faculty_name: e.facultyName || e.faculty_name,
+          semester: e.semester,
+          department: e.department
+        }))
+        await supabase.from('timetable').insert(dbPayloads)
       } catch (err) {
         console.warn('[Supabase] bulk timetable insert error:', err.message)
       }
@@ -990,7 +1060,7 @@ class DataStore {
   addLog(action, module = 'System', severity = 'info', actor = 'system', ip = '127.0.0.1') {
     const log = {
       id: `LOG-${Date.now()}-${Math.floor(10 + Math.random() * 90)}`,
-      timestamp: new Date().toISOString().replace('T', ' ').slice(0, 16),
+      timestamp: new Date().toISOString(),
       actor,
       action,
       module,
@@ -999,7 +1069,7 @@ class DataStore {
     }
 
     if (supabase) {
-      supabase.from('audit_logs').insert([log]).catch(() => {})
+      supabase.from('audit_logs').insert([log]).then(null, () => {})
     }
 
     this.logs.unshift(log)

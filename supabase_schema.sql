@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS public.role_requests (
     id TEXT PRIMARY KEY,
     applicant_name TEXT NOT NULL,
     applicant_email TEXT NOT NULL,
-    current_role TEXT NOT NULL DEFAULT 'Student',
+    "current_role" TEXT NOT NULL DEFAULT 'Student',
     requested_role TEXT NOT NULL,
     department TEXT NOT NULL,
     justification TEXT,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS public.timetable (
 -- 7. Audit Trail & Security Logs Table
 CREATE TABLE IF NOT EXISTS public.audit_logs (
     id TEXT PRIMARY KEY,
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    "timestamp" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     actor TEXT NOT NULL,
     action TEXT NOT NULL,
     module TEXT NOT NULL DEFAULT 'System',
