@@ -8,7 +8,8 @@ import {
   Clock,
   Users,
   Check,
-  Inbox
+  Inbox,
+  CreditCard
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import { bookingsApi } from '../lib/api'
@@ -199,6 +200,15 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                         <Users className="w-3.5 h-3.5 text-slate-400" />
                         <span>{b.attendees} attendees</span>
                       </span>
+                      {(b.paymentStatus === 'Paid' || b.paidAmount || b.paymentId) && (
+                        <>
+                          <span className="text-slate-300 dark:text-slate-700">•</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1 shadow-2xs">
+                            <CreditCard className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                            <span>Paid ₹{b.paidAmount || b.amount || 1180} (Cashfree PG)</span>
+                          </span>
+                        </>
+                      )}
                     </div>
 
                     <div>

@@ -20,5 +20,9 @@ export const config = {
   smtpUser: process.env.SMTP_USER || '',
   smtpPass: process.env.SMTP_PASS || '',
   smtpFrom: process.env.SMTP_FROM || '',
-  nodeEnv: process.env.NODE_ENV || 'development'
+  nodeEnv: process.env.NODE_ENV || 'development',
+  cashfreeAppId: process.env.CASHFREE_APP_ID || '14863398d8e4ab22ef2699a30de9336841',
+  cashfreeSecretKey: process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_4cc07ee54e6f3a6a3c44661fe41fb73f_f3d9c0bc',
+  cashfreeApiVersion: process.env.CASHFREE_API_VERSION || '2023-08-01',
+  cashfreeEnv: process.env.CASHFREE_ENV || 'production'
 }

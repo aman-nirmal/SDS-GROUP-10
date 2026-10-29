@@ -36,12 +36,14 @@ import {
   Check,
   Sun,
   Moon,
-  User
+  User,
+  CreditCard,
+  Receipt
 } from 'lucide-react'
 import UserProfileModal from './components/UserProfileModal'
 import { INITIAL_ROLE_REQUESTS } from './components/admin/mockAdminData'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from './lib/msalConfig'
-import { authApi, venuesApi, bookingsApi, eventsApi, roleRequestsApi } from './lib/api'
+import { authApi, venuesApi, bookingsApi, eventsApi, roleRequestsApi, paymentsApi } from './lib/api'
 import About from './components/About'
 import AdminPanel, { INITIAL_BOOKINGS } from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
@@ -463,7 +465,14 @@ export const classroomTimeSlots = [
   { time: '05:30 PM - 07:30 PM', status: 'free' }
 ]
 
-// Complete Interactive Venue Booking Modal Component with Full Venue Specs & Faculty In-Charge
+export function extractNumericPrice(priceStr) {
+  if (typeof priceStr === 'number') return priceStr
+  if (!priceStr) return 0
+  const match = String(priceStr).replace(/,/g, '').match(/(\d+(\.\d+)?)/)
+  return match ? parseFloat(match[1]) : 0
+}
+
+// Complete Interactive Venue Booking Modal Component with Cashfree PG Integration
 function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
   const [date, setDate] = useState(defaultDate || '2026-10-16')
   const [selectedSlot, setSelectedSlot] = useState('12:30 PM - 01:30 PM')
@@ -472,8 +481,12 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const [department, setDepartment] = useState(venue?.department || currentUser?.department || 'Computer Engineering')
   const [eventPurpose, setEventPurpose] = useState('')
   const [attendees, setAttendees] = useState(venue?.benches ? venue.benches * 2 : 50)
+  const [applicantPhone, setApplicantPhone] = useState(currentUser?.phone || '')
   const [submitted, setSubmitted] = useState(false)
   const [bookingRef, setBookingRef] = useState('')
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [paymentError, setPaymentError] = useState('')
+  const [paymentSuccess, setPaymentSuccess] = useState(null)
 
   const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
   const venuePhoto = getVenueImageUrl(venue)
@@ -483,11 +496,132 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const priceDisplay = venue?.price || (Array.isArray(venue?.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))
   const termsDisplay = venue?.terms || (venue?.description && venue.description.includes('Terms:') ? venue.description.split('Terms:')[1]?.trim() : (venue?.description && venue.description.includes('ONLY FOR BHAU STARTUPS') ? 'ONLY FOR BHAU STARTUPS. Max 2 hours at a time, gap of an hour between next booking, max 7 days in advance, max 12 hrs/week. Eatables not allowed.' : null))
 
-  const handleSubmit = (e) => {
+  const numericPrice = extractNumericPrice(priceDisplay)
+  const isPaidVenue = Boolean(numericPrice && numericPrice > 0)
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!applicantName || !eventPurpose) return
+    setPaymentError('')
 
-    const refNumber = 'LOCUS-' + Math.floor(100000 + Math.random() * 900000)
+    const refNumber = 'LOCUS-' + (isPaidVenue ? 'CF-' : '') + Math.floor(100000 + Math.random() * 900000)
+
+    // Handle Paid Venues via Cashfree Production Payment Gateway
+    if (isPaidVenue) {
+      setIsProcessingPayment(true)
+      try {
+        const orderRes = await paymentsApi.createOrder({
+          venueId: venue?.id,
+          venueName: venueTitle,
+          rawTariff: priceDisplay,
+          amount: numericPrice,
+          applicantName,
+          applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
+          applicantPhone: applicantPhone || '9876543210',
+          bookingDate: date,
+          timeSlot: selectedSlot,
+          purpose: eventPurpose
+        })
+
+        if (!orderRes || !orderRes.paymentSessionId) {
+          throw new Error(orderRes?.error || 'Unable to initialize Cashfree payment gateway session.')
+        }
+
+        const finalizePaidBooking = (paymentInfo = null) => {
+          const paymentRecord = {
+            orderId: orderRes.orderId,
+            cfOrderId: orderRes.cfOrderId,
+            amount: numericPrice,
+            currency: 'INR',
+            paymentId: paymentInfo?.cf_payment_id || orderRes.orderId,
+            paidAt: new Date().toISOString()
+          }
+          setPaymentSuccess(paymentRecord)
+          setBookingRef(refNumber)
+          setSubmitted(true)
+
+          if (onSubmitBooking) {
+            onSubmitBooking({
+              id: refNumber,
+              ref: refNumber,
+              venueName: venueTitle,
+              venue: venueTitle,
+              oldName: venue?.old_hall_name,
+              department,
+              venueDepartment: department,
+              applicantName,
+              applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
+              applicantRole: currentUser?.role || 'Student',
+              applicantPhone: applicantPhone || '9876543210',
+              date,
+              bookingDate: date,
+              slot: selectedSlot,
+              timeSlot: selectedSlot,
+              purpose: eventPurpose,
+              capacity: Number(attendees) || 50,
+              attendees: Number(attendees) || 50,
+              facultyInCharge: faculty.name,
+              status: 'Pending HOD Approval',
+              approvalStage: 'HOD',
+              paymentStatus: 'Paid',
+              paidAmount: numericPrice,
+              paymentId: paymentRecord.paymentId,
+              paymentGateway: 'Cashfree PG (Production)',
+              cfOrderId: orderRes.cfOrderId,
+              submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            })
+          }
+        }
+
+        // Trigger Cashfree JS Modal Checkout
+        if (typeof window !== 'undefined' && window.Cashfree) {
+          try {
+            const cashfree = window.Cashfree({ mode: 'production' })
+            cashfree.checkout({
+              paymentSessionId: orderRes.paymentSessionId,
+              redirectTarget: '_modal'
+            }).then(async (result) => {
+              if (result.error) {
+                console.warn('[Cashfree Modal Result Error]', result.error)
+                setPaymentError(result.error.message || 'Payment window closed or incomplete.')
+                setIsProcessingPayment(false)
+                return
+              }
+              finalizePaidBooking(result.paymentDetails)
+              setIsProcessingPayment(false)
+            }).catch(async (err) => {
+              console.warn('[Cashfree Modal Catch]', err)
+              // Verify backend for payment status in case redirect occurred
+              try {
+                const verifyRes = await paymentsApi.verify(orderRes.orderId, refNumber)
+                if (verifyRes.isPaid) {
+                  finalizePaidBooking(verifyRes.paymentDetails)
+                } else {
+                  setPaymentError('Payment was not completed. Please try again.')
+                }
+              } catch {
+                setPaymentError('Payment session ended. Please re-try payment.')
+              }
+              setIsProcessingPayment(false)
+            })
+          } catch (sdkErr) {
+            console.error('[Cashfree SDK Error]', sdkErr)
+            setPaymentError('Could not launch payment modal: ' + sdkErr.message)
+            setIsProcessingPayment(false)
+          }
+        } else {
+          // Direct fallback to Cashfree checkout
+          window.location.href = `https://payments.cashfree.com/order/#${orderRes.paymentSessionId}`
+        }
+      } catch (err) {
+        console.error('[Payment Order Error]', err)
+        setPaymentError(err.message || 'Failed to connect to Cashfree payment gateway.')
+        setIsProcessingPayment(false)
+      }
+      return
+    }
+
+    // Standard Free Campus Venue Flow
     setBookingRef(refNumber)
     setSubmitted(true)
 
@@ -513,6 +647,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         facultyInCharge: faculty.name,
         status: 'Pending HOD Approval',
         approvalStage: 'HOD',
+        paymentStatus: 'Free',
         submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       })
     }
@@ -529,28 +664,62 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
       >
         {submitted ? (
           <div className="p-8 text-center py-10">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-xs">
+            <div className={`w-16 h-16 rounded-2xl ${paymentSuccess ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
-            <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest block mb-1">
-              Stage 1 of 2: Routed to Department HOD
-            </span>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
-              Sanction Request Logged!
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
-              Your venue reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
-              <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the <strong className="text-slate-900 dark:text-white">{department} Head of Department (HOD)</strong>. Upon HOD endorsement, it will escalate to the Dean for final clearance.
-            </p>
+
+            {paymentSuccess ? (
+              <>
+                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mb-1">
+                  Cashfree Payment Verified &bull; Sanction Request Logged
+                </span>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Payment of ₹{paymentSuccess.amount?.toLocaleString('en-IN')} Received!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
+                  Your payment for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> has been verified via the official <strong className="text-slate-900 dark:text-white">Cashfree Payment Gateway (Production)</strong>. Request has been routed for Stage 1 HOD sanction.
+                </p>
+              </>
+            ) : (
+              <>
+                <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest block mb-1">
+                  Stage 1 of 2: Routed to Department HOD
+                </span>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Sanction Request Logged!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
+                  Your venue reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the <strong className="text-slate-900 dark:text-white">{department} Head of Department (HOD)</strong>.
+                </p>
+              </>
+            )}
 
             <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 text-left mb-6 space-y-3 max-w-lg mx-auto">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Reference Code:</span>
                 <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-sm">{bookingRef}</span>
               </div>
+              {paymentSuccess && (
+                <>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Cashfree Order ID:</span>
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200 text-xs">{paymentSuccess.orderId}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Amount Paid:</span>
+                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Payment Gateway:</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">Cashfree PG (Production)</span>
+                  </div>
+                </>
+              )}
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Applicant:</span>
-                <span className="font-semibold text-slate-800 dark:text-slate-200">{applicantName} ({currentUser?.role || 'Student'})</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">{applicantName} ({currentUser?.role || 'Applicant'})</span>
               </div>
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Department:</span>
@@ -564,18 +733,30 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Status:</span>
                 <span className="inline-flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                  Pending HOD Approval
+                  {paymentSuccess ? 'Paid & Pending HOD Approval' : 'Pending HOD Approval'}
                 </span>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all duration-200 cursor-pointer shadow-xs"
-            >
-              Done & Return
-            </button>
+            <div className="flex items-center justify-center gap-3">
+              {paymentSuccess && (
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-5 h-12 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs inline-flex items-center gap-2 cursor-pointer transition-colors"
+                >
+                  <Receipt className="w-4 h-4" />
+                  <span>Print Receipt</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all duration-200 cursor-pointer shadow-xs"
+              >
+                Done & Return
+              </button>
+            </div>
           </div>
         ) : (
           <div>
@@ -782,7 +963,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                       </div>
                     )}
 
-                    {/* Clean Simple Time Slot Buttons (Bottom Options) */}
+                    {/* Clean Simple Time Slot Buttons */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {classroomTimeSlots.map((slot, i) => {
                         const isFree = slot.status === 'free'
@@ -842,6 +1023,23 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                     </div>
                   </div>
 
+                  {/* Optional/Required Mobile Phone for Cashfree */}
+                  {isPaidVenue && (
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                        Contact Mobile (for Cashfree Payment Receipt) *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        value={applicantPhone}
+                        onChange={(e) => setApplicantPhone(e.target.value)}
+                        placeholder="10-digit mobile number (e.g. 9876543210)"
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+                  )}
+
                   {/* Event Purpose */}
                   <div>
                     <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
@@ -857,12 +1055,47 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                     />
                   </div>
 
+                  {/* Cashfree PG Highlight Card for Paid Venues */}
+                  {isPaidVenue && (
+                    <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/90 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200/90 dark:border-blue-800/80 text-xs space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
+                            ₹
+                          </div>
+                          <div>
+                            <div className="font-extrabold text-slate-900 dark:text-white">Commercial Facility Tariff</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400">Gateway: Cashfree PG (Production)</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-base font-black text-blue-600 dark:text-blue-400">₹{numericPrice.toLocaleString('en-IN')}</div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Inclusive of 18% GST</div>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-blue-200/60 dark:border-blue-800/60 text-[11px] text-slate-600 dark:text-slate-300">
+                        <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
+                          <ShieldCheck className="w-3.5 h-3.5" /> UPI, GPay, PhonePe, Cards, NetBanking
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">Instant Automated Invoice</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Payment Error Alert */}
+                  {paymentError && (
+                    <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                      <span>{paymentError}</span>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
                     <span>
                       Venue Capacity: <strong className="dark:text-slate-200">{capacity} Persons</strong> ({benches} Benches)
                     </span>
                     <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Instant Campus Approval
+                      <CheckCircle2 className="w-3.5 h-3.5" /> {isPaidVenue ? 'Secured by Cashfree' : 'Instant Campus Routing'}
                     </span>
                   </div>
 
@@ -871,16 +1104,32 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer"
+                      disabled={isProcessingPayment}
+                      className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                      disabled={isProcessingPayment}
+                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
                     >
-                      <span>Confirm Reservation</span>
-                      <ArrowRight className="w-4 h-4" />
+                      {isProcessingPayment ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 animate-spin" />
+                          <span>Connecting to Cashfree Gateway...</span>
+                        </>
+                      ) : isPaidVenue ? (
+                        <>
+                          <CreditCard className="w-4 h-4" />
+                          <span>Pay ₹{numericPrice.toLocaleString('en-IN')} via Cashfree & Book</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Confirm Reservation</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>

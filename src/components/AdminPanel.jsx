@@ -17,7 +17,8 @@ import {
   ChevronDown,
   ChevronUp,
   CalendarDays,
-  ArrowLeft
+  ArrowLeft,
+  CreditCard
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import AdminVenues from './admin/AdminVenues'
@@ -1443,6 +1444,12 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             >
                               {b.status}
                             </span>
+                            {(b.paymentStatus === 'Paid' || b.paidAmount || b.paymentId) && (
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
+                                <CreditCard className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                <span>PAID ₹{b.paidAmount || b.amount || 1180} (Cashfree)</span>
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">

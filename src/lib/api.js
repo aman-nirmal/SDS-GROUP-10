@@ -388,3 +388,26 @@ export const eventsApi = {
     return await apiRequest('/events')
   }
 }
+
+// -------------------------------------------------------------
+// Cashfree Payments Gateway API
+// -------------------------------------------------------------
+export const paymentsApi = {
+  async createOrder(payload) {
+    return await apiRequest('/payments/create-order', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  },
+
+  async verify(orderId, bookingId = null) {
+    return await apiRequest('/payments/verify', {
+      method: 'POST',
+      body: JSON.stringify({ orderId, bookingId })
+    })
+  },
+
+  async getStatus(orderId) {
+    return await apiRequest(`/payments/status/${encodeURIComponent(orderId)}`)
+  }
+}

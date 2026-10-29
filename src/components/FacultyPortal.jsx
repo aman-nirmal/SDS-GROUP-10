@@ -11,7 +11,8 @@ import {
   MapPin,
   FileCheck2,
   AlertCircle,
-  ArrowRight
+  ArrowRight,
+  CreditCard
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 
@@ -220,6 +221,12 @@ export default function FacultyPortal({
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Confirmed Academic Slot</span>
                       </span>
+                      {(b.paymentStatus === 'Paid' || b.paidAmount || b.paymentId) && (
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                          <CreditCard className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <span>Paid ₹{b.paidAmount || b.amount || 1180} (Cashfree)</span>
+                        </span>
+                      )}
                     </div>
 
                     <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">

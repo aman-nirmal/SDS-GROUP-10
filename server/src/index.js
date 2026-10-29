@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
 import { config } from './config/env.js'
 import authRoutes from './routes/authRoutes.js'
 import venueRoutes from './routes/venueRoutes.js'
@@ -9,9 +10,14 @@ import roleRequestRoutes from './routes/roleRequestRoutes.js'
 import timetableRoutes from './routes/timetableRoutes.js'
 import logRoutes from './routes/logRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
+import paymentRoutes from './routes/paymentRoutes.js'
 import { supabase } from './config/supabase.js'
 
 const app = express()
+
+// Static Photos Serving
+app.use('/photos', express.static(path.resolve(process.cwd(), 'public/photos')))
+app.use('/photos', express.static(path.resolve(process.cwd(), 'photos')))
 
 // Global Middleware
 app.use(cors({
@@ -60,6 +66,7 @@ app.use('/api/role-requests', roleRequestRoutes)
 app.use('/api/timetable', timetableRoutes)
 app.use('/api/logs', logRoutes)
 app.use('/api/events', eventRoutes)
+app.use('/api/payments', paymentRoutes)
 
 // 404 Route Handler
 app.use((req, res) => {
