@@ -1,7 +1,11 @@
+import { importedCampusUsers } from '../../data/importedCampusUsers.js'
+import { importedFacultyUsers } from '../../data/importedFacultyUsers.js'
 // Institutional mock data for LOCUS Admin Dashboard
 // Separates mock data from presentation components so backend integration can easily replace it.
 
 export const INITIAL_ADMIN_USERS = [
+  ...importedFacultyUsers,
+  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',
@@ -94,36 +98,6 @@ export const INITIAL_ADMIN_USERS = [
 
 export const INITIAL_ADMIN_VENUES = [
   {
-    id: 'VN-COG-LAB',
-    code: 'COG-LAB',
-    name: 'Cognizant Lab',
-    department: 'Computer Engineering',
-    building: 'Computer New Building',
-    type: 'Lab',
-    capacity: 400,
-    benches: 200,
-    isActive: true,
-    status: 'Available',
-    description: 'A computer laboratory for technical workshops, programming sessions, academic activities, and approved technical events.',
-    features: ['High-End Workstations', 'LAN & High-Speed Wi-Fi', 'Smart Projectors', 'Central AC', 'Surround Sound'],
-    image: '/coep_building.png'
-  },
-  {
-    id: 'VN-MINI-AUD',
-    code: 'MINI-AUD',
-    name: 'Mini Auditorium',
-    department: 'Academics Complex',
-    building: 'Main Heritage Building',
-    type: 'Auditorium',
-    capacity: 275,
-    benches: 138,
-    isActive: true,
-    status: 'Available',
-    description: 'A mini auditorium for academic presentations, departmental events, seminars, and student activities.',
-    features: ['Stage Lighting', 'Acoustic Treatment', 'Dolby Acoustics', 'Dual Mics', 'Overhead Projector', 'Central AC'],
-    image: '/coep_building.png'
-  },
-  {
     id: 'VN-1',
     code: 'ND01',
     name: 'North Drawing Hall (ND01)',
@@ -136,7 +110,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available', // 'Available' | 'Occupied' | 'Under Maintenance' | 'Blocked'
     description: 'Historic high-capacity hall with wooden acoustics and dual digital projection.',
     features: ['Overhead Projector', 'Public Address Mic', 'Air Conditioned', 'Tiered Seating'],
-    image: '/coep_building.png'
+    image: '/photos/classroom.jpg'
   },
   {
     id: 'VN-2',
@@ -151,7 +125,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Equipped for technical symposia, hybrid webinars, and robotics presentations.',
     features: ['Smart Interactive Screen', 'Sound System', 'LAN Port', 'Document Camera'],
-    image: '/coep_building.png'
+    image: '/photos/seminar hall.webp'
   },
   {
     id: 'VN-3',
@@ -166,22 +140,126 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Occupied',
     description: 'Large seminar facility with executive podium and high-lumen projection.',
     features: ['Projector', 'Whiteboard', 'Dual Podium', 'Live Stream Camera'],
-    image: '/coep_building.png'
+    image: '/photos/seminar hall 2.jpeg'
   },
   {
-    id: 'VN-4',
+    id: 'b4a00001-0000-4000-8000-000000000001',
+    code: 'BHAU-CONF',
+    name: 'Bhau Conference Room (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Meeting Room',
+    capacity: 16,
+    benches: 8,
+    price: '₹1,180.00 / 1 hr (incl. 18% GST)',
+    duration: '1 h',
+    isActive: true,
+    status: 'Available',
+    description: 'Conference room available for Bhau Startups and outsiders. Tariff: ₹1,180.00 / 1 hr (inclusive of 18% GST). Terms: Max 2 hours at a time, gap of an hour between next booking, max 12 hours in a week. Eatables not allowed.',
+    features: ['15 Seats', 'Duration: 1 h', '₹1,180/hr (incl. 18% GST)', 'For Startups & Outsiders', 'Conference Table', 'Display Screen', 'Air Conditioned'],
+    image: '/photos/ac 2.jpeg'
+  },
+  {
+    id: 'b4a00002-0000-4000-8000-000000000002',
     code: 'BHAU-AUD',
-    name: 'BHAU Institute Main Auditorium',
-    department: 'Management',
-    building: 'BHAU Entrepreneurship Center',
+    name: 'Bhau Auditorium (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
     type: 'Auditorium',
     capacity: 250,
     benches: 125,
+    price: '₹2,950.00 / 1 hr (incl. GST)',
+    duration: '1 h',
     isActive: true,
     status: 'Available',
-    description: 'State-of-the-art auditorium for national hackathons, pitch fests, and convocations.',
-    features: ['Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Green Room', 'Dual Mics'],
-    image: '/coep_building.png'
+    description: 'Premier auditorium for national pitch fests, demo days, startup symposiums, and convocations. Tariff: ₹2,950.00 / 1 hr (includes GST). Eatables not allowed inside.',
+    features: ['250 Seats', 'Duration: 1 h', '₹2,950/hr (incl. GST)', 'Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Dual Mics'],
+    image: '/photos/audi 2.jpeg'
+  },
+  {
+    id: 'b4a00003-0000-4000-8000-000000000003',
+    code: 'BHAU-CR1',
+    name: 'Bhau Classroom 1 (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Classroom',
+    capacity: 60,
+    benches: 30,
+    price: '₹2,360.00 / 2 hr (incl. 18% GST)',
+    duration: '2 h',
+    isActive: true,
+    status: 'Available',
+    description: 'Classroom 1 for entrepreneurship workshops and training bootcamps. Tariff: ₹2,360.00 / 2 hr (inclusive of 18% GST). Duration: 2 h block.',
+    features: ['60 Seats', 'Duration: 2 h', '₹2,360/2 hr (incl. 18% GST)', 'Projector & Screen', 'Whiteboard', 'Air Conditioned'],
+    image: '/photos/classroom.jpg'
+  },
+  {
+    id: 'b4a00004-0000-4000-8000-000000000004',
+    code: 'BHAU-OS-GND',
+    name: 'Bhau Open Space (Ground) (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Seminar Hall',
+    capacity: 40,
+    benches: 20,
+    price: '₹1,770.00 / 1 hr (incl. 18% GST)',
+    duration: '1 h',
+    isActive: true,
+    status: 'Available',
+    description: 'Open ground courtyard for startup exhibitions, demo kiosks, and networking. Tariff: ₹1,770.00 / 1 hr (inclusive of 18% GST). Duration: 1 h.',
+    features: ['50 Persons', 'Duration: 1 h', '₹1,770/hr (incl. 18% GST)', 'Ground Courtyard', 'Open Air Space', 'Wi-Fi Access'],
+    image: '/photos/seminar hall.webp'
+  },
+  {
+    id: 'b4a00005-0000-4000-8000-000000000005',
+    code: 'BHAU-OS-TER',
+    name: 'Bhau Open Space (Terrace) (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Seminar Hall',
+    capacity: 30,
+    benches: 15,
+    price: '₹2,360.00 / 1 hr',
+    duration: '1 h',
+    isActive: true,
+    status: 'Available',
+    description: 'Scenic rooftop terrace space overlooking the Mula river. Tariff: ₹2,360.00 / 1 hr. Duration: 1 h. Perfect for evening founder meetups and venture mixers.',
+    features: ['40 Persons', 'Duration: 1 h', '₹2,360/hr', 'Top Floor Terrace', 'Scenic Riverbank View', 'Ambient Lighting'],
+    image: '/photos/seminar hall 2.jpeg'
+  },
+  {
+    id: 'b4a00006-0000-4000-8000-000000000006',
+    code: 'BHAU-MR1',
+    name: 'Bhau Meeting Room 1 (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Meeting Room',
+    capacity: 8,
+    benches: 4,
+    price: '₹1,000.00 / 1 hr (ONLY FOR BHAU STARTUPS)',
+    duration: '1 h',
+    isActive: true,
+    status: 'Available',
+    description: 'ONLY FOR BHAU STARTUPS. Tariff: ₹1,000.00 / 1 hr. Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
+    features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr', 'Discussion Table', 'Whiteboard', 'Air Conditioned'],
+    image: '/photos/ac 1.jpeg'
+  },
+  {
+    id: 'b4a00007-0000-4000-8000-000000000007',
+    code: 'BHAU-MR2',
+    name: 'Bhau Meeting Room 2 (Bhau Institute of Innovation)',
+    department: 'Bhau Institute of Innovation',
+    building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
+    type: 'Meeting Room',
+    capacity: 8,
+    benches: 4,
+    price: '₹1,000.00 / 1 hr (incl. 18% GST, ONLY FOR BHAU STARTUPS)',
+    duration: '1 h',
+    isActive: true,
+    status: 'Available',
+    description: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Tariff: ₹1,000.00 / 1 hr (incl. 18% GST). Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
+    features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned'],
+    image: '/photos/ac 3.webp'
   },
   {
     id: 'VN-5',
@@ -196,7 +274,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Under Maintenance',
     description: 'Smart lecture hall with acoustic ceiling treatment and ceiling-mounted mics.',
     features: ['Dual HD Projectors', 'WiFi 6 Access Point', 'Surround Sound', 'Smart Whiteboard'],
-    image: '/coep_building.png'
+    image: '/photos/classroom.jpg'
   },
   {
     id: 'VN-6',
@@ -211,7 +289,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Standard lecture room for second and third year structural engineering coursework.',
     features: ['Green Board', 'Fixed Benches', 'Ceiling Fans', 'HDMI Wall Plate'],
-    image: '/coep_building.png'
+    image: '/photos/sc1.jpeg'
   },
   {
     id: 'VN-7',
@@ -226,7 +304,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Blocked',
     description: 'Tiered classroom reserved for institute-wide foundation courses and exams.',
     features: ['Motorized Screen', 'Dual Projectors', 'PA Microphone', 'AC'],
-    image: '/coep_building.png'
+    image: '/photos/ac 1.jpeg'
   },
   {
     id: 'VN-8',
@@ -241,7 +319,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Under Maintenance',
     description: 'Focused collaborative discussion room for departmental clubs and committee meets.',
     features: ['Conference Table', 'Display Monitor', 'Whiteboard'],
-    image: '/coep_building.png'
+    image: '/photos/ac 2.jpeg'
   }
 ]
 

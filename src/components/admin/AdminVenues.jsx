@@ -191,7 +191,7 @@ export default function AdminVenues({
             <button
               type="button"
               onClick={handleRefresh}
-              className="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-850 shadow-2xs flex items-center gap-1.5"
+              className="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-800 shadow-2xs flex items-center gap-1.5"
               title="Refresh venue states"
             >
               <RotateCcw className={`w-3.5 h-3.5 text-slate-500 dark:text-slate-400 ${isLoading ? 'animate-spin' : ''}`} />
@@ -382,7 +382,7 @@ export default function AdminVenues({
           /* Responsive Table */
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
-              <thead className="bg-slate-50/80 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px]">
+              <thead className="bg-slate-100/75 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="py-3.5 px-4 sm:px-6">
                     <button
@@ -610,7 +610,7 @@ export default function AdminVenues({
         )}
 
         {/* Footer with totals */}
-        <div className="p-3.5 sm:px-6 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-2">
+        <div className="p-3.5 sm:px-6 bg-slate-100/60 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-2">
           <span>
             Showing <strong className="text-slate-800 dark:text-slate-200">{filteredVenues.length}</strong> of{' '}
             <strong className="text-slate-800 dark:text-slate-200">{venues.length}</strong> total spaces
@@ -688,7 +688,7 @@ export default function AdminVenues({
               </div>
             </div>
 
-            <p className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-850 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800">
+            <p className="text-xs text-slate-600 dark:text-slate-300 bg-slate-100/60 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800">
               This space will no longer be visible in booking catalogs. Any existing past reservations will remain in audit logs.
             </p>
 

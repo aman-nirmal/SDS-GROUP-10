@@ -1,4 +1,4 @@
-const API_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || (typeof process !== 'undefined' && process.env?.VITE_API_URL) || 'http://localhost:5001/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
 
 export async function apiRequest(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`
@@ -12,15 +12,21 @@ export async function apiRequest(endpoint, options = {}) {
     })
     const data = await response.json()
     if (!response.ok) {
-      throw new Error(data.error || `Request failed with status ${response.status}`)
+      const err = new Error(data.error || `Request failed with status ${response.status}`)
+      err.status = response.status
+      err.data = data
+      throw err
     }
     return data
   } catch (err) {
-    console.warn(`[API] Network request to ${endpoint} failed, using local handler:`, err.message)
+    console.warn(`[API] Network request to ${endpoint} failed:`, err.message)
     throw err
   }
 }
 
+// -------------------------------------------------------------
+// Authentication API
+// -------------------------------------------------------------
 export const authApi = {
   async verifyEmail(email) {
     try {
@@ -46,7 +52,6 @@ export const authApi = {
         body: JSON.stringify({ email })
       })
     } catch {
-      // Local fallback simulation
       const mockOtp = Math.floor(100000 + Math.random() * 900000).toString()
       return {
         success: true,
@@ -68,7 +73,6 @@ export const authApi = {
         body: JSON.stringify({ email, otp, role })
       })
     } catch {
-      // Local fallback
       const trimmed = email.trim().toLowerCase()
       let userRole = role || 'Student'
       let name = trimmed.split('@')[0].replace(/[._]/g, ' ')
@@ -182,58 +186,228 @@ export const authApi = {
         }
       }
     }
-  },
-
-  async forgotPasswordSendCode(email) {
-    try {
-      return await apiRequest('/auth/forgot-password/send-code', {
-        method: 'POST',
-        body: JSON.stringify({ email })
-      })
-    } catch {
-      // Offline/Local fallback
-      return {
-        success: true,
-        message: 'If an account exists with this email address, a password recovery code has been sent. Please check your inbox.',
-        email
-      }
-    }
-  },
-
-  async forgotPasswordVerifyCode(email, code) {
-    try {
-      return await apiRequest('/auth/forgot-password/verify-code', {
-        method: 'POST',
-        body: JSON.stringify({ email, code })
-      })
-    } catch {
-      // Local fallback: verify sandbox test code '123456'
-      if (code && code.trim() === '123456') {
-        return {
-          success: true,
-          resetToken: 'mock-reset-token-' + Date.now(),
-          message: 'Code verified successfully.'
-        }
-      }
-      throw new Error('Invalid verification code. Please check your inbox.')
-    }
-  },
-
-  async forgotPasswordReset(email, resetToken, newPassword) {
-    try {
-      return await apiRequest('/auth/forgot-password/reset-password', {
-        method: 'POST',
-        body: JSON.stringify({ email, resetToken, newPassword })
-      })
-    } catch {
-      if (!newPassword || newPassword.length < 6) {
-        throw new Error('Password must be at least 6 characters in length.')
-      }
-      return {
-        success: true,
-        message: 'Your password has been reset successfully. Please log in with your new password.'
-      }
-    }
   }
 }
 
+// -------------------------------------------------------------
+// Venues API
+// -------------------------------------------------------------
+export const venuesApi = {
+  async getAll(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    return await apiRequest(`/venues${query ? `?${query}` : ''}`)
+  },
+
+  async getById(id) {
+    return await apiRequest(`/venues/${id}`)
+  },
+
+  async create(venueData) {
+    return await apiRequest('/venues', {
+      method: 'POST',
+      body: JSON.stringify(venueData)
+    })
+  },
+
+  async update(id, updates) {
+    return await apiRequest(`/venues/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates)
+    })
+  },
+
+  async delete(id) {
+    return await apiRequest(`/venues/${id}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Bookings API
+// -------------------------------------------------------------
+export const bookingsApi = {
+  async getAll(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    return await apiRequest(`/bookings${query ? `?${query}` : ''}`)
+  },
+
+  async getById(id) {
+    return await apiRequest(`/bookings/${id}`)
+  },
+
+  async create(bookingData) {
+    return await apiRequest('/bookings', {
+      method: 'POST',
+      body: JSON.stringify(bookingData)
+    })
+  },
+
+  async updateStatus(id, status, reason = '', actor = '') {
+    return await apiRequest(`/bookings/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, reason, actor })
+    })
+  },
+
+  async delete(id) {
+    return await apiRequest(`/bookings/${id}`, {
+      method: 'DELETE'
+    })
+  },
+
+  async verifyPass(passCode) {
+    return await apiRequest(`/bookings/verify-pass/${encodeURIComponent(passCode)}`)
+  },
+
+  async sendPassEmail(data) {
+    return await apiRequest('/bookings/send-pass-email', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Institutional Users & Directory API
+// -------------------------------------------------------------
+export const usersApi = {
+  async getAll(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    return await apiRequest(`/users${query ? `?${query}` : ''}`)
+  },
+
+  async create(userData) {
+    return await apiRequest('/users', {
+      method: 'POST',
+      body: JSON.stringify(userData)
+    })
+  },
+
+  async bulkImport(usersArray) {
+    return await apiRequest('/users/import', {
+      method: 'POST',
+      body: JSON.stringify({ users: usersArray })
+    })
+  },
+
+  async updateRole(id, role) {
+    return await apiRequest(`/users/${id}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role })
+    })
+  },
+
+  async updateStatus(id, status) {
+    return await apiRequest(`/users/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    })
+  },
+
+  async delete(id) {
+    return await apiRequest(`/users/${id}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Role Requests API
+// -------------------------------------------------------------
+export const roleRequestsApi = {
+  async getAll() {
+    return await apiRequest('/role-requests')
+  },
+
+  async create(requestData) {
+    return await apiRequest('/role-requests', {
+      method: 'POST',
+      body: JSON.stringify(requestData)
+    })
+  },
+
+  async updateStatus(id, status, reviewedBy = 'Administrator') {
+    return await apiRequest(`/role-requests/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, reviewedBy })
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Academic Timetable API
+// -------------------------------------------------------------
+export const timetableApi = {
+  async getAll() {
+    return await apiRequest('/timetable')
+  },
+
+  async create(entryData) {
+    return await apiRequest('/timetable', {
+      method: 'POST',
+      body: JSON.stringify(entryData)
+    })
+  },
+
+  async bulkImport(entriesArray) {
+    return await apiRequest('/timetable/bulk', {
+      method: 'POST',
+      body: JSON.stringify({ entries: entriesArray })
+    })
+  },
+
+  async delete(id) {
+    return await apiRequest(`/timetable/${id}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Audit Logs API
+// -------------------------------------------------------------
+export const logsApi = {
+  async getAll(limit = 100) {
+    return await apiRequest(`/logs?limit=${limit}`)
+  },
+
+  async create(logData) {
+    return await apiRequest('/logs', {
+      method: 'POST',
+      body: JSON.stringify(logData)
+    })
+  }
+}
+
+// -------------------------------------------------------------
+// Campus Events API
+// -------------------------------------------------------------
+export const eventsApi = {
+  async getAll() {
+    return await apiRequest('/events')
+  }
+}
+
+// -------------------------------------------------------------
+// Cashfree Payments Gateway API
+// -------------------------------------------------------------
+export const paymentsApi = {
+  async createOrder(payload) {
+    return await apiRequest('/payments/create-order', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  },
+
+  async verify(orderId, bookingId = null) {
+    return await apiRequest('/payments/verify', {
+      method: 'POST',
+      body: JSON.stringify({ orderId, bookingId })
+    })
+  },
+
+  async getStatus(orderId) {
+    return await apiRequest(`/payments/status/${encodeURIComponent(orderId)}`)
+  }
+}
