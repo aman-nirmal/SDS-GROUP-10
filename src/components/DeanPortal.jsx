@@ -12,17 +12,23 @@ import {
   QrCode,
   Search,
   ArrowRight,
-  Stamp
+  Stamp,
+  FlaskConical,
+  Layers
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import PersonaVenuesView from './PersonaVenuesView'
 import { INITIAL_BOOKINGS } from './AdminPanel'
 import { bookingsApi } from '../lib/api'
+import { isLabVenue } from '../App'
 
 export default function DeanPortal({
   currentUser,
   onNavigateLogin,
   bookings: propBookings,
-  onUpdateStatus
+  venues = [],
+  onUpdateStatus,
+  onBookVenue
 }) {
   const [localBookings, setLocalBookings] = useState(() => {
     if (propBookings && propBookings.length > 0) return propBookings
@@ -299,25 +305,49 @@ export default function DeanPortal({
               >
                 All ({deptFiltered.length})
               </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('venues')}
+                className={`px-3.5 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                  activeTab === 'venues'
+                    ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-blue-800 dark:text-blue-300 border-blue-300/80 dark:border-blue-800/80 hover:bg-blue-50/60'
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5" />
+                <span>Campus Venues & Facilities</span>
+              </button>
             </div>
 
             {/* Search */}
-            <div className="relative w-full sm:w-64">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search venue or applicant..."
-                className="w-full h-10 px-3 pl-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 outline-none focus:border-blue-500"
-              />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            </div>
+            {activeTab !== 'venues' && (
+              <div className="relative w-full sm:w-64">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search venue or applicant..."
+                  className="w-full h-10 px-3 pl-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 outline-none focus:border-blue-500"
+                />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Requests Feed */}
+        {/* Requests Feed OR Campus Venues Under Dean */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
-          {filteredBookings.length === 0 ? (
+          {activeTab === 'venues' ? (
+            <PersonaVenuesView
+              currentUser={currentUser}
+              persona="dean"
+              venues={venues}
+              campusBookings={allBookings}
+              onBookVenue={onBookVenue}
+              defaultDepartment="All"
+            />
+          ) : filteredBookings.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center mx-auto mb-3">
                 <ShieldCheck className="w-6 h-6" />
@@ -334,6 +364,7 @@ export default function DeanPortal({
               const bookingId = b.id || b.ref
               const venueName = b.venueName || b.venue || 'Venue'
               const venueDept = b.venueDepartment || b.department || 'Central Campus'
+              const isLab = isLabVenue({ name: venueName, new_hall_name: venueName, type: 'Laboratories' }) || venueName.toLowerCase().includes('lab')
               const isPendingDean = b.status === 'Pending Dean Approval'
               const isCleared = b.status === 'Confirmed' || b.status === 'Approved'
               const isDeclined = b.status === 'Rejected' || b.status === 'Cancelled'
@@ -355,10 +386,22 @@ export default function DeanPortal({
                         <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                           {venueDept}
                         </span>
+                        {isLab && b.labAssistantApproval?.status === 'Approved' && (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                            <FlaskConical className="w-3.5 h-3.5 text-teal-600" />
+                            <span>Stage 1: Lab Assistant Cleared</span>
+                          </span>
+                        )}
+                        {b.hodApproval?.status === 'Approved' && (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>Stage 2: HOD Sanctioned</span>
+                          </span>
+                        )}
                         {isPendingDean && (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                             <Clock className="w-3.5 h-3.5 animate-pulse text-blue-500" />
-                            <span>Action Required: Stage 2 Dean Clearance</span>
+                            <span>Action Required: Final Dean Clearance</span>
                           </span>
                         )}
                         {isCleared && (

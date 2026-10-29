@@ -40,7 +40,9 @@ import {
   CreditCard,
   Receipt,
   Camera,
-  Images
+  Images,
+  FlaskConical,
+  Building2
 } from 'lucide-react'
 import UserProfileModal from './components/UserProfileModal'
 import { INITIAL_ROLE_REQUESTS } from './components/admin/mockAdminData'
@@ -54,6 +56,8 @@ import DeanPortal from './components/DeanPortal'
 import StudentPortal from './components/StudentPortal'
 import ClubPortal from './components/ClubPortal'
 import SecurityPortal from './components/SecurityPortal'
+import FacultyPortal from './components/FacultyPortal'
+import LabAssistantPortal from './components/LabAssistantPortal'
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 function FlyingBirds() {
@@ -297,6 +301,29 @@ function formatDateDisplay(dateStr) {
   }
 }
 
+// Helper function to identify engineering laboratories that require 3-stage governance (Lab Assistant -> HOD -> Dean)
+export function isLabVenue(venue) {
+  if (!venue) return false
+  if (venue.isLab === true) return true
+  const type = (venue.type || '').toLowerCase()
+  const name = `${venue.new_hall_name || ''} ${venue.old_hall_name || ''} ${venue.name || ''}`.toLowerCase()
+  const code = (venue.code || venue.hall_code || '').toLowerCase()
+  return (
+    type.includes('lab') ||
+    type.includes('laboratory') ||
+    name.includes('lab') ||
+    name.includes('laboratory') ||
+    code.includes('lab') ||
+    code.includes('cog-lab') ||
+    code.includes('se-lab') ||
+    code.includes('iot-lab') ||
+    code.includes('sm-lab') ||
+    code.includes('geo-lab') ||
+    code.includes('robo-lab') ||
+    code.includes('vlsi-lab')
+  )
+}
+
 // Helper function to get multiple authentic high-quality images from the campus photos repository
 export function getVenueImages(venue) {
   const list = []
@@ -325,8 +352,16 @@ export function getVenueImages(venue) {
 
   let defaults = []
 
+  // Engineering Laboratories (Computer Labs, Robotics Labs, Mechanics Labs)
+  if (isLabVenue(venue) || type.includes('lab') || name.includes('lab') || code.includes('lab')) {
+    if (dept.includes('computer') || dept.includes('data') || dept.includes('ai') || name.includes('cognizant') || name.includes('software')) {
+      defaults = ['/photos/computer-lab.jpg', '/photos/smart-classroom.jpg', '/photos/robotics-lab.jpg']
+    } else {
+      defaults = ['/photos/robotics-lab.jpg', '/photos/computer-lab.jpg', '/photos/smart-classroom.jpg']
+    }
+  }
   // Mini Auditorium
-  if (name.includes('mini') || code.includes('mini')) {
+  else if (name.includes('mini') || code.includes('mini')) {
     defaults = ['/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/audi 2.jpeg']
   }
   // Auditoriums (COEP Main Auditorium, Bhau Auditorium, etc.)
@@ -515,6 +550,7 @@ export function extractNumericPrice(priceStr) {
 
 export function isClassroomVenue(venue) {
   if (!venue) return false
+  if (isLabVenue(venue)) return false // Laboratories require 3-stage governance (Lab Assistant -> HOD -> Dean)
   const type = (venue.type || '').toLowerCase()
   const name = `${venue.new_hall_name || ''} ${venue.old_hall_name || ''} ${venue.name || ''}`.toLowerCase()
   if (type.includes('auditorium') || type.includes('meeting') || type.includes('open space')) return false
@@ -542,6 +578,7 @@ export function isDepartmentMatch(userDept, venueDept) {
 // Complete Interactive Venue Booking Modal Component with Cashfree PG Integration
 function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
   const isFaculty = currentUser?.role === 'Faculty'
+  const isLab = isLabVenue(venue)
   const isClassroom = isClassroomVenue(venue)
   const isHomeDept = isDepartmentMatch(currentUser?.department, venue?.department)
 
@@ -601,8 +638,9 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
 
   // Faculty can book classrooms (in their department only) and it will be instant approved.
   // For any event (or outside their department or non-classroom), they need permission from HOD and Dean.
+  // For laboratories, 3-stage governance is ALWAYS required (Lab Assistant -> HOD -> Dean).
   const isEvent = bookingCategory === 'event' || /event|seminar|symposium|fest|hackathon|workshop|conference|cultural/i.test(eventPurpose)
-  const isFacultyInstantApproved = isFaculty && isClassroom && isHomeDept && !isEvent && !isPaidVenue
+  const isFacultyInstantApproved = isFaculty && isClassroom && isHomeDept && !isEvent && !isPaidVenue && !isLab
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -730,9 +768,24 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
     setBookingRef(refNumber)
     setSubmitted(true)
 
-    const initialStatus = isFacultyInstantApproved ? 'Confirmed' : 'Pending HOD Approval'
-    const approvalStage = isFacultyInstantApproved ? 'Completed' : 'HOD'
+    const initialStatus = isLab
+      ? 'Pending Lab Assistant Approval'
+      : isFacultyInstantApproved
+      ? 'Confirmed'
+      : 'Pending HOD Approval'
+
+    const approvalStage = isLab
+      ? 'LabAssistant'
+      : isFacultyInstantApproved
+      ? 'Completed'
+      : 'HOD'
+
     const passCode = isFacultyInstantApproved ? `COEP-PASS-${refNumber}` : null
+    const bookingNotes = isLab
+      ? '3-Stage Laboratory Clearance: Awaiting Lab Assistant Technical & Safety Review'
+      : isFacultyInstantApproved
+      ? 'Instant Approved: Faculty Academic Lecture in Home Department'
+      : ''
 
     if (onSubmitBooking) {
       onSubmitBooking({
@@ -759,7 +812,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         approvalStage,
         digitalPassCode: passCode,
         passCode,
-        notes: isFacultyInstantApproved ? 'Instant Approved: Faculty Academic Lecture in Home Department' : '',
+        notes: bookingNotes,
         paymentStatus: 'Free',
         submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       })
@@ -777,7 +830,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
       >
         {submitted ? (
           <div className="p-8 text-center py-10 max-w-xl mx-auto">
-            <div className={`w-16 h-16 rounded-2xl ${paymentSuccess || isFacultyInstantApproved ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
+            <div className={`w-16 h-16 rounded-2xl ${paymentSuccess || isFacultyInstantApproved ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : isLab ? 'bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
 
@@ -805,6 +858,19 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
                   Your academic reservation for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
                   <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) is <strong className="text-emerald-600 dark:text-emerald-400">instantly confirmed</strong> for your department ({currentUser?.department || venue?.department}). Digital gate pass has been activated in My Bookings.
+                </p>
+              </>
+            ) : isLab ? (
+              <>
+                <span className="text-[11px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest block mb-1">
+                  Stage 1 of 3: Laboratory Technical Clearance
+                </span>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Lab Clearance Request Logged!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
+                  Your reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) requires 3-stage governance. It has been routed to the <strong className="text-teal-600 dark:text-teal-400">Lab Assistant</strong> for technical & safety review. Once cleared, it will proceed to the <strong className="text-slate-900 dark:text-white">HOD</strong> and <strong className="text-slate-900 dark:text-white">Dean</strong>.
                 </p>
               </>
             ) : (
@@ -1083,6 +1149,21 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                       </a>
                     </div>
                   </div>
+
+                  {/* 3-Stage Laboratory Governance Notice */}
+                  {isLab && (
+                    <div className="p-3.5 rounded-2xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-xs flex items-start gap-2.5">
+                      <FlaskConical className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-teal-950 dark:text-teal-200 block">
+                          3-Stage Laboratory Governance Active
+                        </span>
+                        <p className="text-teal-800 dark:text-teal-300 leading-relaxed text-[11px]">
+                          This space requires technical clearance by the <strong>Lab Assistant</strong> (apparatus & safety check) before proceeding to the <strong>HOD</strong> and <strong>Dean</strong>.
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Installed Facilities & Amenities */}
                   <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
@@ -3046,6 +3127,113 @@ const sampleVenuesFallback = [
     image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
     features: ['Video Conferencing', 'Dual HD Displays', 'Central AC']
   },
+
+  // --- Department Laboratories (Require 3-Stage Governance: Lab Assistant -> HOD -> Dean) ---
+  {
+    id: 'vn-comp-cog-lab',
+    code: 'COG-LAB',
+    new_hall_name: 'COG-LAB',
+    old_hall_name: 'Cognizant Intelligent Systems & AI Lab',
+    department: 'Computer Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 30,
+    capacity: 60,
+    is_active: true,
+    image: '/photos/computer-lab.jpg',
+    images: ['/photos/computer-lab.jpg', '/photos/smart-classroom.jpg', '/photos/robotics-lab.jpg'],
+    features: ['High-Performance GPU Workstations', 'Dual 4K Displays', 'Gigabit Ethernet', 'NVIDIA CUDA Cluster', '3-Stage Lab Governance']
+  },
+  {
+    id: 'vn-comp-se-lab',
+    code: 'SE-LAB',
+    new_hall_name: 'SE-LAB',
+    old_hall_name: 'Software Engineering & Cloud Computing Lab',
+    department: 'Computer Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 25,
+    capacity: 50,
+    is_active: true,
+    image: '/photos/computer-lab.jpg',
+    images: ['/photos/computer-lab.jpg', '/photos/smart-classroom.jpg'],
+    features: ['Linux Dev Environments', 'Kubernetes Cluster Access', 'Dual Displays', 'Fiber Internet']
+  },
+  {
+    id: 'vn-ce-geo-lab',
+    code: 'GEO-LAB',
+    new_hall_name: 'GEO-LAB',
+    old_hall_name: 'Geotechnical Engineering & Soil Mechanics Laboratory',
+    department: 'Civil Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 20,
+    capacity: 40,
+    is_active: true,
+    image: '/photos/robotics-lab.jpg',
+    images: ['/photos/robotics-lab.jpg', '/photos/smart-classroom.jpg'],
+    features: ['Triaxial Compression Apparatus', 'Direct Shear Test Setup', 'Hydraulic Press', 'Digital Data Loggers']
+  },
+  {
+    id: 'vn-ce-sm-lab',
+    code: 'SM-LAB',
+    new_hall_name: 'SM-LAB',
+    old_hall_name: 'Strength of Materials & Concrete Testing Lab',
+    department: 'Civil Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 22,
+    capacity: 45,
+    is_active: true,
+    image: '/photos/robotics-lab.jpg',
+    images: ['/photos/robotics-lab.jpg', '/photos/smart-classroom.jpg'],
+    features: ['Universal Testing Machine (1000 kN)', 'Torsion Testing Setup', 'Hardness Testers', 'Impact Testing Rig']
+  },
+  {
+    id: 'vn-mech-robo-lab',
+    code: 'ROBO-LAB',
+    new_hall_name: 'ROBO-LAB',
+    old_hall_name: 'Advanced Robotics & Mechatronics Lab',
+    department: 'Mechanical Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 20,
+    capacity: 40,
+    is_active: true,
+    image: '/photos/robotics-lab.jpg',
+    images: ['/photos/robotics-lab.jpg', '/photos/computer-lab.jpg'],
+    features: ['6-Axis Industrial Robotic Arms', 'PLC & SCADA Rigs', 'Pneumatics & Hydraulics Workstations', 'Safety Enclosures']
+  },
+  {
+    id: 'vn-entc-vlsi-lab',
+    code: 'VLSI-LAB',
+    new_hall_name: 'VLSI-LAB',
+    old_hall_name: 'VLSI & Embedded Systems Design Lab',
+    department: 'Electronics and Telecommunication Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 25,
+    capacity: 50,
+    is_active: true,
+    image: '/photos/robotics-lab.jpg',
+    images: ['/photos/robotics-lab.jpg', '/photos/computer-lab.jpg'],
+    features: ['Cadence & Synopsys EDA Suite', 'FPGA Development Boards (Xilinx/Altera)', 'Digital Storage Oscilloscopes', 'Logic Analyzers']
+  },
+  {
+    id: 'vn-ee-iot-lab',
+    code: 'IOT-LAB',
+    new_hall_name: 'IOT-LAB',
+    old_hall_name: 'Smart Grid & IoT Automation Lab',
+    department: 'Electrical Engineering',
+    type: 'Laboratories',
+    isLab: true,
+    benches: 22,
+    capacity: 45,
+    is_active: true,
+    image: '/photos/robotics-lab.jpg',
+    images: ['/photos/robotics-lab.jpg', '/photos/computer-lab.jpg'],
+    features: ['Smart Energy Meters', 'Industrial IoT Gateways', 'Programmable DC Power Supplies', 'Sensor Modules']
+  },
   {
     id: 'vn-mr-04',
     new_hall_name: 'MR 04',
@@ -3214,6 +3402,9 @@ export const ROUTE_MAP = {
   admin: '/admin',
   hod: '/hod',
   dean: '/dean',
+  faculty: '/faculty',
+  lab_assistant: '/lab-assistant',
+  'lab-assistant': '/lab-assistant',
   club: '/club',
   security: '/security',
   guest: '/guest',
@@ -3254,6 +3445,10 @@ export function parseRoute(
     tab = 'hod'
   } else if (cleanPath === '/dean') {
     tab = 'dean'
+  } else if (cleanPath === '/faculty') {
+    tab = 'faculty'
+  } else if (cleanPath === '/lab-assistant' || cleanPath === '/lab_assistant') {
+    tab = 'lab_assistant'
   } else if (cleanPath === '/club') {
     tab = 'club'
   } else if (cleanPath === '/security') {
@@ -3434,7 +3629,7 @@ export default function App() {
     const handlePopState = () => {
       const parsed = parseRoute()
 
-      const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
+      const protectedTabs = ['student', 'faculty', 'lab_assistant', 'hod', 'dean', 'club', 'admin', 'security']
       let isAuthed = false
       try {
         isAuthed = !!localStorage.getItem('locus_auth_user')
@@ -3522,6 +3717,10 @@ export default function App() {
 
   const pendingDeanCount = campusBookings.filter(
     (b) => b.status === 'Pending Dean Approval'
+  ).length
+
+  const pendingLabAssistantCount = campusBookings.filter(
+    (b) => b.status === 'Pending Lab Assistant Approval' || b.status === 'Pending Lab Clearance'
   ).length
 
   const [userBookings, setUserBookings] = useState([])
@@ -3687,7 +3886,7 @@ export default function App() {
   }, [])
 
   const handleNavClick = (tab) => {
-    const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
+    const protectedTabs = ['student', 'faculty', 'lab_assistant', 'hod', 'dean', 'club', 'admin', 'security']
     if (protectedTabs.includes(tab) && !currentUser) {
       setActiveTab('login')
       setIsMobileMenuOpen(false)
@@ -3711,9 +3910,9 @@ export default function App() {
     setIsMobileMenuOpen(false)
   }
 
-  const handleUpdateBookingStatus = async (bookingId, newStatus, reason = '') => {
+  const handleUpdateBookingStatus = async (bookingId, newStatus, reason = '', updatedFields = {}) => {
     setCampusBookings((prev) => {
-      const updated = prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
+      const updated = prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus, ...updatedFields } : b))
       try {
         localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
       } catch {
@@ -3722,7 +3921,7 @@ export default function App() {
       return updated
     })
     setUserBookings((prev) =>
-      prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus } : b))
+      prev.map((b) => ((b.id === bookingId || b.ref === bookingId) ? { ...b, status: newStatus, ...updatedFields } : b))
     )
 
     try {
@@ -3831,7 +4030,12 @@ export default function App() {
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
             campusBookings={campusBookings}
+            venues={venues}
             onExploreVenues={() => setActiveTab('venues')}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
             onUpdateStatus={handleUpdateBookingStatus}
           />
         )
@@ -3860,7 +4064,10 @@ export default function App() {
                     setActiveTab('dean')
                     return
                   } else if (user.role === 'Faculty') {
-                    setActiveTab('my-bookings')
+                    setActiveTab('faculty')
+                    return
+                  } else if (user.role === 'Lab Assistant') {
+                    setActiveTab('lab_assistant')
                     return
                   } else if (user.role === 'Club Lead') {
                     setActiveTab('club')
@@ -3895,13 +4102,70 @@ export default function App() {
           />
         )
       case 'faculty':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Faculty' || user.role === 'Administrator' ? 'faculty' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
         return (
-          <StudentPortal
+          <FacultyPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            campusBookings={campusBookings}
-            onExploreVenues={() => setActiveTab('venues')}
+            bookings={campusBookings}
+            venues={venues}
+            onAddBooking={handleAddBooking}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
+          />
+        )
+      case 'lab_assistant':
+      case 'lab-assistant':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Lab Assistant' || user.role === 'Administrator' ? 'lab_assistant' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <LabAssistantPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            bookings={campusBookings}
+            venues={venues}
             onUpdateStatus={handleUpdateBookingStatus}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
           />
         )
       case 'hod':
@@ -3929,7 +4193,12 @@ export default function App() {
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
             bookings={campusBookings}
+            venues={venues}
             onUpdateStatus={handleUpdateBookingStatus}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
           />
         )
       case 'dean':
@@ -3957,7 +4226,12 @@ export default function App() {
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
             bookings={campusBookings}
+            venues={venues}
             onUpdateStatus={handleUpdateBookingStatus}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
           />
         )
       case 'student':
@@ -3985,7 +4259,12 @@ export default function App() {
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
             campusBookings={campusBookings}
+            venues={venues}
             onExploreVenues={() => setActiveTab('venues')}
+            onBookVenue={(v) => {
+              setSelectedVenueForBooking(v)
+              setIsBookingModalOpen(true)
+            }}
             onUpdateStatus={handleUpdateBookingStatus}
           />
         )
@@ -4420,6 +4699,37 @@ export default function App() {
 
 
 
+            {currentUser && currentUser.role === 'Faculty' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('faculty')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'faculty'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
+                  }`}
+              >
+                <span>Faculty Venues</span>
+              </button>
+            )}
+
+            {currentUser && currentUser.role === 'Lab Assistant' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('lab_assistant')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'lab_assistant'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
+                  }`}
+              >
+                <span>Lab Clearances</span>
+                {pendingLabAssistantCount > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-600 text-white font-bold ml-0.5">
+                    {pendingLabAssistantCount}
+                  </span>
+                )}
+              </button>
+            )}
+
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button
                 type="button"
@@ -4648,6 +4958,31 @@ export default function App() {
             )}
 
 
+
+            {currentUser && currentUser.role === 'Faculty' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('faculty')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                <span>Faculty Venues</span>
+              </button>
+            )}
+
+            {currentUser && currentUser.role === 'Lab Assistant' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('lab_assistant')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'lab_assistant' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                <span>Lab Clearances</span>
+                {pendingLabAssistantCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-600 text-white font-bold">
+                    {pendingLabAssistantCount}
+                  </span>
+                )}
+              </button>
+            )}
 
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button
@@ -4915,6 +5250,16 @@ export default function App() {
         currentUser={currentUser}
         roleRequests={roleRequests}
         onSubmitRequest={handleUserSubmitRoleRequest}
+        onSwitchUser={(user, targetPortal) => {
+          setCurrentUser(user)
+          try {
+            localStorage.setItem('locus_auth_user', JSON.stringify(user))
+          } catch {
+            // ignore
+          }
+          if (targetPortal) setActiveTab(targetPortal)
+          setIsProfileModalOpen(false)
+        }}
       />
     </div>
   )

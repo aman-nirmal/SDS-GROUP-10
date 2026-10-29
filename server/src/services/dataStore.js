@@ -618,9 +618,18 @@ class DataStore {
     )
     const venueDepartment = venueObj?.department || data.department || 'Computer Engineering'
 
+    const venueNameLower = (venueName || '').toLowerCase()
+    const isLab = Boolean(venueObj?.isLab || /lab|laboratory/i.test(venueNameLower) || /lab|laboratory/i.test(venueObj?.type || ''))
     const isStudyPass = data.status === 'Confirmed' && (data.digitalPassCode || data.passCode)
-    const initialStatus = isStudyPass ? 'Confirmed' : (data.status || 'Pending HOD Approval')
-    const initialStage = isStudyPass ? 'Completed' : (initialStatus === 'Pending Dean Approval' ? 'Dean' : 'HOD')
+
+    let initialStatus = isStudyPass ? 'Confirmed' : (data.status || (isLab ? 'Pending Lab Assistant Approval' : 'Pending HOD Approval'))
+    let initialStage = isStudyPass
+      ? 'Completed'
+      : initialStatus === 'Pending Lab Assistant Approval'
+      ? 'LabAssistant'
+      : initialStatus === 'Pending Dean Approval'
+      ? 'Dean'
+      : 'HOD'
 
     const newBooking = {
       id: `BK-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
@@ -715,14 +724,41 @@ class DataStore {
       decidedAt
     }
 
-    // Two-tier permission logic: HOD must approve first, then escalates to Dean
-    if (newStatus === 'Approved' || newStatus === 'Confirmed' || newStatus === 'Sanction HOD') {
+    // Three-tier permission logic: Lab Assistant (for labs) -> HOD -> Dean
+    if (newStatus === 'Approved' || newStatus === 'Confirmed' || newStatus === 'Sanction HOD' || newStatus === 'Sanction Lab Assistant') {
       if (
+        currentStatus === 'Pending Lab Assistant Approval' ||
+        newStatus === 'Sanction Lab Assistant'
+      ) {
+        // Step 1 (for Laboratories): Lab Assistant Approves -> Transitions to Pending HOD Approval
+        finalStatus = 'Pending HOD Approval'
+        updates.status = 'Pending HOD Approval'
+        updates.approvalStage = 'HOD'
+        updates.labAssistantApproval = {
+          status: 'Approved',
+          approvedBy: actor || 'Lab Technical Assistant',
+          decidedAt,
+          notes: reason || 'Apparatus verified and safety clearance granted by Lab Assistant'
+        }
+        updates.hodApproval = {
+          department: existing?.venueDepartment || existing?.department || 'Department',
+          status: 'Pending',
+          approvedBy: null,
+          decidedAt: null,
+          notes: ''
+        }
+        updates.deanApproval = {
+          status: 'Waiting',
+          approvedBy: null,
+          decidedAt: null,
+          notes: ''
+        }
+      } else if (
         currentStatus === 'Pending' ||
         currentStatus === 'Pending HOD Approval' ||
         newStatus === 'Sanction HOD'
       ) {
-        // Step 1: HOD Approves -> Transitions to Pending Dean Approval
+        // Step 2: HOD Approves -> Transitions to Pending Dean Approval
         finalStatus = 'Pending Dean Approval'
         updates.status = 'Pending Dean Approval'
         updates.approvalStage = 'Dean'
@@ -740,7 +776,7 @@ class DataStore {
           notes: ''
         }
       } else {
-        // Step 2: Dean Approves -> Confirmed & Gate Pass Active!
+        // Step 3: Dean Approves -> Confirmed & Gate Pass Active!
         finalStatus = 'Confirmed'
         updates.status = 'Confirmed'
         updates.is_approved = true
@@ -762,7 +798,14 @@ class DataStore {
       updates.status = 'Rejected'
       updates.is_approved = false
       updates.approvalStage = 'Rejected'
-      if (currentStatus === 'Pending' || currentStatus === 'Pending HOD Approval') {
+      if (currentStatus === 'Pending Lab Assistant Approval') {
+        updates.labAssistantApproval = {
+          status: 'Rejected',
+          approvedBy: actor || 'Lab Technical Assistant',
+          decidedAt,
+          notes: reason || 'Declined by Lab Assistant due to laboratory constraints'
+        }
+      } else if (currentStatus === 'Pending' || currentStatus === 'Pending HOD Approval') {
         updates.hodApproval = {
           department: existing?.venueDepartment || existing?.department || 'Department',
           status: 'Rejected',

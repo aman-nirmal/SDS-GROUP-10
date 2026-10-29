@@ -20,9 +20,67 @@ const AVAILABLE_ROLES = [
   'Faculty',
   'Head of Department (HOD)',
   'Dean',
+  'Lab Assistant',
   'Club Lead',
   'Security Guard',
   'Administrator'
+]
+
+const DEMO_PERSONAS = [
+  {
+    name: 'Prof. M. S. Ranadive',
+    email: 'hod.civil@coeptech.ac.in',
+    role: 'Head of Department (HOD)',
+    department: 'Civil Engineering',
+    tag: 'Department Head',
+    portal: 'hod',
+    description: 'Manages Civil department classrooms, seminar halls, and labs'
+  },
+  {
+    name: 'Dr. P. R. Dhamangaonkar',
+    email: 'dean.acad@coeptech.ac.in',
+    role: 'Dean',
+    department: 'Central Administration',
+    tag: 'Campus Dean',
+    portal: 'dean',
+    description: 'Supervises all Pune campus facilities, auditoriums, and grounds'
+  },
+  {
+    name: 'Dr. V. K. Kulkarni',
+    email: 'vkk.comp@coeptech.ac.in',
+    role: 'Faculty',
+    department: 'Computer Engineering',
+    tag: 'Senior Professor',
+    portal: 'faculty',
+    description: 'Instant classroom booking in home dept; 3-stage lab clearance'
+  },
+  {
+    name: 'Mr. Sachin Patil',
+    email: 'sachin.patil@coeptech.ac.in',
+    role: 'Lab Assistant',
+    department: 'Computer Engineering',
+    tag: 'Technical Officer',
+    portal: 'lab_assistant',
+    description: 'Stage 1 laboratory equipment & safety clearance authority'
+  },
+  {
+    name: 'Aman Nirmal',
+    email: 'nirmala22.comp@coeptech.ac.in',
+    role: 'Student',
+    department: 'Computer Engineering',
+    tag: 'B.Tech Student',
+    portal: 'student',
+    description: 'Books study halls, labs with 3-stage permission, and activities'
+  },
+  {
+    name: 'Rohan Kulkarni',
+    email: 'robotics.lead@coeptech.ac.in',
+    role: 'Club Lead',
+    department: 'COEP Robotics Club',
+    tag: 'Student Club Lead',
+    portal: 'club',
+    description: 'Schedules workshops, club meets, and technical fests'
+  }
 ]
 
 export default function UserProfileModal({
@@ -30,7 +88,8 @@ export default function UserProfileModal({
   onClose,
   currentUser,
   roleRequests = [],
-  onSubmitRequest
+  onSubmitRequest,
+  onSwitchUser
 }) {
   const [requestedRole, setRequestedRole] = useState('Club Lead')
   const [departmentOrClub, setDepartmentOrClub] = useState('')
@@ -172,6 +231,60 @@ export default function UserProfileModal({
               </span>
             </div>
           </div>
+
+          {/* 1-Click Persona Switcher */}
+          {onSwitchUser && (
+            <div className="space-y-3 pt-1">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Switch Active Persona (Instant Workspace)
+                  </h3>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
+                    Verify venue visibility and 3-stage lab clearance under each authority:
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {DEMO_PERSONAS.map((p) => {
+                  const isActive = currentUser.email?.toLowerCase() === p.email.toLowerCase() || currentUser.role === p.role
+                  return (
+                    <button
+                      key={p.email}
+                      type="button"
+                      onClick={() => onSwitchUser(p, p.portal)}
+                      className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between ${
+                        isActive
+                          ? 'border-blue-500 bg-blue-50/70 dark:bg-blue-950/40 shadow-xs ring-1 ring-blue-500'
+                          : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/80 dark:hover:bg-slate-800/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                          {p.name}
+                        </div>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                          isActive
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                        }`}>
+                          {p.tag}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
+                        {p.description}
+                      </div>
+                      <div className="mt-2 text-[10px] font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                        <span>Activate {p.role} Portal</span>
+                        <span>→</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Form: Request Role Change */}
           <div className="space-y-4 pt-2">
