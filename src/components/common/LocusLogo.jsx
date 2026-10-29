@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Official LOCUS Logo Component
 export default function LocusLogo({ size = 'default' }) {
   const isSmall = size === 'small'
   return (

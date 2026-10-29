@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+// 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 export default function FlyingBirds() {
   const [frame, setFrame] = useState(1)
 

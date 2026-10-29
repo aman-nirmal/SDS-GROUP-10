@@ -22,3 +22,5 @@ export function OutlookLogo({ className = 'w-4 h-4' }) {
     </svg>
   )
 }
+
+export default MicrosoftLogo

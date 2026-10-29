@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import {
   Mail,
-  Lock,
+  RefreshCw,
   AlertCircle,
-  CheckCircle2,
-  RefreshCw
+  CheckCircle2
 } from 'lucide-react'
-import ForgotPasswordModal from '../ForgotPasswordModal'
-import { MicrosoftLogo, OutlookLogo } from './Logos'
+import { MicrosoftLogo, OutlookLogo } from './MicrosoftLogo'
 import { loginWithOutlook, clearStaleMsalInteractionStatus } from '../../lib/msalConfig'
 import { authApi } from '../../lib/api'
 
-const OFFICIAL_COEP_ACCOUNTS = [
+export const OFFICIAL_COEP_ACCOUNTS = [
   {
     role: 'Administrator',
     email: 'admin@coeptech.ac.in',
@@ -19,6 +17,30 @@ const OFFICIAL_COEP_ACCOUNTS = [
     name: 'Central Estate Admin',
     department: 'Central Estate & Infrastructure',
     id: 'ADM-001'
+  },
+  {
+    role: 'Head of Department (HOD)',
+    email: 'hod.civil@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. Balkrishna M. Dawari',
+    department: 'Civil Engineering',
+    id: 'HOD-CIVIL-01'
+  },
+  {
+    role: 'Head of Department (HOD)',
+    email: 'hod.comp@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. V. K. Pachghare',
+    department: 'Computer Engineering',
+    id: 'HOD-COMP-01'
+  },
+  {
+    role: 'Dean',
+    email: 'dean.academics@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. P. R. Dhamangaonkar',
+    department: 'Office of the Dean (Academics & Student Affairs)',
+    id: 'DEAN-ACAD-01'
   },
   {
     role: 'Faculty',
@@ -34,7 +56,6 @@ const OFFICIAL_COEP_ACCOUNTS = [
     password: 'Password@123',
     name: 'MindSpark Secretarial Lead',
     department: 'Technical Events Secretariat',
-    club_name: 'MindSpark',
     id: 'CLUB-MS-26'
   },
   {
@@ -57,13 +78,12 @@ const OFFICIAL_COEP_ACCOUNTS = [
 
 export function LoginForm({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
-  const [authMethod] = useState('password') // 'password'
+  const [authMethod, setAuthMethod] = useState('password') // 'password' | 'otp'
   const [password, setPassword] = useState('')
   const [role] = useState('Student')
   const [errorMessage, setErrorMessage] = useState('')
   const [successNotice, setSuccessNotice] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
-  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false)
 
   // OTP flow states
   const [otpCode, setOtpCode] = useState('')
@@ -161,7 +181,6 @@ export function LoginForm({ onLoginSuccess }) {
         email: matchedAccount.email,
         role: matchedAccount.role,
         department: matchedAccount.department,
-        club_name: matchedAccount.club_name || null,
         authProvider: 'password',
         authenticatedAt: new Date().toISOString()
       }
@@ -188,7 +207,19 @@ export function LoginForm({ onLoginSuccess }) {
         id: `COEP-${Math.floor(1000 + Math.random() * 9000)}`,
         name: trimmedEmail.split('@')[0],
         email: trimmedEmail,
-        role: trimmedEmail.includes('admin') ? 'Administrator' : trimmedEmail.includes('faculty') ? 'Faculty' : trimmedEmail.includes('security') ? 'Security Guard' : trimmedEmail.includes('mindspark') || trimmedEmail.includes('club') ? 'Club Lead' : role,
+        role: trimmedEmail.includes('admin')
+          ? 'Administrator'
+          : (trimmedEmail.includes('hod') || trimmedEmail.startsWith('hod.'))
+            ? 'Head of Department (HOD)'
+            : (trimmedEmail.includes('dean') || trimmedEmail.startsWith('dean.'))
+              ? 'Dean'
+              : trimmedEmail.includes('faculty')
+                ? 'Faculty'
+                : trimmedEmail.includes('security')
+                  ? 'Security Guard'
+                  : trimmedEmail.includes('mindspark') || trimmedEmail.includes('club')
+                    ? 'Club Lead'
+                    : role,
         department: trimmedEmail.includes('security') ? 'Campus Security & Gate 1 Control' : 'COEP Technological University',
         authProvider: 'password',
         authenticatedAt: new Date().toISOString()
@@ -291,22 +322,33 @@ export function LoginForm({ onLoginSuccess }) {
         </span>
       </div>
 
-      {/* Sign In Options Bar with Dedicated Forgot Password Entry Point */}
-      <div className="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl mb-4 border border-slate-200/80 dark:border-slate-700/80 text-xs">
-        <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-          <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-          <span>University Credentials</span>
-        </span>
+      {/* Auth Method Toggle */}
+      <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 text-xs font-bold">
         <button
           type="button"
           onClick={() => {
-            setIsForgotPasswordOpen(true)
+            setAuthMethod('password')
             setErrorMessage('')
-            setSuccessNotice('')
           }}
-          className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer"
+          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'password'
+            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            }`}
         >
-          Forgot Password?
+          University Password
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setAuthMethod('otp')
+            setErrorMessage('')
+          }}
+          className={`py-2 rounded-lg transition-all cursor-pointer ${authMethod === 'otp'
+            ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            }`}
+        >
+          Email OTP
         </button>
       </div>
 
@@ -359,25 +401,12 @@ export function LoginForm({ onLoginSuccess }) {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label
-                htmlFor="password-input"
-                className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"
-              >
-                Password
-              </label>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsForgotPasswordOpen(true)
-                  setErrorMessage('')
-                  setSuccessNotice('')
-                }}
-                className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer"
-              >
-                Forgot Password?
-              </button>
-            </div>
+            <label
+              htmlFor="password-input"
+              className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
+            >
+              Password
+            </label>
             <input
               id="password-input"
               type="password"
@@ -483,6 +512,9 @@ export function LoginForm({ onLoginSuccess }) {
                   disabled={isVerifying}
                   className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
                 />
+                <p className="text-[11px] text-slate-500 text-center mt-1.5">
+                  Enter the 6-digit verification code dispatched to your institutional inbox.
+                </p>
               </div>
 
               <button
@@ -517,22 +549,9 @@ export function LoginForm({ onLoginSuccess }) {
           )}
         </div>
       )}
-
-      {/* Dedicated 4-Step Password Recovery Modal */}
-      {isForgotPasswordOpen && (
-        <ForgotPasswordModal
-          isOpen={isForgotPasswordOpen}
-          initialEmail={email}
-          onClose={() => setIsForgotPasswordOpen(false)}
-          onPasswordResetSuccess={(resetEmail) => {
-            setEmail(resetEmail)
-            setSuccessNotice('Your password has been reset successfully. Please log in with your new password.')
-          }}
-        />
-      )}
     </div>
   )
 }
 
-
 export default LoginForm
+

@@ -1,9 +1,13 @@
 import React from 'react'
 import { ChevronRight } from 'lucide-react'
 
-export default function VenueTypeCard({ icon: Icon, title, description, count }) {
+// Popular Venue Type Card
+export default function VenueTypeCard({ icon: Icon, title, description, count, onClick }) {
   return (
-    <div className="group h-full bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between">
+    <div
+      onClick={onClick}
+      className="group h-full bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
+    >
       <div className="flex-1 flex flex-col">
         <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/40 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors mb-5 shrink-0">
           <Icon className="w-6 h-6 stroke-[1.6]" />
