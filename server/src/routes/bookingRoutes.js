@@ -5,13 +5,15 @@ import {
   createBooking,
   updateBookingStatus,
   deleteBooking,
-  verifyPass
+  verifyPass,
+  sendPassEmailDirect
 } from '../controllers/bookingController.js'
 
 const router = Router()
 
 router.get('/', getAllBookings)
 router.get('/verify-pass/:passCode', verifyPass)
+router.post('/send-pass-email', sendPassEmailDirect)
 router.get('/:id', getBookingById)
 router.post('/', createBooking)
 router.patch('/:id/status', updateBookingStatus)

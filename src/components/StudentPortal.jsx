@@ -620,6 +620,7 @@ export default function StudentPortal({
               <DigitalPassQR
                 passCode={selectedPass.digitalPassCode}
                 passData={selectedPass}
+                userEmail={currentUser?.email}
                 size={180}
               />
 

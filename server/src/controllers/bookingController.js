@@ -1,4 +1,5 @@
 import { dataStore } from '../services/dataStore.js'
+import { sendPassEmail, sendBookingUpdateEmail } from '../services/emailService.js'
 
 export async function getAllBookings(req, res, next) {
   try {
@@ -24,7 +25,25 @@ export async function getBookingById(req, res, next) {
 
 export async function createBooking(req, res, next) {
   try {
-    const { venueName, venue, date, timeSlot, purpose, title, applicantName, applicantEmail, applicantRole, department, attendees, requirements, notes } = req.body
+    const {
+      venueName,
+      venue,
+      date,
+      timeSlot,
+      purpose,
+      title,
+      applicantName,
+      applicantEmail,
+      applicantRole,
+      department,
+      attendees,
+      requirements,
+      notes,
+      digitalPassCode,
+      passCode,
+      ref,
+      status
+    } = req.body
 
     const targetVenue = venueName || venue
     if (!targetVenue || !date || !timeSlot) {
@@ -35,6 +54,7 @@ export async function createBooking(req, res, next) {
     }
 
     const booking = await dataStore.createBooking({
+      ref,
       venueName: targetVenue,
       date,
       timeSlot,
@@ -44,8 +64,40 @@ export async function createBooking(req, res, next) {
       applicantRole,
       department,
       attendees,
+      digitalPassCode: digitalPassCode || passCode,
+      passCode: digitalPassCode || passCode,
+      status: status || 'Pending',
       notes: notes || requirements
     })
+
+    // Asynchronously dispatch email notification
+    if (booking && booking.applicantEmail) {
+      const isConfirmed = booking.status === 'Confirmed' || booking.status === 'Approved'
+      if (isConfirmed || booking.digitalPassCode) {
+        sendPassEmail({
+          to: booking.applicantEmail,
+          holderName: booking.applicantName,
+          role: booking.applicantRole,
+          passCode: booking.digitalPassCode || booking.ref,
+          venue: booking.venueName,
+          purpose: booking.purpose,
+          date: booking.date,
+          timeSlot: booking.timeSlot,
+          attendees: booking.attendees
+        }).catch((err) => console.warn('[Email Dispatch Error]:', err.message))
+      } else {
+        sendBookingUpdateEmail({
+          to: booking.applicantEmail,
+          recipientName: booking.applicantName,
+          bookingRef: booking.ref,
+          venue: booking.venueName,
+          date: booking.date,
+          timeSlot: booking.timeSlot,
+          status: booking.status,
+          purpose: booking.purpose
+        }).catch((err) => console.warn('[Email Dispatch Error]:', err.message))
+      }
+    }
 
     return res.status(201).json({ success: true, booking })
   } catch (err) {
@@ -72,6 +124,22 @@ export async function updateBookingStatus(req, res, next) {
 
     if (!updated) {
       return res.status(404).json({ success: false, error: 'Booking not found.' })
+    }
+
+    // Asynchronously dispatch booking status update email
+    if (updated.applicantEmail) {
+      sendBookingUpdateEmail({
+        to: updated.applicantEmail,
+        recipientName: updated.applicantName,
+        bookingRef: updated.ref || updated.id,
+        venue: updated.venueName || updated.venue,
+        date: updated.date,
+        timeSlot: updated.timeSlot,
+        status: updated.status,
+        purpose: updated.purpose,
+        decisionNotes: reason || notes || updated.decisionNotes,
+        decidedBy: actor || updated.decidedBy || 'Staff Reviewer'
+      }).catch((err) => console.warn('[Status Email Dispatch Error]:', err.message))
     }
 
     return res.json({ success: true, booking: updated })
@@ -104,6 +172,51 @@ export async function verifyPass(req, res, next) {
       })
     }
     return res.json({ success: true, ...pass })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * Direct API endpoint to trigger a pass email with QR code
+ */
+export async function sendPassEmailDirect(req, res, next) {
+  try {
+    const {
+      email,
+      passCode,
+      venue,
+      purpose,
+      date,
+      timeSlot,
+      attendees,
+      holderName,
+      role
+    } = req.body
+
+    const targetEmail = (email || '').trim().toLowerCase()
+    if (!targetEmail) {
+      return res.status(400).json({ success: false, error: 'Recipient email is required.' })
+    }
+
+    const result = await sendPassEmail({
+      to: targetEmail,
+      holderName: holderName || 'Verified Student',
+      role: role || 'Student',
+      passCode: passCode || 'COEP-GATE-PASS',
+      venue: venue || 'Campus Facility',
+      purpose: purpose || 'Academic Access',
+      date: date || new Date().toISOString().split('T')[0],
+      timeSlot: timeSlot || 'Active Window',
+      attendees: attendees || 1
+    })
+
+    return res.json({
+      success: true,
+      message: `Pass dispatched to ${targetEmail}`,
+      provider: result.provider,
+      error: result.error
+    })
   } catch (err) {
     next(err)
   }

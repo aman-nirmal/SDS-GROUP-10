@@ -497,6 +497,8 @@ class DataStore {
       date: data.date,
       timeSlot: data.timeSlot,
       attendees: Number(data.attendees) || 50,
+      digitalPassCode: data.digitalPassCode || data.passCode || data.ref || null,
+      passCode: data.digitalPassCode || data.passCode || data.ref || null,
       status: data.status || 'Pending',
       priority: data.priority || 'Normal',
       submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
@@ -522,7 +524,7 @@ class DataStore {
           attendees: newBooking.attendees,
           status: newBooking.status === 'Approved' ? 'Confirmed' : newBooking.status,
           is_approved: newBooking.status === 'Confirmed' || newBooking.status === 'Approved',
-          pass_code: newBooking.ref
+          pass_code: newBooking.digitalPassCode || newBooking.ref
         }
         const { data: inserted, error: insErr } = await supabase.from('bookings').insert([supabaseBooking]).select()
         if (!insErr && inserted && inserted[0]) {

@@ -258,6 +258,13 @@ export const bookingsApi = {
 
   async verifyPass(passCode) {
     return await apiRequest(`/bookings/verify-pass/${encodeURIComponent(passCode)}`)
+  },
+
+  async sendPassEmail(data) {
+    return await apiRequest('/bookings/send-pass-email', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
   }
 }
 
