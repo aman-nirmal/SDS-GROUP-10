@@ -68,7 +68,22 @@ app.use('/api/logs', logRoutes)
 app.use('/api/events', eventRoutes)
 app.use('/api/payments', paymentRoutes)
 
-// 404 Route Handler
+// Serve static client assets from /dist if present
+const distPath = path.resolve(process.cwd(), 'dist')
+app.use(express.static(distPath))
+
+// SPA Fallback for client web routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/photos')) {
+    return next()
+  }
+  const indexHtml = path.join(distPath, 'index.html')
+  res.sendFile(indexHtml, (err) => {
+    if (err) next()
+  })
+})
+
+// 404 Route Handler for unmatched API routes
 app.use((req, res) => {
   return res.status(404).json({
     error: `Route not found: ${req.method} ${req.originalUrl}`

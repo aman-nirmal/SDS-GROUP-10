@@ -3191,7 +3191,112 @@ const sampleVenuesFallback = [
   image: getVenueImageUrl(v)
 }))
 
+// Universal Route Table mapping view tabs to clean canonical URLs
+export const ROUTE_MAP = {
+  home: '/',
+  venues: '/venues',
+  events: '/events',
+  'my-bookings': '/my-bookings',
+  student: '/my-bookings',
+  about: '/about',
+  login: '/login',
+  admin: '/admin',
+  hod: '/hod',
+  dean: '/dean',
+  club: '/club',
+  security: '/security',
+  guest: '/guest',
+  profile: '/profile'
+}
+
+export function parseRoute(
+  pathname = (typeof window !== 'undefined' ? window.location.pathname : '/'),
+  search = (typeof window !== 'undefined' ? window.location.search : '')
+) {
+  const cleanPath = (pathname || '/').replace(/\/+$/, '') || '/'
+  const params = new URLSearchParams(search || '')
+
+  let tab = 'home'
+  let venueSlug = params.get('venue') || params.get('book') || null
+  let isProfile = params.get('modal') === 'profile' || cleanPath === '/profile'
+  let venueType = params.get('type') || 'All Spaces'
+
+  if (cleanPath === '/' || cleanPath === '/home') {
+    tab = 'home'
+  } else if (cleanPath === '/venues' || cleanPath.startsWith('/venues/')) {
+    tab = 'venues'
+    if (cleanPath.startsWith('/venues/')) {
+      const slug = cleanPath.replace('/venues/', '').trim()
+      if (slug) venueSlug = decodeURIComponent(slug)
+    }
+  } else if (cleanPath === '/events') {
+    tab = 'events'
+  } else if (cleanPath === '/my-bookings' || cleanPath === '/bookings' || cleanPath === '/student') {
+    tab = 'my-bookings'
+  } else if (cleanPath === '/about') {
+    tab = 'about'
+  } else if (cleanPath === '/login') {
+    tab = 'login'
+  } else if (cleanPath === '/admin') {
+    tab = 'admin'
+  } else if (cleanPath === '/hod') {
+    tab = 'hod'
+  } else if (cleanPath === '/dean') {
+    tab = 'dean'
+  } else if (cleanPath === '/club') {
+    tab = 'club'
+  } else if (cleanPath === '/security') {
+    tab = 'security'
+  } else if (cleanPath === '/guest') {
+    tab = 'guest'
+  } else if (cleanPath === '/profile') {
+    tab = 'home'
+    isProfile = true
+  }
+
+  return { tab, venueSlug, isProfile, venueType }
+}
+
+export function updateBrowserUrl({ tab, venue = null, isProfile = false, type = 'All Spaces', replace = false }) {
+  if (typeof window === 'undefined') return
+
+  let basePath = ROUTE_MAP[tab] || '/'
+  const params = new URLSearchParams()
+
+  if (isProfile) {
+    if (tab === 'home' || !tab) {
+      basePath = '/profile'
+    } else {
+      params.set('modal', 'profile')
+    }
+  }
+
+  if (venue) {
+    const venueIdentifier = typeof venue === 'object' ? (venue.new_hall_name || venue.old_hall_name || venue.id) : venue
+    params.set('book', venueIdentifier)
+  }
+
+  if (tab === 'venues' && type && type !== 'All Spaces') {
+    params.set('type', type)
+  }
+
+  const query = params.toString() ? `?${params.toString()}` : ''
+  const targetUrl = `${basePath}${query}`
+  const currentUrl = `${window.location.pathname}${window.location.search}`
+
+  if (targetUrl !== currentUrl) {
+    const historyState = { activeTab: tab, venue, isProfile, type }
+    if (replace) {
+      window.history.replaceState(historyState, '', targetUrl)
+    } else {
+      window.history.pushState(historyState, '', targetUrl)
+    }
+  }
+}
+
 export default function App() {
+  const initialRoute = useMemo(() => parseRoute(), [])
+
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('locus-theme')
@@ -3221,14 +3326,62 @@ export default function App() {
 
   const [venues, setVenues] = useState(sampleVenuesFallback)
   const [isLoadingVenues, setIsLoadingVenues] = useState(false)
-  const [activeTab, _setActiveTab] = useState('home')
+  const [activeTab, _setActiveTab] = useState(initialRoute.tab)
   const [isPageTransitioning, setIsPageTransitioning] = useState(false)
   const transitionTimerRef = useRef(null)
 
-  // Sleek professional page transition handler (Disappear -> Appear)
+  const [selectedType, _setSelectedType] = useState(initialRoute.venueType || 'All Spaces')
+  const [selectedDate, setSelectedDate] = useState('')
+  const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
+  const [selectedVenueForBooking, _setSelectedVenueForBooking] = useState(null)
+  const [isProfileModalOpen, _setIsProfileModalOpen] = useState(initialRoute.isProfile)
+
+  // Synchronized state setters that keep browser URL in sync
+  const setSelectedType = useCallback((type) => {
+    _setSelectedType(type)
+    updateBrowserUrl({
+      tab: activeTab,
+      venue: selectedVenueForBooking,
+      isProfile: isProfileModalOpen,
+      type,
+      replace: true
+    })
+  }, [activeTab, selectedVenueForBooking, isProfileModalOpen])
+
+  const setSelectedVenueForBooking = useCallback((venue) => {
+    _setSelectedVenueForBooking(venue)
+    updateBrowserUrl({
+      tab: activeTab,
+      venue,
+      isProfile: isProfileModalOpen,
+      type: selectedType
+    })
+  }, [activeTab, isProfileModalOpen, selectedType])
+
+  const setIsProfileModalOpen = useCallback((open) => {
+    _setIsProfileModalOpen(open)
+    updateBrowserUrl({
+      tab: activeTab,
+      venue: selectedVenueForBooking,
+      isProfile: open,
+      type: selectedType
+    })
+  }, [activeTab, selectedVenueForBooking, selectedType])
+
+  // Sleek professional page transition handler (Disappear -> Appear) with URL syncing
   const setActiveTab = useCallback((nextTab, options = {}) => {
-    const { immediate = false } = options
+    const { immediate = false, skipUrlSync = false } = options
     if (nextTab === activeTab && !isPageTransitioning) return
+
+    if (!skipUrlSync) {
+      updateBrowserUrl({
+        tab: nextTab,
+        venue: selectedVenueForBooking,
+        isProfile: isProfileModalOpen,
+        type: selectedType
+      })
+    }
 
     if (immediate) {
       _setActiveTab(nextTab)
@@ -3253,7 +3406,7 @@ export default function App() {
         setIsPageTransitioning(false)
       })
     }, 95)
-  }, [activeTab, isPageTransitioning])
+  }, [activeTab, isPageTransitioning, selectedVenueForBooking, isProfileModalOpen, selectedType])
 
   useEffect(() => {
     return () => {
@@ -3262,28 +3415,13 @@ export default function App() {
       }
     }
   }, [])
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  // Listen to browser Back and Forward navigation and synchronize all screens
   useEffect(() => {
-    const handlePopState = (event) => {
-      const tab = event.state?.activeTab
-
-      const validTabs = [
-        'home',
-        'venues',
-        'events',
-        'my-bookings',
-        'about',
-        'login',
-        'guest',
-        'faculty',
-        'hod',
-        'dean',
-        'student',
-        'club',
-        'admin',
-        'security'
-      ]
+    const handlePopState = () => {
+      const parsed = parseRoute()
 
       const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
       let isAuthed = false
@@ -3293,69 +3431,70 @@ export default function App() {
         isAuthed = false
       }
 
-      if (protectedTabs.includes(tab) && !isAuthed) {
-        setActiveTab('login')
+      if (protectedTabs.includes(parsed.tab) && !isAuthed) {
+        setActiveTab('login', { skipUrlSync: true })
         setIsMobileMenuOpen(false)
         return
       }
 
-      if (validTabs.includes(tab)) {
-        setActiveTab(tab)
-      } else {
-        setActiveTab('home')
+      _setActiveTab(parsed.tab)
+      _setIsProfileModalOpen(parsed.isProfile)
+      if (parsed.venueType) _setSelectedType(parsed.venueType)
+
+      if (parsed.venueSlug && venues && venues.length > 0) {
+        const found = venues.find(
+          (v) =>
+            v.new_hall_name?.toLowerCase() === parsed.venueSlug.toLowerCase() ||
+            v.old_hall_name?.toLowerCase() === parsed.venueSlug.toLowerCase() ||
+            v.code?.toLowerCase() === parsed.venueSlug.toLowerCase() ||
+            String(v.id) === String(parsed.venueSlug)
+        )
+        _setSelectedVenueForBooking(found || { new_hall_name: parsed.venueSlug })
+      } else if (!parsed.venueSlug) {
+        _setSelectedVenueForBooking(null)
       }
 
       setIsMobileMenuOpen(false)
     }
 
     window.addEventListener('popstate', handlePopState)
-
     return () => {
       window.removeEventListener('popstate', handlePopState)
     }
+  }, [venues, setActiveTab])
+
+  // Synchronize initial URL state to address bar if launched at root or alias
+  useEffect(() => {
+    updateBrowserUrl({
+      tab: initialRoute.tab,
+      venue: initialRoute.venueSlug,
+      isProfile: initialRoute.isProfile,
+      type: initialRoute.venueType,
+      replace: true
+    })
   }, [])
 
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const stored = localStorage.getItem('locus_auth_user')
-      return stored ? JSON.parse(stored) : null
-    } catch {
-      return null
-    }
-  })
-
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
-  const [roleRequests, setRoleRequests] = useState(() => {
-    try {
-      const stored = localStorage.getItem('locus_admin_role_requests')
-      return stored ? JSON.parse(stored) : INITIAL_ROLE_REQUESTS
-    } catch {
-      return INITIAL_ROLE_REQUESTS
-    }
-  })
-
-  const handleUserSubmitRoleRequest = async (newRequest) => {
-    setRoleRequests((prev) => {
-      const updated = [newRequest, ...prev]
-      try {
-        localStorage.setItem('locus_admin_role_requests', JSON.stringify(updated))
-      } catch {
-        // ignore
+  // On initial mount or venues update, resolve any venue specified in URL
+  useEffect(() => {
+    if (initialRoute.venueSlug && venues && venues.length > 0) {
+      const match = venues.find(
+        (v) =>
+          v.new_hall_name?.toLowerCase() === initialRoute.venueSlug.toLowerCase() ||
+          v.old_hall_name?.toLowerCase() === initialRoute.venueSlug.toLowerCase() ||
+          v.code?.toLowerCase() === initialRoute.venueSlug.toLowerCase() ||
+          String(v.id) === String(initialRoute.venueSlug)
+      )
+      if (match) {
+        _setSelectedVenueForBooking(match)
+      } else {
+        _setSelectedVenueForBooking({
+          new_hall_name: initialRoute.venueSlug,
+          department: 'COEP Technological University',
+          benches: 30
+        })
       }
-      return updated
-    })
-    try {
-      await roleRequestsApi.create(newRequest)
-    } catch (err) {
-      console.warn('Backend role request sync failed:', err)
     }
-  }
-
-  const [selectedType, setSelectedType] = useState('All Spaces')
-  const [selectedDate, setSelectedDate] = useState('')
-  const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const [selectedVenueForBooking, setSelectedVenueForBooking] = useState(null)
+  }, [venues, initialRoute.venueSlug])
 
   const [campusBookings, setCampusBookings] = useState(() => {
     try {
@@ -3540,25 +3679,22 @@ export default function App() {
     const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
     if (protectedTabs.includes(tab) && !currentUser) {
       setActiveTab('login')
-      window.history.pushState({ activeTab: 'login' }, '', window.location.pathname)
       setIsMobileMenuOpen(false)
       return
     }
 
-    if (tab === activeTab) {
+    if (tab === activeTab && !selectedVenueForBooking && !isProfileModalOpen) {
       setIsMobileMenuOpen(false)
       return
     }
-
-    window.history.pushState(
-      { activeTab: tab },
-      '',
-      window.location.pathname
-    )
 
     if (tab === 'venues') {
       setSelectedType('All Spaces')
     }
+
+    // Close any open modals on page navigation
+    if (selectedVenueForBooking) _setSelectedVenueForBooking(null)
+    if (isProfileModalOpen) _setIsProfileModalOpen(false)
 
     setActiveTab(tab)
     setIsMobileMenuOpen(false)
