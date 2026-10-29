@@ -1,4 +1,5 @@
 import { PublicClientApplication, LogLevel } from '@azure/msal-browser'
+import { supabase } from './supabase'
 
 const DEFAULT_AZURE_CLIENT_ID = 'b177caf5-6457-4162-b680-ea9eea7bf560'
 const DEFAULT_AZURE_TENANT_ID = 'b4c6b754-54e3-41e4-a8da-304355c62816'
@@ -107,21 +108,26 @@ export async function getMsalInstance(overrideClientId, overrideTenantId) {
       auth: {
         clientId,
         authority: `https://login.microsoftonline.com/${tenantId}`,
-        redirectUri: typeof window !== 'undefined' ? `${window.location.origin}/` : 'http://localhost:5173/',
-        postLogoutRedirectUri: typeof window !== 'undefined' ? `${window.location.origin}/` : 'http://localhost:5173/',
+        redirectUri: `${window.location.origin}/`,
+        postLogoutRedirectUri: `${window.location.origin}/`,
         navigateToLoginRequestUrl: false
       },
       cache: {
-        cacheLocation: 'sessionStorage',
-        storeAuthStateInCookie: false
+        // localStorage persists across page navigations (redirect flow)
+        // sessionStorage gets cleared on some browser configs during OAuth redirects
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: true  // IE11 / Safari fallback
       },
       system: {
         loggerOptions: {
           loggerCallback: (level, message, containsPii) => {
             if (containsPii) return
-            if (level === LogLevel.Error) {
-              console.error('[MSAL Error]', message)
-            }
+            // Log all MSAL messages so we can debug in browser console
+            const prefix = '[MSAL]'
+            if (level === LogLevel.Error)   console.error(prefix, message)
+            else if (level === LogLevel.Warning) console.warn(prefix, message)
+            else if (level === LogLevel.Info)    console.info(prefix, message)
+            else                                  console.debug(prefix, message)
           },
           logLevel: LogLevel.Warning
         }
@@ -140,34 +146,32 @@ export async function getMsalInstance(overrideClientId, overrideTenantId) {
 }
 
 /**
- * Converts MSAL login response into standard Campus User Profile
+ * Converts MSAL login response into a Campus User Profile.
+ * Identity is proven by Microsoft OAuth. Role comes from Supabase DB.
+ * Exported so main.jsx can call it during early redirect processing.
  */
-async function buildUserProfileFromLoginResponse(loginResponse) {
+export async function buildUserProfileFromLoginResponse(loginResponse) {
   const account = loginResponse.account
 
+  // Fetch real name/email/department from Microsoft Graph
   let graphData = null
   if (loginResponse.accessToken) {
     try {
       const graphResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
-        headers: {
-          Authorization: `Bearer ${loginResponse.accessToken}`
-        }
+        headers: { Authorization: `Bearer ${loginResponse.accessToken}` }
       })
-      if (graphResponse.ok) {
-        graphData = await graphResponse.json()
-      }
+      if (graphResponse.ok) graphData = await graphResponse.json()
     } catch (graphErr) {
       console.warn('[MSAL] Microsoft Graph fetch skipped:', graphErr.message)
     }
   }
 
   const email = (account?.username || graphData?.mail || graphData?.userPrincipalName || '').toLowerCase()
-  const name = account?.name || graphData?.displayName || email.split('@')[0]
-  const jobTitle = graphData?.jobTitle || ''
-  const department = graphData?.department || 'COEP Technological University'
+  const msName = account?.name || graphData?.displayName || email.split('@')[0]
+  const msDepartment = graphData?.department || 'COEP Technological University'
 
+  // Enforce institutional domain
   const isInstitutional = email.endsWith('@coeptech.ac.in') || email.endsWith('@coep.ac.in')
-
   if (!isInstitutional) {
     const domainError = new Error(
       `Access restricted: The Microsoft account (${email}) is not from @coeptech.ac.in or @coep.ac.in.`
@@ -176,16 +180,41 @@ async function buildUserProfileFromLoginResponse(loginResponse) {
     throw domainError
   }
 
+  // Look up the user's role from Supabase — DB is the source of truth
+  let dbRole = 'Student'
+  let dbName = msName
+  let dbDepartment = msDepartment
+  let dbId = account?.homeAccountId || `COEP-${Math.floor(1000 + Math.random() * 9000)}`
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name, role, department')
+        .eq('email', email)
+        .eq('is_active', true)
+        .maybeSingle()
+
+      if (!error && data) {
+        dbRole = data.role || 'Student'
+        dbName = data.name || msName
+        dbDepartment = data.department || msDepartment
+        dbId = data.id || dbId
+      }
+    } catch (dbErr) {
+      console.warn('[MSAL] Supabase role lookup failed, defaulting to Student:', dbErr.message)
+    }
+  }
+
   return {
     success: true,
     account,
     userProfile: {
-      id: account?.homeAccountId || `COEP-${Math.floor(1000 + Math.random() * 9000)}`,
-      name,
+      id: dbId,
+      name: dbName,
       email,
-      jobTitle,
-      department,
-      role: deriveRoleFromClaims(email, jobTitle),
+      department: dbDepartment,
+      role: dbRole,
       authProvider: 'microsoft-outlook-msal',
       isInstitutional: true,
       authenticatedAt: new Date().toISOString()
@@ -217,25 +246,23 @@ function formatMsalError(error) {
 }
 
 /**
- * Triggers Microsoft 365 / Outlook login popup window.
- * Resolves any stale interaction locks cleanly.
+ * Triggers Microsoft 365 / Outlook login via FULL-PAGE REDIRECT.
+ *
+ * Why redirect instead of popup?
+ * - Popup mode caused the OAuth code to land in the main window URL with
+ *   interactionType:"popup" in the state, which handleRedirectPromise() refuses
+ *   to process — leaving the user stuck on the login page.
+ * - Redirect mode is consistent: loginRedirect() → Microsoft → back to app →
+ *   handleMsalRedirect() in App.jsx processes the code cleanly.
+ *
+ * Returns nothing — the browser will navigate away.
+ * Result is handled by handleMsalRedirect() called in App.jsx on startup.
  */
-export async function loginWithOutlook(options = {}) {
-  const clientId = options.clientId || getAzureClientId()
-  const tenantId = options.tenantId || getAzureTenantId()
-
-  if (!clientId) {
-    const error = new Error('AZURE_NOT_CONFIGURED')
-    error.code = 'AZURE_NOT_CONFIGURED'
-    throw error
-  }
-
-  // Pre-emptively clear any stale interaction lock before launching
+export async function loginWithOutlook() {
   clearStaleMsalInteractionStatus()
+  const pca = await getMsalInstance()
 
-  const pca = await getMsalInstance(clientId, tenantId)
-
-  // 1. Check if an account is already authenticated in session
+  // If already signed in silently, return immediately without redirect
   const accounts = pca.getAllAccounts()
   if (accounts.length > 0) {
     try {
@@ -247,61 +274,78 @@ export async function loginWithOutlook(options = {}) {
         return await buildUserProfileFromLoginResponse(silentResponse)
       }
     } catch {
-      // If silent acquisition fails (e.g. expired), proceed to interactive popup
+      // Silent failed — fall through to redirect
     }
   }
 
-  // 2. Launch popup with automatic recovery if an interaction was stuck
-  try {
-    const loginResponse = await pca.loginPopup(loginRequest)
-    return await buildUserProfileFromLoginResponse(loginResponse)
-  } catch (error) {
-    if (error.errorCode === 'interaction_in_progress' || error.message?.includes('interaction_in_progress')) {
-      clearStaleMsalInteractionStatus()
-      await new Promise((resolve) => setTimeout(resolve, 200))
-      try {
-        const retryResponse = await pca.loginPopup(loginRequest)
-        return await buildUserProfileFromLoginResponse(retryResponse)
-      } catch (retryErr) {
-        throw formatMsalError(retryErr)
-      }
-    }
-    throw formatMsalError(error)
-  }
+  // Use redirect mode — consistent with Azure SPA redirect flow
+  await pca.loginRedirect({
+    ...loginRequest,
+    redirectUri: window.location.origin + '/'
+  })
+  // Browser navigates away here. Result handled by handleMsalRedirect() on return.
+  return null
 }
 
-/**
- * Derives appropriate campus role based on email and Microsoft directory claims.
- */
-function deriveRoleFromClaims(email, jobTitle) {
-  const lowerEmail = email.toLowerCase()
-  const lowerTitle = (jobTitle || '').toLowerCase()
-
-  if (lowerEmail.includes('admin') || lowerTitle.includes('estate') || lowerTitle.includes('admin')) {
-    return 'Administrator'
-  }
-  if (lowerEmail.includes('faculty') || lowerTitle.includes('professor') || lowerTitle.includes('faculty') || lowerTitle.includes('lecturer')) {
-    return 'Faculty'
-  }
-  if (lowerEmail.includes('club') || lowerEmail.includes('mindspark') || lowerEmail.includes('gymkhana')) {
-    return 'Club Lead'
-  }
-  return 'Student'
-}
+// Role is now derived exclusively from Supabase DB (see buildUserProfileFromLoginResponse).
+// deriveRoleFromClaims has been removed — email-substring guessing is not secure.
 
 /**
  * Logout from Microsoft session.
  */
 export async function logoutFromOutlook() {
   try {
-    const clientId = getAzureClientId()
-    if (!clientId) return
     const pca = await getMsalInstance()
     const activeAccount = pca.getActiveAccount() || pca.getAllAccounts()[0]
     if (activeAccount) {
-      await pca.logoutPopup({ account: activeAccount })
+      await pca.logoutRedirect({ account: activeAccount, postLogoutRedirectUri: window.location.origin + '/' })
     }
   } catch (err) {
     console.warn('[MSAL] Logout exception:', err)
   }
 }
+
+/**
+ * Called once on app startup (main.jsx).
+ * Processes any pending Microsoft OAuth redirect response.
+ * Returns { userProfile } if a login just completed, or null otherwise.
+ */
+export async function handleMsalRedirect() {
+  const hash = window.location.hash + window.location.search
+  const hasAuthCode = hash.includes('code=') || hash.includes('id_token=')
+
+  console.log('[MSAL Redirect] URL hash:', window.location.hash.slice(0, 60) || '(empty)')
+  console.log('[MSAL Redirect] Has auth code:', hasAuthCode)
+
+  if (!hasAuthCode) return null
+
+  try {
+    const pca = await getMsalInstance()
+    console.log('[MSAL Redirect] MSAL initialized, calling handleRedirectPromise...')
+    const response = await pca.handleRedirectPromise()
+    console.log('[MSAL Redirect] handleRedirectPromise result:', response ? 'GOT RESPONSE' : 'NULL (state mismatch or already consumed)')
+
+    if (!response) {
+      // Clear the stale hash so the app doesn't loop
+      if (window.history?.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname)
+      }
+      return null
+    }
+
+    console.log('[MSAL Redirect] Account email:', response.account?.username)
+    const result = await buildUserProfileFromLoginResponse(response)
+    console.log('[MSAL Redirect] Final profile:', result?.userProfile?.email, '→', result?.userProfile?.role)
+    return result
+  } catch (err) {
+    console.error('[MSAL Redirect] Error:', err.message)
+    if (window.history?.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+    return null
+  }
+}
+
+// loginWithOutlookRedirect is now the same as loginWithOutlook (redirect mode)
+export { loginWithOutlook as loginWithOutlookRedirect }
+

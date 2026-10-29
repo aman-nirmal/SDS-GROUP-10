@@ -17,7 +17,7 @@ import {
   GraduationCap,
   Plus
 } from 'lucide-react'
-import { getVenueImageUrl, isLabVenue, isClassroomVenue } from '../App'
+import { getVenueImageUrl, isLabVenue, isClassroomVenue, isAcClassroom } from '../App'
 
 export default function PersonaVenuesView({
   currentUser,
@@ -303,9 +303,9 @@ export default function PersonaVenuesView({
             const isClassroom = isClassroomVenue(venue)
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
-            const benches = venue.benches || Math.round(capacity / 2)
-            const hallCode = venue.code || venue.new_hall_name || `VN-${idx + 1}`
-            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Space'
+            const isAC = isAcClassroom(venue)
+            const hallCode = isAC ? 'AC' : (venue.code || venue.new_hall_name || `VN-${idx + 1}`)
+            const venueTitle = isAC ? (venue.new_hall_name || venue.code || 'NC01') : (venue.new_hall_name || venue.old_hall_name || venue.name || 'Campus Space')
             const todaySessions = getTodayBookings(venue)
             const status = venue.status || (todaySessions.length > 0 ? 'Occupied' : 'Available')
 
@@ -368,7 +368,7 @@ export default function PersonaVenuesView({
                       </h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-1">
                         <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span className="truncate">{venue.department}</span>
+                        <span className="truncate">{venue.department}{isAC && venue.old_hall_name ? ` (${venue.old_hall_name})` : ''}</span>
                       </p>
                     </div>
 

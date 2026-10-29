@@ -9,7 +9,7 @@ import {
   LayoutGrid,
   List
 } from 'lucide-react'
-import { formatDateDisplay, getVenueImageUrl } from '../utils/venueHelpers'
+import { formatDateDisplay, getVenueImageUrl, isAcClassroom } from '../utils/venueHelpers'
 
 export default function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
 const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All Venues'
@@ -85,8 +85,8 @@ const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All V
     if (sortBy === 'capacity-desc') return capB - capA
     if (sortBy === 'capacity-asc') return capA - capB
     if (sortBy === 'name-asc') {
-      const nameA = a.old_hall_name || a.new_hall_name || ''
-      const nameB = b.old_hall_name || b.new_hall_name || ''
+      const nameA = a.new_hall_name || a.old_hall_name || ''
+      const nameB = b.new_hall_name || b.old_hall_name || ''
       return nameA.localeCompare(nameB)
     }
     return 0
@@ -374,8 +374,9 @@ const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All V
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
-            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Passage Hall')
-            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
+            const isAC = isAcClassroom(venue)
+            const hallCode = isAC ? 'AC' : (venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Passage Hall'))
+            const venueTitle = isAC ? (venue.new_hall_name || venue.code || 'NC01') : (venue.new_hall_name || venue.old_hall_name || venue.name || 'Campus Venue')
             return (
               <div
                 key={venue.id || idx}
@@ -433,7 +434,7 @@ const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All V
                     </h3>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-2.5">
                       <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate">{venue.department}</span>
+                      <span className="truncate">{venue.department}{isAC && venue.old_hall_name ? ` (${venue.old_hall_name})` : ''}</span>
                     </p>
 
                     {/* Price / Tariff Badge & Exclusivity */}
@@ -494,8 +495,9 @@ const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All V
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
-            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Hall')
-            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
+            const isAC = isAcClassroom(venue)
+            const hallCode = isAC ? 'AC' : (venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Hall'))
+            const venueTitle = isAC ? (venue.new_hall_name || venue.code || 'NC01') : (venue.new_hall_name || venue.old_hall_name || venue.name || 'Campus Venue')
             return (
               <div
                 key={venue.id || idx}
@@ -543,7 +545,7 @@ const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All V
 
                     <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
                       <Building className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{venue.department}</span>
+                      <span>{venue.department}{isAC && venue.old_hall_name ? ` (${venue.old_hall_name})` : ''}</span>
                     </p>
 
                     <div className="flex flex-wrap items-center gap-2 pt-0.5">
