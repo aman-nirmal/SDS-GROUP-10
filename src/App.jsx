@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import {
   MapPin,
   Calendar,
@@ -3221,7 +3221,47 @@ export default function App() {
 
   const [venues, setVenues] = useState(sampleVenuesFallback)
   const [isLoadingVenues, setIsLoadingVenues] = useState(false)
-  const [activeTab, setActiveTab] = useState('home')
+  const [activeTab, _setActiveTab] = useState('home')
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false)
+  const transitionTimerRef = useRef(null)
+
+  // Sleek professional page transition handler (Disappear -> Appear)
+  const setActiveTab = useCallback((nextTab, options = {}) => {
+    const { immediate = false } = options
+    if (nextTab === activeTab && !isPageTransitioning) return
+
+    if (immediate) {
+      _setActiveTab(nextTab)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+      return
+    }
+
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current)
+    }
+
+    // 1. Sleek disappearance phase (95ms): current view smoothly fades out & micro-shifts
+    setIsPageTransitioning(true)
+
+    transitionTimerRef.current = setTimeout(() => {
+      // 2. Instant tab switch & scroll reset to top
+      _setActiveTab(nextTab)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+
+      // 3. Sleek appearance phase: new view fades in with subtle elevation
+      requestAnimationFrame(() => {
+        setIsPageTransitioning(false)
+      })
+    }, 95)
+  }, [activeTab, isPageTransitioning])
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) {
+        clearTimeout(transitionTimerRef.current)
+      }
+    }
+  }, [])
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -4525,9 +4565,16 @@ export default function App() {
         )}
       </header>
 
-      {/* Main Dynamic View */}
-      <main className="flex-1 flex flex-col">
-        {renderTabContent()}
+      {/* Main Dynamic View with Sleek Disappear/Appear Page Transition */}
+      <main
+        id="main-content"
+        className={`flex-1 flex flex-col page-transition-wrapper ${
+          isPageTransitioning ? 'page-disappear' : 'page-appear'
+        }`}
+      >
+        <div key={activeTab} className="flex-1 flex flex-col page-content-mount">
+          {renderTabContent()}
+        </div>
       </main>
 
       {/* Interactive Venue Reservation Modal */}
