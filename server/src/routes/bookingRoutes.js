@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   getAllBookings,
+  checkAvailability,
   getBookingById,
   createBooking,
   updateBookingStatus,
@@ -12,6 +13,7 @@ import {
 const router = Router()
 
 router.get('/', getAllBookings)
+router.get('/availability', checkAvailability)
 router.get('/verify-pass/:passCode', verifyPass)
 router.post('/send-pass-email', sendPassEmailDirect)
 router.get('/:id', getBookingById)
