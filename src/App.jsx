@@ -3706,6 +3706,41 @@ export default function App() {
     }
   }, [venues, initialRoute.venueSlug])
 
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_auth_user')
+      return stored ? JSON.parse(stored) : null
+    } catch {
+      return null
+    }
+  })
+
+  const [roleRequests, setRoleRequests] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locus_admin_role_requests')
+      return stored ? JSON.parse(stored) : INITIAL_ROLE_REQUESTS
+    } catch {
+      return INITIAL_ROLE_REQUESTS
+    }
+  })
+
+  const handleUserSubmitRoleRequest = async (newRequest) => {
+    setRoleRequests((prev) => {
+      const updated = [newRequest, ...prev]
+      try {
+        localStorage.setItem('locus_admin_role_requests', JSON.stringify(updated))
+      } catch {
+        // ignore
+      }
+      return updated
+    })
+    try {
+      await roleRequestsApi.create(newRequest)
+    } catch (err) {
+      console.warn('Backend role request sync failed:', err)
+    }
+  }
+
   const [campusBookings, setCampusBookings] = useState(() => {
     try {
       const stored = localStorage.getItem('locus_admin_bookings')
