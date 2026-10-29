@@ -38,7 +38,38 @@ import FacultyPortal from './components/FacultyPortal'
 import StudentPortal from './components/StudentPortal'
 import ClubPortal from './components/ClubPortal'
 import SecurityPortal from './components/SecurityPortal'
+import LabAssistantPortal from './components/LabAssistantPortal'
+import HodPortal from './components/HodPortal'
+import DeanPortal from './components/DeanPortal'
 import CampusEventNotificationPanel from './components/CampusEventNotificationPanel'
+
+export { getVenueImageUrl } from './utils/venueUtils'
+
+export function isLabVenue(venue) {
+  if (!venue) return false
+  if (venue.isLab === true) return true
+  const type = (venue.type || '').toLowerCase()
+  const name = `${venue.new_hall_name || ''} ${venue.old_hall_name || ''} ${venue.name || ''}`.toLowerCase()
+  const code = (venue.code || venue.hall_code || '').toLowerCase()
+  return (
+    type.includes('lab') ||
+    type.includes('laboratory') ||
+    name.includes('lab') ||
+    name.includes('laboratory') ||
+    code.includes('lab')
+  )
+}
+
+export function isClassroomVenue(venue) {
+  if (!venue) return false
+  const type = (venue.type || '').toLowerCase()
+  const name = `${venue.new_hall_name || ''} ${venue.name || ''}`.toLowerCase()
+  return (
+    type.includes('classroom') ||
+    name.includes('classroom') ||
+    /^(sc|nc|ac|hall|room|cr|lh|tut)\s*\d+/i.test(venue.new_hall_name || '')
+  )
+}
 
 // 2-Frame Animated Flying Birds Component (Swaps bird1.png and bird2.png)
 // Official LOCUS Logo Component
@@ -1036,6 +1067,85 @@ export default function App() {
         }
         return (
           <FacultyPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+          />
+        )
+      case 'lab_assistant':
+      case 'lab-assistant':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Lab Assistant' || user.role === 'Administrator' ? 'lab_assistant' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <LabAssistantPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+          />
+        )
+      case 'hod':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Head of Department (HOD)' || user.role === 'HOD' || user.role === 'Administrator' ? 'hod' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <HodPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+          />
+        )
+      case 'dean':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Dean' || user.role === 'Administrator' ? 'dean' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <DeanPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
           />
