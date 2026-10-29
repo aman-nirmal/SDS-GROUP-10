@@ -451,6 +451,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         venue: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
         oldName: venue?.old_hall_name,
         department,
+        venueDepartment: department,
         applicantName,
         applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
         applicantRole: currentUser?.role || 'Student',
@@ -462,7 +463,8 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         capacity: Number(attendees) || 50,
         attendees: Number(attendees) || 50,
         facultyInCharge: faculty.name,
-        status: 'Pending',
+        status: 'Pending HOD Approval',
+        approvalStage: 'HOD',
         submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       })
     }
@@ -483,14 +485,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
             <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest block mb-1">
-              Forwarded to Faculty Review Queue
+              Stage 1 of 2: Routed to Department HOD
             </span>
             <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
               Sanction Request Logged!
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
               Your venue reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
-              <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the departmental faculty in-charge for review and sanction.
+              <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the <strong className="text-slate-900 dark:text-white">{department} Head of Department (HOD)</strong>. Upon HOD endorsement, it will escalate to the Dean for final clearance.
             </p>
 
             <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 text-left mb-6 space-y-3 max-w-lg mx-auto">
@@ -507,14 +509,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                 <span className="font-semibold text-slate-800 dark:text-slate-200">{department}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 dark:text-slate-400 font-medium">Faculty In-Charge Assigned:</span>
-                <span className="font-bold text-blue-700 dark:text-blue-400">{faculty.name} ({faculty.email})</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Review Stage:</span>
+                <span className="font-bold text-blue-700 dark:text-blue-400">Step 1: Department HOD &rarr; Step 2: Dean</span>
               </div>
               <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200/80 dark:border-slate-700/80">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Status:</span>
                 <span className="inline-flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                  Pending Faculty Sanction
+                  Pending HOD Approval
                 </span>
               </div>
             </div>
@@ -843,160 +845,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   )
 }
 
-// Interactive My Bookings Page Component
-function MyBookingsPage({ bookings = [], onBackHome, onExploreVenues }) {
-  const [activeFilter, setActiveFilter] = useState('All')
 
-  const sampleDefaultBookings = [
-    {
-      ref: 'LOCUS-482910',
-      venueName: 'NC01',
-      oldName: 'AC 101',
-      department: 'Academics Complex',
-      applicantName: 'Prof. Aniket Joshi',
-      date: '2026-10-18',
-      slot: '09:00 AM - 11:00 AM',
-      purpose: 'End-Sem Project Viva & Evaluation',
-      capacity: 72,
-      status: 'Confirmed'
-    },
-    {
-      ref: 'LOCUS-319502',
-      venueName: 'NC-27',
-      oldName: 'Computer Dept Hall A',
-      department: 'Computer New Building',
-      applicantName: 'CS Student Chapter',
-      date: '2026-10-21',
-      slot: '02:00 PM - 04:00 PM',
-      purpose: 'Technical Seminar on Distributed Systems',
-      capacity: 80,
-      status: 'Confirmed'
-    }
-  ]
-
-  const allBookings = bookings.length > 0 ? bookings : sampleDefaultBookings
-
-  const filteredBookings = allBookings.filter((b) => {
-    if (activeFilter === 'All') return true
-    return b.status === activeFilter
-  })
-
-  return (
-    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <button
-            type="button"
-            onClick={onBackHome}
-            className="group text-xs font-bold text-blue-600 hover:text-blue-700 mb-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
-            <span>Back to Home</span>
-          </button>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            My Venue Bookings
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Track your slot confirmations, approved timings, and reservation slips across campus.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={onExploreVenues}
-          className="h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
-        >
-          <Calendar className="w-4 h-4" />
-          <span>New Reservation</span>
-        </button>
-      </div>
-
-      {/* Status Filter Tabs */}
-      <div className="flex items-center gap-2 mb-6 border-b border-slate-200/80 pb-3">
-        {['All', 'Confirmed', 'Pending'].map((status) => (
-          <button
-            key={status}
-            type="button"
-            onClick={() => setActiveFilter(status)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${activeFilter === status
-              ? 'bg-blue-600 text-white shadow-xs'
-              : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-              }`}
-          >
-            {status}
-          </button>
-        ))}
-      </div>
-
-      {/* Bookings List */}
-      <div className="space-y-4">
-        {filteredBookings.map((b) => (
-          <div
-            key={b.ref}
-            className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-5"
-          >
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
-                  {b.ref}
-                </span>
-                <span className="text-xs font-bold text-slate-900">
-                  {b.venueName}
-                </span>
-                {b.oldName && (
-                  <span className="text-xs text-slate-400">
-                    ({b.oldName})
-                  </span>
-                )}
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  {b.status}
-                </span>
-              </div>
-
-              <h3 className="font-bold text-slate-900 text-base">
-                {b.purpose}
-              </h3>
-
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                  {formatDateDisplay(b.date)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
-                  {b.slot}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Building className="w-3.5 h-3.5 text-slate-400" />
-                  {b.department}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-slate-400" />
-                  {b.applicantName} ({b.capacity} cap)
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pt-3 md:pt-0 border-t md:border-0 border-slate-100">
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4" />
-                COEP Admin Verified
-              </span>
-            </div>
-          </div>
-        ))}
-
-        {filteredBookings.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-            <p className="text-slate-500 text-sm font-semibold">No bookings found for this filter.</p>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
 
 
 
@@ -1564,34 +1413,7 @@ function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHom
   )
 }
 
-// Coming Soon Placeholder Component
-function ComingSoonPage({ title, description, onBackHome }) {
-  return (
-    <div className="flex-1 max-w-4xl mx-auto px-6 py-24 flex flex-col items-center justify-center text-center">
-      <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 shadow-xs">
-        <Clock className="w-8 h-8 stroke-[1.75]" />
-      </div>
-      <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2">
-        Under Developmentf
-      </span>
-      <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
-        {title}
-      </h2>
-      <p className="text-base text-slate-600 dark:text-slate-300 max-w-md mb-8 leading-relaxed">
-        {description}
-      </p>
-      <div className="flex items-center gap-4">
-        <button
-          type="button"
-          onClick={onBackHome}
-          className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-xs"
-        >
-          Return to Home
-        </button>
-      </div>
-    </div>
-  )
-}
+
 
 // Full Interactive & Modern Venue Catalog Page
 function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
@@ -3186,22 +3008,13 @@ export default function App() {
           />
         )
       case 'my-bookings':
-        if (currentUser && currentUser.role === 'Student') {
-          return (
-            <StudentPortal
-              currentUser={currentUser}
-              onNavigateLogin={() => setActiveTab('login')}
-              campusBookings={campusBookings}
-              onExploreVenues={() => setActiveTab('venues')}
-              onUpdateStatus={handleUpdateBookingStatus}
-            />
-          )
-        }
         return (
-          <MyBookingsPage
-            bookings={campusBookings}
-            onBackHome={() => setActiveTab('home')}
+          <StudentPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            campusBookings={campusBookings}
             onExploreVenues={() => setActiveTab('venues')}
+            onUpdateStatus={handleUpdateBookingStatus}
           />
         )
       case 'about':
