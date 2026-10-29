@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --color-slate-850: #141e33;
-}
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -229,63 +225,3 @@ select.text-\[10px\] {
 
 
 
-html.dark select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.75' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
-}
-
-/* Compact selects in tables, badges, or small toolbars */
-table select,
-.select-compact,
-select.text-xs,
-select.text-\[11px\],
-select.text-\[10px\] {
-  background-position: right 0.55rem center !important;
-  background-size: 0.95rem 0.95rem !important;
-  padding-right: 1.85rem !important;
-  padding-left: 0.65rem !important;
-}
-
-/* ============================================================================
-   SLEEK PROFESSIONAL PAGE TRANSITION (Disappear -> Appear)
-   Fast, fluid 100ms fade-out and 160ms entrance fade-in with subtle micro-shift
-   ============================================================================ */
-.page-transition-wrapper {
-  transition: opacity 100ms cubic-bezier(0.4, 0, 1, 1), transform 100ms cubic-bezier(0.4, 0, 1, 1);
-  will-change: opacity, transform;
-}
-
-.page-transition-wrapper.page-disappear {
-  opacity: 0;
-  transform: translateY(-4px) scale(0.996);
-  pointer-events: none;
-}
-
-.page-transition-wrapper.page-appear {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-@keyframes pageEntrance {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-content-mount {
-  animation: pageEntrance 170ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: opacity, transform;
-}
-
-
-
-
-
-.dark .bg-slate-850,
-html.dark .bg-slate-850 {
-  background-color: #141e33 !important;
-}

@@ -1339,8 +1339,8 @@ export default function App() {
           defaultDate={selectedDate}
           currentUser={currentUser}
           onClose={() => setSelectedVenueForBooking(null)}
-          onSubmitBooking={async (bookingData) => {
-            return await handleAddBooking(bookingData)
+          onSubmitBooking={(bookingData) => {
+            handleAddBooking(bookingData)
           }}
         />
       )}
