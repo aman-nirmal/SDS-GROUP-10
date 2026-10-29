@@ -1,5 +1,5 @@
 import { supabase } from '../src/config/supabase.js'
-import { importedCampusUsers } from '../../src/data/importedCampusUsers.js'
+import { importedCampusUsers } from '../src/data/importedCampusUsers.js'
 
 async function syncYear() {
   console.log('Testing whether "year" column is present in Supabase...')

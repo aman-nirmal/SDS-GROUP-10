@@ -1,5 +1,5 @@
 import { supabase } from '../src/config/supabase.js'
-import { importedCampusUsers } from '../../src/data/importedCampusUsers.js'
+import { importedCampusUsers } from '../src/data/importedCampusUsers.js'
 
 async function syncStudents() {
   console.log(`Starting Supabase sync for ${importedCampusUsers.length} COEP students...`)
