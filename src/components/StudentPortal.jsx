@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
+import DigitalPassQR from './DigitalPassQR'
 import { INITIAL_BOOKINGS } from './AdminPanel'
 import { bookingsApi } from '../lib/api'
 
@@ -133,6 +134,9 @@ export default function StudentPortal({
       applicantName: currentUser?.name || 'Student Member',
       applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
       applicantRole: 'Student',
+      digitalPassCode: newPass.digitalPassCode,
+      passCode: newPass.digitalPassCode,
+      pass_code: newPass.digitalPassCode,
       status: 'Confirmed'
     }
     bookingsApi.create(newBookingData).catch(console.warn)
@@ -602,12 +606,8 @@ export default function StudentPortal({
 
         {/* Modal: View Digital Pass Slip */}
         {selectedPass && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
             <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-center space-y-4">
-              <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                <QrCode className="w-7 h-7" />
-              </div>
-
               <div>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   {selectedPass.status} Gate Pass
@@ -616,11 +616,18 @@ export default function StudentPortal({
                 <p className="text-xs text-slate-500 dark:text-slate-400">{selectedPass.purpose}</p>
               </div>
 
+              {/* Real, Scannable QR Code */}
+              <DigitalPassQR
+                passCode={selectedPass.digitalPassCode}
+                passData={selectedPass}
+                size={180}
+              />
+
               <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs text-left space-y-1 font-mono text-slate-700 dark:text-slate-300">
                 <div>Pass Code: <strong className="text-blue-700 dark:text-blue-400">{selectedPass.digitalPassCode}</strong></div>
-                <div>Slot: {selectedPass.date} • {selectedPass.timeSlot}</div>
-                <div>Team: {selectedPass.attendees} Persons</div>
-                <div>Pass Holder: {currentUser?.name || 'Verified Student'}</div>
+                <div>Slot: <span className="font-sans font-medium">{selectedPass.date} • {selectedPass.timeSlot}</span></div>
+                <div>Team: <span className="font-sans font-medium">{selectedPass.attendees} Persons</span></div>
+                <div>Pass Holder: <span className="font-sans font-medium">{currentUser?.name || 'Verified Student'}</span></div>
               </div>
 
               <button
