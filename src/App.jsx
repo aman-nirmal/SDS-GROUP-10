@@ -304,7 +304,7 @@ export function getVenueImages(venue) {
     venue.images.forEach((img) => {
       if (img) list.push(img.startsWith('/') ? img : `/${img}`)
     })
-  } else if (venue?.image) {
+  } else if (venue?.image && (venue.image.startsWith('/photos/') || venue.image.startsWith('photos/'))) {
     list.push(venue.image.startsWith('/') ? venue.image : `/${venue.image}`)
   }
 
@@ -313,7 +313,18 @@ export function getVenueImages(venue) {
   const code = `${venue?.code || ''}`.toLowerCase()
   const dept = `${venue?.department || ''}`.toLowerCase()
 
+  // Deterministic seed from venue identifiers so each classroom gets a unique primary view
+  const seedString = `${venue?.id || ''}_${code}_${venue?.new_hall_name || ''}_${venue?.old_hall_name || ''}_${dept}`
+  let hash = 0
+  for (let i = 0; i < seedString.length; i++) {
+    hash = (hash * 31 + seedString.charCodeAt(i)) >>> 0
+  }
+
+  // Extract room number if present (e.g. SC07 -> 7, AC 202 -> 202)
+  const roomNum = parseInt((venue?.new_hall_name || code || name).replace(/\D/g, ''), 10) || hash
+
   let defaults = []
+
   // Mini Auditorium
   if (name.includes('mini') || code.includes('mini')) {
     defaults = ['/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/audi 2.jpeg']
@@ -322,19 +333,31 @@ export function getVenueImages(venue) {
   else if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
     defaults = ['/photos/audi 2.jpeg', '/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/seminar hall.webp']
   }
-  // Seminar Halls
-  else if (type.includes('seminar') || name.includes('sh') || name.includes('seminar')) {
-    if (name.includes('comp') || name.includes('civil') || dept.includes('computer')) {
-      defaults = ['/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg']
-    } else {
-      defaults = ['/photos/seminar hall.webp', '/photos/seminar hall 2.jpeg', '/photos/ac 2.jpeg']
-    }
+  // Engineering Drawing Hall / Design Studio (North Drawing Hall, ND01, CDH)
+  else if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01') || name.includes('studio')) {
+    defaults = ['/photos/drawing-hall.jpg', '/photos/heritage-classroom.jpg', '/photos/classroom.jpg']
   }
-  // South Classrooms (SC01-SC28, CDH, South Complex)
+  // Seminar Halls & Smart Classrooms
+  else if (type.includes('seminar') || name.includes('sh') || name.includes('seminar') || name.includes('smart') || name.includes('conference')) {
+    const seminarPool = [
+      ['/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg'],
+      ['/photos/seminar hall 2.jpeg', '/photos/smart-classroom.jpg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg'],
+      ['/photos/seminar hall.webp', '/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/ac 2.jpeg'],
+      ['/photos/ac 2.jpeg', '/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp']
+    ]
+    defaults = seminarPool[roomNum % seminarPool.length]
+  }
+  // South Classrooms (SC01-SC28, CDH, South Complex Heritage Wing)
   else if (name.includes('sc') || code.includes('sc') || name.includes('south')) {
-    defaults = ['/photos/sc1.jpeg', '/photos/classroom.jpg', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
+    const southPool = [
+      ['/photos/south-wing-classroom.jpg', '/photos/heritage-classroom.jpg', '/photos/sc1.jpeg', '/photos/classroom.jpg'],
+      ['/photos/heritage-classroom.jpg', '/photos/south-wing-classroom.jpg', '/photos/sc1.jpeg', '/photos/academic-complex-clean.jpg'],
+      ['/photos/sc1.jpeg', '/photos/south-wing-classroom.jpg', '/photos/heritage-classroom.jpg', '/photos/academic-complex-clean.jpg'],
+      ['/photos/classroom.jpg', '/photos/south-wing-classroom.jpg', '/photos/heritage-classroom.jpg', '/photos/sc1.jpeg']
+    ]
+    defaults = southPool[roomNum % southPool.length]
   }
-  // Academic Complex (NC01 - NC14, AC 101 - AC 304)
+  // Academic Complex & North Classrooms (NC01 - NC14, AC 101 - AC 304)
   else if (
     dept.includes('academic') ||
     name.includes('ac ') ||
@@ -345,36 +368,38 @@ export function getVenueImages(venue) {
     /^nc0[1-9]|^nc1[0-4]/.test(code) ||
     /^nc0[1-9]|^nc1[0-4]/.test(venue?.new_hall_name?.toLowerCase() || '')
   ) {
-    const num = parseInt((venue?.new_hall_name || code || name).replace(/\D/g, ''), 10) || 1
-    if (num % 3 === 0) {
-      defaults = ['/photos/ac 3.webp', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
-    } else if (num % 3 === 2) {
-      defaults = ['/photos/ac 2.jpeg', '/photos/ac 3.webp', '/photos/ac 1.jpeg']
-    } else {
-      defaults = ['/photos/ac 1.jpeg', '/photos/ac 2.jpeg', '/photos/ac 3.webp']
-    }
+    const acPool = [
+      ['/photos/academic-complex-clean.jpg', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg', '/photos/ac 3.webp'],
+      ['/photos/ac 1.jpeg', '/photos/academic-complex-clean.jpg', '/photos/ac 3.webp', '/photos/ac 2.jpeg'],
+      ['/photos/ac 2.jpeg', '/photos/smart-classroom.jpg', '/photos/academic-complex-clean.jpg', '/photos/ac 1.jpeg'],
+      ['/photos/ac 3.webp', '/photos/academic-complex-clean.jpg', '/photos/ac 1.jpeg', '/photos/smart-classroom.jpg']
+    ]
+    defaults = acPool[roomNum % acPool.length]
   }
   // Meeting / Conference Rooms
   else if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
-    defaults = ['/photos/ac 2.jpeg', '/photos/seminar hall 2.jpeg', '/photos/mini audi 2.jpg']
+    defaults = ['/photos/ac 2.jpeg', '/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/mini audi 2.jpg']
   }
-  // Drawing Hall / North Drawing Hall
-  else if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01')) {
-    defaults = ['/photos/classroom.jpg', '/photos/sc1.jpeg', '/photos/ac 1.jpeg']
-  }
-  // Default authentic campus classroom
+  // General Department Classrooms (Civil, Mechanical, Computer, Electrical, etc.) with rich variety
   else {
-    defaults = ['/photos/classroom.jpg', '/photos/sc1.jpeg', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
+    const generalPool = [
+      ['/photos/heritage-classroom.jpg', '/photos/south-wing-classroom.jpg', '/photos/academic-complex-clean.jpg', '/photos/classroom.jpg'],
+      ['/photos/academic-complex-clean.jpg', '/photos/smart-classroom.jpg', '/photos/ac 1.jpeg', '/photos/heritage-classroom.jpg'],
+      ['/photos/south-wing-classroom.jpg', '/photos/heritage-classroom.jpg', '/photos/sc1.jpeg', '/photos/academic-complex-clean.jpg'],
+      ['/photos/smart-classroom.jpg', '/photos/academic-complex-clean.jpg', '/photos/drawing-hall.jpg', '/photos/classroom.jpg'],
+      ['/photos/classroom.jpg', '/photos/heritage-classroom.jpg', '/photos/south-wing-classroom.jpg', '/photos/sc1.jpeg']
+    ]
+    defaults = generalPool[roomNum % generalPool.length]
   }
 
   const merged = Array.from(new Set([...list, ...defaults])).filter(Boolean)
-  return merged.length > 0 ? merged : ['/photos/classroom.jpg']
+  return merged.length > 0 ? merged : ['/photos/academic-complex-clean.jpg']
 }
 
 // Helper function to get authentic high-quality image from the campus photos repository
 export function getVenueImageUrl(venue) {
   const images = getVenueImages(venue)
-  return images[0] || '/photos/classroom.jpg'
+  return images[0] || '/photos/academic-complex-clean.jpg'
 }
 
 // Helper function to get official faculty in-charge & department coordinator for any venue
