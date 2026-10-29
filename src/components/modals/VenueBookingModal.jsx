@@ -829,41 +829,51 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                         </div>
                       )}
 
-                      {/* Clean Simple Time Slot Buttons */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {computedTimeSlots.map((slot, i) => {
-                          const isFree = slot.status === 'free'
-                          const isSelected = selectedSlot === slot.time
-                          return isFree ? (
-                            <button
-                              key={i}
-                              type="button"
-                              onClick={() => {
-                                setSelectedSlot(slot.time)
-                                setConflictError('')
-                              }}
-                              className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${isSelected
-                                  ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                                  : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
-                                }`}
-                            >
-                              <span className="dark:text-slate-100">{slot.time}</span>
-                              {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
-                            </button>
-                          ) : (
-                            <div
-                              key={i}
-                              className="p-2.5 rounded-xl text-xs font-medium border border-rose-200/80 dark:border-rose-900/50 bg-rose-50/60 dark:bg-rose-950/25 text-slate-500 dark:text-slate-400 flex items-center justify-between cursor-not-allowed select-none"
-                              title={slot.purpose ? `Reserved: "${slot.purpose}"` : 'Occupied'}
-                            >
-                              <span className="line-through">{slot.time}</span>
-                              <span className="text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400">
-                                {slot.label}
-                              </span>
-                            </div>
-                          )
-                        })}
-                      </div>
+                      {/* Time Slot Buttons — last orphan slot spans full row */}
+                      {(() => {
+                        const total = computedTimeSlots.length
+                        const remainder = total % 3
+                        return (
+                          <div className="grid grid-cols-3 gap-2">
+                            {computedTimeSlots.map((slot, i) => {
+                              const isFree = slot.status === 'free'
+                              const isSelected = selectedSlot === slot.time
+                              // If only 1 slot left on last row → span full row
+                              const isLastOrphan = remainder === 1 && i === total - 1
+                              const colSpan = isLastOrphan ? 'col-span-3' : ''
+
+                              return isFree ? (
+                                <button
+                                  key={i}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedSlot(slot.time)
+                                    setConflictError('')
+                                  }}
+                                  className={`${colSpan} p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${isSelected
+                                    ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                    : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
+                                  }`}
+                                >
+                                  <span>{slot.time}</span>
+                                  {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
+                                </button>
+                              ) : (
+                                <div
+                                  key={i}
+                                  className={`${colSpan} p-2.5 rounded-xl text-xs font-medium border border-rose-200/80 dark:border-rose-900/50 bg-rose-50/60 dark:bg-rose-950/25 text-slate-500 dark:text-slate-400 flex items-center justify-between cursor-not-allowed select-none`}
+                                  title={slot.purpose ? `Reserved: "${slot.purpose}"` : 'Occupied'}
+                                >
+                                  <span className="line-through">{slot.time}</span>
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400">
+                                    {slot.label}
+                                  </span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )
+                      })()}
                     </div>
 
                     {/* Applicant Details */}
@@ -1042,44 +1052,47 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                     </div>
 
                     {/* Submit / Cancel Buttons */}
-                    <div className="pt-3 flex items-center gap-3">
+                    <div className="pt-3 flex items-center gap-2">
                       <button
                         type="button"
                         onClick={onClose}
                         disabled={isProcessingPayment || isSubmitting}
-                        className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                        className="shrink-0 px-5 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm transition-colors cursor-pointer disabled:opacity-50"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
                         disabled={isProcessingPayment || isSubmitting}
-                        className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                        className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2.5"
                       >
                         {isSubmitting ? (
                           <>
-                            <RefreshCw className="w-4 h-4 animate-spin" />
-                            <span>Verifying with Database...</span>
+                            <RefreshCw className="w-4 h-4 animate-spin shrink-0" />
+                            <span className="text-sm font-semibold">Verifying...</span>
                           </>
                         ) : isProcessingPayment ? (
                           <>
-                            <RefreshCw className="w-4 h-4 animate-spin" />
-                            <span>Connecting to Cashfree Gateway...</span>
+                            <RefreshCw className="w-4 h-4 animate-spin shrink-0" />
+                            <span className="text-sm font-semibold">Connecting to Gateway...</span>
                           </>
                         ) : isPaidVenue ? (
                           <>
-                            <CreditCard className="w-4 h-4" />
-                            <span>Pay ₹{numericPrice.toLocaleString('en-IN')} via Cashfree & Book</span>
+                            <CreditCard className="w-4 h-4 shrink-0" />
+                            <span className="flex flex-col items-start leading-tight">
+                              <span className="text-sm font-bold">Pay ₹{numericPrice.toLocaleString('en-IN')} &amp; Book</span>
+                              <span className="text-[10px] font-normal opacity-80">via Cashfree · Instant confirmation</span>
+                            </span>
                           </>
                         ) : isFacultyInstantApproved ? (
                           <>
-                            <CheckCircle2 className="w-4 h-4" />
-                            <span>Confirm & Auto-Approve Slot</span>
+                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                            <span className="text-sm font-semibold">Confirm &amp; Auto-Approve</span>
                           </>
                         ) : (
                           <>
-                            <span>Submit for HOD & Dean Clearance</span>
-                            <ArrowRight className="w-4 h-4" />
+                            <span className="text-sm font-semibold">Submit for Approval</span>
+                            <ArrowRight className="w-4 h-4 shrink-0" />
                           </>
                         )}
                       </button>
@@ -1094,6 +1107,3 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
     </div>
   )
 }
-
-
-
