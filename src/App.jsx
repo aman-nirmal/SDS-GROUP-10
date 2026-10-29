@@ -302,10 +302,10 @@ export function getVenueImages(venue) {
   const list = []
   if (Array.isArray(venue?.images) && venue.images.length > 0) {
     venue.images.forEach((img) => {
-      if (img) list.push(img.startsWith('/') ? img : `/${img}`)
+      if (img) list.push(img.startsWith('/') || img.startsWith('http') ? img : `/${img}`)
     })
-  } else if (venue?.image && (venue.image.startsWith('/photos/') || venue.image.startsWith('photos/'))) {
-    list.push(venue.image.startsWith('/') ? venue.image : `/${venue.image}`)
+  } else if (venue?.image) {
+    list.push(venue.image.startsWith('/') || venue.image.startsWith('http') ? venue.image : `/${venue.image}`)
   }
 
   const name = `${venue?.new_hall_name || ''} ${venue?.old_hall_name || ''} ${venue?.name || ''}`.toLowerCase()
@@ -333,12 +333,16 @@ export function getVenueImages(venue) {
   else if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
     defaults = ['/photos/audi 2.jpeg', '/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/seminar hall.webp']
   }
+  // Meeting & Executive Conference Rooms
+  else if (type.includes('meeting') || name.includes('meeting') || name.includes('conference') || code.includes('conf') || name.includes('mr')) {
+    defaults = ['/photos/bhau-conference.jpg', '/photos/bhau-meeting-room.jpg', '/photos/ac 2.jpeg', '/photos/seminar hall 2.jpeg']
+  }
   // Engineering Drawing Hall / Design Studio (North Drawing Hall, ND01, CDH)
   else if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01') || name.includes('studio')) {
     defaults = ['/photos/drawing-hall.jpg', '/photos/heritage-classroom.jpg', '/photos/classroom.jpg']
   }
   // Seminar Halls & Smart Classrooms
-  else if (type.includes('seminar') || name.includes('sh') || name.includes('seminar') || name.includes('smart') || name.includes('conference')) {
+  else if (type.includes('seminar') || name.includes('sh') || name.includes('seminar') || name.includes('smart')) {
     const seminarPool = [
       ['/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg'],
       ['/photos/seminar hall 2.jpeg', '/photos/smart-classroom.jpg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg'],
@@ -375,10 +379,6 @@ export function getVenueImages(venue) {
       ['/photos/ac 3.webp', '/photos/academic-complex-clean.jpg', '/photos/ac 1.jpeg', '/photos/smart-classroom.jpg']
     ]
     defaults = acPool[roomNum % acPool.length]
-  }
-  // Meeting / Conference Rooms
-  else if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
-    defaults = ['/photos/ac 2.jpeg', '/photos/smart-classroom.jpg', '/photos/seminar hall 2.jpeg', '/photos/mini audi 2.jpg']
   }
   // General Department Classrooms (Civil, Mechanical, Computer, Electrical, etc.) with rich variety
   else {
@@ -2372,6 +2372,8 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Passage Hall')
+            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
             return (
               <div
                 key={venue.id || idx}
@@ -2382,7 +2384,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                   <img
                     src={venueImage}
-                    alt={venue.old_hall_name || venue.new_hall_name}
+                    alt={venueTitle}
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.onerror = null
@@ -2396,10 +2398,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                   {/* Top Badges Bar (Unified flex container to prevent overlap) */}
                   <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 z-10 pointer-events-none">
                     <span
-                      title={venue.new_hall_name || 'Passage Hall'}
-                      className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs truncate max-w-[62%]"
+                      title={hallCode}
+                      className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs shrink-0 max-w-[65%] truncate"
                     >
-                      {venue.new_hall_name || 'Passage Hall'}
+                      {hallCode}
                     </span>
                     <span className="text-[11px] font-bold text-slate-100 bg-slate-900/80 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10 shrink-0">
                       {venue.type || 'Hall'}
@@ -2422,10 +2424,10 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <h3
-                      className="font-bold text-slate-900 dark:text-white text-base mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-                      title={venue.old_hall_name || venue.new_hall_name}
+                      className="font-bold text-slate-900 dark:text-white text-base mb-1 line-clamp-2 min-h-[3rem] leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                      title={venueTitle}
                     >
-                      {venue.old_hall_name || venue.new_hall_name}
+                      {venueTitle}
                     </h3>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-2.5">
                       <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -2490,6 +2492,8 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Hall')
+            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
             return (
               <div
                 key={venue.id || idx}
@@ -2500,7 +2504,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                   <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     <img
                       src={venueImage}
-                      alt={venue.old_hall_name || venue.new_hall_name}
+                      alt={venueTitle}
                       loading="lazy"
                       onError={(e) => {
                         e.currentTarget.onerror = null
@@ -2510,7 +2514,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                     />
                     <div className="absolute top-1 left-1 max-w-[calc(100%-8px)] pointer-events-none">
                       <span className="text-[10px] font-black text-white bg-slate-900/85 px-1.5 py-0.5 rounded truncate block max-w-full">
-                        {venue.new_hall_name}
+                        {hallCode}
                       </span>
                     </div>
                   </div>
@@ -2518,7 +2522,7 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {venue.old_hall_name || venue.new_hall_name}
+                        {venueTitle}
                       </h3>
                       <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md shrink-0">
                         {venue.type}
@@ -3070,8 +3074,8 @@ const sampleVenuesFallback = [
   {
     id: 'b4a00001-0000-4000-8000-000000000001',
     code: 'BHAU-CONF',
-    new_hall_name: 'Bhau Conference Room',
-    old_hall_name: 'Conference Room (2nd Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-CONF',
+    old_hall_name: 'Bhau Conference Room',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
     benches: 8,
@@ -3081,14 +3085,15 @@ const sampleVenuesFallback = [
     address: '2nd Floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
     terms: 'Available for Bhau Startups and outsiders. Max 2 hours at a time, gap of an hour between next booking, max 12 hours in a week. Eatables not allowed.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/bhau-conference.jpg',
+    images: ['/photos/bhau-conference.jpg', '/photos/bhau-meeting-room.jpg', '/photos/ac 2.jpeg', '/photos/seminar hall 2.jpeg'],
     features: ['15 Seats', 'Duration: 1 h', '₹1,180/hr (incl. 18% GST)', 'For Startups & Outsiders', 'Conference Table', 'Display Screen', 'Air Conditioned']
   },
   {
     id: 'b4a00002-0000-4000-8000-000000000002',
     code: 'BHAU-AUD',
-    new_hall_name: 'Bhau Auditorium',
-    old_hall_name: 'Auditorium (Ground Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-AUD',
+    old_hall_name: 'Bhau Auditorium',
     department: 'Bhau Institute of Innovation',
     type: 'Auditoriums',
     benches: 125,
@@ -3098,14 +3103,15 @@ const sampleVenuesFallback = [
     address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
     terms: 'State-of-the-art auditorium for symposiums, demo days, startup pitch fests, and convocations. Eatables not allowed.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/audi 2.jpeg',
+    images: ['/photos/audi 2.jpeg', '/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/seminar hall.webp'],
     features: ['250 Seats', 'Duration: 1 h', '₹2,950/hr (incl. GST)', 'Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Dual Mics']
   },
   {
     id: 'b4a00003-0000-4000-8000-000000000003',
     code: 'BHAU-CR1',
-    new_hall_name: 'Bhau Classroom 1',
-    old_hall_name: 'Classroom 1 (Ground Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-CR1',
+    old_hall_name: 'Bhau Classroom 1',
     department: 'Bhau Institute of Innovation',
     type: 'Classrooms',
     benches: 30,
@@ -3115,14 +3121,15 @@ const sampleVenuesFallback = [
     address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
     terms: 'Bookings are in 2-hour blocks. Inclusive of 18% GST. Ideal for workshops and entrepreneurship masterclasses.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/smart-classroom.jpg',
+    images: ['/photos/smart-classroom.jpg', '/photos/academic-complex-clean.jpg', '/photos/classroom.jpg'],
     features: ['60 Seats', 'Duration: 2 h', '₹2,360/2 hr (incl. 18% GST)', 'Projector & Screen', 'Whiteboard', 'Air Conditioned']
   },
   {
     id: 'b4a00004-0000-4000-8000-000000000004',
     code: 'BHAU-OS-GND',
-    new_hall_name: 'Bhau Open Space (Ground)',
-    old_hall_name: 'Open Space Ground (Ground Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-OS-GND',
+    old_hall_name: 'Bhau Open Space (Ground)',
     department: 'Bhau Institute of Innovation',
     type: 'Seminar Halls',
     benches: 20,
@@ -3132,14 +3139,15 @@ const sampleVenuesFallback = [
     address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
     terms: 'Ground open courtyard for startup showcases, tech exhibits, and networking. Inclusive of 18% GST.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/seminar hall.webp',
+    images: ['/photos/seminar hall.webp', '/photos/seminar hall 2.jpeg', '/photos/ac 1.jpeg'],
     features: ['50 Persons', 'Duration: 1 h', '₹1,770/hr (incl. 18% GST)', 'Ground Courtyard', 'Open Air Space', 'Wi-Fi Access']
   },
   {
     id: 'b4a00005-0000-4000-8000-000000000005',
     code: 'BHAU-OS-TER',
-    new_hall_name: 'Bhau Open Space (Terrace)',
-    old_hall_name: 'Open Space Terrace (Top Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-OS-TER',
+    old_hall_name: 'Bhau Open Space (Terrace)',
     department: 'Bhau Institute of Innovation',
     type: 'Seminar Halls',
     benches: 15,
@@ -3149,14 +3157,15 @@ const sampleVenuesFallback = [
     address: 'Top floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
     terms: 'Top floor terrace with scenic riverbank view. Suitable for formal evening gatherings, mixers, and founder chats.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/seminar hall 2.jpeg',
+    images: ['/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp', '/photos/ac 1.jpeg'],
     features: ['40 Persons', 'Duration: 1 h', '₹2,360/hr', 'Top Floor Terrace', 'Scenic Riverbank View', 'Ambient Lighting']
   },
   {
     id: 'b4a00006-0000-4000-8000-000000000006',
     code: 'BHAU-MR1',
-    new_hall_name: 'Bhau Meeting Room 1',
-    old_hall_name: 'Meeting Room 1 (Second Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-MR1',
+    old_hall_name: 'Bhau Meeting Room 1',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
     benches: 4,
@@ -3166,14 +3175,15 @@ const sampleVenuesFallback = [
     address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
     terms: 'ONLY FOR BHAU STARTUPS. Bhau Startups can book a maximum of 2 hours at a time and there should be a gap of an hour between the next booking. Bhau Startups can book meeting rooms for the next 7 days only. Bhau Startups can book the space for max. 12 hrs in a week. Eatables are not allowed in the meeting rooms.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/bhau-meeting-room.jpg',
+    images: ['/photos/bhau-meeting-room.jpg', '/photos/bhau-conference.jpg', '/photos/ac 2.jpeg'],
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr', 'Discussion Table', 'Whiteboard', 'Air Conditioned']
   },
   {
     id: 'b4a00007-0000-4000-8000-000000000007',
     code: 'BHAU-MR2',
-    new_hall_name: 'Bhau Meeting Room 2',
-    old_hall_name: 'Meeting Room 2 (Second Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-MR2',
+    old_hall_name: 'Bhau Meeting Room 2',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
     benches: 4,
@@ -3183,7 +3193,8 @@ const sampleVenuesFallback = [
     address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
     terms: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Bhau Startups can book a maximum of 2 hours at a time and there should be a gap of an hour between the next booking. Bhau Startups can book meeting rooms for the next 7 days only. Bhau Startups can book the space for max. 12 hrs in a week. Eatables not allowed in the meeting rooms.',
     is_active: true,
-    image: '/photos/ac 3.webp',
+    image: '/photos/bhau-meeting-room.jpg',
+    images: ['/photos/bhau-meeting-room.jpg', '/photos/bhau-conference.jpg', '/photos/ac 3.webp'],
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned']
   }
 ].map((v) => ({

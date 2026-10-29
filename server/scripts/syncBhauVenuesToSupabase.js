@@ -5,8 +5,8 @@ export const BHAU_VENUES = [
     id: 'b4a00001-0000-4000-8000-000000000001',
     code: 'BHAU-CONF',
     name: 'Bhau Conference Room (Bhau Institute of Innovation)',
-    new_hall_name: 'Bhau Conference Room',
-    old_hall_name: 'Conference Room (2nd Floor, Bhau Institute)',
+    new_hall_name: 'BHAU-CONF',
+    old_hall_name: 'Bhau Conference Room',
     department: 'Bhau Institute of Innovation',
     building: 'Bhau Institute of Innovation, Entrepreneurship and Leadership',
     type: 'Meeting Rooms',
@@ -25,7 +25,7 @@ export const BHAU_VENUES = [
       'Display Screen',
       'Air Conditioned'
     ],
-    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/bhau-conference.jpg',
     faculty_incharge: 'Faculty Director, BHAU Institute (director.bhau@coeptech.ac.in)'
   },
   {

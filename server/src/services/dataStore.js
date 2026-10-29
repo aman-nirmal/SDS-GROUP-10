@@ -305,10 +305,13 @@ class DataStore {
       if (num % 3 === 2) return '/photos/ac 2.jpeg'
       return '/photos/ac 1.jpeg'
     }
-    if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
-      return '/photos/ac 2.jpeg'
+    if (name.includes('conference') || code.includes('conf')) {
+      return '/photos/bhau-conference.jpg'
     }
-    return '/photos/classroom.jpg'
+    if (type.includes('meeting') || name.includes('mr')) {
+      return '/photos/bhau-meeting-room.jpg'
+    }
+    return '/photos/academic-complex-clean.jpg'
   }
 
   async getVenues(filter = {}) {
