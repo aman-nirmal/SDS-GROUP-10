@@ -323,20 +323,31 @@ export default function StudentPortal({
 
                       {/* Right Column (5 cols): Date, Time, Status & Action */}
                       <div className="md:col-span-5 flex flex-col md:items-end justify-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 md:pl-6">
-                        {/* Status Pill */}
+                        {/* Two-Tier Status Pill */}
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
                             isConfirmed
                               ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                              : b.status === 'Pending Dean Approval'
+                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
                               : isPending
                               ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                               : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
                           }`}
                         >
                           {isConfirmed && <Check className="w-3.5 h-3.5" />}
-                          {isPending && <Clock className="w-3.5 h-3.5" />}
+                          {b.status === 'Pending Dean Approval' && <Clock className="w-3.5 h-3.5 text-blue-500 animate-pulse" />}
+                          {isPending && b.status !== 'Pending Dean Approval' && <Clock className="w-3.5 h-3.5" />}
                           {isCancelled && <X className="w-3.5 h-3.5" />}
-                          <span>{isPending ? 'Pending Approval' : isConfirmed ? 'Approved' : 'Cancelled'}</span>
+                          <span>
+                            {isConfirmed
+                              ? 'Approved (Pass Issued)'
+                              : b.status === 'Pending Dean Approval'
+                              ? 'Step 2: Awaiting Dean Clearance'
+                              : isPending
+                              ? 'Step 1: Awaiting HOD Sanction'
+                              : 'Cancelled'}
+                          </span>
                         </span>
 
                         {/* Date & Time */}

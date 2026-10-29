@@ -12,15 +12,30 @@ export const INITIAL_BOOKINGS = [
     ref: 'STU-BK-901',
     venueId: 'VN-1',
     venueName: 'North Drawing Hall (ND01)',
+    venueDepartment: 'Mechanical Engineering',
+    department: 'Mechanical Engineering',
     applicantName: 'Aman Nirmal',
     applicantEmail: 'student@coeptech.ac.in',
     applicantRole: 'Student',
-    department: 'Computer Engineering',
     purpose: 'National Web3 & AI Hackathon Workshop',
     date: '2026-10-24',
     timeSlot: '09:00 AM - 01:00 PM',
     attendees: 120,
-    status: 'Pending',
+    status: 'Pending HOD Approval',
+    approvalStage: 'HOD',
+    hodApproval: {
+      department: 'Mechanical Engineering',
+      status: 'Pending',
+      approvedBy: null,
+      decidedAt: null,
+      notes: ''
+    },
+    deanApproval: {
+      status: 'Waiting',
+      approvedBy: null,
+      decidedAt: null,
+      notes: ''
+    },
     priority: 'High',
     submittedAt: '2026-10-20 14:32',
     notes: 'Requires projector and 4 wireless collar mics.'
@@ -30,15 +45,31 @@ export const INITIAL_BOOKINGS = [
     ref: 'FAC-BK-101',
     venueId: 'VN-4',
     venueName: 'Auditorium Main Hall',
+    venueDepartment: 'Central Estate & Infrastructure',
+    department: 'Central Estate & Infrastructure',
     applicantName: 'Dr. V. K. Kulkarni',
     applicantEmail: 'faculty@coeptech.ac.in',
     applicantRole: 'Faculty',
-    department: 'Computer Engineering',
     purpose: 'End-Semester Department Research & Capstone Viva',
     date: '2026-10-28',
     timeSlot: '09:00 AM - 05:00 PM',
     attendees: 300,
     status: 'Confirmed',
+    approvalStage: 'Completed',
+    hodApproval: {
+      department: 'Central Estate & Infrastructure',
+      status: 'Approved',
+      approvedBy: 'Central Estate Officer',
+      decidedAt: '2026-10-18 11:30',
+      notes: 'Cleared for academic assessment'
+    },
+    deanApproval: {
+      status: 'Approved',
+      approvedBy: 'Dean Academics',
+      decidedAt: '2026-10-18 15:45',
+      notes: 'Final sanction granted'
+    },
+    digitalPassCode: 'COEP-FAC-9912-KEY',
     priority: 'Normal',
     submittedAt: '2026-10-18 10:15',
     notes: 'Sanctioned by Central Academic Cell.'
@@ -48,15 +79,31 @@ export const INITIAL_BOOKINGS = [
     ref: 'CLB-BK-401',
     venueId: 'VN-6',
     venueName: 'BHAU Main Auditorium',
+    venueDepartment: 'Management',
+    department: 'Management',
     applicantName: 'MindSpark Secretarial Lead',
     applicantEmail: 'mindspark@coeptech.ac.in',
     applicantRole: 'Club Lead',
-    department: 'Technical Events Secretariat',
     purpose: 'MindSpark 2026: National Tech Symposium Keynote',
     date: '2026-10-28',
     timeSlot: '08:00 AM - 06:00 PM',
     attendees: 280,
     status: 'Confirmed',
+    approvalStage: 'Completed',
+    hodApproval: {
+      department: 'Management',
+      status: 'Approved',
+      approvedBy: 'Dr. Sandeep A. Meshram (HoD)',
+      decidedAt: '2026-10-16 11:00',
+      notes: 'Sanctioned for tech keynote'
+    },
+    deanApproval: {
+      status: 'Approved',
+      approvedBy: 'Dean of Student Affairs',
+      decidedAt: '2026-10-16 16:30',
+      notes: 'VIP protocol approved'
+    },
+    digitalPassCode: 'COEP-CLB-7721-FEST',
     priority: 'High',
     submittedAt: '2026-10-15 16:40',
     notes: 'VIP guest from ISRO arriving at 10 AM.'
@@ -66,15 +113,31 @@ export const INITIAL_BOOKINGS = [
     ref: 'STU-BK-902',
     venueId: 'VN-2',
     venueName: 'Central Library Discussion Room B',
+    venueDepartment: 'Central Library',
+    department: 'Central Library',
     applicantName: 'Aman Nirmal',
     applicantEmail: 'student@coeptech.ac.in',
     applicantRole: 'Student',
-    department: 'Computer Engineering',
     purpose: 'Final Year Capstone Project Coding',
     date: '2026-10-24',
     timeSlot: '02:00 PM - 04:00 PM',
     attendees: 4,
     status: 'Confirmed',
+    approvalStage: 'Completed',
+    hodApproval: {
+      department: 'Central Library',
+      status: 'Approved',
+      approvedBy: 'Head Librarian',
+      decidedAt: '2026-10-21 09:12',
+      notes: 'Study Pass'
+    },
+    deanApproval: {
+      status: 'Approved',
+      approvedBy: 'Central System',
+      decidedAt: '2026-10-21 09:12',
+      notes: 'Instant study pass'
+    },
+    digitalPassCode: 'COEP-LIB-8849-PASS',
     priority: 'Low',
     submittedAt: '2026-10-21 09:10',
     notes: 'Requires whiteboard markers and power strips.'
@@ -84,15 +147,30 @@ export const INITIAL_BOOKINGS = [
     ref: 'CLB-BK-402',
     venueId: 'VN-5',
     venueName: 'Historic Boat Club & Regatta Grounds',
+    venueDepartment: 'Central Estate & Gymkhana',
+    department: 'Central Estate & Gymkhana',
     applicantName: 'ZEST Sports Secretary',
     applicantEmail: 'zest@coeptech.ac.in',
     applicantRole: 'Club Lead',
-    department: 'Gymkhana Sports Board',
     purpose: 'ZEST Annual Inter-Engineering Sports Carnival Inauguration',
     date: '2026-11-05',
     timeSlot: '07:00 AM - 01:00 PM',
     attendees: 500,
-    status: 'Pending',
+    status: 'Pending Dean Approval',
+    approvalStage: 'Dean',
+    hodApproval: {
+      department: 'Central Estate & Gymkhana',
+      status: 'Approved',
+      approvedBy: 'Dr. P. R. Dhamangaonkar (HoD)',
+      decidedAt: '2026-10-23 11:30',
+      notes: 'Safety and emergency rescue crew verified'
+    },
+    deanApproval: {
+      status: 'Pending',
+      approvedBy: null,
+      decidedAt: null,
+      notes: ''
+    },
     priority: 'High',
     submittedAt: '2026-10-22 11:00',
     notes: 'Sound equipment setup required from 6:00 AM.'
@@ -481,25 +559,51 @@ class DataStore {
       bookingType = 'Club Event'
     }
 
+    // Resolve venue and its department
+    const venueObj = this.venues.find(
+      (v) => v.name === venueName || v.code === venueName || v.id === data.venueId
+    )
+    const venueDepartment = venueObj?.department || data.department || 'Computer Engineering'
+
+    const isStudyPass = data.status === 'Confirmed' && (data.digitalPassCode || data.passCode)
+    const initialStatus = isStudyPass ? 'Confirmed' : (data.status || 'Pending HOD Approval')
+    const initialStage = isStudyPass ? 'Completed' : (initialStatus === 'Pending Dean Approval' ? 'Dean' : 'HOD')
+
     const newBooking = {
       id: `BK-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
       ref: data.ref || `LOCUS-${Math.floor(100000 + Math.random() * 900000)}`,
-      venueId: data.venueId || 'VN-GEN',
+      venueId: data.venueId || venueObj?.id || 'VN-GEN',
       venueName: venueName,
       venue: venueName,
+      venueDepartment: venueDepartment,
+      department: venueDepartment,
       applicantName: data.applicantName || 'Campus Member',
       applicantEmail: data.applicantEmail || 'student@coeptech.ac.in',
       applicantRole: data.applicantRole || 'Student',
-      department: data.department || 'Computer Engineering',
+      applicantDepartment: data.department || 'Computer Engineering',
       clubName: data.clubName || null,
       bookingType,
       purpose: data.purpose || data.title || 'Academic Activity',
       date: data.date,
       timeSlot: data.timeSlot,
       attendees: Number(data.attendees) || 50,
-      digitalPassCode: data.digitalPassCode || data.passCode || data.ref || null,
-      passCode: data.digitalPassCode || data.passCode || data.ref || null,
-      status: data.status || 'Pending',
+      digitalPassCode: data.digitalPassCode || data.passCode || (isStudyPass ? data.ref : null),
+      passCode: data.digitalPassCode || data.passCode || (isStudyPass ? data.ref : null),
+      status: initialStatus,
+      approvalStage: initialStage,
+      hodApproval: {
+        department: venueDepartment,
+        status: isStudyPass ? 'Approved' : 'Pending',
+        approvedBy: isStudyPass ? 'Auto-Sanctioned' : null,
+        decidedAt: isStudyPass ? new Date().toISOString().replace('T', ' ').slice(0, 16) : null,
+        notes: isStudyPass ? 'Study Space Pass' : ''
+      },
+      deanApproval: {
+        status: isStudyPass ? 'Approved' : 'Waiting',
+        approvedBy: isStudyPass ? 'Auto-Sanctioned' : null,
+        decidedAt: isStudyPass ? new Date().toISOString().replace('T', ' ').slice(0, 16) : null,
+        notes: ''
+      },
       priority: data.priority || 'Normal',
       submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
       notes: data.notes || data.requirements || ''
@@ -537,22 +641,92 @@ class DataStore {
 
     this.bookings.unshift(newBooking)
     this.addLog(
-      `Reservation submitted for ${newBooking.venueName} by ${newBooking.applicantName} (${newBooking.date})`,
+      `Reservation submitted for ${newBooking.venueName} under ${venueDepartment} HOD jurisdiction by ${newBooking.applicantName}`,
       'Bookings',
       'info'
     )
     return newBooking
   }
 
-  async updateBookingStatus(id, newStatus, reason = '', actor = 'Administrator') {
-    const dbStatus = newStatus === 'Approved' ? 'Confirmed' : newStatus
-    const isApproved = dbStatus === 'Confirmed'
+  async updateBookingStatus(id, newStatus, reason = '', actor = 'Administrator', role = 'Faculty') {
+    const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
+    const existing = idx !== -1 ? this.bookings[idx] : null
+
+    let finalStatus = newStatus
+    const decidedAt = new Date().toISOString().replace('T', ' ').slice(0, 16)
+    const currentStatus = existing?.status || 'Pending'
 
     const updates = {
-      status: newStatus,
       decisionNotes: reason,
       decidedBy: actor,
-      decidedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
+      decidedAt
+    }
+
+    // Two-tier permission logic: HOD must approve first, then escalates to Dean
+    if (newStatus === 'Approved' || newStatus === 'Confirmed' || newStatus === 'Sanction HOD') {
+      if (
+        currentStatus === 'Pending' ||
+        currentStatus === 'Pending HOD Approval' ||
+        newStatus === 'Sanction HOD'
+      ) {
+        // Step 1: HOD Approves -> Transitions to Pending Dean Approval
+        finalStatus = 'Pending Dean Approval'
+        updates.status = 'Pending Dean Approval'
+        updates.approvalStage = 'Dean'
+        updates.hodApproval = {
+          department: existing?.venueDepartment || existing?.department || 'Department',
+          status: 'Approved',
+          approvedBy: actor,
+          decidedAt,
+          notes: reason || 'Sanctioned by Department HOD'
+        }
+        updates.deanApproval = {
+          status: 'Pending',
+          approvedBy: null,
+          decidedAt: null,
+          notes: ''
+        }
+      } else {
+        // Step 2: Dean Approves -> Confirmed & Gate Pass Active!
+        finalStatus = 'Confirmed'
+        updates.status = 'Confirmed'
+        updates.is_approved = true
+        updates.approvalStage = 'Completed'
+        updates.deanApproval = {
+          status: 'Approved',
+          approvedBy: actor,
+          decidedAt,
+          notes: reason || 'Final clearance sanctioned by Dean'
+        }
+        if (!existing?.digitalPassCode) {
+          const randomNum = Math.floor(1000 + Math.random() * 9000)
+          updates.digitalPassCode = `COEP-SANCTION-${randomNum}-PASS`
+          updates.passCode = updates.digitalPassCode
+        }
+      }
+    } else if (newStatus === 'Rejected' || newStatus === 'Cancelled') {
+      finalStatus = 'Rejected'
+      updates.status = 'Rejected'
+      updates.is_approved = false
+      updates.approvalStage = 'Rejected'
+      if (currentStatus === 'Pending' || currentStatus === 'Pending HOD Approval') {
+        updates.hodApproval = {
+          department: existing?.venueDepartment || existing?.department || 'Department',
+          status: 'Rejected',
+          approvedBy: actor,
+          decidedAt,
+          notes: reason || 'Rejected by Department HOD'
+        }
+      } else {
+        updates.deanApproval = {
+          status: 'Rejected',
+          approvedBy: actor,
+          decidedAt,
+          notes: reason || 'Rejected by Dean'
+        }
+      }
+    } else {
+      updates.status = newStatus
     }
 
     if (supabase) {
@@ -560,8 +734,8 @@ class DataStore {
         await supabase
           .from('bookings')
           .update({
-            status: dbStatus,
-            is_approved: isApproved,
+            status: finalStatus === 'Approved' ? 'Confirmed' : finalStatus,
+            is_approved: finalStatus === 'Confirmed',
             faculty_remarks: reason
           })
           .or(`id.eq.${id},booking_ref.eq.${id}`)
@@ -570,7 +744,6 @@ class DataStore {
       }
     }
 
-    const idx = this.bookings.findIndex((b) => b.id === id || b.ref === id)
     if (idx !== -1) {
       this.bookings[idx] = {
         ...this.bookings[idx],
@@ -579,9 +752,9 @@ class DataStore {
     }
 
     this.addLog(
-      `Booking ${id} status updated to ${newStatus} by ${actor}`,
+      `Booking ${id} status updated to ${finalStatus} by ${actor}`,
       'Sanctions',
-      newStatus === 'Confirmed' || newStatus === 'Approved' ? 'success' : 'warning'
+      finalStatus === 'Confirmed' ? 'success' : 'info'
     )
     return this.bookings[idx] || { id, ...updates }
   }

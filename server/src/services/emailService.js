@@ -248,8 +248,9 @@ export async function sendBookingUpdateEmail({
   decidedBy = 'Administrator'
 }) {
   const isApproved = status === 'Confirmed' || status === 'Approved'
+  const isHodSanctioned = status === 'Pending Dean Approval'
   const isRejected = status === 'Rejected' || status === 'Cancelled'
-  const isPending = status === 'Pending'
+  const isPendingHod = status === 'Pending HOD Approval' || status === 'Pending'
 
   const ref = bookingRef || `LOCUS-${Math.floor(100000 + Math.random() * 900000)}`
 
@@ -269,14 +270,16 @@ export async function sendBookingUpdateEmail({
   }
 
   const subject = isApproved
-    ? `✅ Reservation Confirmed & Gate Pass: ${venue} (${date})`
+    ? `✅ Official Dean Sanction & Gate Pass: ${venue} (${date})`
+    : isHodSanctioned
+    ? `🏛️ Step 1 Approved: HOD Sanction Granted for ${venue} (Forwarded to Dean)`
     : isRejected
     ? `⚠️ Reservation Status Update: ${venue} (${status})`
     : `📋 Reservation Request Received: ${venue} (${date})`
 
-  const statusColor = isApproved ? '#10b981' : isRejected ? '#ef4444' : '#f59e0b'
-  const statusBg = isApproved ? '#ecfdf5' : isRejected ? '#fef2f2' : '#fffbeb'
-  const statusBorder = isApproved ? '#a7f3d0' : isRejected ? '#fecaca' : '#fde68a'
+  const statusColor = isApproved ? '#10b981' : isHodSanctioned ? '#2563eb' : isRejected ? '#ef4444' : '#f59e0b'
+  const statusBg = isApproved ? '#ecfdf5' : isHodSanctioned ? '#eff6ff' : isRejected ? '#fef2f2' : '#fffbeb'
+  const statusBorder = isApproved ? '#a7f3d0' : isHodSanctioned ? '#bfdbfe' : isRejected ? '#fecaca' : '#fde68a'
 
   const html = `
 <!DOCTYPE html>
@@ -298,7 +301,7 @@ export async function sendBookingUpdateEmail({
                 COEP TECHNOLOGICAL UNIVERSITY
               </div>
               <div style="color: #ffffff; font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.3px;">
-                LOCUS Campus Reservation Update
+                LOCUS Multi-Tier Venue Sanctioning
               </div>
             </td>
           </tr>
@@ -307,10 +310,18 @@ export async function sendBookingUpdateEmail({
           <tr>
             <td style="padding: 20px 28px; background-color: ${statusBg}; border-bottom: 1px solid ${statusBorder}; text-align: center;">
               <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">
-                Current Status
+                Approval Pipeline Stage
               </div>
-              <div style="font-size: 18px; font-weight: 900; color: ${statusColor}; margin-top: 2px;">
-                ${isApproved ? 'Booking Confirmed & Gate Pass Active' : isRejected ? `Booking ${status}` : 'Pending Administrative Review'}
+              <div style="font-size: 17px; font-weight: 900; color: ${statusColor}; margin-top: 2px;">
+                ${
+                  isApproved
+                    ? '✓ Full Clearance Granted & QR Pass Active'
+                    : isHodSanctioned
+                    ? 'Step 1 Cleared: HOD Sanctioned • Pending Dean'
+                    : isRejected
+                    ? `Request ${status}`
+                    : 'Step 1 of 2: Awaiting Department HOD Review'
+                }
               </div>
               <div style="font-size: 12px; color: #475569; margin-top: 4px;">
                 Booking Reference: <strong style="font-family: monospace;">${ref}</strong>

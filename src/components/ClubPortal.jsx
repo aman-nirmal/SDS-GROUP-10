@@ -215,13 +215,25 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                   <div className="lg:col-span-5 flex flex-col lg:items-end justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 w-full">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
-                        b.status === 'Approved'
+                        b.status === 'Approved' || b.status === 'Confirmed'
                           ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                          : b.status === 'Pending Dean Approval'
+                          ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
                           : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                       }`}
                     >
-                      {b.status === 'Approved' ? <Check className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
-                      <span>{b.status}</span>
+                      {b.status === 'Approved' || b.status === 'Confirmed' ? (
+                        <Check className="w-3.5 h-3.5" />
+                      ) : (
+                        <Clock className="w-3.5 h-3.5" />
+                      )}
+                      <span>
+                        {b.status === 'Approved' || b.status === 'Confirmed'
+                          ? 'Approved (Gate Pass Active)'
+                          : b.status === 'Pending Dean Approval'
+                          ? 'Step 2: Awaiting Dean Clearance'
+                          : 'Step 1: Awaiting HOD Sanction'}
+                      </span>
                     </span>
 
                     <div className="text-left lg:text-right space-y-0.5">
