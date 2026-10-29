@@ -11,27 +11,37 @@ import {
   UserCheck,
   UserX,
   Download,
-  Key,
+  Upload,
+  FileSpreadsheet,
   Clock,
   ChevronDown,
   ChevronUp,
   CalendarDays,
-  ArrowLeft
+  ArrowLeft,
+  CreditCard
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
-import { bookingsApi } from '../lib/bookingsApi'
-import { supabase, isSupabaseConfigured } from '../lib/supabase'
 import AdminVenues from './admin/AdminVenues'
 import RoleRequests from './admin/RoleRequests'
 import AdminTimetable from './admin/AdminTimetable'
 import {
   INITIAL_ADMIN_VENUES,
-  INITIAL_ROLE_REQUESTS,
-  INITIAL_TIMETABLE_ENTRIES
 } from './admin/mockAdminData'
+import { importedCampusUsers } from '../data/importedCampusUsers'
+import { importedFacultyUsers } from '../data/importedFacultyUsers'
+import {
+  usersApi,
+  bookingsApi,
+  venuesApi,
+  roleRequestsApi,
+  timetableApi,
+  logsApi
+} from '../lib/api'
 
 // Initial institutional users store
 const INITIAL_USERS = [
+  ...importedFacultyUsers,
+  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',
@@ -134,7 +144,7 @@ const INITIAL_USERS = [
 ]
 
 // Initial campus reservation requests
-const INITIAL_BOOKINGS = [
+export const INITIAL_BOOKINGS = [
   {
     id: 'COEP-BK-8950',
     venueName: 'ND01 (North Drawing Hall)',
@@ -207,7 +217,7 @@ const INITIAL_BOOKINGS = [
   }
 ]
 
-// Initial audit & security event logs// Initial audit & security event logs
+// Initial audit & security event logs
 const INITIAL_LOGS = [
   {
     id: 'LOG-101',
@@ -292,29 +302,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     }
   })
 
-  // Synchronize bookings with Supabase database
-  useEffect(() => {
-    async function loadAdminBookings() {
-      try {
-        const data = await bookingsApi.fetchUserBookings({
-          role: 'Administrator',
-          email: currentUser?.email || 'admin@coeptech.ac.in'
-        })
-
-        if (data && data.length > 0) {
-          setBookings(data)
-        }
-      } catch (err) {
-        console.warn(
-          '[AdminPanel] Could not fetch bookings from Supabase:',
-          err
-        )
-      }
-    }
-
-    loadAdminBookings()
-  }, [currentUser])
-
   // Approvals view toggle ('bookings' | 'role_requests')
   const [approvalsView, setApprovalsView] = useState('bookings')
 
@@ -322,57 +309,11 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
   const [venuesList, setVenuesList] = useState(() => {
     try {
       const stored = localStorage.getItem('locus_admin_venues')
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const existingCodes = new Set(parsed.map((v) => v.code || v.id))
-          const missingInitial = INITIAL_ADMIN_VENUES.filter(
-            (v) => !existingCodes.has(v.code) && !existingCodes.has(v.id)
-          )
-          return [...missingInitial, ...parsed]
-        }
-      }
-      return INITIAL_ADMIN_VENUES
+      return stored ? JSON.parse(stored) : INITIAL_ADMIN_VENUES
     } catch {
       return INITIAL_ADMIN_VENUES
     }
   })
-
-  // Synchronize venues from Supabase database
-  useEffect(() => {
-    async function loadSupabaseVenues() {
-      if (supabase && isSupabaseConfigured) {
-        try {
-          const { data, error } = await supabase
-            .from('venues')
-            .select('*')
-            .order('new_hall_name', { ascending: true })
-
-          if (!error && data && data.length > 0) {
-            const mapped = data.map((v) => ({
-              id: v.id,
-              code: v.code || v.old_hall_name || v.id,
-              name: v.new_hall_name,
-              department: v.department,
-              building: v.building || 'Campus Complex',
-              type: v.type || 'Auditorium',
-              capacity: v.capacity || (v.benches ? v.benches * 2 : 60),
-              benches: v.benches || Math.round((v.capacity || 60) / 2),
-              isActive: v.is_active !== false,
-              status: v.status || (v.is_active ? 'Available' : 'Blocked'),
-              description: v.description || '',
-              features: Array.isArray(v.features) ? v.features : [],
-              image: v.image || '/coep_building.png'
-            }))
-            setVenuesList(mapped)
-          }
-        } catch (err) {
-          console.warn('[AdminPanel] Could not sync venues from Supabase:', err)
-        }
-      }
-    }
-    loadSupabaseVenues()
-  }, [])
 
   // Role change requests state
   const [roleRequests, setRoleRequests] = useState(() => {
@@ -418,6 +359,12 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     role: 'Faculty',
     department: 'Computer Engineering'
   })
+
+  // CSV Import State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [importPreview, setImportPreview] = useState([])
+  const [importFileName, setImportFileName] = useState('')
+  const [isImportDragging, setIsImportDragging] = useState(false)
 
   const [notification, setNotification] = useState('')
 
@@ -480,6 +427,45 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     }
   }, [timetable])
 
+  // Sync initial data from backend API on mount
+  useEffect(() => {
+    async function loadAdminData() {
+      try {
+        const [usersRes, bookingsRes, venuesRes, roleReqsRes, timetableRes, logsRes] = await Promise.allSettled([
+          usersApi.getAll(),
+          bookingsApi.getAll(),
+          venuesApi.getAll(),
+          roleRequestsApi.getAll(),
+          timetableApi.getAll(),
+          logsApi.getAll()
+        ])
+
+        if (usersRes.status === 'fulfilled' && usersRes.value?.users?.length > 0) {
+          setUsers(usersRes.value.users)
+        }
+        if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.bookings?.length > 0) {
+          setBookings(bookingsRes.value.bookings)
+        }
+        if (venuesRes.status === 'fulfilled' && venuesRes.value?.venues?.length > 0) {
+          setVenuesList(venuesRes.value.venues)
+        }
+        if (roleReqsRes.status === 'fulfilled' && roleReqsRes.value?.requests?.length > 0) {
+          setRoleRequests(roleReqsRes.value.requests)
+        }
+        if (timetableRes.status === 'fulfilled' && timetableRes.value?.timetable?.length > 0) {
+          setTimetable(timetableRes.value.timetable)
+        }
+        if (logsRes.status === 'fulfilled' && logsRes.value?.logs?.length > 0) {
+          setLogs(logsRes.value.logs)
+        }
+      } catch (err) {
+        console.warn('Initial admin data fetch from API failed:', err)
+      }
+    }
+
+    loadAdminData()
+  }, [])
+
   // Append new audit log helper
   const addLog = useCallback((action, module = 'General', severity = 'info') => {
     const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19)
@@ -493,6 +479,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       severity
     }
     setLogs((prev) => [newLog, ...prev])
+    logsApi.create(newLog).catch(() => {})
   }, [currentUser])
 
   // Filtered Users
@@ -532,6 +519,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             nextStatus === 'Suspended' ? 'warning' : 'success'
           )
           showNotification(`User ${u.name} is now ${nextStatus}`)
+          usersApi.updateStatus(userId, nextStatus).catch(console.warn)
           return { ...u, status: nextStatus }
         }
         return u
@@ -545,6 +533,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         if (u.id === userId) {
           addLog(`User ${u.email} role elevated to ${newRole}`, 'Access Control', 'info')
           showNotification(`Updated ${u.name}'s role to ${newRole}`)
+          usersApi.updateRole(userId, newRole).catch(console.warn)
           return { ...u, role: newRole }
         }
         return u
@@ -559,6 +548,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       setUsers((prev) => prev.filter((u) => u.id !== userId))
       addLog(`Deleted campus account for ${target.email}`, 'Account Deletion', 'warning')
       showNotification(`Account ${target.email} removed.`)
+      usersApi.delete(userId).catch(console.warn)
     }
   }
 
@@ -586,7 +576,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       email: trimmedEmail,
       role: newUserForm.role,
       department: newUserForm.department,
-      authProvider: 'Microsoft Outlook 365 & Password',
       status: 'Active',
       lastActive: 'Never',
       createdAt: new Date().toISOString().split('T')[0]
@@ -595,6 +584,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setUsers((prev) => [createdUser, ...prev])
     addLog(`Manually provisioned user account for ${trimmedEmail} (${newUserForm.role})`, 'User Provisioning', 'success')
     showNotification(`New ${newUserForm.role} account created for ${createdUser.name}`)
+    usersApi.create(createdUser).catch(console.warn)
     setIsAddUserModalOpen(false)
     setNewUserForm({
       name: '',
@@ -605,18 +595,13 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
   }
 
   // Handlers for Booking Approvals
-  const handleApproveBooking = async (bookingId) => {
-    try {
-      await bookingsApi.updateBookingStatus(bookingId, 'Confirmed', currentUser)
-    } catch (err) {
-      console.warn('Database approve sync error:', err)
-    }
-
+  const handleApproveBooking = (bookingId) => {
     setBookings((prev) =>
       prev.map((b) => {
-        if (b.id === bookingId || b.ref === bookingId) {
-          addLog(`Approved campus reservation ${b.id || b.ref} for venue ${b.venueName}`, 'Bookings', 'success')
-          showNotification(`Reservation ${b.id || b.ref} confirmed successfully!`)
+        if (b.id === bookingId) {
+          addLog(`Approved campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'success')
+          showNotification(`Reservation ${b.id} confirmed successfully!`)
+          bookingsApi.updateStatus(bookingId, 'Confirmed', '', currentUser?.name || 'Administrator').catch(console.warn)
           return { ...b, status: 'Confirmed' }
         }
         return b
@@ -624,121 +609,54 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     )
   }
 
-  const handleRejectBooking = async (bookingId) => {
-    try {
-      await bookingsApi.updateBookingStatus(bookingId, 'Rejected', currentUser)
-    } catch (err) {
-      console.warn('Database reject sync error:', err)
-    }
-
+  const handleRejectBooking = (bookingId) => {
     setBookings((prev) =>
       prev.map((b) => {
-        if (b.id === bookingId || b.ref === bookingId) {
-          addLog(`Rejected campus reservation ${b.id || b.ref} for venue ${b.venueName}`, 'Bookings', 'warning')
-          showNotification(`Reservation ${b.id || b.ref} rejected.`)
-          return { ...b, status: 'Rejected' }
+        if (b.id === bookingId) {
+          addLog(`Rejected campus reservation ${b.id} for venue ${b.venueName}`, 'Bookings', 'warning')
+          showNotification(`Reservation ${b.id} rejected.`)
+          bookingsApi.updateStatus(bookingId, 'Cancelled', '', currentUser?.name || 'Administrator').catch(console.warn)
+          return { ...b, status: 'Cancelled' }
         }
         return b
       })
     )
   }
 
-  // Handlers for Venues (Integrated with Supabase persistence)
-  const handleAddVenue = async (venueData) => {
+  // Handlers for Venues
+  const handleAddVenue = (venueData) => {
     const newId = `VN-${Date.now().toString().slice(-4)}`
     const newVenue = { ...venueData, id: newId }
     setVenuesList((prev) => [newVenue, ...prev])
     addLog(`Added campus venue "${newVenue.name}" (${newVenue.code || newId})`, 'Venues', 'success')
     showNotification(`Venue "${newVenue.name}" added successfully.`)
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        const venuePayload = {
-          code: newVenue.code || newId,
-          new_hall_name: newVenue.name,
-          old_hall_name: newVenue.code || newVenue.name,
-          department: newVenue.department,
-          building: newVenue.building || 'Campus Complex',
-          type: newVenue.type || 'Auditorium',
-          benches: Number(newVenue.benches) || Math.round((Number(newVenue.capacity) || 60) / 2),
-          is_active: newVenue.isActive !== false,
-          status: newVenue.status || 'Available',
-          description: newVenue.description || '',
-          features: newVenue.features || [],
-          image: newVenue.image || '/coep_building.png'
-        }
-
-        // Try inserting with capacity if non-generated, or omit if generated
-        let { error } = await supabase.from('venues').insert([{ ...venuePayload, id: newId, capacity: Number(newVenue.capacity) || 60 }])
-        if (error && error.message?.includes('generated column')) {
-          await supabase.from('venues').insert([{ ...venuePayload, id: newId }])
-        }
-      } catch (err) {
-        console.warn('[AdminPanel] Supabase insert venue error:', err)
-      }
-    }
+    venuesApi.create(newVenue).catch(console.warn)
   }
 
-  const handleUpdateVenue = async (venueData) => {
+  const handleUpdateVenue = (venueData) => {
     setVenuesList((prev) =>
       prev.map((v) => (v.id === venueData.id ? { ...v, ...venueData } : v))
     )
     addLog(`Updated venue attributes for "${venueData.name}"`, 'Venues', 'info')
     showNotification(`Updated venue "${venueData.name}".`)
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        const updatePayload = {
-          code: venueData.code,
-          new_hall_name: venueData.name,
-          department: venueData.department,
-          building: venueData.building,
-          type: venueData.type,
-          benches: Number(venueData.benches) || Math.round((Number(venueData.capacity) || 60) / 2),
-          is_active: venueData.isActive !== false,
-          status: venueData.status,
-          description: venueData.description,
-          features: venueData.features
-        }
-
-        let { error } = await supabase.from('venues').update({
-          ...updatePayload,
-          capacity: Number(venueData.capacity)
-        }).eq('id', venueData.id)
-
-        if (error && error.message?.includes('generated column')) {
-          await supabase.from('venues').update(updatePayload).eq('id', venueData.id)
-        }
-      } catch (err) {
-        console.warn('[AdminPanel] Supabase update venue error:', err)
-      }
-    }
+    venuesApi.update(venueData.id, venueData).catch(console.warn)
   }
 
-  const handleDeleteVenue = async (venueId) => {
+  const handleDeleteVenue = (venueId) => {
     const target = venuesList.find((v) => v.id === venueId)
     setVenuesList((prev) => prev.filter((v) => v.id !== venueId))
     if (target) {
       addLog(`Removed venue "${target.name}" from catalog`, 'Venues', 'warning')
       showNotification(`Venue "${target.name}" removed.`)
-    }
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase.from('venues').delete().eq('id', venueId)
-      } catch (err) {
-        console.warn('[AdminPanel] Supabase delete venue error:', err)
-      }
+      venuesApi.delete(venueId).catch(console.warn)
     }
   }
 
-  const handleToggleVenueActive = async (venueId) => {
-    let nextState = true
+  const handleToggleVenueActive = (venueId) => {
     setVenuesList((prev) =>
       prev.map((v) => {
         if (v.id === venueId) {
           const next = !v.isActive
-          nextState = next
           addLog(`Venue "${v.name}" status changed to ${next ? 'Active' : 'Inactive'}`, 'Venues', 'info')
           showNotification(`Venue "${v.name}" marked ${next ? 'Active' : 'Inactive'}.`)
           return { ...v, isActive: next }
@@ -746,22 +664,13 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         return v
       })
     )
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase.from('venues').update({ is_active: nextState }).eq('id', venueId)
-      } catch (err) {
-        console.warn('[AdminPanel] Supabase toggle active error:', err)
-      }
-    }
   }
 
-  const handleToggleVenueMaintenance = async (venueId) => {
-    let nextStatus = 'Available'
+  const handleToggleVenueMaintenance = (venueId) => {
     setVenuesList((prev) =>
       prev.map((v) => {
         if (v.id === venueId) {
-          nextStatus = v.status === 'Under Maintenance' ? 'Available' : 'Under Maintenance'
+          const nextStatus = v.status === 'Under Maintenance' ? 'Available' : 'Under Maintenance'
           addLog(`Venue "${v.name}" availability changed to ${nextStatus}`, 'Venues', nextStatus === 'Under Maintenance' ? 'warning' : 'success')
           showNotification(`Venue "${v.name}" is now ${nextStatus}.`)
           return { ...v, status: nextStatus }
@@ -769,14 +678,6 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
         return v
       })
     )
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase.from('venues').update({ status: nextStatus }).eq('id', venueId)
-      } catch (err) {
-        console.warn('[AdminPanel] Supabase toggle maintenance error:', err)
-      }
-    }
   }
 
   // Handlers for Role Change Requests
@@ -813,6 +714,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       'success'
     )
     showNotification(`Role request for ${req.userName} approved!`)
+    roleRequestsApi.updateStatus(requestId, 'Approved', currentUser?.name || 'Administrator').catch(console.warn)
   }
 
   const handleRejectRoleRequest = (requestId, rejectionReason) => {
@@ -838,6 +740,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
       'warning'
     )
     showNotification(`Role request for ${req.userName} rejected.`)
+    roleRequestsApi.updateStatus(requestId, 'Rejected', currentUser?.name || 'Administrator').catch(console.warn)
   }
 
   // Handlers for Timetable & Blocking
@@ -845,6 +748,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setTimetable((prev) => [newBlock, ...prev])
     addLog(`Created timetable block "${newBlock.title}" in ${newBlock.venueName}`, 'Timetable', 'info')
     showNotification(`Time slot blocked in ${newBlock.venueName}.`)
+    timetableApi.create(newBlock).catch(console.warn)
   }
 
   const handleDeleteTimetableEntry = (entryId) => {
@@ -853,6 +757,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     if (target) {
       addLog(`Removed timetable block "${target.title}" in ${target.venueName}`, 'Timetable', 'info')
       showNotification('Timetable block removed.')
+      timetableApi.delete(entryId).catch(console.warn)
     }
   }
 
@@ -860,18 +765,19 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     setTimetable((prev) => [...newEntries, ...prev])
     addLog(`Imported ${newEntries.length} academic timetable blocks`, 'Timetable Import', 'success')
     showNotification(`Imported ${newEntries.length} timetable records successfully!`)
+    timetableApi.bulkImport(newEntries).catch(console.warn)
   }
 
   // Export Users CSV
   const handleExportUsersCSV = () => {
-    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Department', 'Auth Provider', 'Status', 'Created At']
+    const headers = ['User ID', 'Full Name', 'University Email', 'Role', 'Year', 'Department', 'Status', 'Created At']
     const rows = users.map((u) => [
       u.id,
       `"${u.name}"`,
       u.email,
       u.role,
+      u.role === 'Student' ? (u.year || 'SY') : 'N/A',
       `"${u.department}"`,
-      `"${u.authProvider}"`,
       u.status,
       u.createdAt
     ])
@@ -885,6 +791,118 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
     link.click()
     document.body.removeChild(link)
     showNotification('Users CSV export downloaded successfully!')
+  }
+
+  // Download Sample Template CSV for Directory Import
+  const handleDownloadSampleCSV = () => {
+    const headers = ['Full Name', 'University Email', 'Role', 'Department']
+    const sampleRows = [
+      ['Rohan Deshmukh', 'rohan.deshmukh@coeptech.ac.in', 'Student', 'Computer Engineering'],
+      ['Dr. Anita Rao', 'anita.rao@coeptech.ac.in', 'Faculty', 'Electrical Engineering'],
+      ['Robotics Club Lead', 'robotics@coeptech.ac.in', 'Club Lead', 'Student Affairs'],
+      ['Campus Estate Admin', 'estate.admin@coeptech.ac.in', 'Administrator', 'Central Estate']
+    ]
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...sampleRows.map((e) => e.map((val) => `"${val}"`).join(','))].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', 'sample_directory_users.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  // Parse CSV File into User Objects
+  const processCSVText = (text, fileName) => {
+    try {
+      const lines = text.split(/\r\n|\n/).filter((l) => l.trim().length > 0)
+      if (lines.length < 2) {
+        showNotification('CSV must have a header row and at least 1 record.')
+        return
+      }
+
+      const headerCols = lines[0].split(',').map((h) => h.replace(/^["']|["']$/g, '').trim().toLowerCase())
+      const nameIdx = headerCols.findIndex((h) => h.includes('name'))
+      const emailIdx = headerCols.findIndex((h) => h.includes('email'))
+      const roleIdx = headerCols.findIndex((h) => h.includes('role'))
+      const deptIdx = headerCols.findIndex((h) => h.includes('dept') || h.includes('department'))
+
+      const parsed = []
+      const timestamp = Date.now()
+      for (let i = 1; i < lines.length; i++) {
+        const rawRow = lines[i].trim()
+        if (!rawRow) continue
+        const matches = rawRow.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || rawRow.split(',')
+        const cols = matches.map((c) => c.replace(/^["']|["']$/g, '').trim())
+
+        const name = nameIdx !== -1 && cols[nameIdx] ? cols[nameIdx] : (cols[0] || '').trim()
+        const email = emailIdx !== -1 && cols[emailIdx] ? cols[emailIdx] : (cols[1] || '').trim()
+        const rawRole = roleIdx !== -1 && cols[roleIdx] ? cols[roleIdx] : (cols[2] || 'Student').trim()
+        const department = deptIdx !== -1 && cols[deptIdx] ? cols[deptIdx] : (cols[3] || 'General Academic').trim()
+
+        let role = 'Student'
+        const lr = rawRole.toLowerCase()
+        if (lr.includes('admin')) role = 'Administrator'
+        else if (lr.includes('fac') || lr.includes('prof') || lr.includes('teach')) role = 'Faculty'
+        else if (lr.includes('club') || lr.includes('lead') || lr.includes('society')) role = 'Club Lead'
+        else if (lr.includes('guard') || lr.includes('sec')) role = 'Security Guard'
+        else if (lr.includes('stud')) role = 'Student'
+
+        if (name && email) {
+          parsed.push({
+            id: `USR-${timestamp}-${i}`,
+            name,
+            email,
+            role,
+            department: department || 'General Academic',
+            status: 'Active',
+            lastActive: 'Just imported',
+            createdAt: new Date().toISOString().slice(0, 10)
+          })
+        }
+      }
+
+      if (parsed.length === 0) {
+        showNotification('No valid user records found in CSV.')
+        return
+      }
+
+      setImportFileName(fileName)
+      setImportPreview(parsed)
+    } catch {
+      showNotification('Failed to parse CSV file. Please check format.')
+    }
+  }
+
+  const handleCSVFileInput = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (evt) => {
+      if (typeof evt.target?.result === 'string') {
+        processCSVText(evt.target.result, file.name)
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  const handleCommitImport = () => {
+    if (importPreview.length === 0) return
+    const importedList = [...importPreview]
+    setUsers((prev) => [...importedList, ...prev])
+    addLog(`Imported ${importedList.length} users into directory via CSV`, 'Directory Import', 'success')
+    showNotification(`Successfully imported ${importedList.length} users into the directory!`)
+    usersApi.bulkImport(importedList).catch(console.warn)
+    setImportPreview([])
+    setImportFileName('')
+    setIsImportModalOpen(false)
+  }
+
+  const handleCancelImport = () => {
+    setImportPreview([])
+    setImportFileName('')
+    setIsImportModalOpen(false)
   }
 
   // Quick Stats
@@ -942,6 +960,15 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <span>Back to Campus</span>
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setIsImportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer bg-white dark:bg-slate-850 shadow-2xs"
+              title="Import users from CSV file"
+            >
+              <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>Import CSV</span>
+            </button>
             <button
               type="button"
               onClick={handleExportUsersCSV}
@@ -1097,36 +1124,94 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
             ===================================================================== */}
         {activeSubTab === 'users' && (
           <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden">
-            {/* Unified Search & Filter Toolbar */}
+            {/* Directory Selection Tabs Sub-Bar */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>Institutional Directory</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                    {filteredUsers.length} {filteredUsers.length === 1 ? 'member' : 'members'}
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Browse and manage directories for students, faculty, student clubs, and campus administrators.
+                </p>
+              </div>
+
+              {/* Directory Segmented Filter Tabs */}
+              <div className="flex items-center p-1 rounded-xl bg-slate-200/70 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 gap-1 overflow-x-auto scrollbar-none">
+                {[
+                  { id: 'All', label: 'All Directory', count: stats.totalUsers },
+                  { id: 'Student', label: 'Students', count: stats.students },
+                  { id: 'Faculty', label: 'Faculty', count: stats.faculty },
+                  { id: 'Club Lead', label: 'Clubs', count: stats.clubLeads },
+                  { id: 'Administrator', label: 'Admins', count: stats.admins },
+                ].map((dir) => (
+                  <button
+                    key={dir.id}
+                    type="button"
+                    onClick={() => setUserRoleFilter(dir.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      userRoleFilter === dir.id
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs border border-slate-200/70 dark:border-slate-600'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{dir.label}</span>
+                    <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                      userRoleFilter === dir.id
+                        ? 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    }`}>
+                      {dir.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Unified Search & Quick Actions Toolbar */}
             <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-              <div className="relative flex-1 max-w-sm">
+              <div className="relative flex-1 max-w-md">
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  placeholder="Search by name, email, or department..."
+                  placeholder={`Search ${userRoleFilter === 'All' ? 'directory' : userRoleFilter.toLowerCase() + 's'} by name, email, department...`}
                   className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/80 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
                 />
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Filter:</span>
-                <select
-                  value={userRoleFilter}
-                  onChange={(e) => setUserRoleFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-xs font-bold transition-colors cursor-pointer"
+                  title="Import users from CSV"
                 >
-                  <option value="All">All Roles ({users.length})</option>
-                  <option value="Administrator">Administrator ({stats.admins})</option>
-                  <option value="Faculty">Faculty ({stats.faculty})</option>
-                  <option value="Club Lead">Club Lead ({stats.clubLeads})</option>
-                  <option value="Student">Student ({stats.students})</option>
-                  <option value="Security Guard">Security Guard ({stats.securityGuards})</option>
-                </select>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Import CSV</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportUsersCSV}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                  title="Export current directory as CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                  <span>Export</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAddUserModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add User</span>
+                </button>
               </div>
             </div>
-
 
             {/* Users Table */}
             <div className="overflow-x-auto">
@@ -1136,8 +1221,8 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                     <th className="py-3 px-4">User</th>
                     <th className="py-3 px-4">University Email</th>
                     <th className="py-3 px-4">Role</th>
+                    <th className="py-3 px-4">Year</th>
                     <th className="py-3 px-4">Department</th>
-                    <th className="py-3 px-4">Auth Method</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
@@ -1146,7 +1231,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   {filteredUsers.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="py-12 text-center text-slate-500 dark:text-slate-400">
-                        No users matching "{userSearch}" found.
+                        No directory users matching "{userSearch}" found.
                       </td>
                     </tr>
                   ) : (
@@ -1172,7 +1257,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           <select
                             value={user.role}
                             onChange={(e) => handleChangeUserRole(user.id, e.target.value)}
-                            className={`px-2 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors ${
+                            className={`pl-2.5 pr-7 py-1 rounded-md text-xs font-bold border cursor-pointer outline-none transition-colors select-compact ${
                               user.role === 'Administrator'
                                 ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
                                 : user.role === 'Faculty'
@@ -1192,15 +1277,18 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                           </select>
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">
-                          {user.department}
+                        <td className="py-3.5 px-4">
+                          {user.role === 'Student' ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                              {user.year || 'SY'}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-500 text-[11px] font-mono">—</span>
+                          )}
                         </td>
 
-                        <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
-                          <span className="inline-flex items-center gap-1">
-                            <Key className="w-3 h-3 text-slate-400 dark:text-slate-500" />
-                            {user.authProvider}
-                          </span>
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">
+                          {user.department}
                         </td>
 
                         <td className="py-3.5 px-4">
@@ -1319,7 +1407,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 <select
                   value={bookingStatusFilter}
                   onChange={(e) => setBookingStatusFilter(e.target.value)}
-                  className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
+                  className="h-9 pl-3 pr-8.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer"
                 >
                   <option value="All">All ({bookings.length})</option>
                   <option value="Pending">Pending ({stats.pendingBookings})</option>
@@ -1356,6 +1444,12 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                             >
                               {b.status}
                             </span>
+                            {(b.paymentStatus === 'Paid' || b.paidAmount || b.paymentId) && (
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
+                                <CreditCard className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                <span>PAID ₹{b.paidAmount || b.amount || 1180} (Cashfree)</span>
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
@@ -1636,7 +1730,7 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                   <select
                     value={newUserForm.role}
                     onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
+                    className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
                   >
                     <option value="Administrator">Administrator</option>
                     <option value="Faculty">Faculty</option>
@@ -1677,6 +1771,183 @@ export default function AdminPanel({ onBackHome, currentUser, onNavigateLogin })
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL: IMPORT DIRECTORY USERS VIA CSV
+          ===================================================================== */}
+      {isImportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-5">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <Upload className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Import Directory Users</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Bulk add students, faculty, club leads, and admins via CSV
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelImport}
+                className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer p-1 rounded-lg"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Template Download Prompt */}
+            <div className="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 flex items-center justify-between gap-3">
+              <div className="text-xs text-blue-900 dark:text-blue-200">
+                <span className="font-bold">Required CSV columns:</span> Full Name, University Email, Role, Department.
+              </div>
+              <button
+                type="button"
+                onClick={handleDownloadSampleCSV}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 font-bold text-[11px] whitespace-nowrap transition-colors cursor-pointer shadow-2xs shrink-0"
+              >
+                <Download className="w-3 h-3" />
+                <span>Sample CSV</span>
+              </button>
+            </div>
+
+            {/* File Dropzone */}
+            <div
+              onDragOver={(e) => {
+                e.preventDefault()
+                setIsImportDragging(true)
+              }}
+              onDragLeave={() => setIsImportDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault()
+                setIsImportDragging(false)
+                const file = e.dataTransfer.files?.[0]
+                if (file) {
+                  const reader = new FileReader()
+                  reader.onload = (evt) => {
+                    if (typeof evt.target?.result === 'string') {
+                      processCSVText(evt.target.result, file.name)
+                    }
+                  }
+                  reader.readAsText(file)
+                }
+              }}
+              onClick={() => document.getElementById('admin-csv-import-input')?.click()}
+              className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2 ${
+                isImportDragging
+                  ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/50'
+                  : importPreview.length > 0
+                  ? 'border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/40 dark:bg-emerald-950/20'
+                  : 'border-slate-300 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600 bg-slate-50/50 dark:bg-slate-800/40'
+              }`}
+            >
+              <input
+                id="admin-csv-import-input"
+                type="file"
+                accept=".csv,text/csv"
+                className="hidden"
+                onChange={handleCSVFileInput}
+              />
+              <FileSpreadsheet
+                className={`w-10 h-10 ${
+                  importPreview.length > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-500 dark:text-blue-400'
+                }`}
+              />
+              {importPreview.length > 0 ? (
+                <div>
+                  <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>{importFileName || 'File selected'}</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    {importPreview.length} valid user records parsed and ready. Click to re-upload.
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    Click to select CSV file or drag and drop
+                  </div>
+                  <div className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                    Standard comma-separated format (.csv)
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Preview of Parsed Users */}
+            {importPreview.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">
+                    Preview ({importPreview.length} {importPreview.length === 1 ? 'user' : 'users'})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImportPreview([])
+                      setImportFileName('')
+                    }}
+                    className="text-[11px] text-red-600 hover:text-red-700 dark:text-red-400 font-semibold cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="max-h-36 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                  {importPreview.slice(0, 5).map((user, idx) => (
+                    <div key={idx} className="p-2 flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-800 dark:text-slate-200 truncate">{user.name}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">{user.email}</div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                          {user.role}
+                        </span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[120px] truncate">
+                          {user.department}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  {importPreview.length > 5 && (
+                    <div className="p-2 text-center text-[10px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-50/60 dark:bg-slate-800/40">
+                      + {importPreview.length - 5} more records to import
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Modal Actions */}
+            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={handleCancelImport}
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCommitImport}
+                disabled={importPreview.length === 0}
+                className={`px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer ${
+                  importPreview.length > 0
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                }`}
+              >
+                Confirm Import {importPreview.length > 0 ? `(${importPreview.length} Users)` : ''}
+              </button>
+            </div>
           </div>
         </div>
       )}
