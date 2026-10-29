@@ -46,6 +46,8 @@ import About from './components/About'
 import AdminPanel, { INITIAL_BOOKINGS } from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
 import FacultyPortal from './components/FacultyPortal'
+import HodPortal from './components/HodPortal'
+import DeanPortal from './components/DeanPortal'
 import StudentPortal from './components/StudentPortal'
 import ClubPortal from './components/ClubPortal'
 import SecurityPortal from './components/SecurityPortal'
@@ -2642,13 +2644,15 @@ export default function App() {
         'login',
         'guest',
         'faculty',
+        'hod',
+        'dean',
         'student',
         'club',
         'admin',
         'security'
       ]
 
-      const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+      const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
       let isAuthed = false
       try {
         isAuthed = !!localStorage.getItem('locus_auth_user')
@@ -2729,8 +2733,12 @@ export default function App() {
     }
   })
 
-  const pendingSanctionsCount = campusBookings.filter(
-    (b) => b.status === 'Pending' || b.status === 'Pending Sanction'
+  const pendingHodCount = campusBookings.filter(
+    (b) => b.status === 'Pending' || b.status === 'Pending HOD Approval' || b.status === 'Pending Sanction'
+  ).length
+
+  const pendingDeanCount = campusBookings.filter(
+    (b) => b.status === 'Pending Dean Approval'
   ).length
 
   const [userBookings, setUserBookings] = useState([])
@@ -2896,7 +2904,7 @@ export default function App() {
   }, [])
 
   const handleNavClick = (tab) => {
-    const protectedTabs = ['student', 'faculty', 'club', 'admin', 'security']
+    const protectedTabs = ['student', 'faculty', 'hod', 'dean', 'club', 'admin', 'security']
     if (protectedTabs.includes(tab) && !currentUser) {
       setActiveTab('login')
       window.history.pushState({ activeTab: 'login' }, '', window.location.pathname)
@@ -3065,6 +3073,12 @@ export default function App() {
                   if (user.role === 'Administrator') {
                     setActiveTab('admin')
                     return
+                  } else if (user.role === 'Head of Department (HOD)' || user.role === 'HOD') {
+                    setActiveTab('hod')
+                    return
+                  } else if (user.role === 'Dean') {
+                    setActiveTab('dean')
+                    return
                   } else if (user.role === 'Faculty') {
                     setActiveTab('faculty')
                     return
@@ -3127,6 +3141,62 @@ export default function App() {
             bookings={campusBookings}
             onUpdateStatus={handleUpdateBookingStatus}
             onAddBooking={handleAddBooking}
+          />
+        )
+      case 'hod':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Head of Department (HOD)' || user.role === 'HOD' || user.role === 'Administrator' ? 'hod' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <HodPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            bookings={campusBookings}
+            onUpdateStatus={handleUpdateBookingStatus}
+          />
+        )
+      case 'dean':
+        if (!currentUser) {
+          return (
+            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
+              <LoginForm
+                onLoginSuccess={(user) => {
+                  if (user) {
+                    setCurrentUser(user)
+                    try {
+                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
+                    } catch {
+                      // ignore
+                    }
+                    setActiveTab(user.role === 'Dean' || user.role === 'Administrator' ? 'dean' : 'home')
+                  }
+                }}
+              />
+            </div>
+          )
+        }
+        return (
+          <DeanPortal
+            currentUser={currentUser}
+            onNavigateLogin={() => setActiveTab('login')}
+            bookings={campusBookings}
+            onUpdateStatus={handleUpdateBookingStatus}
           />
         )
       case 'student':
@@ -3597,10 +3667,41 @@ export default function App() {
                   : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                   }`}
               >
-                <span>Approvals</span>
-                {pendingSanctionsCount > 0 && (
+                <span>Faculty Hub</span>
+              </button>
+            )}
+
+            {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('hod')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'hod'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
+                  }`}
+              >
+                <span>HOD Sanctions</span>
+                {pendingHodCount > 0 && (
                   <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold ml-0.5">
-                    {pendingSanctionsCount}
+                    {pendingHodCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {currentUser && currentUser.role === 'Dean' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('dean')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'dean'
+                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
+                  }`}
+              >
+                <span>Dean Clearance</span>
+                {pendingDeanCount > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-purple-600 text-white font-bold ml-0.5">
+                    {pendingDeanCount}
                   </span>
                 )}
               </button>
@@ -3670,6 +3771,8 @@ export default function App() {
                   onClick={() => {
                     const role = currentUser.role
                     if (role === 'Administrator') handleNavClick('admin')
+                    else if (role === 'Head of Department (HOD)' || role === 'HOD') handleNavClick('hod')
+                    else if (role === 'Dean') handleNavClick('dean')
                     else if (role === 'Faculty') handleNavClick('faculty')
                     else if (role === 'Club Lead') handleNavClick('club')
                     else if (role === 'Security Guard') handleNavClick('security')
@@ -3815,12 +3918,37 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <span>Approvals</span>
-                {pendingSanctionsCount > 0 && (
+                <span>Faculty Hub</span>
+              </button>
+            )}
+
+            {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('hod')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'hod' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                <span>HOD Sanctions</span>
+                {pendingHodCount > 0 && (
                   <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500 text-white font-bold">
-                    {pendingSanctionsCount}
+                    {pendingHodCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {currentUser && currentUser.role === 'Dean' && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('dean')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'dean' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                <span>Dean Clearance</span>
+                {pendingDeanCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-purple-600 text-white font-bold">
+                    {pendingDeanCount}
                   </span>
                 )}
               </button>
@@ -4093,6 +4221,30 @@ const OFFICIAL_COEP_ACCOUNTS = [
     id: 'ADM-001'
   },
   {
+    role: 'Head of Department (HOD)',
+    email: 'hod.civil@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. Balkrishna M. Dawari',
+    department: 'Civil Engineering',
+    id: 'HOD-CIVIL-01'
+  },
+  {
+    role: 'Head of Department (HOD)',
+    email: 'hod.comp@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. V. K. Pachghare',
+    department: 'Computer Engineering',
+    id: 'HOD-COMP-01'
+  },
+  {
+    role: 'Dean',
+    email: 'dean.academics@coeptech.ac.in',
+    password: 'Password@123',
+    name: 'Dr. P. R. Dhamangaonkar',
+    department: 'Office of the Dean (Academics & Student Affairs)',
+    id: 'DEAN-ACAD-01'
+  },
+  {
     role: 'Faculty',
     email: 'faculty@coeptech.ac.in',
     password: 'Password@123',
@@ -4257,7 +4409,19 @@ export function LoginForm({ onLoginSuccess }) {
         id: `COEP-${Math.floor(1000 + Math.random() * 9000)}`,
         name: trimmedEmail.split('@')[0],
         email: trimmedEmail,
-        role: trimmedEmail.includes('admin') ? 'Administrator' : trimmedEmail.includes('faculty') ? 'Faculty' : trimmedEmail.includes('security') ? 'Security Guard' : trimmedEmail.includes('mindspark') || trimmedEmail.includes('club') ? 'Club Lead' : role,
+        role: trimmedEmail.includes('admin')
+          ? 'Administrator'
+          : (trimmedEmail.includes('hod') || trimmedEmail.startsWith('hod.'))
+            ? 'Head of Department (HOD)'
+            : (trimmedEmail.includes('dean') || trimmedEmail.startsWith('dean.'))
+              ? 'Dean'
+              : trimmedEmail.includes('faculty')
+                ? 'Faculty'
+                : trimmedEmail.includes('security')
+                  ? 'Security Guard'
+                  : trimmedEmail.includes('mindspark') || trimmedEmail.includes('club')
+                    ? 'Club Lead'
+                    : role,
         department: trimmedEmail.includes('security') ? 'Campus Security & Gate 1 Control' : 'COEP Technological University',
         authProvider: 'password',
         authenticatedAt: new Date().toISOString()
@@ -4587,6 +4751,35 @@ export function LoginForm({ onLoginSuccess }) {
           )}
         </div>
       )}
+
+      {/* Demo Persona Quick Select */}
+      <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2.5 text-center">
+          Quick Demo Persona Credentials
+        </div>
+        <div className="grid grid-cols-2 gap-1.5 text-left">
+          {OFFICIAL_COEP_ACCOUNTS.slice(0, 6).map((acc) => (
+            <button
+              key={acc.email}
+              type="button"
+              onClick={() => {
+                setEmail(acc.email)
+                setPassword(acc.password)
+                setAuthMethod('password')
+                if (errorMessage) setErrorMessage('')
+              }}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 dark:hover:border-blue-700 transition-colors text-left cursor-pointer"
+            >
+              <div className="text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate">
+                {acc.role === 'Head of Department (HOD)' ? `HOD (${acc.department.split(' ')[0]})` : acc.role}
+              </div>
+              <div className="text-[9px] text-slate-500 dark:text-slate-400 truncate font-mono">
+                {acc.email.split('@')[0]}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

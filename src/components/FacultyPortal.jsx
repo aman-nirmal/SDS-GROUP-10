@@ -1,863 +1,421 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
-  CheckCircle2,
-  Clock,
-  Check,
-  X,
-  Inbox,
   Calendar,
+  Clock,
+  Building,
+  GraduationCap,
+  PlusCircle,
+  CheckCircle2,
+  BookOpen,
   Users,
-  AlertCircle,
-  ChevronDown,
-  ChevronUp,
-  Building2,
-  ShieldCheck,
-  ArrowRight,
-  Stamp,
-  Lock,
-  Sparkles,
+  MapPin,
   FileCheck2,
-  FileText
+  AlertCircle,
+  ArrowRight
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
-import { INITIAL_BOOKINGS } from './AdminPanel'
-import { bookingsApi } from '../lib/api'
 
 export default function FacultyPortal({
   currentUser,
   onNavigateLogin,
-  bookings: propBookings,
-  onUpdateStatus
+  bookings: propBookings = [],
+  onAddBooking
 }) {
-  // Local bookings fallback if prop not provided
-  const [localBookings, setLocalBookings] = useState(() => {
-    if (propBookings && propBookings.length > 0) return propBookings
-    try {
-      const stored = localStorage.getItem('locus_admin_bookings')
-      return stored ? JSON.parse(stored) : INITIAL_BOOKINGS
-    } catch {
-      return INITIAL_BOOKINGS
-    }
-  })
-
-  // Keep local bookings in sync when propBookings updates
-  useEffect(() => {
-    if (propBookings && propBookings.length > 0) {
-      setLocalBookings(propBookings)
-    }
-  }, [propBookings])
-
-  const activeBookingsList = propBookings || localBookings
-
-  const [requestStatusFilter, setRequestStatusFilter] = useState('All') // 'All' | 'HOD_Pending' | 'Dean_Pending' | 'Confirmed' | 'Rejected'
-  const [departmentFilter, setDepartmentFilter] = useState('All')
-  const [notification, setNotification] = useState(null)
-  const [confirmModal, setConfirmModal] = useState(null) // { type: 'HOD_Approve' | 'Dean_Approve' | 'Reject', booking: object }
-  const [reviewerRemarks, setReviewerRemarks] = useState('')
+  const [activeTab, setActiveTab] = useState('bookings') // 'bookings' | 'reserve' | 'schedule'
+  const [selectedVenue, setSelectedVenue] = useState('Computer Engineering Lecture Hall 1')
+  const [date, setDate] = useState('2026-10-30')
+  const [slot, setSlot] = useState('09:00 AM - 11:00 AM')
+  const [purpose, setPurpose] = useState('')
+  const [courseCode, setCourseCode] = useState('CS-302')
+  const [attendees, setAttendees] = useState(70)
+  const [successNotice, setSuccessNotice] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Track expanded cards. Default pending requests to expanded.
-  const [expandedIds, setExpandedIds] = useState(() => {
-    const pending = (propBookings || INITIAL_BOOKINGS)
-      .filter((b) => b.applicantRole !== 'Faculty' && (b.status === 'Pending' || b.status === 'Pending HOD Approval' || b.status === 'Pending Dean Approval'))
-      .map((b) => b.id || b.ref)
-    return new Set(pending)
-  })
+  // Filter bookings submitted by faculty or relevant to current faculty
+  const facultyBookings = propBookings.filter(
+    (b) =>
+      b.applicantRole === 'Faculty' ||
+      (currentUser?.email && b.applicantEmail?.toLowerCase() === currentUser.email.toLowerCase())
+  )
 
-  const toggleExpand = (id) => {
-    setExpandedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
-    })
-  }
-
-  const showToast = (message, type = 'success') => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification(null), 4500)
-  }
-
-  // Handle approving or rejecting an incoming request in the two-tier pipeline
-  const handleConfirmDecision = async () => {
-    if (!confirmModal) return
-    const { type, booking } = confirmModal
-    const bookingId = booking.id || booking.ref
-    const venueName = booking.venueName || booking.venue || 'Venue'
-    const remarks = reviewerRemarks.trim()
-
-    let nextStatus = 'Confirmed'
-    let toastMsg = ''
-
-    if (type === 'HOD_Approve') {
-      nextStatus = 'Pending Dean Approval'
-      toastMsg = `Sanctioned by HOD for ${venueName}. Escalated to Dean for final clearance.`
-    } else if (type === 'Dean_Approve') {
-      nextStatus = 'Confirmed'
-      toastMsg = `Final Dean clearance granted for ${venueName}! Digital pass & QR dispatched to applicant.`
-    } else if (type === 'Reject') {
-      nextStatus = 'Rejected'
-      toastMsg = `Reservation request for ${venueName} was rejected.`
-    }
+  const handleCreateFacultyBooking = async (e) => {
+    e.preventDefault()
+    if (!purpose.trim()) return
 
     setIsSubmitting(true)
-
-    try {
-      if (onUpdateStatus) {
-        onUpdateStatus(bookingId, nextStatus)
-      }
-
-      setLocalBookings((prev) => {
-        const decidedAt = new Date().toISOString().replace('T', ' ').slice(0, 16)
-        const updated = prev.map((b) => {
-          if (b.id !== bookingId && b.ref !== bookingId) return b
-          const copy = { ...b, status: nextStatus, decisionNotes: remarks, decidedBy: currentUser?.name || 'Reviewer' }
-
-          if (type === 'HOD_Approve') {
-            copy.approvalStage = 'Dean'
-            copy.hodApproval = {
-              status: 'Approved',
-              department: b.venueDepartment || b.department,
-              approvedBy: currentUser?.name || 'Department HOD',
-              decidedAt,
-              notes: remarks || 'Sanctioned by Department HOD'
-            }
-            copy.deanApproval = {
-              status: 'Pending',
-              approvedBy: null,
-              decidedAt: null,
-              notes: ''
-            }
-          } else if (type === 'Dean_Approve') {
-            copy.approvalStage = 'Completed'
-            copy.deanApproval = {
-              status: 'Approved',
-              approvedBy: currentUser?.name || 'Dean',
-              decidedAt,
-              notes: remarks || 'Final clearance granted by Dean'
-            }
-            if (!copy.digitalPassCode) {
-              copy.digitalPassCode = `COEP-SANCTION-${Math.floor(1000 + Math.random() * 9000)}-PASS`
-            }
-          } else if (type === 'Reject') {
-            copy.approvalStage = 'Rejected'
-            if (b.status === 'Pending Dean Approval') {
-              copy.deanApproval = { status: 'Rejected', approvedBy: currentUser?.name || 'Dean', decidedAt, notes: remarks }
-            } else {
-              copy.hodApproval = { status: 'Rejected', approvedBy: currentUser?.name || 'HOD', decidedAt, notes: remarks }
-            }
-          }
-          return copy
-        })
-
-        try {
-          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
-        } catch {
-          // ignore
-        }
-        return updated
-      })
-
-      await bookingsApi.updateStatus(bookingId, nextStatus, remarks, currentUser?.name || 'Reviewer')
-      showToast(toastMsg, type === 'Reject' ? 'warning' : 'success')
-    } catch (err) {
-      showToast(err.message || 'Failed to update reservation status', 'warning')
-    } finally {
-      setIsSubmitting(false)
-      setConfirmModal(null)
-      setReviewerRemarks('')
+    const refNumber = 'FAC-BK-' + Math.floor(100 + Math.random() * 900)
+    const newBooking = {
+      id: refNumber,
+      ref: refNumber,
+      venueName: selectedVenue,
+      venue: selectedVenue,
+      department: currentUser?.department || 'Computer Engineering',
+      venueDepartment: currentUser?.department || 'Computer Engineering',
+      applicantName: currentUser?.name || 'Dr. V. K. Kulkarni',
+      applicantEmail: currentUser?.email || 'faculty@coeptech.ac.in',
+      applicantRole: 'Faculty',
+      date,
+      bookingDate: date,
+      slot,
+      timeSlot: slot,
+      purpose: `[${courseCode}] ${purpose}`,
+      capacity: Number(attendees),
+      attendees: Number(attendees),
+      status: 'Confirmed', // Faculty academic reservations are auto-confirmed for curriculum
+      approvalStage: 'Completed',
+      submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
     }
+
+    if (onAddBooking) {
+      await onAddBooking(newBooking)
+    }
+
+    setIsSubmitting(false)
+    setSuccessNotice(`Hall ${selectedVenue} reserved successfully for ${courseCode} (${slot})!`)
+    setPurpose('')
+    setActiveTab('bookings')
+    setTimeout(() => setSuccessNotice(''), 5000)
   }
 
-  // Requests submitted by students and clubs
-  const requests = activeBookingsList.filter((b) => b.applicantRole !== 'Faculty')
-
-  // Extract distinct venue departments for filtering
-  const distinctDepartments = Array.from(
-    new Set(
-      requests
-        .map((b) => b.venueDepartment || b.department)
-        .filter(Boolean)
-    )
-  ).sort()
-
-  // Counts for pipeline badges
-  const pendingHodCount = requests.filter(
-    (b) => b.status === 'Pending' || b.status === 'Pending HOD Approval'
-  ).length
-
-  const pendingDeanCount = requests.filter(
-    (b) => b.status === 'Pending Dean Approval'
-  ).length
-
-  // Filtered requests by pipeline status and department
-  const filteredRequests = requests.filter((b) => {
-    // Department Filter
-    const bDept = b.venueDepartment || b.department || 'Central'
-    if (departmentFilter !== 'All' && bDept !== departmentFilter) return false
-
-    // Status Filter
-    if (requestStatusFilter === 'All') return true
-    if (requestStatusFilter === 'HOD_Pending') {
-      return b.status === 'Pending' || b.status === 'Pending HOD Approval'
-    }
-    if (requestStatusFilter === 'Dean_Pending') {
-      return b.status === 'Pending Dean Approval'
-    }
-    if (requestStatusFilter === 'Confirmed') {
-      return b.status === 'Confirmed' || b.status === 'Approved'
-    }
-    if (requestStatusFilter === 'Rejected') {
-      return b.status === 'Rejected' || b.status === 'Cancelled'
-    }
-    return true
-  })
-
-  const allExpanded = filteredRequests.length > 0 && filteredRequests.every((b) => expandedIds.has(b.id || b.ref))
-
-  const toggleAll = () => {
-    if (allExpanded) {
-      setExpandedIds(new Set())
-    } else {
-      setExpandedIds(new Set(filteredRequests.map((b) => b.id || b.ref)))
-    }
-  }
+  // Predefined academic timetable slots for faculty
+  const timetableSlots = [
+    { day: 'Monday', time: '09:00 AM - 11:00 AM', course: 'CS-302: Operating Systems', venue: 'NC-27 (Computer Dept Hall A)', type: 'Theory Lecture' },
+    { day: 'Monday', time: '02:00 PM - 04:00 PM', course: 'CS-304: Distributed Systems Lab', venue: 'Cognizant Lab (COG-LAB)', type: 'Practical Batch A' },
+    { day: 'Wednesday', time: '11:00 AM - 01:00 PM', course: 'CS-401: Cloud Computing', venue: 'AC 101 (NC01)', type: 'Theory Lecture' },
+    { day: 'Thursday', time: '09:00 AM - 11:00 AM', course: 'CS-302: Operating Systems', venue: 'NC-27 (Computer Dept Hall A)', type: 'Tutorial & Quiz' },
+    { day: 'Friday', time: '02:00 PM - 05:00 PM', course: 'B.Tech Capstone Project Viva', venue: 'Seminar Hall No 1 (SC10)', type: 'Viva Assessment' }
+  ]
 
   return (
     <ProtectedGate
       allowedRoles={['Faculty', 'Administrator']}
-      portalName="Venue Permission Sanctions"
-      portalDescription="Two-tier digital approval pipeline: Department HOD sanction followed by Dean final clearance."
+      portalName="Faculty Academic Desk"
+      portalDescription="Academic scheduling and lecture hall reservation platform for COEP faculty members and professors."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
       <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
-        {/* Toast Notification */}
-        {notification && (
+        {/* Success Banner */}
+        {successNotice && (
           <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-2xl animate-in slide-in-from-top duration-200 border border-slate-700">
-            {notification.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-            )}
-            <span>{notification.message}</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{successNotice}</span>
           </div>
         )}
 
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-7 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                  Venue Permissions & Sanctions
+                  Faculty Academic Desk
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                  HOD ➔ Dean Pipeline
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  Curriculum & Lectures
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
-                Venues require endorsement by the <strong>Department HOD</strong> where the venue is located, followed by <strong>Dean</strong> final clearance before passes are issued.
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+                Signed in as <strong>{currentUser?.name || 'Faculty Member'}</strong> &bull; {currentUser?.department || 'COEP Technological University'}
               </p>
             </div>
 
-            {/* Department Jurisdiction Selector */}
-            <div className="flex items-center gap-2 self-start md:self-auto">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Jurisdiction:</span>
-              <select
-                value={departmentFilter}
-                onChange={(e) => setDepartmentFilter(e.target.value)}
-                className="h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab('reserve')}
+                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
               >
-                <option value="All">All Department Venues</option>
-                {distinctDepartments.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
+                <PlusCircle className="w-4 h-4" />
+                <span>Reserve Hall for Class / Viva</span>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Filter Pills & Overview Bar */}
+        {/* Tab Navigation */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setRequestStatusFilter('All')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors cursor-pointer border ${
-                  requestStatusFilter === 'All'
-                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                All Requests ({requests.length})
-              </button>
+          <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab('bookings')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'bookings'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>My Reserved Halls ({facultyBookings.length})</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setRequestStatusFilter('HOD_Pending')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors cursor-pointer border flex items-center gap-1.5 ${
-                  requestStatusFilter === 'HOD_Pending'
-                    ? 'bg-amber-600 text-white border-transparent shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/60 hover:bg-amber-50'
-                }`}
-              >
-                <Stamp className="w-3.5 h-3.5" />
-                <span>Step 1: HOD Review ({pendingHodCount})</span>
-              </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('schedule')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'schedule'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Academic Timetable</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setRequestStatusFilter('Dean_Pending')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors cursor-pointer border flex items-center gap-1.5 ${
-                  requestStatusFilter === 'Dean_Pending'
-                    ? 'bg-blue-600 text-white border-transparent shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/60 hover:bg-blue-50'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Step 2: Dean Clearance ({pendingDeanCount})</span>
-              </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('reserve')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'reserve'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Direct Reservation</span>
+            </button>
+          </div>
+        </div>
 
-              <button
-                type="button"
-                onClick={() => setRequestStatusFilter('Confirmed')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors cursor-pointer border ${
-                  requestStatusFilter === 'Confirmed'
-                    ? 'bg-emerald-600 text-white border-transparent shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/60 hover:bg-emerald-50'
-                }`}
-              >
-                Cleared & Active
-              </button>
+        {/* Tab 1: Faculty Bookings */}
+        {activeTab === 'bookings' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+            {facultyBookings.length === 0 ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center mx-auto mb-3">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                  No active classroom reservations
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-5">
+                  You haven't reserved any additional halls for tests, vivas, or guest talks yet.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('reserve')}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-xs"
+                >
+                  Reserve Hall Now
+                </button>
+              </div>
+            ) : (
+              facultyBookings.map((b) => (
+                <div
+                  key={b.id || b.ref}
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-lg border border-blue-200 dark:border-blue-800">
+                        {b.ref || b.id}
+                      </span>
+                      <span className="font-bold text-slate-900 dark:text-white text-sm">
+                        {b.venueName || b.venue}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Confirmed Academic Slot</span>
+                      </span>
+                    </div>
 
-              <button
-                type="button"
-                onClick={() => setRequestStatusFilter('Rejected')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors cursor-pointer border ${
-                  requestStatusFilter === 'Rejected'
-                    ? 'bg-rose-600 text-white border-transparent shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/60 hover:bg-rose-50'
-                }`}
-              >
-                Rejected
-              </button>
-            </div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                      {b.purpose}
+                    </h4>
 
-            {filteredRequests.length > 0 && (
-              <button
-                type="button"
-                onClick={toggleAll}
-                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-              >
-                {allExpanded ? 'Collapse All' : 'Expand All'}
-              </button>
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-0.5">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        {b.bookingDate || b.date}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        {b.timeSlot || b.slot}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                        {b.attendees || b.capacity || 60} Students
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                      <FileCheck2 className="w-4 h-4" />
+                      <span>Timetable Cleared</span>
+                    </span>
+                  </div>
+                </div>
+              ))
             )}
           </div>
-        </div>
+        )}
 
-        {/* Requests Feed */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
-          {filteredRequests.map((b) => {
-            const bookingId = b.id || b.ref
-            const isExpanded = expandedIds.has(bookingId)
+        {/* Tab 2: Academic Timetable */}
+        {activeTab === 'schedule' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
+              <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">
+                    Curricular Weekly Schedule
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Allocated classroom slots for course lectures and laboratory sessions.
+                  </p>
+                </div>
+                <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-lg">
+                  Semester I &bull; 2026-27
+                </span>
+              </div>
 
-            const isPendingHod = b.status === 'Pending' || b.status === 'Pending HOD Approval'
-            const isPendingDean = b.status === 'Pending Dean Approval'
-            const isConfirmed = b.status === 'Confirmed' || b.status === 'Approved'
-            const isRejected = b.status === 'Rejected' || b.status === 'Cancelled'
-
-            const venueDepartment = b.venueDepartment || b.department || 'Central Department'
-            const hodInfo = b.hodApproval || {}
-            const deanInfo = b.deanApproval || {}
-
-            return (
-              <div
-                key={bookingId}
-                className={`bg-white dark:bg-slate-900 rounded-2xl border transition-all shadow-2xs ${
-                  isExpanded
-                    ? 'border-blue-300 dark:border-blue-900/60 ring-2 ring-blue-500/10'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                {/* Card Header (Clickable Summary Row) */}
-                <div
-                  onClick={() => toggleExpand(bookingId)}
-                  className="p-5 sm:p-6 cursor-pointer hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors select-none"
-                >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start lg:items-center">
-                    {/* Left: Metadata, Venue, and Purpose preview */}
-                    <div className="lg:col-span-7 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                          {bookingId}
-                        </span>
-                        <span className="text-slate-300 dark:text-slate-700">•</span>
-                        <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                          {b.applicantName || 'Applicant'}
-                        </span>
-                        {b.applicantRole && (
-                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">
-                            {b.applicantRole}
-                          </span>
-                        )}
-                        <span className="text-slate-300 dark:text-slate-700">•</span>
-                        {/* Owning Venue Department Badge */}
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 flex items-center gap-1">
-                          <Building2 className="w-3 h-3 text-indigo-500" />
-                          <span>Venue Dept: {venueDepartment}</span>
-                        </span>
-                      </div>
-
-                      <div>
-                        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                          {b.venueName || b.venue}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
-                          {b.purpose}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Right: Date, Two-Tier Status & Expand Toggle */}
-                    <div className="lg:col-span-5 flex flex-col lg:items-end justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-6 w-full">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                {timetableSlots.map((slot, idx) => (
+                  <div key={idx} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        {isPendingHod && (
-                          <span className="px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                            <Clock className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                            <span>Step 1: Awaiting HOD Sanction</span>
-                          </span>
-                        )}
-                        {isPendingDean && (
-                          <span className="px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                            <ShieldCheck className="w-3.5 h-3.5 text-blue-500 animate-bounce" />
-                            <span>Step 2: Awaiting Dean Clearance</span>
-                          </span>
-                        )}
-                        {isConfirmed && (
-                          <span className="px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Approved by HOD & Dean</span>
-                          </span>
-                        )}
-                        {isRejected && (
-                          <span className="px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-                            <X className="w-3.5 h-3.5 text-rose-600" />
-                            <span>Rejected</span>
-                          </span>
-                        )}
+                        <span className="text-xs font-black text-slate-900 dark:text-white w-24">
+                          {slot.day}
+                        </span>
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                          {slot.time}
+                        </span>
+                        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                          {slot.type}
+                        </span>
                       </div>
-
-                      <div className="text-left lg:text-right space-y-0.5">
-                        <div className="flex items-center lg:justify-end gap-1.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-                          <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                          <span>{b.bookingDate || b.date}</span>
-                        </div>
-                        <div className="flex items-center lg:justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-                          <Clock className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{b.timeSlot || b.slot}</span>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          toggleExpand(bookingId)
-                        }}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 pt-1 cursor-pointer transition-colors"
-                      >
-                        <span>{isExpanded ? 'Hide Details' : 'Review Sanctions'}</span>
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                      </button>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {slot.course}
+                      </h4>
                     </div>
+
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">
+                      <MapPin className="w-3.5 h-3.5 text-blue-500" />
+                      <span>{slot.venue}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Direct Reservation Form */}
+        {activeTab === 'reserve' && (
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-md">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Direct Hall Reservation for Faculty
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Book classrooms and seminar halls for end-sem vivas, remedial lectures, guest sessions, or project demos.
+                </p>
+              </div>
+
+              <form onSubmit={handleCreateFacultyBooking} className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Select Classroom / Seminar Hall
+                  </label>
+                  <select
+                    value={selectedVenue}
+                    onChange={(e) => setSelectedVenue(e.target.value)}
+                    className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                  >
+                    <option value="Computer Engineering Lecture Hall 1">Computer Engineering Lecture Hall 1 (NC-27)</option>
+                    <option value="Computer Dept Hall B (NC-28)">Computer Dept Hall B (NC-28)</option>
+                    <option value="AC 101 (NC01) Academics Complex">AC 101 (NC01) Academics Complex</option>
+                    <option value="Cognizant Lab (COG-LAB)">Cognizant Lab (COG-LAB)</option>
+                    <option value="Seminar Hall No 1 (SC10)">Seminar Hall No 1 (SC10)</option>
+                    <option value="Mechanical Drawing Hall (ND01)">Mechanical Drawing Hall (ND01)</option>
+                    <option value="Civil Old Wing (SC06)">Civil Old Wing (SC06)</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Time Slot
+                    </label>
+                    <select
+                      value={slot}
+                      onChange={(e) => setSlot(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    >
+                      <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM (Morning Session)</option>
+                      <option value="11:30 AM - 01:30 PM">11:30 AM - 01:30 PM (Midday Session)</option>
+                      <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM (Afternoon Practical)</option>
+                      <option value="04:30 PM - 06:30 PM">04:30 PM - 06:30 PM (Evening Viva/Exam)</option>
+                    </select>
                   </div>
                 </div>
 
-                {/* Expanded Details & Sequential Stepper */}
-                {isExpanded && (
-                  <div className="border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 p-5 sm:p-6 rounded-b-2xl space-y-5 animate-in fade-in-50 duration-200">
-                    {/* Visual 3-Stage Pipeline Stepper */}
-                    <div className="p-4 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700">
-                      <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
-                        Approval Chain of Custody
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        {/* Stage 1: Student Submission */}
-                        <div className="p-3 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30">
-                          <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-300">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                            <span>1. Request Submitted</span>
-                          </div>
-                          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
-                            By {b.applicantName} ({b.submittedAt || 'Initial Entry'})
-                          </p>
-                        </div>
-
-                        {/* Stage 2: Venue HOD Sanction */}
-                        <div
-                          className={`p-3 rounded-xl border ${
-                            hodInfo.status === 'Approved' || isConfirmed
-                              ? 'border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30'
-                              : isPendingHod
-                              ? 'border-amber-300 dark:border-amber-800 bg-amber-50/60 dark:bg-amber-950/30'
-                              : isRejected && b.approvalStage === 'HOD'
-                              ? 'border-rose-200 dark:border-rose-800 bg-rose-50/60 dark:bg-rose-950/30'
-                              : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs font-bold">
-                              {hodInfo.status === 'Approved' || isConfirmed ? (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                              ) : isPendingHod ? (
-                                <Clock className="w-4 h-4 text-amber-500 animate-pulse" />
-                              ) : isRejected && b.approvalStage === 'HOD' ? (
-                                <X className="w-4 h-4 text-rose-600" />
-                              ) : (
-                                <Stamp className="w-4 h-4 text-slate-400" />
-                              )}
-                              <span>2. {venueDepartment} HOD</span>
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-white/70 dark:bg-black/30">
-                              {hodInfo.status === 'Approved' || isConfirmed
-                                ? 'Sanctioned'
-                                : isPendingHod
-                                ? 'In Review'
-                                : isRejected && b.approvalStage === 'HOD'
-                                ? 'Rejected'
-                                : 'Pending'}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
-                            {hodInfo.approvedBy
-                              ? `Sanctioned by ${hodInfo.approvedBy} (${hodInfo.decidedAt || 'Stamped'})`
-                              : `Requires sign-off from Head of ${venueDepartment}`}
-                          </p>
-                          {hodInfo.notes && (
-                            <p className="text-[11px] text-slate-700 dark:text-slate-300 italic mt-0.5">
-                              "{hodInfo.notes}"
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Stage 3: Dean Clearance */}
-                        <div
-                          className={`p-3 rounded-xl border ${
-                            isConfirmed || deanInfo.status === 'Approved'
-                              ? 'border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30'
-                              : isPendingDean
-                              ? 'border-blue-300 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-950/30'
-                              : isRejected && b.approvalStage === 'Dean'
-                              ? 'border-rose-200 dark:border-rose-800 bg-rose-50/60 dark:bg-rose-950/30'
-                              : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 opacity-60'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs font-bold">
-                              {isConfirmed || deanInfo.status === 'Approved' ? (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                              ) : isPendingDean ? (
-                                <Clock className="w-4 h-4 text-blue-500 animate-pulse" />
-                              ) : (
-                                <Lock className="w-4 h-4 text-slate-400" />
-                              )}
-                              <span>3. Dean Clearance</span>
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-white/70 dark:bg-black/30">
-                              {isConfirmed ? 'Cleared' : isPendingDean ? 'Ready for Dean' : 'Locked'}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
-                            {isConfirmed
-                              ? `Cleared by ${deanInfo.approvedBy || 'Dean'} (${deanInfo.decidedAt || 'Approved'})`
-                              : isPendingDean
-                              ? 'HOD sanctioned. Awaiting Dean sign-off.'
-                              : 'Unlocks only after HOD approval'}
-                          </p>
-                          {deanInfo.notes && (
-                            <p className="text-[11px] text-slate-700 dark:text-slate-300 italic mt-0.5">
-                              "{deanInfo.notes}"
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Request Details Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-                        <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-blue-500" />
-                          <span>Venue Jurisdiction</span>
-                        </div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">
-                          {venueDepartment}
-                        </div>
-                        <div className="text-[11px] text-slate-500">
-                          Space: {b.venueName || b.venue}
-                        </div>
-                      </div>
-
-                      <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-                        <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>Applicant & Team</span>
-                        </div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">
-                          {b.applicantName} ({b.applicantRole || 'Student'})
-                        </div>
-                        <div className="text-[11px] text-slate-500">
-                          {b.applicantEmail || 'applicant@coeptech.ac.in'} • {b.attendees || 50} Attendees
-                        </div>
-                      </div>
-
-                      <div className="p-3.5 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
-                        <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-purple-500" />
-                          <span>Slot & Timing</span>
-                        </div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-white">
-                          {b.bookingDate || b.date}
-                        </div>
-                        <div className="text-[11px] text-slate-500">
-                          {b.timeSlot || b.slot}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Declared Purpose & Notes */}
-                    <div className="p-4 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-                      <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-                        Declared Event Purpose & Equipment Requirements
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-                        "{b.purpose}"
-                      </p>
-                      {b.notes && (
-                        <p className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700 pt-2">
-                          <strong className="text-slate-700 dark:text-slate-300">Special Requirements:</strong> {b.notes}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Action Panel Based on Current Pipeline Stage */}
-                    {isPendingHod ? (
-                      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div>
-                          <div className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
-                            <Stamp className="w-4 h-4 text-amber-600" />
-                            <span>Step 1 Action: Department HOD Sanction Required</span>
-                          </div>
-                          <p className="text-[11px] text-amber-800/80 dark:text-amber-300/80 mt-0.5">
-                            As Head of <strong>{venueDepartment}</strong>, approving will automatically forward this request to the Dean for final clearance.
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setConfirmModal({
-                                type: 'HOD_Approve',
-                                booking: b,
-                                title: `Sanction as HOD (${venueDepartment})`,
-                                description: `Are you sure you want to sanction ${venueName} for ${b.applicantName}? This will automatically escalate the request to the Dean.`
-                              })
-                            }
-                            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-                          >
-                            <Check className="w-4 h-4" />
-                            <span>Sanction (Forward to Dean)</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setConfirmModal({
-                                type: 'Reject',
-                                booking: b,
-                                title: 'Reject Request as HOD',
-                                description: `Provide rejection remarks for ${venueName} request submitted by ${b.applicantName}.`
-                              })
-                            }
-                            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <X className="w-4 h-4" />
-                            <span>Reject</span>
-                          </button>
-                        </div>
-                      </div>
-                    ) : isPendingDean ? (
-                      <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div>
-                          <div className="text-xs font-bold text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-                            <ShieldCheck className="w-4 h-4 text-blue-600" />
-                            <span>Step 2 Action: Final Dean Sanction Required</span>
-                          </div>
-                          <p className="text-[11px] text-blue-800/80 dark:text-blue-300/80 mt-0.5">
-                            HOD has stamped approval. Dean's approval will issue the digital gate pass with QR code directly to {b.applicantName}.
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setConfirmModal({
-                                type: 'Dean_Approve',
-                                booking: b,
-                                title: 'Grant Final Dean Approval & Gate Pass',
-                                description: `Confirm final clearance for ${venueName}. This will officially activate the reservation and email the scannable gate pass to ${b.applicantName}.`
-                              })
-                            }
-                            className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-                          >
-                            <ShieldCheck className="w-4 h-4" />
-                            <span>Grant Dean Clearance</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setConfirmModal({
-                                type: 'Reject',
-                                booking: b,
-                                title: 'Reject Request as Dean',
-                                description: `Provide reason for declining final sanction for ${venueName}.`
-                              })
-                            }
-                            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <X className="w-4 h-4" />
-                            <span>Reject</span>
-                          </button>
-                        </div>
-                      </div>
-                    ) : isConfirmed ? (
-                      <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-xs flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>
-                            Fully Sanctioned by Department HOD and Dean. Gate pass code:{' '}
-                            <strong className="font-mono">{b.digitalPassCode || b.ref}</strong>
-                          </span>
-                        </div>
-                        <span className="font-black text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200">
-                          Cleared
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200 text-xs flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <X className="w-4 h-4 text-rose-600 shrink-0" />
-                          <span>
-                            Request rejected at {b.approvalStage || 'Review'} stage.{' '}
-                            {b.decisionNotes ? `Remarks: "${b.decisionNotes}"` : ''}
-                          </span>
-                        </div>
-                        <span className="font-black text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-200">
-                          Rejected
-                        </span>
-                      </div>
-                    )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Course Code / Subject
+                    </label>
+                    <input
+                      type="text"
+                      value={courseCode}
+                      onChange={(e) => setCourseCode(e.target.value)}
+                      placeholder="e.g. CS-302, ME-201"
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    />
                   </div>
-                )}
-              </div>
-            )
-          })}
 
-          {filteredRequests.length === 0 && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 py-12 px-6 text-center text-slate-400 shadow-2xs">
-              <Inbox className="w-9 h-9 mx-auto mb-2 opacity-40 text-slate-400" />
-              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">No booking requests found</p>
-              <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-                No requests currently match the selected status filter and department jurisdiction.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Confirmation & Sanction Remarks Modal */}
-        {confirmModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4 animate-in zoom-in-95 duration-150">
-              <div className="flex items-start gap-3.5">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                    confirmModal.type === 'Reject'
-                      ? 'bg-rose-100 dark:bg-rose-950 text-rose-600'
-                      : confirmModal.type === 'HOD_Approve'
-                      ? 'bg-amber-100 dark:bg-amber-950 text-amber-600'
-                      : 'bg-blue-100 dark:bg-blue-950 text-blue-600'
-                  }`}
-                >
-                  {confirmModal.type === 'Reject' ? (
-                    <X className="w-5 h-5 stroke-[2.5]" />
-                  ) : confirmModal.type === 'HOD_Approve' ? (
-                    <Stamp className="w-5 h-5" />
-                  ) : (
-                    <ShieldCheck className="w-5 h-5" />
-                  )}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Expected Student Count
+                    </label>
+                    <input
+                      type="number"
+                      value={attendees}
+                      onChange={(e) => setAttendees(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    {confirmModal.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    {confirmModal.description}
-                  </p>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Academic Purpose / Topic
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={purpose}
+                    onChange={(e) => setPurpose(e.target.value)}
+                    placeholder="e.g., Mid-Semester Practical Evaluation & Code Review for SY CS Batch 1"
+                    required
+                    className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                  />
                 </div>
-              </div>
 
-              {/* Remarks Textarea */}
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                  Reviewer Remarks / Conditions (Optional)
-                </label>
-                <textarea
-                  rows={3}
-                  value={reviewerRemarks}
-                  onChange={(e) => setReviewerRemarks(e.target.value)}
-                  placeholder={
-                    confirmModal.type === 'Reject'
-                      ? 'Explain reason for rejection...'
-                      : 'e.g. Sanctioned subject to lab tech supervision and audio setup by 4 PM.'
-                  }
-                  className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs outline-none focus:border-blue-500 resize-none font-medium"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <button
-                  type="button"
-                  onClick={() => setConfirmModal(null)}
+                  type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
+                  className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-colors"
                 >
-                  Cancel
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{isSubmitting ? 'Confirming Reservation...' : 'Confirm Faculty Booking'}</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={handleConfirmDecision}
-                  disabled={isSubmitting}
-                  className={`px-5 py-2 rounded-xl text-white text-xs font-bold transition-colors cursor-pointer shadow-sm ${
-                    confirmModal.type === 'Reject'
-                      ? 'bg-rose-600 hover:bg-rose-700'
-                      : confirmModal.type === 'HOD_Approve'
-                      ? 'bg-emerald-600 hover:bg-emerald-700'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                >
-                  {isSubmitting ? 'Confirming...' : 'Confirm Decision'}
-                </button>
-              </div>
+              </form>
             </div>
           </div>
         )}

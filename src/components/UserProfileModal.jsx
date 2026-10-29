@@ -18,6 +18,8 @@ import {
 const AVAILABLE_ROLES = [
   'Student',
   'Faculty',
+  'Head of Department (HOD)',
+  'Dean',
   'Club Lead',
   'Security Guard',
   'Administrator'
