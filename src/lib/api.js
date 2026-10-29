@@ -232,6 +232,11 @@ export const bookingsApi = {
     return await apiRequest(`/bookings${query ? `?${query}` : ''}`)
   },
 
+  async getAvailability(venueName, date) {
+    const query = new URLSearchParams({ venueName, date }).toString()
+    return await apiRequest(`/bookings/availability?${query}`)
+  },
+
   async getById(id) {
     return await apiRequest(`/bookings/${id}`)
   },

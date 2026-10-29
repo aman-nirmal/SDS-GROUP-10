@@ -473,12 +473,19 @@ class DataStore {
             bookingDate: b.booking_date,
             timeSlot: b.time_slot,
             attendees: Number(b.attendees) || 50,
-            status: b.status || 'Confirmed',
+            status: b.status === 'Pending' && b.dean_approval && b.dean_approval.status === 'Pending'
+              ? 'Pending Dean Approval'
+              : (b.status === 'Pending' && b.lab_assistant_approval && b.lab_assistant_approval.status === 'Pending'
+                ? 'Pending Lab Assistant Approval'
+                : (b.status === 'Pending' ? 'Pending HOD Approval' : (b.status || 'Confirmed'))),
             priority: b.priority || 'Normal',
             submittedAt: b.created_at ? b.created_at.replace('T', ' ').slice(0, 16) : new Date().toISOString().slice(0, 16),
             notes: b.description || b.notes || b.faculty_remarks || '',
             passCode: b.pass_code || b.booking_ref || `COEP-PASS-${b.id.toString().slice(0, 6)}`,
-            isApproved: b.is_approved !== false
+            isApproved: b.is_approved !== false,
+            hodApproval: b.hod_approval || null,
+            deanApproval: b.dean_approval || null,
+            labAssistantApproval: b.lab_assistant_approval || null
           })).filter((b) => !b.ref.startsWith('T-'))
 
           // Also include any local pending bookings not yet on remote
@@ -575,12 +582,105 @@ class DataStore {
     return this.bookings.find((b) => b.id === id || b.ref === id) || null
   }
 
-  checkBookingConflict(venueName, date, timeSlot, excludeId = null) {
+  async getVenueAvailability(venueName, date) {
+    const vLower = (venueName || '').toLowerCase().trim()
+    let bookedSlots = []
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('id, booking_ref, venue_name, booking_date, time_slot, status, purpose, event_title, applicant_name')
+          .eq('booking_date', date)
+          .not('status', 'in', '("Cancelled","Rejected")')
+
+        if (!error && Array.isArray(data)) {
+          const matches = data.filter((row) => {
+            const rVenue = (row.venue_name || '').toLowerCase().trim()
+            return rVenue === vLower || rVenue.includes(vLower) || vLower.includes(rVenue)
+          })
+          bookedSlots = matches.map((m) => ({
+            id: m.id,
+            ref: m.booking_ref,
+            timeSlot: m.time_slot,
+            purpose: m.purpose || m.event_title || 'Campus Event',
+            status: m.status,
+            applicantName: m.applicant_name
+          }))
+          return { bookedSlots }
+        }
+      } catch (err) {
+        console.warn('[Supabase] getVenueAvailability error:', err.message)
+      }
+    }
+
+    // Fallback to in-memory bookings only if Supabase was unreachable
+    const active = this.bookings.filter((b) => {
+      if (b.status === 'Cancelled' || b.status === 'Rejected') return false
+      const bVenue = (b.venueName || b.venue || '').toLowerCase().trim()
+      return (bVenue === vLower || bVenue.includes(vLower) || vLower.includes(bVenue)) && b.date === date
+    })
+    bookedSlots = active.map((m) => ({
+      id: m.id,
+      ref: m.ref,
+      timeSlot: m.timeSlot,
+      purpose: m.purpose,
+      status: m.status,
+      applicantName: m.applicantName
+    }))
+    return { bookedSlots }
+  }
+
+  async checkBookingConflict(venueName, date, timeSlot, excludeId = null) {
+    const vLower = (venueName || '').toLowerCase().trim()
+
+    // 1. Direct Supabase database validation (real database source of truth)
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('id, booking_ref, venue_name, booking_date, time_slot, status, purpose, event_title, applicant_name')
+          .eq('booking_date', date)
+          .eq('time_slot', timeSlot)
+          .not('status', 'in', '("Cancelled","Rejected")')
+
+        if (!error && Array.isArray(data)) {
+          const match = data.find((row) => {
+            if (excludeId && (row.id === excludeId || row.booking_ref === excludeId)) return false
+            const rVenue = (row.venue_name || '').toLowerCase().trim()
+            return rVenue === vLower || rVenue.includes(vLower) || vLower.includes(rVenue)
+          })
+
+          if (match) {
+            return {
+              hasConflict: true,
+              conflictingBooking: {
+                id: match.id,
+                ref: match.booking_ref,
+                venueName: match.venue_name,
+                purpose: match.purpose || match.event_title || 'Reserved Event',
+                status: match.status,
+                applicantName: match.applicant_name,
+                date: match.booking_date,
+                timeSlot: match.time_slot
+              }
+            }
+          }
+          // Supabase returned results without conflict, and Supabase is connected
+          return { hasConflict: false }
+        }
+      } catch (err) {
+        console.warn('[Supabase] checkBookingConflict error:', err.message)
+      }
+    }
+
+    // 2. Fallback to in-memory check only if Supabase was unavailable
     const activeBookings = this.bookings.filter((b) => {
       if (excludeId && (b.id === excludeId || b.ref === excludeId)) return false
       if (b.status === 'Cancelled' || b.status === 'Rejected') return false
+      const bVenue = (b.venueName || b.venue || '').toLowerCase().trim()
       return (
-        (b.venueName === venueName || b.venue === venueName) &&
+        (bVenue === vLower || bVenue.includes(vLower) || vLower.includes(bVenue)) &&
         b.date === date
       )
     })
@@ -595,7 +695,7 @@ class DataStore {
 
   async createBooking(data) {
     const venueName = data.venueName || data.venue
-    const conflict = this.checkBookingConflict(venueName, data.date, data.timeSlot)
+    const conflict = await this.checkBookingConflict(venueName, data.date, data.timeSlot)
     if (conflict.hasConflict) {
       const err = new Error(
         `Time slot conflict: ${venueName} is already reserved on ${data.date} for "${conflict.conflictingBooking.purpose}" (${conflict.conflictingBooking.status}).`
@@ -677,6 +777,7 @@ class DataStore {
       try {
         const supabaseBooking = {
           booking_ref: newBooking.ref,
+          venue_id: newBooking.venueId || null,
           booking_type: bookingType,
           venue_name: newBooking.venueName,
           applicant_name: newBooking.applicantName,
@@ -690,9 +791,12 @@ class DataStore {
           booking_date: newBooking.date,
           time_slot: newBooking.timeSlot,
           attendees: newBooking.attendees,
-          status: newBooking.status === 'Approved' ? 'Confirmed' : newBooking.status,
+          status: newBooking.status === 'Approved' ? 'Confirmed' : (newBooking.status.includes('Pending') ? 'Pending' : newBooking.status),
           is_approved: newBooking.status === 'Confirmed' || newBooking.status === 'Approved',
-          pass_code: newBooking.digitalPassCode || newBooking.ref
+          pass_code: newBooking.digitalPassCode || newBooking.ref,
+          hod_approval: newBooking.hodApproval || null,
+          dean_approval: newBooking.deanApproval || null,
+          lab_assistant_approval: newBooking.labAssistantApproval || null
         }
         const { data: inserted, error: insErr } = await supabase.from('bookings').insert([supabaseBooking]).select()
         if (!insErr && inserted && inserted[0]) {

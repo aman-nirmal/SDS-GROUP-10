@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
   X,
   Calendar,
@@ -20,9 +20,10 @@ import {
   Camera,
   RefreshCw,
   MapPin,
-  Mail
+  Mail,
+  AlertTriangle
 } from 'lucide-react'
-import { paymentsApi } from '../../lib/api'
+import { paymentsApi, bookingsApi } from '../../lib/api'
 import {
   formatDateDisplay,
   isLabVenue,
@@ -31,13 +32,15 @@ import {
   getVenueFaculty,
   classroomTimeSlots,
   extractNumericPrice,
-  isDepartmentMatch
+  isDepartmentMatch,
+  isAcClassroom
 } from '../../utils/venueHelpers'
 
 export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
-const isFaculty = currentUser?.role === 'Faculty'
+  const isFaculty = currentUser?.role === 'Faculty'
   const isLab = isLabVenue(venue)
   const isClassroom = isClassroomVenue(venue)
+  const isAC = isAcClassroom(venue)
   const isHomeDept = isDepartmentMatch(currentUser?.department, venue?.department)
 
   const [date, setDate] = useState(defaultDate || '2026-10-16')
@@ -54,6 +57,10 @@ const isFaculty = currentUser?.role === 'Faculty'
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [paymentSuccess, setPaymentSuccess] = useState(null)
+  const [bookedSlots, setBookedSlots] = useState([])
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false)
+  const [conflictError, setConflictError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const venuePhotos = useMemo(() => getVenueImages(venue), [venue])
   const [activePhotoIdx, setActivePhotoIdx] = useState(0)
@@ -84,7 +91,9 @@ const isFaculty = currentUser?.role === 'Faculty'
     setActivePhotoIdx((prev) => (prev < venuePhotos.length - 1 ? prev + 1 : 0))
   }
 
-  const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
+  const venueTitle = isAC
+    ? (venue?.new_hall_name || venue?.code || 'NC01')
+    : (venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue')
   const faculty = getVenueFaculty(venue)
   const capacity = venue?.capacity || (venue?.benches ? venue.benches * 2 : 60)
   const benches = venue?.benches || Math.round(capacity / 2)
@@ -100,10 +109,74 @@ const isFaculty = currentUser?.role === 'Faculty'
   const isEvent = bookingCategory === 'event' || /event|seminar|symposium|fest|hackathon|workshop|conference|cultural/i.test(eventPurpose)
   const isFacultyInstantApproved = isFaculty && isClassroom && isHomeDept && !isEvent && !isPaidVenue && !isLab
 
+  // Query live database availability whenever venue or date changes
+  useEffect(() => {
+    let isMounted = true
+    async function loadAvailability() {
+      if (!venueTitle || !date) return
+      setIsLoadingSlots(true)
+      setConflictError('')
+      try {
+        const res = await bookingsApi.getAvailability(venueTitle, date)
+        if (isMounted && res && Array.isArray(res.bookedSlots)) {
+          setBookedSlots(res.bookedSlots)
+        }
+      } catch (err) {
+        console.warn('[Supabase Availability Fetch]', err)
+      } finally {
+        if (isMounted) setIsLoadingSlots(false)
+      }
+    }
+    loadAvailability()
+    return () => {
+      isMounted = false
+    }
+  }, [venueTitle, date])
+
+  // Merge default institutional timetable with live database reservations
+  const computedTimeSlots = useMemo(() => {
+    return classroomTimeSlots.map((slot) => {
+      const match = bookedSlots.find((b) => b.timeSlot === slot.time)
+      if (match) {
+        return {
+          time: slot.time,
+          status: 'occupied',
+          label: 'Reserved',
+          purpose: match.purpose || 'Reserved Slot',
+          bookingStatus: match.status
+        }
+      }
+      return slot
+    })
+  }, [bookedSlots])
+
+  // Auto-switch away if currently selected slot is already booked in database
+  useEffect(() => {
+    const isOccupied = computedTimeSlots.some((s) => s.time === selectedSlot && s.status === 'occupied')
+    if (isOccupied) {
+      const firstFree = computedTimeSlots.find((s) => s.status === 'free')
+      if (firstFree) {
+        setSelectedSlot(firstFree.time)
+      }
+    }
+  }, [computedTimeSlots, selectedSlot])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!applicantName || !eventPurpose) return
     setPaymentError('')
+    setConflictError('')
+    setIsSubmitting(true)
+
+    // Check if selected slot is already occupied
+    const slotObj = computedTimeSlots.find((s) => s.time === selectedSlot)
+    if (slotObj && slotObj.status === 'occupied') {
+      setConflictError(
+        `Time slot conflict: ${venueTitle} is already reserved for "${slotObj.purpose || 'Campus Activity'}" on ${formatDateDisplay(date)} (${selectedSlot}). Please pick an open time slot.`
+      )
+      setIsSubmitting(false)
+      return
+    }
 
     const refNumber = 'LOCUS-' + (isPaidVenue ? 'CF-' : '') + Math.floor(100000 + Math.random() * 900000)
 
@@ -223,59 +296,75 @@ const isFaculty = currentUser?.role === 'Faculty'
     }
 
     // Standard Free Campus Venue Flow
-    setBookingRef(refNumber)
-    setSubmitted(true)
-
     const initialStatus = isLab
       ? 'Pending Lab Assistant Approval'
       : isFacultyInstantApproved
-      ? 'Confirmed'
-      : 'Pending HOD Approval'
+        ? 'Confirmed'
+        : 'Pending HOD Approval'
 
     const approvalStage = isLab
       ? 'LabAssistant'
       : isFacultyInstantApproved
-      ? 'Completed'
-      : 'HOD'
+        ? 'Completed'
+        : 'HOD'
 
     const passCode = isFacultyInstantApproved ? `COEP-PASS-${refNumber}` : null
     const bookingNotes = isLab
       ? '3-Stage Laboratory Clearance: Awaiting Lab Assistant Technical & Safety Review'
       : isFacultyInstantApproved
-      ? 'Instant Approved: Faculty Academic Lecture in Home Department'
-      : ''
+        ? 'Instant Approved: Faculty Academic Lecture in Home Department'
+        : ''
+
+    const bookingPayload = {
+      id: refNumber,
+      ref: refNumber,
+      venueName: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
+      venue: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
+      oldName: venue?.old_hall_name,
+      department,
+      venueDepartment: venue?.department || department,
+      applicantName,
+      applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
+      applicantRole: currentUser?.role || 'Student',
+      date,
+      bookingDate: date,
+      slot: selectedSlot,
+      timeSlot: selectedSlot,
+      purpose: eventPurpose,
+      category: bookingCategory,
+      capacity: Number(attendees) || 50,
+      attendees: Number(attendees) || 50,
+      facultyInCharge: faculty.name,
+      status: initialStatus,
+      approvalStage,
+      digitalPassCode: passCode,
+      passCode,
+      notes: bookingNotes,
+      paymentStatus: 'Free',
+      submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
 
     if (onSubmitBooking) {
-      onSubmitBooking({
-        id: refNumber,
-        ref: refNumber,
-        venueName: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
-        venue: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
-        oldName: venue?.old_hall_name,
-        department,
-        venueDepartment: venue?.department || department,
-        applicantName,
-        applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
-        applicantRole: currentUser?.role || 'Student',
-        date,
-        bookingDate: date,
-        slot: selectedSlot,
-        timeSlot: selectedSlot,
-        purpose: eventPurpose,
-        category: bookingCategory,
-        capacity: Number(attendees) || 50,
-        attendees: Number(attendees) || 50,
-        facultyInCharge: faculty.name,
-        status: initialStatus,
-        approvalStage,
-        digitalPassCode: passCode,
-        passCode,
-        notes: bookingNotes,
-        paymentStatus: 'Free',
-        submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      })
+      try {
+        const res = await onSubmitBooking(bookingPayload)
+        if (res && res.success === false) {
+          setConflictError(res.error || 'This time slot is no longer available. Please select another slot.')
+          setIsSubmitting(false)
+          return
+        }
+      } catch (err) {
+        setConflictError(err.message || 'Failed to complete reservation.')
+        setIsSubmitting(false)
+        return
+      }
     }
+
+    setBookingRef(refNumber)
+    setSubmitted(true)
+    setIsSubmitting(false)
   }
+
+  if (!venue) return null
 
   return (
     <div
@@ -486,9 +575,8 @@ const isFaculty = currentUser?.role === 'Faculty'
                               key={idx}
                               type="button"
                               onClick={() => setActivePhotoIdx(idx)}
-                              className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                                idx === activePhotoIdx ? 'w-4 bg-blue-500' : 'w-1.5 bg-white/50 hover:bg-white'
-                              }`}
+                              className={`h-1.5 rounded-full transition-all cursor-pointer ${idx === activePhotoIdx ? 'w-4 bg-blue-500' : 'w-1.5 bg-white/50 hover:bg-white'
+                                }`}
                               aria-label={`Slide ${idx + 1}`}
                             />
                           ))}
@@ -508,11 +596,10 @@ const isFaculty = currentUser?.role === 'Faculty'
                             key={idx}
                             type="button"
                             onClick={() => setActivePhotoIdx(idx)}
-                            className={`relative shrink-0 w-16 h-11 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
-                              idx === activePhotoIdx
+                            className={`relative shrink-0 w-16 h-11 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${idx === activePhotoIdx
                                 ? 'border-blue-600 ring-2 ring-blue-500/30 scale-102'
                                 : 'border-slate-200 dark:border-slate-700 opacity-60 hover:opacity-100'
-                            }`}
+                              }`}
                           >
                             <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
                             <span className="absolute bottom-0.5 right-0.5 text-[8px] font-bold text-white bg-black/75 px-1 rounded">
@@ -528,16 +615,16 @@ const isFaculty = currentUser?.role === 'Faculty'
                   <div className="pt-0.5">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
                       <span className="text-[11px] font-black tracking-wide text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
-                        {venue?.new_hall_name || venue?.old_hall_name || 'Passage Hall'}
+                        {isAC ? 'AC Classrooms' : (venue?.code || venue?.new_hall_name || 'Passage Hall')}
                       </span>
-                      {venue?.old_hall_name && venue.new_hall_name && (
+                      {venue?.old_hall_name && (
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                          Code: {venue.new_hall_name}
+                          {isAC ? `Ref: ${venue.old_hall_name}` : `Code: ${venue.new_hall_name || venue.code}`}
                         </span>
                       )}
                     </div>
                     <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-                      {venue?.old_hall_name || venue?.new_hall_name}
+                      {venueTitle}
                     </h2>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300 mt-1.5">
                       <span className="flex items-center gap-1.5">
@@ -633,12 +720,15 @@ const isFaculty = currentUser?.role === 'Faculty'
                       Installed Classroom Facilities:
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {(venue?.features || [
-                        'Overhead Projector',
-                        'PA Sound System',
-                        'Air Conditioned',
-                        'Wi-Fi 6'
-                      ]).map((feat, i) => (
+                      {(Array.isArray(venue?.features) && venue.features.length > 0
+                        ? venue.features
+                        : [
+                          'Overhead Projector',
+                          'PA Sound System',
+                          'Air Conditioned',
+                          'Wi-Fi 6'
+                        ]
+                      ).map((feat, i) => (
                         <span
                           key={i}
                           className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700 shadow-2xs"
@@ -695,9 +785,15 @@ const isFaculty = currentUser?.role === 'Faculty'
 
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                          2. Time Slot
-                        </label>
+                        <div className="flex items-center gap-2">
+                          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                            2. Time Slot
+                          </label>
+                          <span className="text-[10px] font-semibold flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                            <span className={`w-1.5 h-1.5 rounded-full ${isLoadingSlots ? 'bg-amber-400 animate-ping' : 'bg-emerald-500'}`}></span>
+                            {isLoadingSlots ? 'Checking database...' : 'Database verified'}
+                          </span>
+                        </div>
                         <button
                           type="button"
                           onClick={() => setShowSchedule(!showSchedule)}
@@ -735,19 +831,21 @@ const isFaculty = currentUser?.role === 'Faculty'
 
                       {/* Clean Simple Time Slot Buttons */}
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {classroomTimeSlots.map((slot, i) => {
+                        {computedTimeSlots.map((slot, i) => {
                           const isFree = slot.status === 'free'
                           const isSelected = selectedSlot === slot.time
                           return isFree ? (
                             <button
                               key={i}
                               type="button"
-                              onClick={() => setSelectedSlot(slot.time)}
-                              className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${
-                                isSelected
+                              onClick={() => {
+                                setSelectedSlot(slot.time)
+                                setConflictError('')
+                              }}
+                              className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${isSelected
                                   ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                                   : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
-                              }`}
+                                }`}
                             >
                               <span className="dark:text-slate-100">{slot.time}</span>
                               {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
@@ -755,11 +853,13 @@ const isFaculty = currentUser?.role === 'Faculty'
                           ) : (
                             <div
                               key={i}
-                              className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 line-through flex items-center justify-between cursor-not-allowed select-none"
-                              title="Occupied for regular classes"
+                              className="p-2.5 rounded-xl text-xs font-medium border border-rose-200/80 dark:border-rose-900/50 bg-rose-50/60 dark:bg-rose-950/25 text-slate-500 dark:text-slate-400 flex items-center justify-between cursor-not-allowed select-none"
+                              title={slot.purpose ? `Reserved: "${slot.purpose}"` : 'Occupied'}
                             >
-                              <span>{slot.time}</span>
-                              <span className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold">{slot.label}</span>
+                              <span className="line-through">{slot.time}</span>
+                              <span className="text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400">
+                                {slot.label}
+                              </span>
                             </div>
                           )
                         })}
@@ -821,11 +921,10 @@ const isFaculty = currentUser?.role === 'Faculty'
                           <button
                             type="button"
                             onClick={() => setBookingCategory('lecture')}
-                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
-                              bookingCategory === 'lecture'
+                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${bookingCategory === 'lecture'
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
-                            }`}
+                              }`}
                           >
                             <GraduationCap className="w-4 h-4" />
                             <span>Academic Lecture / Class</span>
@@ -833,11 +932,10 @@ const isFaculty = currentUser?.role === 'Faculty'
                           <button
                             type="button"
                             onClick={() => setBookingCategory('event')}
-                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
-                              bookingCategory === 'event'
+                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${bookingCategory === 'event'
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
-                            }`}
+                              }`}
                           >
                             <Calendar className="w-4 h-4" />
                             <span>Campus Event / Seminar</span>
@@ -864,8 +962,8 @@ const isFaculty = currentUser?.role === 'Faculty'
                                 {bookingCategory === 'event'
                                   ? 'Because this session is scheduled as an event, formal permission is required: your request will go to the Department HOD for sanction first, followed by the Dean for clearance.'
                                   : !isHomeDept
-                                  ? `This venue belongs to ${venue?.department || 'another department'}. Inter-departmental bookings require sanction from the Department HOD and Dean.`
-                                  : 'Non-classroom facilities require sanction from the Department HOD and Dean.'}
+                                    ? `This venue belongs to ${venue?.department || 'another department'}. Inter-departmental bookings require sanction from the Department HOD and Dean.`
+                                    : 'Non-classroom facilities require sanction from the Department HOD and Dean.'}
                               </p>
                             </div>
                           </div>
@@ -923,6 +1021,17 @@ const isFaculty = currentUser?.role === 'Faculty'
                       </div>
                     )}
 
+                    {/* Reservation Conflict Alert Banner */}
+                    {conflictError && (
+                      <div className="p-3.5 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-3 shadow-xs animate-in fade-in duration-200">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                        <div className="space-y-0.5 flex-1">
+                          <p className="font-bold text-amber-800 dark:text-amber-300">Time Slot Unavailable</p>
+                          <p className="leading-relaxed opacity-95 text-slate-700 dark:text-slate-300">{conflictError}</p>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
                       <span>
                         Venue Capacity: <strong className="dark:text-slate-200">{capacity} Persons</strong> ({benches} Benches)
@@ -937,17 +1046,22 @@ const isFaculty = currentUser?.role === 'Faculty'
                       <button
                         type="button"
                         onClick={onClose}
-                        disabled={isProcessingPayment}
+                        disabled={isProcessingPayment || isSubmitting}
                         className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        disabled={isProcessingPayment}
+                        disabled={isProcessingPayment || isSubmitting}
                         className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
                       >
-                        {isProcessingPayment ? (
+                        {isSubmitting ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            <span>Verifying with Database...</span>
+                          </>
+                        ) : isProcessingPayment ? (
                           <>
                             <RefreshCw className="w-4 h-4 animate-spin" />
                             <span>Connecting to Cashfree Gateway...</span>

@@ -44,7 +44,8 @@ import {
   getVenueFaculty,
   classroomTimeSlots,
   extractNumericPrice,
-  isDepartmentMatch
+  isDepartmentMatch,
+  isAcClassroom
 } from './utils/venueHelpers'
 
 // Backwards compatibility re-exports for other components importing from App.jsx
@@ -53,6 +54,7 @@ export {
   formatDateISO,
   isLabVenue,
   isClassroomVenue,
+  isAcClassroom,
   getVenueImages,
   getVenueImageUrl,
   getVenueFaculty,
@@ -508,21 +510,11 @@ export default function App() {
       return { success: true, booking: created }
     } catch (err) {
       console.warn('Backend booking creation error:', err)
+      const errorMsg = err.data?.error || err.message || 'Failed to complete reservation.'
       if (err.status === 409 || err.data?.isConflict) {
-        alert(err.data?.error || err.message)
-        return { success: false, error: err.message, isConflict: true }
+        return { success: false, error: errorMsg, isConflict: true }
       }
-      setCampusBookings((prev) => {
-        const updated = [newBooking, ...prev]
-        try {
-          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
-        } catch {
-          // ignore
-        }
-        return updated
-      })
-      setUserBookings((prev) => [newBooking, ...prev])
-      return { success: true, booking: newBooking }
+      return { success: false, error: errorMsg }
     }
   }
 
@@ -880,7 +872,8 @@ export default function App() {
             setIsDatePickerOpen={setIsDatePickerOpen}
             onSearch={() => handleNavClick('venues')}
             onSelectPopularType={(title) => {
-              setSelectedVenueForBooking(title)
+              setSelectedType(title)
+              setActiveTab('venues')
             }}
             onViewAllVenues={() => setActiveTab('venues')}
           />
@@ -1339,9 +1332,7 @@ export default function App() {
           defaultDate={selectedDate}
           currentUser={currentUser}
           onClose={() => setSelectedVenueForBooking(null)}
-          onSubmitBooking={(bookingData) => {
-            handleAddBooking(bookingData)
-          }}
+          onSubmitBooking={(bookingData) => handleAddBooking(bookingData)}
         />
       )}
 
@@ -1453,25 +1444,30 @@ export default function App() {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Booking Guidelines')}
+                    onClick={() => {
+                      setActiveTab('venues')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Booking Guidelines
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedVenueForBooking('IT Helpdesk')}
+                  <a
+                    href="mailto:estate@coeptech.ac.in"
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     IT Helpdesk
-                  </button>
+                  </a>
                 </li>
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Privacy Policy')}
+                    onClick={() => {
+                      setActiveTab('guest')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Privacy Policy
@@ -1480,7 +1476,10 @@ export default function App() {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Terms of Use')}
+                    onClick={() => {
+                      setActiveTab('guest')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Terms of Use

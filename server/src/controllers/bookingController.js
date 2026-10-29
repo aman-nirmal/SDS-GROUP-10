@@ -11,6 +11,19 @@ export async function getAllBookings(req, res, next) {
   }
 }
 
+export async function checkAvailability(req, res, next) {
+  try {
+    const { venueName, date } = req.query
+    if (!venueName || !date) {
+      return res.status(400).json({ success: false, error: 'Missing venueName or date parameter.' })
+    }
+    const availability = await dataStore.getVenueAvailability(venueName, date)
+    return res.json({ success: true, venueName, date, ...availability })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export async function getBookingById(req, res, next) {
   try {
     const booking = await dataStore.getBookingById(req.params.id)
@@ -22,6 +35,7 @@ export async function getBookingById(req, res, next) {
     next(err)
   }
 }
+
 
 export async function createBooking(req, res, next) {
   try {
