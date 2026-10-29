@@ -22,7 +22,8 @@ const INITIAL_CLUB_BOOKINGS = [
     date: '2026-10-28',
     timeSlot: '08:00 AM - 06:00 PM',
     attendees: 280,
-    status: 'Approved'
+    status: 'Approved',
+    club_name: 'MindSpark'
   },
   {
     id: 'CLB-BK-402',
@@ -31,7 +32,8 @@ const INITIAL_CLUB_BOOKINGS = [
     date: '2026-11-05',
     timeSlot: '07:00 AM - 01:00 PM',
     attendees: 500,
-    status: 'Under Review'
+    status: 'Under Review',
+    club_name: 'ZEST'
   },
   {
     id: 'CLB-BK-403',
@@ -40,13 +42,15 @@ const INITIAL_CLUB_BOOKINGS = [
     date: '2026-11-12',
     timeSlot: '10:00 AM - 04:00 PM',
     attendees: 150,
-    status: 'Approved'
+    status: 'Approved',
+    club_name: 'Robot Study Circle (RSC)'
   }
 ]
 
 export default function ClubPortal({ currentUser, onNavigateLogin }) {
   const [bookings, setBookings] = useState(INITIAL_CLUB_BOOKINGS)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     venue: 'BHAU Main Auditorium',
     title: '',
@@ -100,6 +104,8 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
       attendees: Number(form.attendees),
       status: 'Under Review'
     }
+    loadClubBookings()
+  }, [currentUser, authorizedClub])
 
     try {
       await bookingsApi.create({
@@ -161,9 +167,7 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
                 Reserve campus auditoriums, open-air theatres, and event spaces for student clubs.
               </p>
             </div>
-
             <button
-              type="button"
               onClick={() => setIsModalOpen(true)}
               className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
             >
@@ -293,16 +297,15 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
           </div>
         </div>
 
-        {/* Modal: Submit Event Proposal */}
+        {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Submit Event Proposal</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Submit Gymkhana Venue Requisition</h3>
                 <button
-                  type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                 >
                   <XCircle className="w-5 h-5" />
                 </button>
@@ -310,93 +313,115 @@ export default function ClubPortal({ currentUser, onNavigateLogin }) {
 
               <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Event Venue
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Club Organization
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={authorizedClub}
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-bold outline-none cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Select Campus Auditorium / Grounds
                   </label>
                   <select
                     value={form.venue}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500 cursor-pointer"
+                    className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   >
-                    <option value="BHAU Main Auditorium">BHAU Main Auditorium (250 Seats)</option>
-                    <option value="Open Air Theatre (OAT)">Open Air Theatre (OAT)</option>
+                    <option value="Cognizant Lab">Cognizant Lab (Computer Dept - 400 Seats)</option>
+                    <option value="Mini Auditorium">Mini Auditorium (Academics Complex - 275 Seats)</option>
+                    <option value="BHAU Main Auditorium">BHAU Main Auditorium</option>
                     <option value="Historic Boat Club & Regatta Grounds">Historic Boat Club & Regatta Grounds</option>
                     <option value="North Drawing Hall (ND01)">North Drawing Hall (ND01)</option>
+                    <option value="Open Air Theatre (OAT)">Open Air Theatre (OAT)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Event / Festival Name
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Official Event / Fest Title *
                   </label>
                   <input
                     type="text"
                     required
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    placeholder="e.g. Impressions '26: Annual Inter-College Cultural Fest"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
+                    placeholder="e.g. MindSpark 2026 Keynote"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Event Date
                     </label>
                     <input
                       type="date"
-                      required
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
+                      className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                       Time Slot
                     </label>
                     <select
                       value={form.timeSlot}
                       onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500 cursor-pointer"
+                      className="w-full h-9 px-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                     >
-                      <option value="08:00 AM - 01:00 PM">08:00 AM - 01:00 PM</option>
-                      <option value="01:00 PM - 06:00 PM">01:00 PM - 06:00 PM</option>
-                      <option value="06:00 PM - 10:00 PM">06:00 PM - 10:00 PM</option>
-                      <option value="Full Day (08:00 AM - 08:00 PM)">Full Day (08:00 AM - 08:00 PM)</option>
+                      <option value="08:00 AM - 06:00 PM">08:00 AM - 06:00 PM (Full Day)</option>
+                      <option value="09:00 AM - 01:00 PM">09:00 AM - 01:00 PM (Morning Slot)</option>
+                      <option value="02:00 PM - 08:00 PM">02:00 PM - 08:00 PM (Evening Slot)</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] mb-1">
-                    Expected Footfall
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Expected Total Attendees
                   </label>
                   <input
                     type="number"
-                    min="10"
-                    max="1500"
                     value={form.attendees}
                     onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium outline-none focus:border-amber-500"
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="pt-2 flex items-center justify-end gap-2">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Special Facilities & Audio Setup
+                  </label>
+                  <input
+                    type="text"
+                    value={form.requirements}
+                    onChange={(e) => setForm({ ...form, requirements: e.target.value })}
+                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="pt-2 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
+                    className="flex-1 h-9 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer shadow-sm transition-colors"
+                    disabled={isSubmitting}
+                    className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
                   >
-                    Submit for Approval
+                    {isSubmitting ? 'Submitting...' : 'Submit Requisition'}
                   </button>
                 </div>
               </form>

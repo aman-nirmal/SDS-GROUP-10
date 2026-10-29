@@ -205,7 +205,7 @@ export default function UserProfileModal({
         {/* Scrollable Content */}
         <div className="p-5 sm:p-6 space-y-6 overflow-y-auto">
           {/* User Details Banner */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="space-y-1">
               <div className="text-sm font-bold text-slate-900 dark:text-white">
                 {currentUser.name}
@@ -380,7 +380,7 @@ export default function UserProfileModal({
             </div>
 
             {userRequests.length === 0 ? (
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
+              <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
                 You have not submitted any role change requests yet.
               </div>
             ) : (
@@ -388,7 +388,7 @@ export default function UserProfileModal({
                 {userRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-2"
+                    className="p-3.5 rounded-xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 space-y-2"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -442,7 +442,7 @@ export default function UserProfileModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex justify-end shrink-0">
+        <div className="p-4 bg-slate-100/60 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex justify-end shrink-0">
           <button
             type="button"
             onClick={onClose}

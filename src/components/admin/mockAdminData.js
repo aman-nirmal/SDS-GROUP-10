@@ -1,7 +1,11 @@
+import { importedCampusUsers } from '../../data/importedCampusUsers.js'
+import { importedFacultyUsers } from '../../data/importedFacultyUsers.js'
 // Institutional mock data for LOCUS Admin Dashboard
 // Separates mock data from presentation components so backend integration can easily replace it.
 
 export const INITIAL_ADMIN_USERS = [
+  ...importedFacultyUsers,
+  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',

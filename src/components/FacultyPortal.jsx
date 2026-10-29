@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Calendar,
   Clock,
@@ -73,6 +73,8 @@ export default function FacultyPortal({
       approvalStage: 'Completed',
       submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
     }
+    loadFacultyBookings()
+  }, [currentUser])
 
     if (onAddBooking) {
       await onAddBooking(newBooking)
@@ -389,7 +391,6 @@ export default function FacultyPortal({
                       className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
                     />
                   </div>
-
                   <div>
                     <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       Time Slot

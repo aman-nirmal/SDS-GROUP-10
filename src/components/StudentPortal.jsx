@@ -500,9 +500,9 @@ export default function StudentPortal({
               <button
                 type="button"
                 onClick={() => setSelectedPass(null)}
-                className="w-full h-10 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition-colors border border-transparent dark:border-slate-700"
+                className="w-full h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-xs transition-colors"
               >
-                Done
+                Close Pass
               </button>
             </div>
           </div>

@@ -5,11 +5,30 @@ import {
   Clock,
   Shield,
   ArrowRight,
-  Calendar,
-  Building2
+  Calendar
 } from 'lucide-react'
 
 const PUBLIC_CAMPUS_VENUES = [
+  {
+    id: 'g-vn-cog-lab',
+    code: 'COG-LAB',
+    name: 'Cognizant Lab',
+    type: 'Computing & Technical Workshop Lab',
+    location: 'Computer New Building (Computer Engineering)',
+    capacity: '400 Persons',
+    image: '/coep_building.png',
+    publicAccess: 'Open for university coding workshops, hackathons, and approved technical events.'
+  },
+  {
+    id: 'g-vn-mini-aud',
+    code: 'MINI-AUD',
+    name: 'Mini Auditorium',
+    type: 'Auditorium & Seminar Theatre',
+    location: 'Main Heritage Building (Academics Complex)',
+    capacity: '275 Persons',
+    image: '/coep_building.png',
+    publicAccess: 'Open for academic presentations, departmental events, seminars, and student activities.'
+  },
   {
     id: 'g-vn-1',
     name: 'Historic Main Victorian Building (1865)',
