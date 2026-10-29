@@ -434,6 +434,8 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const faculty = getVenueFaculty(venue)
   const capacity = venue?.capacity || (venue?.benches ? venue.benches * 2 : 60)
   const benches = venue?.benches || Math.round(capacity / 2)
+  const priceDisplay = venue?.price || (Array.isArray(venue?.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))
+  const termsDisplay = venue?.terms || (venue?.description && venue.description.includes('Terms:') ? venue.description.split('Terms:')[1]?.trim() : (venue?.description && venue.description.includes('ONLY FOR BHAU STARTUPS') ? 'ONLY FOR BHAU STARTUPS. Max 2 hours at a time, gap of an hour between next booking, max 7 days in advance, max 12 hrs/week. Eatables not allowed.' : null))
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -612,11 +614,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
-                    {venue?.price ? 'Tariff' : 'Status'}
+                    {priceDisplay ? 'Tariff' : 'Status'}
                   </span>
-                  {venue?.price ? (
-                    <span className="font-extrabold text-amber-700 dark:text-amber-400 text-xs truncate block" title={venue.price}>
-                      {venue.price}
+                  {priceDisplay ? (
+                    <span className="font-extrabold text-amber-700 dark:text-amber-400 text-xs truncate block" title={priceDisplay}>
+                      {priceDisplay}
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
@@ -628,12 +630,12 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
               </div>
 
               {/* Terms and Guidelines if applicable */}
-              {venue?.terms && (
-                <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-xs flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              {termsDisplay && (
+                <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800 text-xs flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold text-amber-900 block mb-0.5">Booking Terms & Guidelines</span>
-                    <p className="text-amber-800 leading-relaxed text-[11px]">{venue.terms}</p>
+                    <span className="font-bold text-amber-900 dark:text-amber-300 block mb-0.5">Booking Terms & Guidelines</span>
+                    <p className="text-amber-800 dark:text-amber-400 leading-relaxed text-[11px]">{termsDisplay}</p>
                   </div>
                 </div>
               )}
@@ -1838,12 +1840,17 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                       <span className="truncate">{venue.department}</span>
                     </p>
 
-                    {/* Price / Tariff Badge */}
-                    {venue.price && (
-                      <div className="mb-2.5">
-                        <span className="inline-block text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
-                          Tariff: {venue.price}
+                    {/* Price / Tariff Badge & Exclusivity */}
+                    {(venue.price || (Array.isArray(venue.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))) && (
+                      <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
+                        <span className="inline-block text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 px-2 py-0.5 rounded-md">
+                          Tariff: {venue.price || venue.features.find((f) => typeof f === 'string' && f.startsWith('₹'))}
                         </span>
+                        {((venue.terms && venue.terms.includes('ONLY FOR BHAU STARTUPS')) || (venue.description && venue.description.includes('ONLY FOR BHAU STARTUPS'))) && (
+                          <span className="inline-block text-[10px] font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200/80 dark:border-purple-800/80 px-2 py-0.5 rounded-md">
+                            Bhau Startups Exclusive
+                          </span>
+                        )}
                       </div>
                     )}
 
@@ -1924,9 +1931,14 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                       <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
                         {venue.type}
                       </span>
-                      {venue.price && (
-                        <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
-                          {venue.price}
+                      {(venue.price || (Array.isArray(venue.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))) && (
+                        <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 px-2 py-0.5 rounded-md">
+                          {venue.price || venue.features.find((f) => typeof f === 'string' && f.startsWith('₹'))}
+                        </span>
+                      )}
+                      {((venue.terms && venue.terms.includes('ONLY FOR BHAU STARTUPS')) || (venue.description && venue.description.includes('ONLY FOR BHAU STARTUPS'))) && (
+                        <span className="text-[10px] font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200/80 dark:border-purple-800/80 px-2 py-0.5 rounded-md">
+                          Bhau Startups Exclusive
                         </span>
                       )}
                     </div>
@@ -2464,105 +2476,123 @@ const sampleVenuesFallback = [
   },
   // --- Bhau Institute of Innovation, Entrepreneurship and Leadership ---
   {
-    id: 'vn-bhau-auditorium',
-    new_hall_name: 'Bhau Auditorium',
-    old_hall_name: 'Auditorium (Ground Floor, Bhau Institute)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Auditoriums',
-    benches: 60,
-    capacity: 120,
-    price: '₹2,950 / hr (incl. GST)',
-    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
-    is_active: true,
-    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
-    features: ['120 Seats', 'Air Conditioned', 'Stage & Sound System', '₹2,950/hr']
-  },
-  {
-    id: 'vn-bhau-conference-room',
+    id: 'b4a00001-0000-4000-8000-000000000001',
+    code: 'BHAU-CONF',
     new_hall_name: 'Bhau Conference Room',
     old_hall_name: 'Conference Room (2nd Floor, Bhau Institute)',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
-    benches: 6,
-    capacity: 12,
-    price: '₹1,180 / hr (incl. 18% GST)',
+    benches: 8,
+    capacity: 16,
+    price: '₹1,180.00 / 1 hr (incl. 18% GST)',
+    duration: '1 h',
     address: '2nd Floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
-    terms: 'Available for Bhau Startups and outsiders. Max 2 hours at a time, 1 hr gap between bookings, max 12 hrs/week. Eatables not allowed.',
+    terms: 'Available for Bhau Startups and outsiders. Max 2 hours at a time, gap of an hour between next booking, max 12 hours in a week. Eatables not allowed.',
     is_active: true,
     image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80',
-    features: ['12 Seats', 'Conference Table', 'Display Screen', '₹1,180/hr']
+    features: ['15 Seats', 'Duration: 1 h', '₹1,180/hr (incl. 18% GST)', 'For Startups & Outsiders', 'Conference Table', 'Display Screen', 'Air Conditioned']
   },
   {
-    id: 'vn-bhau-classroom-1',
+    id: 'b4a00002-0000-4000-8000-000000000002',
+    code: 'BHAU-AUD',
+    new_hall_name: 'Bhau Auditorium',
+    old_hall_name: 'Auditorium (Ground Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Auditoriums',
+    benches: 125,
+    capacity: 250,
+    price: '₹2,950.00 / 1 hr (incl. GST)',
+    duration: '1 h',
+    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    terms: 'State-of-the-art auditorium for symposiums, demo days, startup pitch fests, and convocations. Eatables not allowed.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
+    features: ['250 Seats', 'Duration: 1 h', '₹2,950/hr (incl. GST)', 'Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Dual Mics']
+  },
+  {
+    id: 'b4a00003-0000-4000-8000-000000000003',
+    code: 'BHAU-CR1',
     new_hall_name: 'Bhau Classroom 1',
     old_hall_name: 'Classroom 1 (Ground Floor, Bhau Institute)',
     department: 'Bhau Institute of Innovation',
     type: 'Classrooms',
     benches: 30,
     capacity: 60,
-    price: '₹2,360 / 2 hr (incl. 18% GST)',
+    price: '₹2,360.00 / 2 hr (incl. 18% GST)',
+    duration: '2 h',
     address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
+    terms: 'Bookings are in 2-hour blocks. Inclusive of 18% GST. Ideal for workshops and entrepreneurship masterclasses.',
     is_active: true,
     image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    features: ['60 Seats', 'Projector & Screen', 'Whiteboard', '₹2,360/2 hr']
+    features: ['60 Seats', 'Duration: 2 h', '₹2,360/2 hr (incl. 18% GST)', 'Projector & Screen', 'Whiteboard', 'Air Conditioned']
   },
   {
-    id: 'vn-bhau-meeting-room-1',
+    id: 'b4a00004-0000-4000-8000-000000000004',
+    code: 'BHAU-OS-GND',
+    new_hall_name: 'Bhau Open Space (Ground)',
+    old_hall_name: 'Open Space Ground (Ground Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Seminar Halls',
+    benches: 20,
+    capacity: 40,
+    price: '₹1,770.00 / 1 hr (incl. 18% GST)',
+    duration: '1 h',
+    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
+    terms: 'Ground open courtyard for startup showcases, tech exhibits, and networking. Inclusive of 18% GST.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+    features: ['50 Persons', 'Duration: 1 h', '₹1,770/hr (incl. 18% GST)', 'Ground Courtyard', 'Open Air Space', 'Wi-Fi Access']
+  },
+  {
+    id: 'b4a00005-0000-4000-8000-000000000005',
+    code: 'BHAU-OS-TER',
+    new_hall_name: 'Bhau Open Space (Terrace)',
+    old_hall_name: 'Open Space Terrace (Top Floor, Bhau Institute)',
+    department: 'Bhau Institute of Innovation',
+    type: 'Seminar Halls',
+    benches: 15,
+    capacity: 30,
+    price: '₹2,360.00 / 1 hr',
+    duration: '1 h',
+    address: 'Top floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
+    terms: 'Top floor terrace with scenic riverbank view. Suitable for formal evening gatherings, mixers, and founder chats.',
+    is_active: true,
+    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
+    features: ['40 Persons', 'Duration: 1 h', '₹2,360/hr', 'Top Floor Terrace', 'Scenic Riverbank View', 'Ambient Lighting']
+  },
+  {
+    id: 'b4a00006-0000-4000-8000-000000000006',
+    code: 'BHAU-MR1',
     new_hall_name: 'Bhau Meeting Room 1',
     old_hall_name: 'Meeting Room 1 (Second Floor, Bhau Institute)',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
     benches: 4,
     capacity: 8,
-    price: '₹1,000 / hr (Bhau Startups)',
+    price: '₹1,000.00 / 1 hr (ONLY FOR BHAU STARTUPS)',
+    duration: '1 h',
     address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
-    terms: 'Only for Bhau Startups. Max 2 hours at a time, 1 hr gap, max 7 days in advance, max 12 hrs/week. Eatables not allowed.',
+    terms: 'ONLY FOR BHAU STARTUPS. Bhau Startups can book a maximum of 2 hours at a time and there should be a gap of an hour between the next booking. Bhau Startups can book meeting rooms for the next 7 days only. Bhau Startups can book the space for max. 12 hrs in a week. Eatables are not allowed in the meeting rooms.',
     is_active: true,
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-    features: ['8 Seats', 'For Bhau Startups', 'Discussion Table', '₹1,000/hr']
+    features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr', 'Discussion Table', 'Whiteboard', 'Air Conditioned']
   },
   {
-    id: 'vn-bhau-meeting-room-2',
+    id: 'b4a00007-0000-4000-8000-000000000007',
+    code: 'BHAU-MR2',
     new_hall_name: 'Bhau Meeting Room 2',
     old_hall_name: 'Meeting Room 2 (Second Floor, Bhau Institute)',
     department: 'Bhau Institute of Innovation',
     type: 'Meeting Rooms',
     benches: 4,
     capacity: 8,
-    price: '₹1,000 / hr (incl. 18% GST, Bhau Startups)',
+    price: '₹1,000.00 / 1 hr (incl. 18% GST, ONLY FOR BHAU STARTUPS)',
+    duration: '1 h',
     address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
-    terms: 'Only for Bhau Startups. Max 2 hours at a time, 1 hr gap, max 7 days in advance, max 12 hrs/week. Eatables not allowed.',
+    terms: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Bhau Startups can book a maximum of 2 hours at a time and there should be a gap of an hour between the next booking. Bhau Startups can book meeting rooms for the next 7 days only. Bhau Startups can book the space for max. 12 hrs in a week. Eatables not allowed in the meeting rooms.',
     is_active: true,
     image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80',
-    features: ['8 Seats', 'For Bhau Startups', 'Smart Screen', '₹1,000/hr']
-  },
-  {
-    id: 'vn-bhau-open-space-terrace',
-    new_hall_name: 'Bhau Open Space (Terrace)',
-    old_hall_name: 'Open Space Terrace (Top Floor, Bhau Institute)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Seminar Halls',
-    benches: 12,
-    capacity: 25,
-    price: '₹2,360 / hr',
-    address: 'Top floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
-    is_active: true,
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
-    features: ['25 Persons', 'Top Floor Terrace', 'Scenic Riverbank View', '₹2,360/hr']
-  },
-  {
-    id: 'vn-bhau-open-space-ground',
-    new_hall_name: 'Bhau Open Space (Ground)',
-    old_hall_name: 'Open Space Ground (Ground Floor, Bhau Institute)',
-    department: 'Bhau Institute of Innovation',
-    type: 'Seminar Halls',
-    benches: 12,
-    capacity: 25,
-    price: '₹1,770 / hr (incl. 18% GST)',
-    address: 'Ground floor, Bhau Institute, COEP Technological University, Wellesely Rd, Shivajinagar, Pune',
-    is_active: true,
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-    features: ['25 Persons', 'Ground Courtyard', 'Open Air Seating', '₹1,770/hr']
+    features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned']
   }
 ]
 

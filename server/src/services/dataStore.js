@@ -292,7 +292,11 @@ class DataStore {
             isActive: v.is_active !== false,
             features: Array.isArray(v.features) && v.features.length > 0 ? v.features : ['Air Conditioned', 'Projector'],
             image: v.image || '/campus.jpeg',
-            description: v.description || `COEP Technological University venue in ${v.department}`
+            description: v.description || `COEP Technological University venue in ${v.department}`,
+            price: v.price || (Array.isArray(v.features) ? v.features.find((f) => typeof f === 'string' && f.startsWith('₹')) : null),
+            duration: v.duration || (Array.isArray(v.features) ? v.features.find((f) => typeof f === 'string' && f.startsWith('Duration:'))?.replace('Duration:', '').trim() : '1 h'),
+            terms: v.terms || (v.description && v.description.includes('Terms:') ? v.description.split('Terms:')[1]?.trim() : (v.description && v.description.includes('ONLY FOR BHAU STARTUPS') ? 'ONLY FOR BHAU STARTUPS. Max 2 hours at a time, gap of an hour between next booking.' : null)),
+            address: v.address || v.building || 'COEP Technological University, Wellesely Road, Shivajinagar, Pune'
           }))
         }
       } catch (err) {
