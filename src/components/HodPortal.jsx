@@ -57,8 +57,14 @@ export default function HodPortal({
     setTimeout(() => setNotification(null), 4000)
   }
 
-  // Filter requests that are for students/clubs (venue bookings requiring sanction)
-  const relevantBookings = allBookings.filter((b) => b.applicantRole !== 'Faculty')
+  // Filter requests that require HOD sanction (students, clubs, and faculty event/inter-dept bookings)
+  const relevantBookings = allBookings.filter((b) => {
+    // Already auto-confirmed curriculum classroom lectures skip the sanction queue
+    if (b.applicantRole === 'Faculty' && (b.status === 'Confirmed' || b.status === 'Approved') && !b.hodApproval) {
+      return false
+    }
+    return true
+  })
 
   // Extract distinct departments from venues
   const distinctDepartments = Array.from(

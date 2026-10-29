@@ -47,7 +47,6 @@ import { authApi, venuesApi, bookingsApi, eventsApi, roleRequestsApi, paymentsAp
 import About from './components/About'
 import AdminPanel, { INITIAL_BOOKINGS } from './components/AdminPanel'
 import GuestPortal from './components/GuestPortal'
-import FacultyPortal from './components/FacultyPortal'
 import HodPortal from './components/HodPortal'
 import DeanPortal from './components/DeanPortal'
 import StudentPortal from './components/StudentPortal'
@@ -472,13 +471,44 @@ export function extractNumericPrice(priceStr) {
   return match ? parseFloat(match[1]) : 0
 }
 
+export function isClassroomVenue(venue) {
+  if (!venue) return false
+  const type = (venue.type || '').toLowerCase()
+  const name = `${venue.new_hall_name || ''} ${venue.old_hall_name || ''} ${venue.name || ''}`.toLowerCase()
+  if (type.includes('auditorium') || type.includes('meeting') || type.includes('open space')) return false
+  return type.includes('classroom') ||
+         type.includes('drawing hall') ||
+         type.includes('class') ||
+         name.includes('classroom') ||
+         name.includes('lecture hall') ||
+         name.includes('drawing hall') ||
+         /^sc\d+|^nc\d+|^nt\d+/.test(name)
+}
+
+export function isDepartmentMatch(userDept, venueDept) {
+  if (!userDept || !venueDept) return false
+  const u = String(userDept).toLowerCase().trim()
+  const v = String(venueDept).toLowerCase().trim()
+  if (u === v) return true
+  if (u.includes(v) || v.includes(u)) return true
+  const normalize = (s) => s.replace(/\bdepartment\b|\bdept\b|\bof\b|\band\b|&/gi, '').replace(/\s+/g, ' ').trim()
+  const nu = normalize(u)
+  const nv = normalize(v)
+  return nu.length > 3 && nv.length > 3 && (nu.includes(nv) || nv.includes(nu))
+}
+
 // Complete Interactive Venue Booking Modal Component with Cashfree PG Integration
 function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, currentUser }) {
+  const isFaculty = currentUser?.role === 'Faculty'
+  const isClassroom = isClassroomVenue(venue)
+  const isHomeDept = isDepartmentMatch(currentUser?.department, venue?.department)
+
   const [date, setDate] = useState(defaultDate || '2026-10-16')
   const [selectedSlot, setSelectedSlot] = useState('12:30 PM - 01:30 PM')
   const [showSchedule, setShowSchedule] = useState(false)
   const [applicantName, setApplicantName] = useState(currentUser?.name || '')
   const [department, setDepartment] = useState(venue?.department || currentUser?.department || 'Computer Engineering')
+  const [bookingCategory, setBookingCategory] = useState(isFaculty ? 'lecture' : 'event')
   const [eventPurpose, setEventPurpose] = useState('')
   const [attendees, setAttendees] = useState(venue?.benches ? venue.benches * 2 : 50)
   const [applicantPhone, setApplicantPhone] = useState(currentUser?.phone || '')
@@ -498,6 +528,11 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
 
   const numericPrice = extractNumericPrice(priceDisplay)
   const isPaidVenue = Boolean(numericPrice && numericPrice > 0)
+
+  // Faculty can book classrooms (in their department only) and it will be instant approved.
+  // For any event (or outside their department or non-classroom), they need permission from HOD and Dean.
+  const isEvent = bookingCategory === 'event' || /event|seminar|symposium|fest|hackathon|workshop|conference|cultural/i.test(eventPurpose)
+  const isFacultyInstantApproved = isFaculty && isClassroom && isHomeDept && !isEvent && !isPaidVenue
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -625,6 +660,10 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
     setBookingRef(refNumber)
     setSubmitted(true)
 
+    const initialStatus = isFacultyInstantApproved ? 'Confirmed' : 'Pending HOD Approval'
+    const approvalStage = isFacultyInstantApproved ? 'Completed' : 'HOD'
+    const passCode = isFacultyInstantApproved ? `COEP-PASS-${refNumber}` : null
+
     if (onSubmitBooking) {
       onSubmitBooking({
         id: refNumber,
@@ -633,7 +672,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         venue: venue?.new_hall_name || venue?.old_hall_name || 'COEP Venue',
         oldName: venue?.old_hall_name,
         department,
-        venueDepartment: department,
+        venueDepartment: venue?.department || department,
         applicantName,
         applicantEmail: currentUser?.email || 'student@coeptech.ac.in',
         applicantRole: currentUser?.role || 'Student',
@@ -642,11 +681,15 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
         slot: selectedSlot,
         timeSlot: selectedSlot,
         purpose: eventPurpose,
+        category: bookingCategory,
         capacity: Number(attendees) || 50,
         attendees: Number(attendees) || 50,
         facultyInCharge: faculty.name,
-        status: 'Pending HOD Approval',
-        approvalStage: 'HOD',
+        status: initialStatus,
+        approvalStage,
+        digitalPassCode: passCode,
+        passCode,
+        notes: isFacultyInstantApproved ? 'Instant Approved: Faculty Academic Lecture in Home Department' : '',
         paymentStatus: 'Free',
         submittedAt: new Date().toLocaleDateString('en-CA') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       })
@@ -664,7 +707,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
       >
         {submitted ? (
           <div className="p-8 text-center py-10">
-            <div className={`w-16 h-16 rounded-2xl ${paymentSuccess ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
+            <div className={`w-16 h-16 rounded-2xl ${paymentSuccess || isFacultyInstantApproved ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
 
@@ -681,6 +724,19 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                   <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> has been verified via the official <strong className="text-slate-900 dark:text-white">Cashfree Payment Gateway (Production)</strong>. Request has been routed for Stage 1 HOD sanction.
                 </p>
               </>
+            ) : isFacultyInstantApproved ? (
+              <>
+                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mb-1">
+                  Faculty Clearance &bull; Instant Approved
+                </span>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Classroom Slot Confirmed!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
+                  Your academic reservation for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) is <strong className="text-emerald-600 dark:text-emerald-400">instantly confirmed</strong> for your department ({currentUser?.department || venue?.department}). Digital gate pass has been activated in My Bookings.
+                </p>
+              </>
             ) : (
               <>
                 <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest block mb-1">
@@ -690,8 +746,8 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                   Sanction Request Logged!
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed max-w-md mx-auto">
-                  Your venue reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
-                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the <strong className="text-slate-900 dark:text-white">{department} Head of Department (HOD)</strong>.
+                  Your reservation request for <strong className="text-slate-900 dark:text-white">{venueTitle}</strong> on{' '}
+                  <strong className="text-slate-900 dark:text-white">{formatDateDisplay(date)}</strong> ({selectedSlot}) has been routed to the <strong className="text-slate-900 dark:text-white">{venue?.department || department} Head of Department (HOD)</strong>. Once sanctioned by HOD, it will proceed to the Dean for final approval.
                 </p>
               </>
             )}
@@ -1043,6 +1099,68 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                     </div>
                   )}
 
+                  {/* Faculty Session Nature: Academic Lecture vs Event */}
+                  {isFaculty && (
+                    <div className="space-y-2 pt-1">
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Session Nature / Activity Type *
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setBookingCategory('lecture')}
+                          className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+                            bookingCategory === 'lecture'
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
+                          }`}
+                        >
+                          <GraduationCap className="w-4 h-4" />
+                          <span>Academic Lecture / Class</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBookingCategory('event')}
+                          className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+                            bookingCategory === 'event'
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
+                          }`}
+                        >
+                          <Calendar className="w-4 h-4" />
+                          <span>Campus Event / Seminar</span>
+                        </button>
+                      </div>
+
+                      {/* Dynamic Sanction / Instant Clearance Guidance Card */}
+                      {isFacultyInstantApproved ? (
+                        <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs flex items-start gap-2.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-emerald-900 dark:text-emerald-200 block">⚡ Instant Approval</span>
+                            <p className="text-emerald-700 dark:text-emerald-300 text-[11px] mt-0.5 leading-relaxed">
+                              As a faculty member reserving a classroom in your home department ({venue?.department || currentUser?.department}), this regular academic lecture is <strong>instantly approved</strong> with an active gate pass.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs flex items-start gap-2.5">
+                          <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-amber-900 dark:text-amber-200 block">📋 HOD & Dean Permission Required</span>
+                            <p className="text-amber-700 dark:text-amber-300 text-[11px] mt-0.5 leading-relaxed">
+                              {bookingCategory === 'event'
+                                ? 'Because this session is scheduled as an event, formal permission is required: your request will go to the Department HOD for sanction first, followed by the Dean for clearance.'
+                                : !isHomeDept
+                                ? `This venue belongs to ${venue?.department || 'another department'}. Inter-departmental bookings require sanction from the Department HOD and Dean.`
+                                : 'Non-classroom facilities require sanction from the Department HOD and Dean.'}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Event Purpose */}
                   <div>
                     <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
@@ -1127,9 +1245,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                           <CreditCard className="w-4 h-4" />
                           <span>Pay ₹{numericPrice.toLocaleString('en-IN')} via Cashfree & Book</span>
                         </>
+                      ) : isFacultyInstantApproved ? (
+                        <>
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Confirm & Auto-Approve Slot</span>
+                        </>
                       ) : (
                         <>
-                          <span>Confirm Reservation</span>
+                          <span>Submit for HOD & Dean Clearance</span>
                           <ArrowRight className="w-4 h-4" />
                         </>
                       )}
@@ -3380,7 +3503,7 @@ export default function App() {
                     setActiveTab('dean')
                     return
                   } else if (user.role === 'Faculty') {
-                    setActiveTab('faculty')
+                    setActiveTab('my-bookings')
                     return
                   } else if (user.role === 'Club Lead') {
                     setActiveTab('club')
@@ -3415,32 +3538,13 @@ export default function App() {
           />
         )
       case 'faculty':
-        if (!currentUser) {
-          return (
-            <div className="flex-1 py-12 sm:py-20 px-4 flex flex-col items-center justify-center">
-              <LoginForm
-                onLoginSuccess={(user) => {
-                  if (user) {
-                    setCurrentUser(user)
-                    try {
-                      localStorage.setItem('locus_auth_user', JSON.stringify(user))
-                    } catch {
-                      // ignore
-                    }
-                    setActiveTab(user.role === 'Faculty' || user.role === 'Administrator' ? 'faculty' : 'home')
-                  }
-                }}
-              />
-            </div>
-          )
-        }
         return (
-          <FacultyPortal
+          <StudentPortal
             currentUser={currentUser}
             onNavigateLogin={() => setActiveTab('login')}
-            bookings={campusBookings}
+            campusBookings={campusBookings}
+            onExploreVenues={() => setActiveTab('venues')}
             onUpdateStatus={handleUpdateBookingStatus}
-            onAddBooking={handleAddBooking}
           />
         )
       case 'hod':
@@ -3957,19 +4061,7 @@ export default function App() {
               About
             </button>
 
-            {/* Role-Specific Action Links */}
-            {currentUser && currentUser.role === 'Faculty' && (
-              <button
-                type="button"
-                onClick={() => handleNavClick('faculty')}
-                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${activeTab === 'faculty'
-                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
-                  }`}
-              >
-                <span>Faculty Hub</span>
-              </button>
-            )}
+
 
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button
@@ -4068,34 +4160,18 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    const role = currentUser.role
-                    if (role === 'Administrator') handleNavClick('admin')
-                    else if (role === 'Head of Department (HOD)' || role === 'HOD') handleNavClick('hod')
-                    else if (role === 'Dean') handleNavClick('dean')
-                    else if (role === 'Faculty') handleNavClick('faculty')
-                    else if (role === 'Club Lead') handleNavClick('club')
-                    else if (role === 'Security Guard') handleNavClick('security')
-                    else handleNavClick('student')
-                  }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-semibold transition-colors cursor-pointer"
+                  onClick={() => setIsProfileModalOpen(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-semibold transition-colors cursor-pointer shadow-2xs"
+                  title="View Profile, Credentials & Switch Role"
+                  aria-label="Account and Institutional Profile"
                 >
-                  <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px] shrink-0">
                     {currentUser.name ? currentUser.name.charAt(0) : 'U'}
                   </div>
                   <div className="text-left">
-                    <div className="font-bold leading-tight">{currentUser.name}</div>
+                    <div className="font-bold leading-tight line-clamp-1">{currentUser.name}</div>
                     <div className="text-[10px] text-slate-500 dark:text-slate-400">{currentUser.role}</div>
                   </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsProfileModalOpen(true)}
-                  className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
-                  title="Profile & Role Change Requests"
-                  aria-label="Profile and Role Change Requests"
-                >
-                  <User className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
@@ -4214,15 +4290,7 @@ export default function App() {
               </button>
             )}
 
-            {currentUser && currentUser.role === 'Faculty' && (
-              <button
-                type="button"
-                onClick={() => handleNavClick('faculty')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-              >
-                <span>Faculty Hub</span>
-              </button>
-            )}
+
 
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button

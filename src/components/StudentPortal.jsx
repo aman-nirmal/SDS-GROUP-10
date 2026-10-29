@@ -82,32 +82,43 @@ export default function StudentPortal({
     setTimeout(() => setNotification(null), 3500)
   }
 
-  // Filter campus venue bookings belonging to this student
-  const studentVenueBookings = campusBookings.filter((b) => {
+  // Filter campus venue bookings belonging to this user
+  const userVenueBookings = campusBookings.filter((b) => {
     if (!currentUser) return true
-    return (
-      b.applicantEmail === currentUser.email ||
-      b.applicantName?.toLowerCase() === currentUser.name?.toLowerCase() ||
-      b.applicantRole === 'Student' ||
-      b.id === 'COEP-BK-8954' ||
-      b.id === 'BK-2026-001'
-    )
+    if (currentUser.role === 'Administrator') return true
+    const userEmail = (currentUser.email || '').toLowerCase()
+    const userName = (currentUser.name || '').toLowerCase()
+    const bEmail = (b.applicantEmail || '').toLowerCase()
+    const bName = (b.applicantName || '').toLowerCase()
+
+    if (bEmail && userEmail && bEmail === userEmail) return true
+    if (bName && userName && (bName === userName || bName.includes(userName) || userName.includes(bName))) return true
+
+    if (currentUser.role === 'Student') {
+      return b.applicantRole === 'Student' || b.id === 'COEP-BK-8954' || b.id === 'BK-2026-001'
+    }
+    if (currentUser.role === 'Faculty') {
+      return b.applicantRole === 'Faculty'
+    }
+    return false
   })
 
   // Combine campus bookings and active local passes into a single unified list
-  const combinedBookings = [...studentVenueBookings]
-  localPasses.forEach((p) => {
-    if (!combinedBookings.some((b) => b.id === p.id || b.ref === p.id || b.digitalPassCode === p.digitalPassCode)) {
-      combinedBookings.push({
-        ...p,
-        ref: p.id,
-        venueName: p.venue,
-        applicantName: currentUser?.name || 'Verified Student',
-        applicantRole: 'Student',
-        bookingDate: p.date
-      })
-    }
-  })
+  const combinedBookings = [...userVenueBookings]
+  if (currentUser?.role === 'Student') {
+    localPasses.forEach((p) => {
+      if (!combinedBookings.some((b) => b.id === p.id || b.ref === p.id || b.digitalPassCode === p.digitalPassCode)) {
+        combinedBookings.push({
+          ...p,
+          ref: p.id,
+          venueName: p.venue,
+          applicantName: currentUser?.name || 'Verified Student',
+          applicantRole: 'Student',
+          bookingDate: p.date
+        })
+      }
+    })
+  }
 
   // Filtered by status
   const filteredBookings = combinedBookings.filter((b) => {
@@ -136,7 +147,7 @@ export default function StudentPortal({
     }
     setLocalPasses((prev) => prev.filter((p) => p.id !== bookingId))
     bookingsApi
-      .updateStatus(bookingId, 'Cancelled', 'Cancelled by student', currentUser?.name || 'Student')
+      .updateStatus(bookingId, 'Cancelled', 'Cancelled by applicant', currentUser?.name || 'User')
       .catch(console.warn)
 
     showToast('Reservation has been cancelled.', 'warning')
@@ -144,7 +155,7 @@ export default function StudentPortal({
 
   return (
     <ProtectedGate
-      allowedRoles={['Student', 'Administrator']}
+      allowedRoles={['Student', 'Faculty', 'Club Lead', 'Club Coordinator', 'HOD', 'Dean', 'Administrator']}
       portalName="My Bookings"
       portalDescription="View your venue reservations, approval status, and digital QR gate passes."
       currentUser={currentUser}
