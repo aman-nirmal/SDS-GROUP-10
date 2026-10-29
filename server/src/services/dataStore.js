@@ -265,6 +265,52 @@ class DataStore {
   }
 
   // --- VENUES ---
+  resolveVenuePhoto(v) {
+    if (v?.image && (v.image.startsWith('/photos/') || v.image.startsWith('photos/'))) {
+      return v.image.startsWith('/') ? v.image : `/${v.image}`
+    }
+
+    const name = `${v?.new_hall_name || ''} ${v?.old_hall_name || ''} ${v?.name || ''}`.toLowerCase()
+    const type = `${v?.type || ''}`.toLowerCase()
+    const code = `${v?.code || ''}`.toLowerCase()
+    const dept = `${v?.department || ''}`.toLowerCase()
+
+    if (name.includes('mini') || code.includes('mini')) {
+      return '/photos/mini audi 1.jpg'
+    }
+    if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
+      return '/photos/audi 2.jpeg'
+    }
+    if (type.includes('seminar') || name.includes('sh') || name.includes('seminar')) {
+      if (name.includes('comp') || name.includes('civil') || dept.includes('computer')) {
+        return '/photos/seminar hall 2.jpeg'
+      }
+      return '/photos/seminar hall.webp'
+    }
+    if (name.includes('sc') || code.includes('sc') || name.includes('south')) {
+      return '/photos/sc1.jpeg'
+    }
+    if (
+      dept.includes('academic') ||
+      name.includes('ac ') ||
+      name.includes('ac-') ||
+      name.includes('ac1') ||
+      name.includes('ac2') ||
+      name.includes('ac3') ||
+      /^nc0[1-9]|^nc1[0-4]/.test(code) ||
+      /^nc0[1-9]|^nc1[0-4]/.test(v?.new_hall_name?.toLowerCase() || '')
+    ) {
+      const num = parseInt((v?.new_hall_name || code || name).replace(/\D/g, ''), 10) || 1
+      if (num % 3 === 0) return '/photos/ac 3.webp'
+      if (num % 3 === 2) return '/photos/ac 2.jpeg'
+      return '/photos/ac 1.jpeg'
+    }
+    if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
+      return '/photos/ac 2.jpeg'
+    }
+    return '/photos/classroom.jpg'
+  }
+
   async getVenues(filter = {}) {
     if (supabase) {
       try {
@@ -291,7 +337,7 @@ class DataStore {
             status: v.status || 'Available',
             isActive: v.is_active !== false,
             features: Array.isArray(v.features) && v.features.length > 0 ? v.features : ['Air Conditioned', 'Projector'],
-            image: v.image || '/campus.jpeg',
+            image: this.resolveVenuePhoto(v),
             description: v.description || `COEP Technological University venue in ${v.department}`,
             price: v.price || (Array.isArray(v.features) ? v.features.find((f) => typeof f === 'string' && f.startsWith('₹')) : null),
             duration: v.duration || (Array.isArray(v.features) ? v.features.find((f) => typeof f === 'string' && f.startsWith('Duration:'))?.replace('Duration:', '').trim() : '1 h'),

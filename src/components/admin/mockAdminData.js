@@ -110,7 +110,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available', // 'Available' | 'Occupied' | 'Under Maintenance' | 'Blocked'
     description: 'Historic high-capacity hall with wooden acoustics and dual digital projection.',
     features: ['Overhead Projector', 'Public Address Mic', 'Air Conditioned', 'Tiered Seating'],
-    image: '/coep_building.png'
+    image: '/photos/classroom.jpg'
   },
   {
     id: 'VN-2',
@@ -125,7 +125,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Equipped for technical symposia, hybrid webinars, and robotics presentations.',
     features: ['Smart Interactive Screen', 'Sound System', 'LAN Port', 'Document Camera'],
-    image: '/coep_building.png'
+    image: '/photos/seminar hall.webp'
   },
   {
     id: 'VN-3',
@@ -140,7 +140,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Occupied',
     description: 'Large seminar facility with executive podium and high-lumen projection.',
     features: ['Projector', 'Whiteboard', 'Dual Podium', 'Live Stream Camera'],
-    image: '/coep_building.png'
+    image: '/photos/seminar hall 2.jpeg'
   },
   {
     id: 'b4a00001-0000-4000-8000-000000000001',
@@ -157,7 +157,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Conference room available for Bhau Startups and outsiders. Tariff: ₹1,180.00 / 1 hr (inclusive of 18% GST). Terms: Max 2 hours at a time, gap of an hour between next booking, max 12 hours in a week. Eatables not allowed.',
     features: ['15 Seats', 'Duration: 1 h', '₹1,180/hr (incl. 18% GST)', 'For Startups & Outsiders', 'Conference Table', 'Display Screen', 'Air Conditioned'],
-    image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/ac 2.jpeg'
   },
   {
     id: 'b4a00002-0000-4000-8000-000000000002',
@@ -174,7 +174,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Premier auditorium for national pitch fests, demo days, startup symposiums, and convocations. Tariff: ₹2,950.00 / 1 hr (includes GST). Eatables not allowed inside.',
     features: ['250 Seats', 'Duration: 1 h', '₹2,950/hr (incl. GST)', 'Stage Lighting', 'Dolby Acoustics', 'Central AC', 'Dual Mics'],
-    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/audi 2.jpeg'
   },
   {
     id: 'b4a00003-0000-4000-8000-000000000003',
@@ -191,7 +191,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Classroom 1 for entrepreneurship workshops and training bootcamps. Tariff: ₹2,360.00 / 2 hr (inclusive of 18% GST). Duration: 2 h block.',
     features: ['60 Seats', 'Duration: 2 h', '₹2,360/2 hr (incl. 18% GST)', 'Projector & Screen', 'Whiteboard', 'Air Conditioned'],
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/classroom.jpg'
   },
   {
     id: 'b4a00004-0000-4000-8000-000000000004',
@@ -208,7 +208,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Open ground courtyard for startup exhibitions, demo kiosks, and networking. Tariff: ₹1,770.00 / 1 hr (inclusive of 18% GST). Duration: 1 h.',
     features: ['50 Persons', 'Duration: 1 h', '₹1,770/hr (incl. 18% GST)', 'Ground Courtyard', 'Open Air Space', 'Wi-Fi Access'],
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/seminar hall.webp'
   },
   {
     id: 'b4a00005-0000-4000-8000-000000000005',
@@ -225,7 +225,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Scenic rooftop terrace space overlooking the Mula river. Tariff: ₹2,360.00 / 1 hr. Duration: 1 h. Perfect for evening founder meetups and venture mixers.',
     features: ['40 Persons', 'Duration: 1 h', '₹2,360/hr', 'Top Floor Terrace', 'Scenic Riverbank View', 'Ambient Lighting'],
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/seminar hall 2.jpeg'
   },
   {
     id: 'b4a00006-0000-4000-8000-000000000006',
@@ -242,7 +242,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'ONLY FOR BHAU STARTUPS. Tariff: ₹1,000.00 / 1 hr. Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr', 'Discussion Table', 'Whiteboard', 'Air Conditioned'],
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/ac 1.jpeg'
   },
   {
     id: 'b4a00007-0000-4000-8000-000000000007',
@@ -259,7 +259,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Tariff: ₹1,000.00 / 1 hr (incl. 18% GST). Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned'],
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80'
+    image: '/photos/ac 3.webp'
   },
   {
     id: 'VN-5',
@@ -274,7 +274,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Under Maintenance',
     description: 'Smart lecture hall with acoustic ceiling treatment and ceiling-mounted mics.',
     features: ['Dual HD Projectors', 'WiFi 6 Access Point', 'Surround Sound', 'Smart Whiteboard'],
-    image: '/coep_building.png'
+    image: '/photos/classroom.jpg'
   },
   {
     id: 'VN-6',
@@ -289,7 +289,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Standard lecture room for second and third year structural engineering coursework.',
     features: ['Green Board', 'Fixed Benches', 'Ceiling Fans', 'HDMI Wall Plate'],
-    image: '/coep_building.png'
+    image: '/photos/sc1.jpeg'
   },
   {
     id: 'VN-7',
@@ -304,7 +304,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Blocked',
     description: 'Tiered classroom reserved for institute-wide foundation courses and exams.',
     features: ['Motorized Screen', 'Dual Projectors', 'PA Microphone', 'AC'],
-    image: '/coep_building.png'
+    image: '/photos/ac 1.jpeg'
   },
   {
     id: 'VN-8',
@@ -319,7 +319,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Under Maintenance',
     description: 'Focused collaborative discussion room for departmental clubs and committee meets.',
     features: ['Conference Table', 'Display Monitor', 'Whiteboard'],
-    image: '/coep_building.png'
+    image: '/photos/ac 2.jpeg'
   }
 ]
 

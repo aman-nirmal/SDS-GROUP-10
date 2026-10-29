@@ -294,25 +294,69 @@ function formatDateDisplay(dateStr) {
   }
 }
 
-// Helper function to get authentic high-quality image for any campus venue
+// Helper function to get authentic high-quality image from the campus photos repository
 export function getVenueImageUrl(venue) {
-  if (venue?.image) return venue.image
-  if (venue?.image_url) return venue.image_url
+  if (venue?.image && (venue.image.startsWith('/photos/') || venue.image.startsWith('photos/'))) {
+    return venue.image.startsWith('/') ? venue.image : `/${venue.image}`
+  }
 
   const name = `${venue?.new_hall_name || ''} ${venue?.old_hall_name || ''} ${venue?.name || ''}`.toLowerCase()
   const type = `${venue?.type || ''}`.toLowerCase()
+  const code = `${venue?.code || ''}`.toLowerCase()
+  const dept = `${venue?.department || ''}`.toLowerCase()
 
-  if (type.includes('auditorium') || name.includes('aud')) {
-    return 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80'
+  // Mini Auditorium
+  if (name.includes('mini') || code.includes('mini')) {
+    return '/photos/mini audi 1.jpg'
   }
-  if (type.includes('seminar') || name.includes('sh') || name.includes('seminar') || name.includes('drawing') || name.includes('nd')) {
-    return 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80'
+
+  // Auditoriums (COEP Main Auditorium, Bhau Auditorium, etc.)
+  if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
+    return '/photos/audi 2.jpeg'
   }
-  if (type.includes('meeting') || name.includes('mr') || name.includes('conference')) {
-    return 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'
+
+  // Seminar Halls
+  if (type.includes('seminar') || name.includes('sh') || name.includes('seminar')) {
+    if (name.includes('comp') || name.includes('civil') || dept.includes('computer')) {
+      return '/photos/seminar hall 2.jpeg'
+    }
+    return '/photos/seminar hall.webp'
   }
-  // Default authentic university classroom interior with desks and chalkboard
-  return 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80'
+
+  // South Classrooms (SC01-SC28, CDH, South Complex)
+  if (name.includes('sc') || code.includes('sc') || name.includes('south')) {
+    return '/photos/sc1.jpeg'
+  }
+
+  // Academic Complex (NC01 - NC14, AC 101 - AC 304)
+  if (
+    dept.includes('academic') ||
+    name.includes('ac ') ||
+    name.includes('ac-') ||
+    name.includes('ac1') ||
+    name.includes('ac2') ||
+    name.includes('ac3') ||
+    /^nc0[1-9]|^nc1[0-4]/.test(code) ||
+    /^nc0[1-9]|^nc1[0-4]/.test(venue?.new_hall_name?.toLowerCase() || '')
+  ) {
+    const num = parseInt((venue?.new_hall_name || code || name).replace(/\D/g, ''), 10) || 1
+    if (num % 3 === 0) return '/photos/ac 3.webp'
+    if (num % 3 === 2) return '/photos/ac 2.jpeg'
+    return '/photos/ac 1.jpeg'
+  }
+
+  // Meeting / Conference Rooms
+  if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
+    return '/photos/ac 2.jpeg'
+  }
+
+  // Drawing Hall / North Drawing Hall
+  if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01')) {
+    return '/photos/classroom.jpg'
+  }
+
+  // Default authentic campus classroom
+  return '/photos/classroom.jpg'
 }
 
 // Helper function to get official faculty in-charge & department coordinator for any venue
@@ -2593,10 +2637,13 @@ const sampleVenuesFallback = [
     address: 'Second floor, Bhau Institute, COEP Technological University, Wellesely Road, Shivajinagar, Pune',
     terms: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Bhau Startups can book a maximum of 2 hours at a time and there should be a gap of an hour between the next booking. Bhau Startups can book meeting rooms for the next 7 days only. Bhau Startups can book the space for max. 12 hrs in a week. Eatables not allowed in the meeting rooms.',
     is_active: true,
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/ac 3.webp',
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned']
   }
-]
+].map((v) => ({
+  ...v,
+  image: getVenueImageUrl(v)
+}))
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -2799,7 +2846,7 @@ export default function App() {
         const res = await venuesApi.getAll()
         const venueList = res?.venues || (Array.isArray(res) ? res : [])
         if (venueList.length > 0) {
-          setVenues(venueList)
+          setVenues(venueList.map((v) => ({ ...v, image: getVenueImageUrl(v) })))
           setIsLoadingVenues(false)
           return
         }
@@ -2820,7 +2867,7 @@ export default function App() {
           .order('new_hall_name', { ascending: true })
 
         if (!error && data && data.length > 0) {
-          setVenues(data)
+          setVenues(data.map((v) => ({ ...v, image: getVenueImageUrl(v) })))
         }
       } catch (err) {
         console.warn('Supabase fetch failed:', err)
@@ -4715,7 +4762,7 @@ export function LoginForm({ onLoginSuccess }) {
                   className="w-full h-12 text-center tracking-[0.3em] font-mono text-base font-extrabold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
                 />
                 <p className="text-[11px] text-slate-500 text-center mt-1.5">
-                  Universal test code: <strong className="font-mono text-blue-600">123456</strong>
+                  Enter the 6-digit verification code dispatched to your institutional inbox.
                 </p>
               </div>
 
@@ -4751,35 +4798,6 @@ export function LoginForm({ onLoginSuccess }) {
           )}
         </div>
       )}
-
-      {/* Demo Persona Quick Select */}
-      <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2.5 text-center">
-          Quick Demo Persona Credentials
-        </div>
-        <div className="grid grid-cols-2 gap-1.5 text-left">
-          {OFFICIAL_COEP_ACCOUNTS.slice(0, 6).map((acc) => (
-            <button
-              key={acc.email}
-              type="button"
-              onClick={() => {
-                setEmail(acc.email)
-                setPassword(acc.password)
-                setAuthMethod('password')
-                if (errorMessage) setErrorMessage('')
-              }}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 dark:hover:border-blue-700 transition-colors text-left cursor-pointer"
-            >
-              <div className="text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate">
-                {acc.role === 'Head of Department (HOD)' ? `HOD (${acc.department.split(' ')[0]})` : acc.role}
-              </div>
-              <div className="text-[9px] text-slate-500 dark:text-slate-400 truncate font-mono">
-                {acc.email.split('@')[0]}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }

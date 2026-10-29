@@ -597,7 +597,7 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
                   <div>
                     <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Ready to Scan Passes</p>
                     <p className="text-[11px] text-slate-400 mt-0.5">
-                      Turn on device camera, upload a saved pass QR, or use quick-test codes below.
+                      Turn on device camera, upload a saved pass QR, or enter a valid campus pass code below.
                     </p>
                   </div>
                 </div>
@@ -628,30 +628,6 @@ export default function SecurityPortal({ currentUser, onNavigateLogin }) {
                   </button>
                 </div>
               </form>
-
-              {/* Quick Sample Test Passes */}
-              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-1.5">
-                  Quick-Test Sample Passes:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    { label: 'Library Pass', code: 'COEP-LIB-8849-PASS' },
-                    { label: 'AI Lab Pass', code: 'COEP-LAB-4412-PASS' },
-                    { label: 'Faculty Key', code: 'COEP-FAC-9912-KEY' },
-                    { label: 'Club Fest', code: 'COEP-CLB-7721-FEST' }
-                  ].map((item) => (
-                    <button
-                      key={item.code}
-                      type="button"
-                      onClick={() => executeVerification(item.code)}
-                      className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
             {/* Right: Real-time Verification Result Card */}

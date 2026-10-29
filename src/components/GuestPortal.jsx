@@ -25,7 +25,7 @@ const PUBLIC_CAMPUS_VENUES = [
     type: 'Incubation Center & Auditorium',
     location: 'Boat Club Road, Mula Riverbank',
     capacity: '250 Seat Auditorium',
-    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/audi 2.jpeg',
     publicAccess: 'Open for guest symposiums, startup pitches, and public technology lectures.'
   },
   {
@@ -34,7 +34,7 @@ const PUBLIC_CAMPUS_VENUES = [
     type: 'Riverside Regatta Pavilion',
     location: 'Sangam River Front',
     capacity: '1,500 Spectators',
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+    image: '/photos/seminar hall 2.jpeg',
     publicAccess: 'Home of the COEP Regatta. Public spectator gallery open during scheduled fixtures.'
   }
 ]
