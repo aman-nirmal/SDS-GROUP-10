@@ -514,7 +514,7 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
             <div className="p-5 sm:p-7 pt-6 sm:pt-7">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
                 {/* Left Column (5 cols): Photo Gallery (Top-Left), Venue Identity, Specs & Facilities */}
-                <div className="lg:col-span-5 space-y-4">
+                <div className="lg:col-span-5 space-y-4 pt-7 sm:pt-8">
                   {/* Top-Left Photo Gallery Carousel */}
                   <div className="space-y-2">
                     <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-950 select-none group shadow-md border border-slate-200/80 dark:border-slate-800">
@@ -714,60 +714,10 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                     </div>
                   )}
 
-                  {/* Installed Facilities & Amenities */}
-                  <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
-                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      Installed Classroom Facilities:
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(venue?.features) && venue.features.length > 0
-                        ? venue.features
-                        : [
-                          'Overhead Projector',
-                          'PA Sound System',
-                          'Air Conditioned',
-                          'Wi-Fi 6'
-                        ]
-                      ).map((feat, i) => (
-                        <span
-                          key={i}
-                          className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700 shadow-2xs"
-                        >
-                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                          {feat}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Terms and Guidelines if applicable */}
-                  {termsDisplay && (
-                    <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800 text-xs flex items-start gap-2.5">
-                      <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                      <div>
-                        <span className="font-bold text-amber-900 dark:text-amber-300 block mb-0.5">Booking Terms & Guidelines</span>
-                        <p className="text-amber-800 dark:text-amber-400 leading-relaxed text-[11px]">{termsDisplay}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Timetable Overview Card */}
-                  <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/60 text-xs">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-bold text-blue-950 dark:text-blue-200 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                        Timetable Guidelines
-                      </span>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Free Gaps Available</span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Regular curriculum lectures are priority scheduled during 10:30 AM – 5:30 PM. Recess/lunch hours (12:30–1:30 PM) and morning/evening slots are open for reservations.
-                    </p>
-                  </div>
                 </div>
 
                 {/* Right Column (7 cols): Slot Reservation Form */}
-                <div className="lg:col-span-7">
+                <div className="lg:col-span-7 pt-7 sm:pt-8">
                   <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Date & Time Slot */}
                     <div>
@@ -830,7 +780,7 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                       )}
 
                       {/* Clean Simple Time Slot Buttons */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {computedTimeSlots.map((slot, i) => {
                           const isFree = slot.status === 'free'
                           const isSelected = selectedSlot === slot.time
@@ -867,7 +817,7 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                     </div>
 
                     {/* Applicant Details */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="grid grid-cols-1 gap-3 pt-1">
                       <div>
                         <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                           Applicant / Faculty Name *
@@ -1085,6 +1035,58 @@ export default function VenueBookingModal({ venue, defaultDate, onClose, onSubmi
                       </button>
                     </div>
                   </form>
+                </div>
+                <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-4">
+                  {/* Terms and Guidelines if applicable */}
+                  {termsDisplay && (
+                    <div className="lg:col-span-12 p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800 text-xs flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-amber-900 dark:text-amber-300 block mb-0.5">Booking Terms & Guidelines</span>
+                        <p className="text-amber-800 dark:text-amber-400 leading-relaxed text-[11px]">{termsDisplay}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Installed Facilities & Amenities */}
+                  <div className="lg:col-span-5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      Installed Classroom Facilities:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {(Array.isArray(venue?.features) && venue.features.length > 0
+                        ? venue.features
+                        : [
+                          'Overhead Projector',
+                          'PA Sound System',
+                          'Air Conditioned',
+                          'Wi-Fi 6'
+                        ]
+                      ).map((feat, i) => (
+                        <span
+                          key={i}
+                          className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700 shadow-2xs"
+                        >
+                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Timetable Overview Card */}
+                  <div className="lg:col-span-7 p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/60 text-xs">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-blue-950 dark:text-blue-200 flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        Timetable Guidelines
+                      </span>
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Free Gaps Available</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Regular curriculum lectures are priority scheduled during 10:30 AM – 5:30 PM. Recess/lunch hours (12:30–1:30 PM) and morning/evening slots are open for reservations.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
