@@ -44,7 +44,8 @@ import {
   getVenueFaculty,
   classroomTimeSlots,
   extractNumericPrice,
-  isDepartmentMatch
+  isDepartmentMatch,
+  isAcClassroom
 } from './utils/venueHelpers'
 
 // Backwards compatibility re-exports for other components importing from App.jsx
@@ -53,6 +54,7 @@ export {
   formatDateISO,
   isLabVenue,
   isClassroomVenue,
+  isAcClassroom,
   getVenueImages,
   getVenueImageUrl,
   getVenueFaculty,
@@ -65,7 +67,7 @@ export {
   LoginForm
 }
 
-export default function App() {
+export default function App({ msalRedirectPromise }) {
   const initialRoute = useMemo(() => parseRoute(), [])
 
   const [theme, setTheme] = useState(() => {
@@ -281,6 +283,46 @@ export default function App() {
       return null
     }
   })
+
+  // ── Handle Microsoft OAuth redirect callback ──────────────────────────────────
+  // msalRedirectPromise was kicked off in main.jsx BEFORE React rendered.
+  // By the time this runs, the PKCE exchange is likely already complete.
+  useEffect(() => {
+    const promise = msalRedirectPromise || Promise.resolve(null)
+    promise.then((result) => {
+      if (!result) return
+
+      // Handle errors returned from the OAuth flow
+      if (result.error) {
+        console.error('[App] Microsoft SSO error:', result.error)
+        // Show error — the login modal will be visible so user can retry
+        return
+      }
+
+      if (!result.userProfile) return
+
+      const profile = result.userProfile
+      try { localStorage.setItem('locus_auth_user', JSON.stringify(profile)) } catch { }
+      setCurrentUser(profile)
+      const roleTabMap = {
+        'Administrator': 'admin',
+        'Head of Department (HOD)': 'hod',
+        'HOD': 'hod',
+        'Dean': 'dean',
+        'Faculty': 'faculty',
+        'Lab Assistant': 'lab_assistant',
+        'Club Lead': 'club',
+        'Student': 'student',
+        'Security Guard': 'security'
+      }
+      const tab = roleTabMap[profile.role] || 'home'
+      setActiveTab(tab)
+    }).catch((err) => {
+      console.warn('[App] OAuth callback error:', err.message)
+    })
+  }, [msalRedirectPromise]) // eslint-disable-line react-hooks/exhaustive-deps
+
+
 
   const [roleRequests, setRoleRequests] = useState(() => {
     try {
@@ -508,21 +550,11 @@ export default function App() {
       return { success: true, booking: created }
     } catch (err) {
       console.warn('Backend booking creation error:', err)
+      const errorMsg = err.data?.error || err.message || 'Failed to complete reservation.'
       if (err.status === 409 || err.data?.isConflict) {
-        alert(err.data?.error || err.message)
-        return { success: false, error: err.message, isConflict: true }
+        return { success: false, error: errorMsg, isConflict: true }
       }
-      setCampusBookings((prev) => {
-        const updated = [newBooking, ...prev]
-        try {
-          localStorage.setItem('locus_admin_bookings', JSON.stringify(updated))
-        } catch {
-          // ignore
-        }
-        return updated
-      })
-      setUserBookings((prev) => [newBooking, ...prev])
-      return { success: true, booking: newBooking }
+      return { success: false, error: errorMsg }
     }
   }
 
@@ -880,7 +912,8 @@ export default function App() {
             setIsDatePickerOpen={setIsDatePickerOpen}
             onSearch={() => handleNavClick('venues')}
             onSelectPopularType={(title) => {
-              setSelectedVenueForBooking(title)
+              setSelectedType(title)
+              setActiveTab('venues')
             }}
             onViewAllVenues={() => setActiveTab('venues')}
           />
@@ -897,8 +930,9 @@ export default function App() {
             <LocusLogo size="default" />
           </div>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links — role-contextual */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+            {/* Home — always visible */}
             <button
               type="button"
               onClick={() => handleNavClick('home')}
@@ -910,53 +944,68 @@ export default function App() {
             >
               Home
             </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('venues')}
-              className={`transition-colors cursor-pointer relative pb-1 ${
-                activeTab === 'venues'
-                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              Venues
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('events')}
-              className={`transition-colors cursor-pointer relative pb-1 ${
-                activeTab === 'events'
-                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              Events
-            </button>
 
-            <button
-              type="button"
-              onClick={() => handleNavClick(currentUser?.role === 'Student' ? 'student' : 'my-bookings')}
-              className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${
-                activeTab === 'my-bookings' || activeTab === 'student'
-                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <span>My Bookings</span>
-            </button>
+            {/* Venues — visible to all except Security Guard (they only scan passes) and pure HOD/Dean (workflow-only) */}
+            {(!currentUser || ['Student', 'Faculty', 'Club Lead', 'Administrator', 'Lab Assistant'].includes(currentUser.role)) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('venues')}
+                className={`transition-colors cursor-pointer relative pb-1 ${
+                  activeTab === 'venues'
+                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Venues
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('about')}
-              className={`transition-colors cursor-pointer relative pb-1 ${
-                activeTab === 'about'
-                  ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
-                  : 'hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              About
-            </button>
+            {/* Events — visible to public and students */}
+            {(!currentUser || ['Student', 'Faculty', 'Club Lead', 'Administrator'].includes(currentUser.role)) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('events')}
+                className={`transition-colors cursor-pointer relative pb-1 ${
+                  activeTab === 'events'
+                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Events
+              </button>
+            )}
 
+            {/* My Bookings — only for logged-in Student or Faculty */}
+            {currentUser && ['Student', 'Faculty'].includes(currentUser.role) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick(currentUser.role === 'Student' ? 'student' : 'my-bookings')}
+                className={`transition-colors cursor-pointer relative pb-1 flex items-center gap-1.5 ${
+                  activeTab === 'my-bookings' || activeTab === 'student'
+                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span>My Bookings</span>
+              </button>
+            )}
+
+            {/* About — public pages only (not shown to role-specific users to reduce clutter) */}
+            {(!currentUser || ['Student', 'Faculty'].includes(currentUser.role)) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('about')}
+                className={`transition-colors cursor-pointer relative pb-1 ${
+                  activeTab === 'about'
+                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 font-bold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                About
+              </button>
+            )}
+
+            {/* Faculty Portal */}
             {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
@@ -967,10 +1016,11 @@ export default function App() {
                     : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>Faculty Venues</span>
+                <span>Faculty Portal</span>
               </button>
             )}
 
+            {/* Lab Assistant */}
             {currentUser && currentUser.role === 'Lab Assistant' && (
               <button
                 type="button"
@@ -983,13 +1033,14 @@ export default function App() {
               >
                 <span>Lab Clearances</span>
                 {pendingLabAssistantCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-600 text-white font-bold ml-0.5">
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-600 text-white font-bold ml-0.5">
                     {pendingLabAssistantCount}
                   </span>
                 )}
               </button>
             )}
 
+            {/* HOD Dashboard */}
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button
                 type="button"
@@ -1000,15 +1051,16 @@ export default function App() {
                     : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>HOD Sanctions</span>
+                <span>HOD Dashboard</span>
                 {pendingHodCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold ml-0.5">
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-amber-500 text-white font-bold ml-0.5">
                     {pendingHodCount}
                   </span>
                 )}
               </button>
             )}
 
+            {/* Dean Dashboard */}
             {currentUser && currentUser.role === 'Dean' && (
               <button
                 type="button"
@@ -1019,15 +1071,16 @@ export default function App() {
                     : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>Dean Clearance</span>
+                <span>Dean Dashboard</span>
                 {pendingDeanCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-purple-600 text-white font-bold ml-0.5">
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-purple-600 text-white font-bold ml-0.5">
                     {pendingDeanCount}
                   </span>
                 )}
               </button>
             )}
 
+            {/* Club Portal */}
             {currentUser && currentUser.role === 'Club Lead' && (
               <button
                 type="button"
@@ -1038,10 +1091,11 @@ export default function App() {
                     : 'hover:text-slate-900 dark:hover:text-white text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>Club Bookings</span>
+                <span>Club Portal</span>
               </button>
             )}
 
+            {/* Gate Scanner — Security Guard only */}
             {currentUser && currentUser.role === 'Security Guard' && (
               <button
                 type="button"
@@ -1056,6 +1110,7 @@ export default function App() {
               </button>
             )}
 
+            {/* Admin Console — Administrator only */}
             {currentUser && currentUser.role === 'Administrator' && (
               <button
                 type="button"
@@ -1149,10 +1204,24 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => handleNavClick(currentUser ? 'admin' : 'login')}
+              onClick={() => {
+                if (!currentUser) { handleNavClick('login'); return }
+                const roleTabMap = {
+                  'Administrator': 'admin',
+                  'Head of Department (HOD)': 'hod',
+                  'HOD': 'hod',
+                  'Dean': 'dean',
+                  'Faculty': 'faculty',
+                  'Student': 'student',
+                  'Club Lead': 'club',
+                  'Security Guard': 'security',
+                  'Lab Assistant': 'lab_assistant',
+                }
+                handleNavClick(roleTabMap[currentUser.role] || 'home')
+              }}
               className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-xs"
             >
-              {currentUser ? 'Console' : 'Login'}
+              {currentUser ? 'My Portal' : 'Login'}
             </button>
             <button
               type="button"
@@ -1168,141 +1237,176 @@ export default function App() {
         {/* Mobile Dropdown Drawer */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-[rgb(249,248,246)] dark:bg-[#0b0f19] px-4 py-4 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-150">
+            {/* Home — always */}
             <button
               type="button"
               onClick={() => handleNavClick('home')}
               className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'home' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
             >
-              Home
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('venues')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-            >
-              Venues Catalog
+              🏠 Home
             </button>
 
-            <button
-              type="button"
-              onClick={() => handleNavClick('events')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-            >
-              Events
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('about')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-            >
-              About
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleNavClick(currentUser?.role === 'Student' ? 'student' : 'my-bookings')}
-              className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'my-bookings' || activeTab === 'student' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-            >
-              My Bookings
-            </button>
-
-            {currentUser && (
+            {/* Venues — not for security/HOD/Dean */}
+            {(!currentUser || ['Student', 'Faculty', 'Club Lead', 'Administrator', 'Lab Assistant'].includes(currentUser.role)) && (
               <button
                 type="button"
-                onClick={() => {
-                  setIsProfileModalOpen(true)
-                  setIsMobileMenuOpen(false)
-                }}
-                className="w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                onClick={() => handleNavClick('venues')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'venues' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span>Profile & Role Requests</span>
+                🏛️ Venues
               </button>
             )}
 
+            {/* Events */}
+            {(!currentUser || ['Student', 'Faculty', 'Club Lead', 'Administrator'].includes(currentUser.role)) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('events')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                📅 Events
+              </button>
+            )}
+
+            {/* About */}
+            {(!currentUser || ['Student', 'Faculty'].includes(currentUser.role)) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick('about')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'about' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                ℹ️ About
+              </button>
+            )}
+
+            {/* Divider if logged in */}
+            {currentUser && <div className="border-t border-slate-200 dark:border-slate-700 my-1" />}
+
+            {/* My Bookings — Student / Faculty */}
+            {currentUser && ['Student', 'Faculty'].includes(currentUser.role) && (
+              <button
+                type="button"
+                onClick={() => handleNavClick(currentUser.role === 'Student' ? 'student' : 'my-bookings')}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'my-bookings' || activeTab === 'student' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              >
+                📋 My Bookings
+              </button>
+            )}
+
+            {/* Faculty Portal */}
             {currentUser && currentUser.role === 'Faculty' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('faculty')}
-                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'faculty' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <span>Faculty Venues</span>
+                🎓 Faculty Portal
               </button>
             )}
 
+            {/* Lab Clearances */}
             {currentUser && currentUser.role === 'Lab Assistant' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('lab_assistant')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'lab_assistant' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <span>Lab Clearances</span>
+                <span>🔬 Lab Clearances</span>
                 {pendingLabAssistantCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-600 text-white font-bold">
-                    {pendingLabAssistantCount}
-                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-600 text-white font-bold">{pendingLabAssistantCount}</span>
                 )}
               </button>
             )}
 
+            {/* HOD Dashboard */}
             {currentUser && (currentUser.role === 'Head of Department (HOD)' || currentUser.role === 'HOD') && (
               <button
                 type="button"
                 onClick={() => handleNavClick('hod')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'hod' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <span>HOD Sanctions</span>
+                <span>🏢 HOD Dashboard</span>
                 {pendingHodCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500 text-white font-bold">
-                    {pendingHodCount}
-                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500 text-white font-bold">{pendingHodCount}</span>
                 )}
               </button>
             )}
 
+            {/* Dean Dashboard */}
             {currentUser && currentUser.role === 'Dean' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('dean')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'dean' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                <span>Dean Clearance</span>
+                <span>👨‍💼 Dean Dashboard</span>
                 {pendingDeanCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-xs bg-purple-600 text-white font-bold">
-                    {pendingDeanCount}
-                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-purple-600 text-white font-bold">{pendingDeanCount}</span>
                 )}
               </button>
             )}
 
+            {/* Club Portal */}
             {currentUser && currentUser.role === 'Club Lead' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('club')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'club' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                Club Bookings
+                🎭 Club Portal
               </button>
             )}
 
+            {/* Gate Scanner */}
             {currentUser && currentUser.role === 'Security Guard' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('security')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'security' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                Gate Scanner
+                🛡️ Gate Scanner
               </button>
             )}
 
+            {/* Admin Console */}
             {currentUser && currentUser.role === 'Administrator' && (
               <button
                 type="button"
                 onClick={() => handleNavClick('admin')}
                 className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors ${activeTab === 'admin' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
               >
-                Admin Console
+                ⚙️ Admin Console
               </button>
+            )}
+
+            {/* Profile — always show if logged in */}
+            {currentUser && (
+              <>
+                <div className="border-t border-slate-200 dark:border-slate-700 my-1" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsProfileModalOpen(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span>Profile & Settings</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentUser(null)
+                    try { localStorage.removeItem('locus_auth_user') } catch {}
+                    handleNavClick('home')
+                  }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </>
             )}
           </div>
         )}
@@ -1339,9 +1443,7 @@ export default function App() {
           defaultDate={selectedDate}
           currentUser={currentUser}
           onClose={() => setSelectedVenueForBooking(null)}
-          onSubmitBooking={(bookingData) => {
-            handleAddBooking(bookingData)
-          }}
+          onSubmitBooking={(bookingData) => handleAddBooking(bookingData)}
         />
       )}
 
@@ -1453,25 +1555,30 @@ export default function App() {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Booking Guidelines')}
+                    onClick={() => {
+                      setActiveTab('venues')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Booking Guidelines
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedVenueForBooking('IT Helpdesk')}
+                  <a
+                    href="mailto:estate@coeptech.ac.in"
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     IT Helpdesk
-                  </button>
+                  </a>
                 </li>
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Privacy Policy')}
+                    onClick={() => {
+                      setActiveTab('guest')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Privacy Policy
@@ -1480,7 +1587,10 @@ export default function App() {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setSelectedVenueForBooking('Terms of Use')}
+                    onClick={() => {
+                      setActiveTab('guest')
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
                     Terms of Use

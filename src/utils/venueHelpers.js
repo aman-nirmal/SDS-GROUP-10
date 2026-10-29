@@ -161,7 +161,22 @@ export function getVenueImageUrl(venue) {
 
 // Helper function to get official faculty in-charge & department coordinator for any venue
 export function getVenueFaculty(venue) {
-  if (venue?.faculty_incharge) return venue.faculty_incharge
+  if (venue?.faculty_incharge) {
+    if (typeof venue.faculty_incharge === 'string') {
+      return {
+        name: venue.faculty_incharge,
+        designation: 'Faculty In-Charge',
+        email: 'estate@coeptech.ac.in',
+        office: 'COEP Technological University'
+      }
+    }
+    return {
+      name: venue.faculty_incharge.name || 'Central Estate Officer',
+      designation: venue.faculty_incharge.designation || 'Faculty In-Charge',
+      email: venue.faculty_incharge.email || 'estate@coeptech.ac.in',
+      office: venue.faculty_incharge.office || 'Central Estate Office'
+    }
+  }
 
   const dept = (venue?.department || '').toLowerCase()
   if (dept.includes('civil')) {
@@ -296,3 +311,26 @@ export function isDepartmentMatch(userDept, venueDept) {
   const nv = normalize(v)
   return nu.length > 3 && nv.length > 3 && (nu.includes(nv) || nv.includes(nu))
 }
+
+// Helper to identify Academic Complex (AC) classrooms (NC01 to NC14)
+export function isAcClassroom(venue) {
+  if (!venue) return false
+  const dept = (venue.department || '').toLowerCase()
+  const newName = (venue.new_hall_name || venue.name || '').toUpperCase()
+  const oldName = (venue.old_hall_name || '').toUpperCase()
+  const type = (venue.type || '').toLowerCase()
+
+  if (type.includes('auditorium') || newName.includes('AUDITORIUM') || oldName.includes('AUDITORIUM')) return false
+
+  return (
+    dept.includes('academic') ||
+    oldName.startsWith('AC ') ||
+    oldName.startsWith('AC-') ||
+    oldName.startsWith('AC1') ||
+    oldName.startsWith('AC2') ||
+    oldName.startsWith('AC3') ||
+    oldName.startsWith('AC4') ||
+    ((newName.startsWith('NC0') || /^NC1[0-4]$/.test(newName)) && dept.includes('academic'))
+  )
+}
+

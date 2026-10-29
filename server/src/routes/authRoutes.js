@@ -9,5 +9,7 @@ router.post('/verify-otp', authController.verifyOtp)
 router.get('/verify-link', authController.verifyLink)
 router.post('/outlook', authController.outlookAuth)
 router.post('/login', authController.login)
+router.post('/token-exchange', authController.tokenExchange)
+router.post('/register', authController.register)
 
 export default router
