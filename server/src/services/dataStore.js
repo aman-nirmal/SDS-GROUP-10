@@ -1,6 +1,6 @@
 import { supabase } from '../config/supabase.js'
-import { importedCampusUsers } from '../../../src/data/importedCampusUsers.js'
-import { importedFacultyUsers } from '../../../src/data/importedFacultyUsers.js'
+import { importedCampusUsers } from '../data/importedCampusUsers.js'
+import { importedFacultyUsers } from '../data/importedFacultyUsers.js'
 import {
   INITIAL_ADMIN_USERS,
   INITIAL_ADMIN_VENUES,
