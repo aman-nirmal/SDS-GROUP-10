@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 import { Resend } from 'resend'
 import nodemailer from 'nodemailer'
 import { config } from '../config/env.js'
@@ -362,13 +363,29 @@ export const authController = {
         })
       }
 
-      // Constant-time comparison to prevent timing attacks
-      const suppliedHash = crypto.createHash('sha256').update(password).digest('hex')
-      const storedHash = crypto.createHash('sha256').update(dbUser.password).digest('hex')
-      const passwordMatch = crypto.timingSafeEqual(
-        Buffer.from(suppliedHash, 'hex'),
-        Buffer.from(storedHash, 'hex')
-      )
+      // Verify password — supports both bcrypt hashes and plaintext (legacy)
+      // If plaintext, auto-upgrade to bcrypt on successful login
+      const isBcrypt = dbUser.password.startsWith('$2b$') || dbUser.password.startsWith('$2a$')
+      let passwordMatch = false
+
+      if (isBcrypt) {
+        // Secure: compare against bcrypt hash
+        passwordMatch = await bcrypt.compare(password, dbUser.password)
+      } else {
+        // Legacy plaintext — do constant-time comparison then upgrade to bcrypt
+        const suppliedHash = crypto.createHash('sha256').update(password).digest('hex')
+        const storedHash = crypto.createHash('sha256').update(dbUser.password).digest('hex')
+        passwordMatch = crypto.timingSafeEqual(
+          Buffer.from(suppliedHash, 'hex'),
+          Buffer.from(storedHash, 'hex')
+        )
+        // Auto-upgrade: hash and store securely for next login
+        if (passwordMatch) {
+          const hashed = await bcrypt.hash(password, 12)
+          await supabase.from('users').update({ password: hashed }).eq('email', trimmedEmail)
+          console.log(`[Auth] Auto-upgraded password to bcrypt for ${trimmedEmail}`)
+        }
+      }
 
       if (!passwordMatch) {
         return res.status(401).json({ error: 'Invalid email or password.' })
@@ -388,6 +405,7 @@ export const authController = {
         message: 'Authentication successful.'
       })
     } catch (err) {
+      console.error('[Auth Login Error]', err.message)
       return res.status(500).json({ error: 'Authentication failed.' })
     }
   },
