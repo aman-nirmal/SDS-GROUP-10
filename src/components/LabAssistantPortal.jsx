@@ -7,15 +7,8 @@ import {
   ShieldCheck,
   AlertCircle,
   Building2,
-  Users,
   Search,
-  ArrowRight,
-  Filter,
-  FileCheck2,
-  Layers,
-  Wrench,
-  Sparkles,
-  Calendar
+  FileCheck2
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
 import PersonaVenuesView from './PersonaVenuesView'

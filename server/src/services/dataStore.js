@@ -1,4 +1,6 @@
 import { supabase } from '../config/supabase.js'
+import { importedCampusUsers } from '../../../src/data/importedCampusUsers.js'
+import { importedFacultyUsers } from '../../../src/data/importedFacultyUsers.js'
 import {
   INITIAL_ADMIN_USERS,
   INITIAL_ADMIN_VENUES,
@@ -255,7 +257,7 @@ export const INITIAL_EVENTS = [
 // DataStore with Supabase integration and offline fallback
 class DataStore {
   constructor() {
-    this.users = [...INITIAL_ADMIN_USERS]
+    this.users = [...importedFacultyUsers, ...importedCampusUsers, ...INITIAL_ADMIN_USERS]
     this.venues = [...INITIAL_ADMIN_VENUES]
     this.bookings = [...INITIAL_BOOKINGS]
     this.roleRequests = [...INITIAL_ROLE_REQUESTS]

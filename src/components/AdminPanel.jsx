@@ -27,8 +27,6 @@ import AdminTimetable from './admin/AdminTimetable'
 import {
   INITIAL_ADMIN_VENUES,
 } from './admin/mockAdminData'
-import { importedCampusUsers } from '../data/importedCampusUsers'
-import { importedFacultyUsers } from '../data/importedFacultyUsers'
 import {
   usersApi,
   bookingsApi,
@@ -38,10 +36,8 @@ import {
   logsApi
 } from '../lib/api'
 
-// Initial institutional users store
+// Initial institutional placeholder users store until backend/Supabase responds
 const INITIAL_USERS = [
-  ...importedFacultyUsers,
-  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',
