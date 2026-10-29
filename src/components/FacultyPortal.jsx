@@ -1,317 +1,461 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
+  Calendar,
+  Clock,
+  Building,
   GraduationCap,
-  Plus,
-  Trash2,
-  XCircle
+  PlusCircle,
+  CheckCircle2,
+  BookOpen,
+  Users,
+  MapPin,
+  FileCheck2,
+  AlertCircle,
+  ArrowRight,
+  CreditCard,
+  Building2,
+  FlaskConical,
+  Layers
 } from 'lucide-react'
 import ProtectedGate from './ProtectedGate'
-import { bookingsApi } from '../lib/bookingsApi'
+import PersonaVenuesView from './PersonaVenuesView'
+import { isLabVenue } from '../App'
 
-const INITIAL_FACULTY_BOOKINGS = [
-  {
-    id: 'FAC-BK-101',
-    venue: 'ND01 (North Drawing Hall)',
-    purpose: 'End-Semester Department Research & Capstone Viva',
-    date: '2026-10-28',
-    timeSlot: '09:00 AM - 11:00 AM',
-    attendees: 120,
-    status: 'Confirmed'
-  },
-  {
-    id: 'FAC-BK-102',
-    venue: 'Computer Department Seminar Hall',
-    purpose: 'Guest Lecture: Scalable Deep Learning Architectures',
-    date: '2026-10-31',
-    timeSlot: '02:00 PM - 04:00 PM',
-    attendees: 80,
-    status: 'Confirmed'
-  },
-  {
-    id: 'FAC-BK-103',
-    venue: 'NC24 Classroom',
-    purpose: 'Special Remedial Lecture: Distributed Operating Systems',
-    date: '2026-11-04',
-    timeSlot: '04:00 PM - 06:00 PM',
-    attendees: 60,
-    status: 'Pending'
-  }
-]
-
-export default function FacultyPortal({ currentUser, onNavigateLogin }) {
-  const [bookings, setBookings] = useState(INITIAL_FACULTY_BOOKINGS)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function FacultyPortal({
+  currentUser,
+  onNavigateLogin,
+  bookings: propBookings = [],
+  venues = [],
+  onAddBooking,
+  onBookVenue
+}) {
+  const [activeTab, setActiveTab] = useState('venues') // 'venues' | 'bookings' | 'reserve' | 'schedule'
+  const [selectedVenue, setSelectedVenue] = useState('Computer Engineering Lecture Hall 1')
+  const [date, setDate] = useState('2026-10-30')
+  const [slot, setSlot] = useState('09:00 AM - 11:00 AM')
+  const [purpose, setPurpose] = useState('')
+  const [courseCode, setCourseCode] = useState('CS-302')
+  const [attendees, setAttendees] = useState(70)
+  const [successNotice, setSuccessNotice] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [form, setForm] = useState({
-    venue: 'ND01 (North Drawing Hall)',
-    purpose: '',
-    date: '2026-10-29',
-    timeSlot: '10:00 AM - 12:00 PM',
-    attendees: 60
-  })
 
-  useEffect(() => {
-    async function loadFacultyBookings() {
-      if (currentUser?.email) {
-        try {
-          const data = await bookingsApi.fetchUserBookings(currentUser)
-          if (data && data.length > 0) {
-            setBookings(data)
-          }
-        } catch (err) {
-          console.warn('[FacultyPortal] Could not load bookings from Supabase:', err)
-        }
-      }
-    }
-    loadFacultyBookings()
-  }, [currentUser])
+  // Filter bookings submitted by faculty or relevant to current faculty
+  const facultyBookings = propBookings.filter(
+    (b) =>
+      b.applicantRole === 'Faculty' ||
+      (currentUser?.email && b.applicantEmail?.toLowerCase() === currentUser.email.toLowerCase())
+  )
 
-  const handleCreateBooking = async (e) => {
+  const handleCreateFacultyBooking = async (e) => {
     e.preventDefault()
-    if (!form.purpose.trim() || isSubmitting) return
+    if (!purpose.trim()) return
 
     setIsSubmitting(true)
-    try {
-      const saved = await bookingsApi.createBooking({
-        venueName: form.venue,
-        purpose: form.purpose,
-        date: form.date,
-        slot: form.timeSlot,
-        capacity: Number(form.attendees),
-        status: 'Confirmed'
-      }, currentUser)
-
-      setBookings((prev) => [saved, ...prev.filter((b) => b.id !== saved.id && b.ref !== saved.ref)])
-      setIsModalOpen(false)
-      setForm({
-        venue: 'ND01 (North Drawing Hall)',
-        purpose: '',
-        date: '2026-10-29',
-        timeSlot: '10:00 AM - 12:00 PM',
-        attendees: 60
-      })
-    } catch (err) {
-      alert(err.message || 'Failed to reserve academic hall.')
-    } finally {
-      setIsSubmitting(false)
+    const refNumber = 'FAC-BK-' + Math.floor(100 + Math.random() * 900)
+    const newBooking = {
+      id: refNumber,
+      ref: refNumber,
+      venueName: selectedVenue,
+      venue: selectedVenue,
+      department: currentUser?.department || 'Computer Engineering',
+      venueDepartment: currentUser?.department || 'Computer Engineering',
+      applicantName: currentUser?.name || 'Dr. V. K. Kulkarni',
+      applicantEmail: currentUser?.email || 'faculty@coeptech.ac.in',
+      applicantRole: 'Faculty',
+      date,
+      bookingDate: date,
+      slot,
+      timeSlot: slot,
+      purpose: `[${courseCode}] ${purpose}`,
+      capacity: Number(attendees),
+      attendees: Number(attendees),
+      status: 'Confirmed', // Faculty academic reservations are auto-confirmed for curriculum
+      approvalStage: 'Completed',
+      submittedAt: new Date().toISOString().replace('T', ' ').slice(0, 16)
     }
+
+    if (onAddBooking) {
+      await onAddBooking(newBooking)
+    }
+
+    setIsSubmitting(false)
+    setSuccessNotice(`Hall ${selectedVenue} reserved successfully for ${courseCode} (${slot})!`)
+    setPurpose('')
+    setActiveTab('bookings')
+    setTimeout(() => setSuccessNotice(''), 5000)
   }
 
-  const handleDelete = async (id) => {
-    try {
-      await bookingsApi.cancelBooking(id, currentUser)
-    } catch (err) {
-      console.warn('Could not cancel booking in database:', err)
-    }
-    setBookings((prev) => prev.filter((b) => b.id !== id && b.ref !== id))
-  }
+  // Predefined academic timetable slots for faculty
+  const timetableSlots = [
+    { day: 'Monday', time: '09:00 AM - 11:00 AM', course: 'CS-302: Operating Systems', venue: 'NC-27 (Computer Dept Hall A)', type: 'Theory Lecture' },
+    { day: 'Monday', time: '02:00 PM - 04:00 PM', course: 'CS-304: Distributed Systems Lab', venue: 'Cognizant Lab (COG-LAB)', type: 'Practical Batch A' },
+    { day: 'Wednesday', time: '11:00 AM - 01:00 PM', course: 'CS-401: Cloud Computing', venue: 'AC 101 (NC01)', type: 'Theory Lecture' },
+    { day: 'Thursday', time: '09:00 AM - 11:00 AM', course: 'CS-302: Operating Systems', venue: 'NC-27 (Computer Dept Hall A)', type: 'Tutorial & Quiz' },
+    { day: 'Friday', time: '02:00 PM - 05:00 PM', course: 'B.Tech Capstone Project Viva', venue: 'Seminar Hall No 1 (SC10)', type: 'Viva Assessment' }
+  ]
 
   return (
     <ProtectedGate
       allowedRoles={['Faculty', 'Administrator']}
-      portalName="Faculty Academic Portal"
-      portalDescription="Classroom and lecture hall scheduling for COEP faculty members."
+      portalName="Faculty Academic Desk"
+      portalDescription="Academic scheduling and lecture hall reservation platform for COEP faculty members and professors."
       currentUser={currentUser}
       onNavigateLogin={onNavigateLogin}
     >
       <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 transition-colors">
+        {/* Success Banner */}
+        {successNotice && (
+          <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-2xl animate-in slide-in-from-top duration-200 border border-slate-700">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{successNotice}</span>
+          </div>
+        )}
+
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-7 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 mb-2">
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Faculty Workspace</span>
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                  Faculty Academic Desk
+                </h1>
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  Curriculum & Lectures
+                </span>
               </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Academic Hall Reservations
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                {currentUser?.name || 'Dr. V. K. Kulkarni'} • {currentUser?.department || 'Computer Engineering'}
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+                Signed in as <strong>{currentUser?.name || 'Faculty Member'}</strong> &bull; {currentUser?.department || 'COEP Technological University'}
               </p>
             </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab('reserve')}
+                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Reserve Hall for Class / Viva</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+          <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
             <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs transition-colors"
+              type="button"
+              onClick={() => setActiveTab('venues')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'venues'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Schedule Lecture / Viva</span>
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Department Venues & Labs</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('bookings')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'bookings'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>My Reserved Halls ({facultyBookings.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('schedule')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'schedule'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Academic Timetable</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('reserve')}
+              className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border flex items-center gap-2 ${
+                activeTab === 'reserve'
+                  ? 'bg-blue-600 text-white border-transparent shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Direct Reservation</span>
             </button>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold text-slate-900 dark:text-white">Scheduled Sessions ({bookings.length})</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Classrooms and departmental seminar rooms reserved for academic evaluation.</p>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
-                  <tr>
-                    <th className="py-3 px-4">Booking ID</th>
-                    <th className="py-3 px-4">Venue</th>
-                    <th className="py-3 px-4">Academic Session</th>
-                    <th className="py-3 px-4">Date & Slot</th>
-                    <th className="py-3 px-4">Batch Size</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {bookings.map((b) => (
-                    <tr key={b.id || b.ref} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">{b.id || b.ref}</td>
-                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{b.venue || b.venueName}</td>
-                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.purpose}</td>
-                      <td className="py-3 px-4 text-slate-500 dark:text-slate-400">
-                        <div>{b.date || b.bookingDate}</div>
-                        <div className="text-[11px] text-slate-400 dark:text-slate-500">{b.timeSlot || b.slot}</div>
-                      </td>
-                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300 font-medium">{b.attendees || b.capacity || 1} Students</td>
-                      <td className="py-3 px-4">
-                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          b.status === 'Confirmed' || b.status === 'Approved'
-                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                            : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                        }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${b.status === 'Confirmed' || b.status === 'Approved' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                          {b.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <button
-                          onClick={() => handleDelete(b.id || b.ref)}
-                          className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
-                          title="Cancel Reservation"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {bookings.length === 0 && (
-                    <tr>
-                      <td colSpan={7} className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
-                        No scheduled academic reservations found. Click "Schedule Lecture / Viva" to allocate a venue.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+        {/* Tab 0: Persona Venues View for Faculty */}
+        {activeTab === 'venues' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+            <PersonaVenuesView
+              currentUser={currentUser}
+              persona="faculty"
+              venues={venues}
+              campusBookings={propBookings}
+              onBookVenue={onBookVenue}
+              defaultDepartment={currentUser?.department || 'Computer Engineering'}
+            />
           </div>
-        </div>
+        )}
 
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 text-slate-900 dark:text-slate-100">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Schedule Lecture or Department Viva</h3>
+        {/* Tab 1: Faculty Bookings */}
+        {activeTab === 'bookings' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+            {facultyBookings.length === 0 ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center mx-auto mb-3">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                  No active classroom reservations
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-5">
+                  You haven't reserved any additional halls for tests, vivas, or guest talks yet.
+                </p>
                 <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  type="button"
+                  onClick={() => setActiveTab('reserve')}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-xs"
                 >
-                  <XCircle className="w-5 h-5" />
+                  Reserve Hall Now
                 </button>
               </div>
+            ) : (
+              facultyBookings.map((b) => (
+                <div
+                  key={b.id || b.ref}
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-lg border border-blue-200 dark:border-blue-800">
+                        {b.ref || b.id}
+                      </span>
+                      <span className="font-bold text-slate-900 dark:text-white text-sm">
+                        {b.venueName || b.venue}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Confirmed Academic Slot</span>
+                      </span>
+                      {(b.paymentStatus === 'Paid' || b.paidAmount || b.paymentId) && (
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                          <CreditCard className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <span>Paid ₹{b.paidAmount || b.amount || 1180} (Cashfree)</span>
+                        </span>
+                      )}
+                    </div>
 
-              <form onSubmit={handleCreateBooking} className="space-y-3.5 text-xs">
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                      {b.purpose}
+                    </h4>
+
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-0.5">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        {b.bookingDate || b.date}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        {b.timeSlot || b.slot}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                        {b.attendees || b.capacity || 60} Students
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                      <FileCheck2 className="w-4 h-4" />
+                      <span>Timetable Cleared</span>
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Tab 2: Academic Timetable */}
+        {activeTab === 'schedule' && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
+              <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-between">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                    Select Lecture Hall / Room
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">
+                    Curricular Weekly Schedule
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Allocated classroom slots for course lectures and laboratory sessions.
+                  </p>
+                </div>
+                <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-lg">
+                  Semester I &bull; 2026-27
+                </span>
+              </div>
+
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                {timetableSlots.map((slot, idx) => (
+                  <div key={idx} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black text-slate-900 dark:text-white w-24">
+                          {slot.day}
+                        </span>
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                          {slot.time}
+                        </span>
+                        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                          {slot.type}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {slot.course}
+                      </h4>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">
+                      <MapPin className="w-3.5 h-3.5 text-blue-500" />
+                      <span>{slot.venue}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Direct Reservation Form */}
+        {activeTab === 'reserve' && (
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-md">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Direct Hall Reservation for Faculty
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Book classrooms and seminar halls for end-sem vivas, remedial lectures, guest sessions, or project demos.
+                </p>
+              </div>
+
+              <form onSubmit={handleCreateFacultyBooking} className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Select Classroom / Seminar Hall
                   </label>
                   <select
-                    value={form.venue}
-                    onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                    className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
+                    value={selectedVenue}
+                    onChange={(e) => setSelectedVenue(e.target.value)}
+                    className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
                   >
-                    <option value="Mini Auditorium">Mini Auditorium (Academics Complex - 275 Seats)</option>
-                    <option value="Cognizant Lab">Cognizant Lab (Computer Dept - 400 Seats)</option>
-                    <option value="ND01 (North Drawing Hall)">ND01 (North Drawing Hall)</option>
-                    <option value="Computer Department Seminar Hall">Computer Department Seminar Hall</option>
-                    <option value="NC24 Classroom">NC24 Classroom</option>
-                    <option value="Electrical Machines Lab A">Electrical Machines Lab A</option>
+                    <option value="Computer Engineering Lecture Hall 1">Computer Engineering Lecture Hall 1 (NC-27)</option>
+                    <option value="Computer Dept Hall B (NC-28)">Computer Dept Hall B (NC-28)</option>
+                    <option value="AC 101 (NC01) Academics Complex">AC 101 (NC01) Academics Complex</option>
+                    <option value="Cognizant Lab (COG-LAB)">Cognizant Lab (COG-LAB)</option>
+                    <option value="Seminar Hall No 1 (SC10)">Seminar Hall No 1 (SC10)</option>
+                    <option value="Mechanical Drawing Hall (ND01)">Mechanical Drawing Hall (ND01)</option>
+                    <option value="Civil Old Wing (SC06)">Civil Old Wing (SC06)</option>
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                    Session Purpose / Subject *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={form.purpose}
-                    onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-                    placeholder="e.g. Distributed Systems Final Evaluation"
-                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       Date
                     </label>
                     <input
                       type="date"
-                      value={form.date}
-                      onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      className="w-full h-9 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
                     />
                   </div>
+
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       Time Slot
                     </label>
                     <select
-                      value={form.timeSlot}
-                      onChange={(e) => setForm({ ...form, timeSlot: e.target.value })}
-                      className="w-full h-9 px-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
+                      value={slot}
+                      onChange={(e) => setSlot(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
                     >
-                      <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
-                      <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-                      <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
-                      <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                      <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM (Morning Session)</option>
+                      <option value="11:30 AM - 01:30 PM">11:30 AM - 01:30 PM (Midday Session)</option>
+                      <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM (Afternoon Practical)</option>
+                      <option value="04:30 PM - 06:30 PM">04:30 PM - 06:30 PM (Evening Viva/Exam)</option>
                     </select>
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Course Code / Subject
+                    </label>
+                    <input
+                      type="text"
+                      value={courseCode}
+                      onChange={(e) => setCourseCode(e.target.value)}
+                      placeholder="e.g. CS-302, ME-201"
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                      Expected Student Count
+                    </label>
+                    <input
+                      type="number"
+                      value={attendees}
+                      onChange={(e) => setAttendees(e.target.value)}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                    Expected Class Capacity
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Academic Purpose / Topic
                   </label>
-                  <input
-                    type="number"
-                    value={form.attendees}
-                    onChange={(e) => setForm({ ...form, attendees: e.target.value })}
-                    className="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500"
+                  <textarea
+                    rows={3}
+                    value={purpose}
+                    onChange={(e) => setPurpose(e.target.value)}
+                    placeholder="e.g., Mid-Semester Practical Evaluation & Code Review for SY CS Batch 1"
+                    required
+                    className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <div className="pt-2 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="flex-1 h-9 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="flex-1 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold transition-colors"
-                  >
-                    {isSubmitting ? 'Reserving...' : 'Confirm Reservation'}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-colors"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{isSubmitting ? 'Confirming Reservation...' : 'Confirm Faculty Booking'}</span>
+                </button>
               </form>
             </div>
           </div>

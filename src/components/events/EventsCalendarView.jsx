@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import {
-  ChevronLeft,
-  ChevronRight,
   Calendar,
   Clock,
   Building,
   Users,
+  ChevronLeft,
+  ChevronRight,
   ArrowRight
 } from 'lucide-react'
-import { formatDateDisplay } from '../utils/venueUtils'
+import { formatDateDisplay } from '../../utils/venueHelpers'
 
 export default function EventsCalendarView({ events = [], onExploreVenues }) {
-  // Academic session default date (October 2026)
+// Academic session default date (October 2026)
   const [viewDate, setViewDate] = useState(new Date(2026, 9, 1))
   const [selectedDate, setSelectedDate] = useState('2026-10-25')
 
@@ -338,3 +338,5 @@ export default function EventsCalendarView({ events = [], onExploreVenues }) {
     </div>
   )
 }
+
+// Campus Events Page Component (Auto-populated from confirmed club & college bookings)

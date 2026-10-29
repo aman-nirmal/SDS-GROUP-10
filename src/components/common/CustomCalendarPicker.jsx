@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+// Custom Calendar Picker matching Website Design System
 export default function CustomCalendarPicker({ selectedDate, onSelectDate, onClose }) {
   const initialDate = selectedDate ? new Date(selectedDate) : new Date(2026, 9, 16)
   const [viewDate, setViewDate] = useState(initialDate)

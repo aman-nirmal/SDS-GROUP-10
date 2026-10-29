@@ -1,11 +1,7 @@
-import { importedCampusUsers } from '../../data/importedCampusUsers.js'
-import { importedFacultyUsers } from '../../data/importedFacultyUsers.js'
 // Institutional mock data for LOCUS Admin Dashboard
 // Separates mock data from presentation components so backend integration can easily replace it.
 
 export const INITIAL_ADMIN_USERS = [
-  ...importedFacultyUsers,
-  ...importedCampusUsers,
   {
     id: 'USR-001',
     name: 'Central Estate Admin',
@@ -157,7 +153,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Conference room available for Bhau Startups and outsiders. Tariff: ₹1,180.00 / 1 hr (inclusive of 18% GST). Terms: Max 2 hours at a time, gap of an hour between next booking, max 12 hours in a week. Eatables not allowed.',
     features: ['15 Seats', 'Duration: 1 h', '₹1,180/hr (incl. 18% GST)', 'For Startups & Outsiders', 'Conference Table', 'Display Screen', 'Air Conditioned'],
-    image: '/photos/ac 2.jpeg'
+    image: '/photos/bhau-conference.jpg'
   },
   {
     id: 'b4a00002-0000-4000-8000-000000000002',
@@ -191,7 +187,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'Classroom 1 for entrepreneurship workshops and training bootcamps. Tariff: ₹2,360.00 / 2 hr (inclusive of 18% GST). Duration: 2 h block.',
     features: ['60 Seats', 'Duration: 2 h', '₹2,360/2 hr (incl. 18% GST)', 'Projector & Screen', 'Whiteboard', 'Air Conditioned'],
-    image: '/photos/classroom.jpg'
+    image: '/photos/smart-classroom.jpg'
   },
   {
     id: 'b4a00004-0000-4000-8000-000000000004',
@@ -242,7 +238,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'ONLY FOR BHAU STARTUPS. Tariff: ₹1,000.00 / 1 hr. Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr', 'Discussion Table', 'Whiteboard', 'Air Conditioned'],
-    image: '/photos/ac 1.jpeg'
+    image: '/photos/bhau-meeting-room.jpg'
   },
   {
     id: 'b4a00007-0000-4000-8000-000000000007',
@@ -259,7 +255,7 @@ export const INITIAL_ADMIN_VENUES = [
     status: 'Available',
     description: 'ONLY FOR BHAU STARTUPS. The above charges are inclusive of 18% GST. Tariff: ₹1,000.00 / 1 hr (incl. 18% GST). Duration: 1 h. Terms: Max 2 hours at a time, gap of an hour between next booking, book for next 7 days only, max 12 hrs in a week. Eatables not allowed.',
     features: ['10 Seats', 'ONLY FOR BHAU STARTUPS', 'Duration: 1 h', '₹1,000/hr (incl. 18% GST)', 'Smart Screen', 'Conference Audio', 'Air Conditioned'],
-    image: '/photos/ac 3.webp'
+    image: '/photos/bhau-meeting-room.jpg'
   },
   {
     id: 'VN-5',

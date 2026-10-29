@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import {
   Search,
-  LayoutGrid,
-  CalendarDays,
   Calendar,
   Clock,
   Building,
   Users,
+  ArrowRight,
   ArrowLeft,
-  ArrowRight
+  CalendarDays,
+  LayoutGrid
 } from 'lucide-react'
-import { formatDateDisplay } from '../utils/venueUtils'
-import EventsCalendarView from './EventsCalendarView'
+import EventsCalendarView from '../components/events/EventsCalendarView'
+import { formatDateDisplay } from '../utils/venueHelpers'
 
 export default function EventsPage({ events = [], isLoading = false, onExploreVenues, onBackHome }) {
-  const [viewMode, setViewMode] = useState('grid')
+const [viewMode, setViewMode] = useState('grid')
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -245,3 +245,5 @@ export default function EventsPage({ events = [], isLoading = false, onExploreVe
     </div>
   )
 }
+
+

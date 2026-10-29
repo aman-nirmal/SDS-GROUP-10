@@ -1,25 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-  Building,
   Search,
+  X,
+  Building,
   Users,
   ArrowRight,
-  X,
   RotateCcw,
   LayoutGrid,
   List
 } from 'lucide-react'
-import { getVenueImageUrl, formatDateDisplay } from '../utils/venueUtils'
+import { formatDateDisplay, getVenueImageUrl } from '../utils/venueHelpers'
 
 export default function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, onSelectVenue, onBackHome }) {
+const isAllType = (t) => !t || t === 'All' || t === 'All Spaces' || t === 'All Venues'
+
   const [filterDept, setFilterDept] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterType, setFilterType] = useState(
-    initialType && initialType !== 'All' ? initialType : 'All Spaces'
+  const [filterType, setFilterType] = useState(() =>
+    isAllType(initialType) ? 'All Spaces' : initialType
   )
   const [filterCapacity, setFilterCapacity] = useState('All')
   const [sortBy, setSortBy] = useState('default')
   const [viewMode, setViewMode] = useState('grid') // 'grid' | 'list'
+
+  useEffect(() => {
+    if (initialType !== undefined) {
+      setFilterType(isAllType(initialType) ? 'All Spaces' : initialType)
+    }
+  }, [initialType])
 
   const departments = ['All', ...new Set(venues.map((v) => v.department).filter(Boolean))]
 
@@ -28,30 +36,18 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
     'Classrooms',
     'Seminar Halls',
     'Auditoriums',
-    'Meeting Rooms',
-    'Labs'
+    'Meeting Rooms'
   ]
 
-  const matchesTypeFilter = (venueType, filter) => {
-    if (filter === 'All Spaces') return true
-    if (venueType === filter) return true
-    if (filter === 'Labs' && (venueType === 'Lab' || venueType === 'Labs')) return true
-    if (filter === 'Auditoriums' && (venueType === 'Auditorium' || venueType === 'Auditoriums')) return true
-    if (filter === 'Classrooms' && (venueType === 'Classroom' || venueType === 'Classrooms')) return true
-    if (filter === 'Seminar Halls' && (venueType === 'Seminar Hall' || venueType === 'Seminar Halls')) return true
-    if (filter === 'Meeting Rooms' && (venueType === 'Meeting Room' || venueType === 'Meeting Rooms')) return true
-    return false
-  }
-
   const getTypeCount = (type) => {
-    if (type === 'All Spaces') return venues.length
-    return venues.filter((v) => matchesTypeFilter(v.type, type)).length
+    if (isAllType(type)) return venues.length
+    return venues.filter((v) => v.type === type).length
   }
 
   const isFiltered =
     filterDept !== 'All' ||
     searchQuery.trim() !== '' ||
-    filterType !== 'All Spaces' ||
+    !isAllType(filterType) ||
     filterCapacity !== 'All' ||
     sortBy !== 'default'
 
@@ -65,16 +61,13 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
 
   const filteredVenues = venues.filter((venue) => {
     const matchesDept = filterDept === 'All' || venue.department === filterDept
-    const matchesType = matchesTypeFilter(venue.type, filterType)
-    const q = searchQuery.trim().toLowerCase()
+    const matchesType =
+      isAllType(filterType) || venue.type === filterType
     const matchesSearch =
-      q === '' ||
-      (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(q)) ||
-      (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(q)) ||
-      (venue.department && venue.department.toLowerCase().includes(q)) ||
-      (venue.code && venue.code.toLowerCase().includes(q)) ||
-      (venue.building && venue.building.toLowerCase().includes(q)) ||
-      (venue.type && venue.type.toLowerCase().includes(q))
+      searchQuery.trim() === '' ||
+      (venue.new_hall_name && venue.new_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (venue.old_hall_name && venue.old_hall_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (venue.department && venue.department.toLowerCase().includes(searchQuery.toLowerCase()))
 
     const cap = venue.capacity || (venue.benches ? venue.benches * 2 : 0)
     let matchesCap = true
@@ -215,7 +208,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
             <select
               value={filterDept}
               onChange={(e) => setFilterDept(e.target.value)}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="All">All Departments ({venues.length})</option>
               {departments
@@ -233,7 +226,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
             <select
               value={filterCapacity}
               onChange={(e) => setFilterCapacity(e.target.value)}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="All">Any Capacity</option>
               <option value="compact">Small (&lt; 50 Seats)</option>
@@ -248,7 +241,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="flex-1 h-10 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
+              className="flex-1 h-10 pl-3 pr-8.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
             >
               <option value="default">Default</option>
               <option value="capacity-desc">Capacity &darr;</option>
@@ -290,7 +283,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
             <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               Active Filters:
             </span>
-            {filterType !== 'All Spaces' && (
+            {!isAllType(filterType) && (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-lg">
                 Type: {filterType}
                 <button
@@ -381,6 +374,8 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Passage Hall')
+            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
             return (
               <div
                 key={venue.id || idx}
@@ -391,7 +386,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
                 <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                   <img
                     src={venueImage}
-                    alt={venue.old_hall_name || venue.new_hall_name}
+                    alt={venueTitle}
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.onerror = null
@@ -402,14 +397,15 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
                   {/* Gradient Overlay for Text Readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/15 to-transparent pointer-events-none" />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-3 left-3">
-                    <span className="text-xs font-black tracking-wide text-white bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs">
-                      {venue.new_hall_name || 'Passage Hall'}
+                  {/* Top Badges Bar (Unified flex container to prevent overlap) */}
+                  <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                    <span
+                      title={hallCode}
+                      className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs shrink-0 max-w-[65%] truncate"
+                    >
+                      {hallCode}
                     </span>
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <span className="text-[11px] font-bold text-slate-100 bg-slate-900/75 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10">
+                    <span className="text-[11px] font-bold text-slate-100 bg-slate-900/80 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10 shrink-0">
                       {venue.type || 'Hall'}
                     </span>
                   </div>
@@ -430,15 +426,29 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <h3
-                      className="font-bold text-slate-900 dark:text-white text-base mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-                      title={venue.old_hall_name || venue.new_hall_name}
+                      className="font-bold text-slate-900 dark:text-white text-base mb-1 line-clamp-2 min-h-[3rem] leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                      title={venueTitle}
                     >
-                      {venue.old_hall_name || venue.new_hall_name}
+                      {venueTitle}
                     </h3>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-3">
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-2.5">
                       <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span className="truncate">{venue.department}</span>
                     </p>
+
+                    {/* Price / Tariff Badge & Exclusivity */}
+                    {(venue.price || (Array.isArray(venue.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))) && (
+                      <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
+                        <span className="inline-block text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 px-2 py-0.5 rounded-md">
+                          Tariff: {venue.price || venue.features.find((f) => typeof f === 'string' && f.startsWith('₹'))}
+                        </span>
+                        {((venue.terms && venue.terms.includes('ONLY FOR BHAU STARTUPS')) || (venue.description && venue.description.includes('ONLY FOR BHAU STARTUPS'))) && (
+                          <span className="inline-block text-[10px] font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200/80 dark:border-purple-800/80 px-2 py-0.5 rounded-md">
+                            Bhau Startups Exclusive
+                          </span>
+                        )}
+                      </div>
+                    )}
 
                     {/* Features list */}
                     {venue.features && venue.features.length > 0 && (
@@ -484,6 +494,8 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
           {sortedVenues.map((venue, idx) => {
             const venueImage = getVenueImageUrl(venue)
             const capacity = venue.capacity || (venue.benches ? venue.benches * 2 : 60)
+            const hallCode = venue.code || (venue.new_hall_name && venue.new_hall_name.length <= 12 ? venue.new_hall_name : venue.code || venue.new_hall_name || 'Hall')
+            const venueTitle = venue.old_hall_name || venue.new_hall_name || venue.name || 'Campus Venue'
             return (
               <div
                 key={venue.id || idx}
@@ -494,7 +506,7 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
                   <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     <img
                       src={venueImage}
-                      alt={venue.old_hall_name || venue.new_hall_name}
+                      alt={venueTitle}
                       loading="lazy"
                       onError={(e) => {
                         e.currentTarget.onerror = null
@@ -502,21 +514,31 @@ export default function VenuesPage({ venues = [], isLoading = false, initialType
                       }}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
-                    <div className="absolute top-1 left-1">
-                      <span className="text-[10px] font-black text-white bg-slate-900/80 px-1.5 py-0.2 rounded">
-                        {venue.new_hall_name}
+                    <div className="absolute top-1 left-1 max-w-[calc(100%-8px)] pointer-events-none">
+                      <span className="text-[10px] font-black text-white bg-slate-900/85 px-1.5 py-0.5 rounded truncate block max-w-full">
+                        {hallCode}
                       </span>
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {venue.old_hall_name || venue.new_hall_name}
+                        {venueTitle}
                       </h3>
-                      <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md shrink-0">
                         {venue.type}
                       </span>
+                      {(venue.price || (Array.isArray(venue.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))) && (
+                        <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 px-2 py-0.5 rounded-md">
+                          {venue.price || venue.features.find((f) => typeof f === 'string' && f.startsWith('₹'))}
+                        </span>
+                      )}
+                      {((venue.terms && venue.terms.includes('ONLY FOR BHAU STARTUPS')) || (venue.description && venue.description.includes('ONLY FOR BHAU STARTUPS'))) && (
+                        <span className="text-[10px] font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200/80 dark:border-purple-800/80 px-2 py-0.5 rounded-md">
+                          Bhau Startups Exclusive
+                        </span>
+                      )}
                     </div>
 
                     <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
