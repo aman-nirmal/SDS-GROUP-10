@@ -784,11 +784,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
               </button>
 
               {/* Floating Badges */}
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 shadow-xs">
+              <div className="absolute top-4 left-4 right-16 flex items-center gap-2 pointer-events-none z-10 overflow-hidden">
+                <span
+                  title={venue?.new_hall_name || 'Passage Hall'}
+                  className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 shadow-xs truncate max-w-[65%]"
+                >
                   {venue?.new_hall_name || 'Passage Hall'}
                 </span>
-                <span className="text-[11px] font-bold text-blue-200 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/20">
+                <span className="text-[11px] font-bold text-blue-200 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/20 shrink-0">
                   {venue?.type || 'Classrooms'}
                 </span>
               </div>
@@ -2097,14 +2100,15 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                   {/* Gradient Overlay for Text Readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/15 to-transparent pointer-events-none" />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-3 left-3">
-                    <span className="text-xs font-black tracking-wide text-white bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs">
+                  {/* Top Badges Bar (Unified flex container to prevent overlap) */}
+                  <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                    <span
+                      title={venue.new_hall_name || 'Passage Hall'}
+                      className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-xs truncate max-w-[62%]"
+                    >
                       {venue.new_hall_name || 'Passage Hall'}
                     </span>
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <span className="text-[11px] font-bold text-slate-100 bg-slate-900/75 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10">
+                    <span className="text-[11px] font-bold text-slate-100 bg-slate-900/80 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10 shrink-0">
                       {venue.type || 'Hall'}
                     </span>
                   </div>
@@ -2211,19 +2215,19 @@ function VenuesPage({ venues = [], isLoading = false, initialType, initialDate, 
                       }}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
-                    <div className="absolute top-1 left-1">
-                      <span className="text-[10px] font-black text-white bg-slate-900/80 px-1.5 py-0.2 rounded">
+                    <div className="absolute top-1 left-1 max-w-[calc(100%-8px)] pointer-events-none">
+                      <span className="text-[10px] font-black text-white bg-slate-900/85 px-1.5 py-0.5 rounded truncate block max-w-full">
                         {venue.new_hall_name}
                       </span>
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {venue.old_hall_name || venue.new_hall_name}
                       </h3>
-                      <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md shrink-0">
                         {venue.type}
                       </span>
                       {(venue.price || (Array.isArray(venue.features) && venue.features.find((f) => typeof f === 'string' && f.startsWith('₹')))) && (
