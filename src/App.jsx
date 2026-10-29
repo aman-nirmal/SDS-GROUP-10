@@ -951,146 +951,150 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
             </div>
           </div>
         ) : (
-          <div>
-            {/* 1. Large Image Banner Header with Multi-photo Carousel */}
-            <div className="relative h-60 sm:h-72 lg:h-80 w-full overflow-hidden bg-slate-950 select-none group">
-              <img
-                key={activePhotoIdx}
-                src={venuePhotos[activePhotoIdx]}
-                alt={`${venueTitle} - Photo ${activePhotoIdx + 1}`}
-                className="w-full h-full object-cover transition-opacity duration-300"
-                onError={(e) => {
-                  e.currentTarget.onerror = null
-                  e.currentTarget.src = '/coep_building.png'
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/30 pointer-events-none" />
-
-              {/* Left / Right Scroll Navigation Arrows */}
-              {venuePhotos.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    onClick={prevPhoto}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-950/75 hover:bg-slate-900/95 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/25 shadow-xl hover:scale-105 active:scale-95 z-20"
-                    title="Previous photo (or Left Arrow)"
-                    aria-label="Previous photo"
-                  >
-                    <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={nextPhoto}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-950/75 hover:bg-slate-900/95 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/25 shadow-xl hover:scale-105 active:scale-95 z-20"
-                    title="Next photo (or Right Arrow)"
-                    aria-label="Next photo"
-                  >
-                    <ChevronRight className="w-6 h-6 stroke-[2.5]" />
-                  </button>
-                </>
-              )}
-
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={onClose}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 z-20 shadow-md"
-                title="Close"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Floating Badges */}
-              <div className="absolute top-4 left-4 right-16 flex items-center gap-2 pointer-events-none z-10 overflow-hidden">
-                <span
-                  title={venue?.new_hall_name || 'Passage Hall'}
-                  className="text-xs font-black tracking-wide text-white bg-slate-950/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 shadow-xs truncate max-w-[65%]"
-                >
-                  {venue?.new_hall_name || 'Passage Hall'}
-                </span>
-                <span className="text-[11px] font-bold text-blue-200 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/20 shrink-0">
-                  {venue?.type || 'Classrooms'}
-                </span>
-                {venuePhotos.length > 1 && (
-                  <span className="text-[11px] font-bold text-slate-200 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 flex items-center gap-1.5 shrink-0">
-                    <Camera className="w-3.5 h-3.5 text-blue-400" />
-                    {activePhotoIdx + 1} / {venuePhotos.length} Photos
-                  </span>
-                )}
-              </div>
-
-              {/* Banner Title & Department */}
-              <div className="absolute bottom-4 left-5 right-24 text-white z-10">
-                <h2 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md">
-                  {venue?.old_hall_name || venue?.new_hall_name}
-                </h2>
-                <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-200 mt-1">
-                  <span className="flex items-center gap-1.5">
-                    <Building className="w-3.5 h-3.5 text-blue-300 shrink-0" />
-                    <span>{venue?.department || 'COEP Campus'}</span>
-                  </span>
-                  {venue?.old_hall_name && venue.new_hall_name && (
-                    <span>&bull; Hall Code: {venue.new_hall_name}</span>
-                  )}
-                </div>
-                {venue?.address && (
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-300 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                    <span className="truncate">{venue.address}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Dot Indicators */}
-              {venuePhotos.length > 1 && (
-                <div className="absolute bottom-4 right-4 flex items-center gap-1.5 z-10 bg-black/50 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10">
-                  {venuePhotos.map((_, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setActivePhotoIdx(idx)}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${
-                        idx === activePhotoIdx ? 'w-5 bg-blue-500' : 'w-2 bg-white/50 hover:bg-white'
-                      }`}
-                      aria-label={`Slide ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Horizontal Thumbnail Views Bar */}
-            {venuePhotos.length > 1 && (
-              <div className="flex items-center gap-2.5 px-6 py-2.5 bg-slate-100 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800 overflow-x-auto">
-                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1.5 mr-1">
-                  <Images className="w-3.5 h-3.5 text-blue-500" />
-                  Venue Views ({venuePhotos.length}):
-                </span>
-                {venuePhotos.map((img, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActivePhotoIdx(idx)}
-                    className={`relative shrink-0 w-20 h-13 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
-                      idx === activePhotoIdx
-                        ? 'border-blue-600 ring-2 ring-blue-500/30 scale-102'
-                        : 'border-slate-300 dark:border-slate-700 opacity-60 hover:opacity-100'
-                    }`}
-                  >
-                    <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
-                    <span className="absolute bottom-0.5 right-1 text-[9px] font-bold text-white bg-black/75 px-1 rounded">
-                      {idx + 1}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="relative">
+            {/* Top Right Close Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-colors cursor-pointer border border-slate-200 dark:border-slate-700 z-30 shadow-xs"
+              title="Close"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
             {/* Modal Body with Wide Ergonomic 2-Column Desktop Grid */}
-            <div className="p-6 sm:p-7">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                {/* Left Column (5 cols): Venue Specifications, In-Charge, Amenities & Guidelines */}
+            <div className="p-5 sm:p-7 pt-6 sm:pt-7">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+                {/* Left Column (5 cols): Photo Gallery (Top-Left), Venue Identity, Specs & Facilities */}
                 <div className="lg:col-span-5 space-y-4">
+                  {/* Top-Left Photo Gallery Carousel */}
+                  <div className="space-y-2">
+                    <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-950 select-none group shadow-md border border-slate-200/80 dark:border-slate-800">
+                      <img
+                        key={activePhotoIdx}
+                        src={venuePhotos[activePhotoIdx]}
+                        alt={`${venueTitle} - Photo ${activePhotoIdx + 1}`}
+                        className="w-full h-full object-cover transition-opacity duration-300"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null
+                          e.currentTarget.src = '/coep_building.png'
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/20 pointer-events-none" />
+
+                      {/* Left / Right Scroll Navigation Arrows */}
+                      {venuePhotos.length > 1 && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={prevPhoto}
+                            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/85 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/20 shadow-md hover:scale-105 active:scale-95 z-20"
+                            title="Previous photo (Left Arrow)"
+                            aria-label="Previous photo"
+                          >
+                            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={nextPhoto}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/85 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/20 shadow-md hover:scale-105 active:scale-95 z-20"
+                            title="Next photo (Right Arrow)"
+                            aria-label="Next photo"
+                          >
+                            <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+                          </button>
+                        </>
+                      )}
+
+                      {/* Floating Badges */}
+                      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
+                        <span className="text-[11px] font-bold text-blue-200 bg-blue-950/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/25 shrink-0 shadow-xs">
+                          {venue?.type || 'Classrooms'}
+                        </span>
+                        {venuePhotos.length > 1 && (
+                          <span className="text-[10px] font-bold text-white bg-black/75 backdrop-blur-md px-2 py-0.5 rounded-lg border border-white/15 flex items-center gap-1 shrink-0">
+                            <Camera className="w-3 h-3 text-blue-400" />
+                            {activePhotoIdx + 1} / {venuePhotos.length}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Dot Indicators */}
+                      {venuePhotos.length > 1 && (
+                        <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1 z-10 bg-black/50 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
+                          {venuePhotos.map((_, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => setActivePhotoIdx(idx)}
+                              className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                                idx === activePhotoIdx ? 'w-4 bg-blue-500' : 'w-1.5 bg-white/50 hover:bg-white'
+                              }`}
+                              aria-label={`Slide ${idx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Horizontal Thumbnail Views Bar */}
+                    {venuePhotos.length > 1 && (
+                      <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1 mr-0.5">
+                          <Images className="w-3 h-3 text-blue-500" />
+                          Views ({venuePhotos.length}):
+                        </span>
+                        {venuePhotos.map((img, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActivePhotoIdx(idx)}
+                            className={`relative shrink-0 w-16 h-11 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                              idx === activePhotoIdx
+                                ? 'border-blue-600 ring-2 ring-blue-500/30 scale-102'
+                                : 'border-slate-200 dark:border-slate-700 opacity-60 hover:opacity-100'
+                            }`}
+                          >
+                            <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                            <span className="absolute bottom-0.5 right-0.5 text-[8px] font-bold text-white bg-black/75 px-1 rounded">
+                              {idx + 1}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Venue Header & Identity Details */}
+                  <div className="pt-0.5">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span className="text-[11px] font-black tracking-wide text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
+                        {venue?.new_hall_name || venue?.old_hall_name || 'Passage Hall'}
+                      </span>
+                      {venue?.old_hall_name && venue.new_hall_name && (
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                          Code: {venue.new_hall_name}
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
+                      {venue?.old_hall_name || venue?.new_hall_name}
+                    </h2>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300 mt-1.5">
+                      <span className="flex items-center gap-1.5">
+                        <Building className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <span>{venue?.department || 'COEP Campus'}</span>
+                      </span>
+                      {venue?.address && (
+                        <span className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
+                          <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                          <span className="truncate">{venue.address}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Specifications Grid */}
                   <div className="grid grid-cols-2 gap-2.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
                     <div>
