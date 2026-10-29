@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
   MapPin,
   Calendar,
@@ -38,7 +38,9 @@ import {
   Moon,
   User,
   CreditCard,
-  Receipt
+  Receipt,
+  Camera,
+  Images
 } from 'lucide-react'
 import UserProfileModal from './components/UserProfileModal'
 import { INITIAL_ROLE_REQUESTS } from './components/admin/mockAdminData'
@@ -295,10 +297,15 @@ function formatDateDisplay(dateStr) {
   }
 }
 
-// Helper function to get authentic high-quality image from the campus photos repository
-export function getVenueImageUrl(venue) {
-  if (venue?.image && (venue.image.startsWith('/photos/') || venue.image.startsWith('photos/'))) {
-    return venue.image.startsWith('/') ? venue.image : `/${venue.image}`
+// Helper function to get multiple authentic high-quality images from the campus photos repository
+export function getVenueImages(venue) {
+  const list = []
+  if (Array.isArray(venue?.images) && venue.images.length > 0) {
+    venue.images.forEach((img) => {
+      if (img) list.push(img.startsWith('/') ? img : `/${img}`)
+    })
+  } else if (venue?.image) {
+    list.push(venue.image.startsWith('/') ? venue.image : `/${venue.image}`)
   }
 
   const name = `${venue?.new_hall_name || ''} ${venue?.old_hall_name || ''} ${venue?.name || ''}`.toLowerCase()
@@ -306,31 +313,29 @@ export function getVenueImageUrl(venue) {
   const code = `${venue?.code || ''}`.toLowerCase()
   const dept = `${venue?.department || ''}`.toLowerCase()
 
+  let defaults = []
   // Mini Auditorium
   if (name.includes('mini') || code.includes('mini')) {
-    return '/photos/mini audi 1.jpg'
+    defaults = ['/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/audi 2.jpeg']
   }
-
   // Auditoriums (COEP Main Auditorium, Bhau Auditorium, etc.)
-  if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
-    return '/photos/audi 2.jpeg'
+  else if (type.includes('auditorium') || name.includes('aud') || code.includes('aud')) {
+    defaults = ['/photos/audi 2.jpeg', '/photos/mini audi 1.jpg', '/photos/mini audi 2.jpg', '/photos/seminar hall.webp']
   }
-
   // Seminar Halls
-  if (type.includes('seminar') || name.includes('sh') || name.includes('seminar')) {
+  else if (type.includes('seminar') || name.includes('sh') || name.includes('seminar')) {
     if (name.includes('comp') || name.includes('civil') || dept.includes('computer')) {
-      return '/photos/seminar hall 2.jpeg'
+      defaults = ['/photos/seminar hall 2.jpeg', '/photos/seminar hall.webp', '/photos/ac 2.jpeg']
+    } else {
+      defaults = ['/photos/seminar hall.webp', '/photos/seminar hall 2.jpeg', '/photos/ac 2.jpeg']
     }
-    return '/photos/seminar hall.webp'
   }
-
   // South Classrooms (SC01-SC28, CDH, South Complex)
-  if (name.includes('sc') || code.includes('sc') || name.includes('south')) {
-    return '/photos/sc1.jpeg'
+  else if (name.includes('sc') || code.includes('sc') || name.includes('south')) {
+    defaults = ['/photos/sc1.jpeg', '/photos/classroom.jpg', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
   }
-
   // Academic Complex (NC01 - NC14, AC 101 - AC 304)
-  if (
+  else if (
     dept.includes('academic') ||
     name.includes('ac ') ||
     name.includes('ac-') ||
@@ -341,23 +346,35 @@ export function getVenueImageUrl(venue) {
     /^nc0[1-9]|^nc1[0-4]/.test(venue?.new_hall_name?.toLowerCase() || '')
   ) {
     const num = parseInt((venue?.new_hall_name || code || name).replace(/\D/g, ''), 10) || 1
-    if (num % 3 === 0) return '/photos/ac 3.webp'
-    if (num % 3 === 2) return '/photos/ac 2.jpeg'
-    return '/photos/ac 1.jpeg'
+    if (num % 3 === 0) {
+      defaults = ['/photos/ac 3.webp', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
+    } else if (num % 3 === 2) {
+      defaults = ['/photos/ac 2.jpeg', '/photos/ac 3.webp', '/photos/ac 1.jpeg']
+    } else {
+      defaults = ['/photos/ac 1.jpeg', '/photos/ac 2.jpeg', '/photos/ac 3.webp']
+    }
   }
-
   // Meeting / Conference Rooms
-  if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
-    return '/photos/ac 2.jpeg'
+  else if (type.includes('meeting') || name.includes('mr') || name.includes('conference') || code.includes('conf')) {
+    defaults = ['/photos/ac 2.jpeg', '/photos/seminar hall 2.jpeg', '/photos/mini audi 2.jpg']
   }
-
   // Drawing Hall / North Drawing Hall
-  if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01')) {
-    return '/photos/classroom.jpg'
+  else if (name.includes('drawing') || name.includes('nd01') || code.includes('nd01')) {
+    defaults = ['/photos/classroom.jpg', '/photos/sc1.jpeg', '/photos/ac 1.jpeg']
+  }
+  // Default authentic campus classroom
+  else {
+    defaults = ['/photos/classroom.jpg', '/photos/sc1.jpeg', '/photos/ac 1.jpeg', '/photos/ac 2.jpeg']
   }
 
-  // Default authentic campus classroom
-  return '/photos/classroom.jpg'
+  const merged = Array.from(new Set([...list, ...defaults])).filter(Boolean)
+  return merged.length > 0 ? merged : ['/photos/classroom.jpg']
+}
+
+// Helper function to get authentic high-quality image from the campus photos repository
+export function getVenueImageUrl(venue) {
+  const images = getVenueImages(venue)
+  return images[0] || '/photos/classroom.jpg'
 }
 
 // Helper function to get official faculty in-charge & department coordinator for any venue
@@ -518,8 +535,36 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   const [paymentError, setPaymentError] = useState('')
   const [paymentSuccess, setPaymentSuccess] = useState(null)
 
+  const venuePhotos = useMemo(() => getVenueImages(venue), [venue])
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0)
+
+  useEffect(() => {
+    setActivePhotoIdx(0)
+  }, [venue])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : venuePhotos.length - 1))
+      } else if (e.key === 'ArrowRight') {
+        setActivePhotoIdx((prev) => (prev < venuePhotos.length - 1 ? prev + 1 : 0))
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [venuePhotos])
+
+  const prevPhoto = (e) => {
+    e?.stopPropagation()
+    setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : venuePhotos.length - 1))
+  }
+
+  const nextPhoto = (e) => {
+    e?.stopPropagation()
+    setActivePhotoIdx((prev) => (prev < venuePhotos.length - 1 ? prev + 1 : 0))
+  }
+
   const venueTitle = venue?.new_hall_name || venue?.old_hall_name || 'Selected Venue'
-  const venuePhoto = getVenueImageUrl(venue)
   const faculty = getVenueFaculty(venue)
   const capacity = venue?.capacity || (venue?.benches ? venue.benches * 2 : 60)
   const benches = venue?.benches || Math.round(capacity / 2)
@@ -699,14 +744,14 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-5 overflow-y-auto"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 my-6 flex flex-col text-slate-900 dark:text-slate-100"
+        className="bg-white dark:bg-slate-900 rounded-3xl max-w-5xl xl:max-w-6xl w-full max-h-[94vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 my-4 flex flex-col text-slate-900 dark:text-slate-100"
       >
         {submitted ? (
-          <div className="p-8 text-center py-10">
+          <div className="p-8 text-center py-10 max-w-xl mx-auto">
             <div className={`w-16 h-16 rounded-2xl ${paymentSuccess || isFacultyInstantApproved ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400'} flex items-center justify-center mx-auto mb-4 shadow-xs`}>
               <CheckCircle2 className="w-9 h-9 stroke-[2]" />
             </div>
@@ -752,7 +797,7 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
               </>
             )}
 
-            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 text-left mb-6 space-y-3 max-w-lg mx-auto">
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 text-left mb-6 space-y-3">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Reference Code:</span>
                 <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-sm">{bookingRef}</span>
@@ -816,24 +861,49 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
           </div>
         ) : (
           <div>
-            {/* 1. Large Image Banner Header */}
-            <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-900">
+            {/* 1. Large Image Banner Header with Multi-photo Carousel */}
+            <div className="relative h-60 sm:h-72 lg:h-80 w-full overflow-hidden bg-slate-950 select-none group">
               <img
-                src={venuePhoto}
-                alt={venueTitle}
-                className="w-full h-full object-cover"
+                key={activePhotoIdx}
+                src={venuePhotos[activePhotoIdx]}
+                alt={`${venueTitle} - Photo ${activePhotoIdx + 1}`}
+                className="w-full h-full object-cover transition-opacity duration-300"
                 onError={(e) => {
                   e.currentTarget.onerror = null
                   e.currentTarget.src = '/coep_building.png'
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/30 pointer-events-none" />
+
+              {/* Left / Right Scroll Navigation Arrows */}
+              {venuePhotos.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={prevPhoto}
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-950/75 hover:bg-slate-900/95 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/25 shadow-xl hover:scale-105 active:scale-95 z-20"
+                    title="Previous photo (or Left Arrow)"
+                    aria-label="Previous photo"
+                  >
+                    <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextPhoto}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-950/75 hover:bg-slate-900/95 text-white backdrop-blur-md flex items-center justify-center transition-all cursor-pointer border border-white/25 shadow-xl hover:scale-105 active:scale-95 z-20"
+                    title="Next photo (or Right Arrow)"
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+                  </button>
+                </>
+              )}
 
               {/* Close Button */}
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 z-20 shadow-md"
                 title="Close"
               >
                 <X className="w-5 h-5" />
@@ -850,10 +920,16 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                 <span className="text-[11px] font-bold text-blue-200 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-blue-400/20 shrink-0">
                   {venue?.type || 'Classrooms'}
                 </span>
+                {venuePhotos.length > 1 && (
+                  <span className="text-[11px] font-bold text-slate-200 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 flex items-center gap-1.5 shrink-0">
+                    <Camera className="w-3.5 h-3.5 text-blue-400" />
+                    {activePhotoIdx + 1} / {venuePhotos.length} Photos
+                  </span>
+                )}
               </div>
 
               {/* Banner Title & Department */}
-              <div className="absolute bottom-4 left-5 right-5 text-white">
+              <div className="absolute bottom-4 left-5 right-24 text-white z-10">
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md">
                   {venue?.old_hall_name || venue?.new_hall_name}
                 </h2>
@@ -873,392 +949,461 @@ function VenueBookingModal({ venue, defaultDate, onClose, onSubmitBooking, curre
                   </div>
                 )}
               </div>
-            </div>
 
-            <div className="p-6 sm:p-7 space-y-5">
-              {/* 2. Venue Specifications Strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
-                    Capacity
-                  </span>
-                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">{capacity} Persons</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
-                    {venue?.benches ? 'Benches' : 'Space'}
-                  </span>
-                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">
-                    {venue?.benches ? `${benches} Benches` : 'Open Floor'}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
-                    Category
-                  </span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 text-sm truncate block">{venue?.type || 'Classrooms'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
-                    {priceDisplay ? 'Tariff' : 'Status'}
-                  </span>
-                  {priceDisplay ? (
-                    <span className="font-extrabold text-amber-700 dark:text-amber-400 text-xs truncate block" title={priceDisplay}>
-                      {priceDisplay}
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Available Now
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Terms and Guidelines if applicable */}
-              {termsDisplay && (
-                <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800 text-xs flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold text-amber-900 dark:text-amber-300 block mb-0.5">Booking Terms & Guidelines</span>
-                    <p className="text-amber-800 dark:text-amber-400 leading-relaxed text-[11px]">{termsDisplay}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* 3. Concise Faculty In-Charge */}
-              <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 font-medium">Faculty In-Charge:</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{faculty.name}</span>
-                </div>
-                <a
-                  href={`mailto:${faculty.email}`}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-[11px] font-semibold hover:underline inline-flex items-center gap-1"
-                >
-                  <Mail className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
-                  {faculty.email}
-                </a>
-              </div>
-
-              {/* 4. Installed Facilities & Amenities */}
-              <div>
-                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2">
-                  Installed Classroom Facilities:
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {(venue?.features || [
-                    'Overhead Projector',
-                    'PA Sound System',
-                    'Air Conditioned',
-                    'Wi-Fi 6'
-                  ]).map((feat, i) => (
-                    <span
-                      key={i}
-                      className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700"
-                    >
-                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                      {feat}
-                    </span>
+              {/* Dot Indicators */}
+              {venuePhotos.length > 1 && (
+                <div className="absolute bottom-4 right-4 flex items-center gap-1.5 z-10 bg-black/50 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10">
+                  {venuePhotos.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActivePhotoIdx(idx)}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        idx === activePhotoIdx ? 'w-5 bg-blue-500' : 'w-2 bg-white/50 hover:bg-white'
+                      }`}
+                      aria-label={`Slide ${idx + 1}`}
+                    />
                   ))}
                 </div>
-              </div>
+              )}
+            </div>
 
-              {/* 5. Slot Reservation Form */}
-              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Date & Time Slot */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                      1. Reservation Date
-                    </label>
-                    <input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      required
-                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
-                    />
+            {/* Horizontal Thumbnail Views Bar */}
+            {venuePhotos.length > 1 && (
+              <div className="flex items-center gap-2.5 px-6 py-2.5 bg-slate-100 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800 overflow-x-auto">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1.5 mr-1">
+                  <Images className="w-3.5 h-3.5 text-blue-500" />
+                  Venue Views ({venuePhotos.length}):
+                </span>
+                {venuePhotos.map((img, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActivePhotoIdx(idx)}
+                    className={`relative shrink-0 w-20 h-13 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                      idx === activePhotoIdx
+                        ? 'border-blue-600 ring-2 ring-blue-500/30 scale-102'
+                        : 'border-slate-300 dark:border-slate-700 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                    <span className="absolute bottom-0.5 right-1 text-[9px] font-bold text-white bg-black/75 px-1 rounded">
+                      {idx + 1}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Modal Body with Wide Ergonomic 2-Column Desktop Grid */}
+            <div className="p-6 sm:p-7">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
+                {/* Left Column (5 cols): Venue Specifications, In-Charge, Amenities & Guidelines */}
+                <div className="lg:col-span-5 space-y-4">
+                  {/* Specifications Grid */}
+                  <div className="grid grid-cols-2 gap-2.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
+                        Capacity
+                      </span>
+                      <span className="font-extrabold text-slate-900 dark:text-white text-sm">{capacity} Persons</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
+                        {venue?.benches ? 'Benches' : 'Space'}
+                      </span>
+                      <span className="font-extrabold text-slate-900 dark:text-white text-sm">
+                        {venue?.benches ? `${benches} Benches` : 'Open Floor'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
+                        Category
+                      </span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200 text-sm truncate block">{venue?.type || 'Classrooms'}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 block">
+                        {priceDisplay ? 'Tariff' : 'Status'}
+                      </span>
+                      {priceDisplay ? (
+                        <span className="font-extrabold text-amber-700 dark:text-amber-400 text-xs truncate block" title={priceDisplay}>
+                          {priceDisplay}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                          Available Now
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        2. Time Slot
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setShowSchedule(!showSchedule)}
-                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 inline-flex items-center gap-1 cursor-pointer"
+                  {/* Faculty In-Charge */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs space-y-1.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Faculty Department Coordinator
+                    </span>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span className="font-bold text-slate-800 dark:text-slate-200">{faculty.name}</span>
+                      </div>
+                      <a
+                        href={`mailto:${faculty.email}`}
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-[11px] font-semibold hover:underline inline-flex items-center gap-1"
                       >
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{showSchedule ? 'Hide Timetable' : 'View Timetable'}</span>
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSchedule ? 'rotate-180' : ''}`} />
-                      </button>
+                        <Mail className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
+                        {faculty.email}
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Installed Facilities & Amenities */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs">
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      Installed Classroom Facilities:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {(venue?.features || [
+                        'Overhead Projector',
+                        'PA Sound System',
+                        'Air Conditioned',
+                        'Wi-Fi 6'
+                      ]).map((feat, i) => (
+                        <span
+                          key={i}
+                          className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-xl flex items-center gap-1.5 border border-slate-200/70 dark:border-slate-700 shadow-2xs"
+                        >
+                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Terms and Guidelines if applicable */}
+                  {termsDisplay && (
+                    <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800 text-xs flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-amber-900 dark:text-amber-300 block mb-0.5">Booking Terms & Guidelines</span>
+                        <p className="text-amber-800 dark:text-amber-400 leading-relaxed text-[11px]">{termsDisplay}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Timetable Overview Card */}
+                  <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/60 text-xs">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-blue-950 dark:text-blue-200 flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        Timetable Guidelines
+                      </span>
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Free Gaps Available</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Regular curriculum lectures are priority scheduled during 10:30 AM – 5:30 PM. Recess/lunch hours (12:30–1:30 PM) and morning/evening slots are open for reservations.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column (7 cols): Slot Reservation Form */}
+                <div className="lg:col-span-7">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Date & Time Slot */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                        1. Reservation Date
+                      </label>
+                      <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
+                        className="w-full h-11 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-colors"
+                      />
                     </div>
 
-                    {/* Expandable Daily Timetable Strip */}
-                    {showSchedule && (
-                      <div className="mb-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs animate-in fade-in duration-150">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2">
-                          <span>Lecture Hours (10:30 AM – 5:30 PM)</span>
-                          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Green = Free for booking</span>
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                          2. Time Slot
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setShowSchedule(!showSchedule)}
+                          className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <Calendar className="w-3.5 h-3.5" />
+                          <span>{showSchedule ? 'Hide Timetable' : 'View Timetable'}</span>
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSchedule ? 'rotate-180' : ''}`} />
+                        </button>
+                      </div>
+
+                      {/* Expandable Daily Timetable Strip */}
+                      {showSchedule && (
+                        <div className="mb-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs animate-in fade-in duration-150">
+                          <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2">
+                            <span>Lecture Hours (10:30 AM – 5:30 PM)</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Green = Free for booking</span>
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
+                            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
+                              <span className="font-bold block">08:30 – 10:30 AM</span> Free
+                            </div>
+                            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
+                              <span className="font-bold block">10:30 – 12:30 PM</span> Lecture
+                            </div>
+                            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
+                              <span className="font-bold block">12:30 – 02:30 PM</span> Free Gaps
+                            </div>
+                            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
+                              <span className="font-bold block">02:30 – 04:30 PM</span> Practical
+                            </div>
+                          </div>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-                          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
-                            <span className="font-bold block">08:30 – 10:30 AM</span> Free
+                      )}
+
+                      {/* Clean Simple Time Slot Buttons */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {classroomTimeSlots.map((slot, i) => {
+                          const isFree = slot.status === 'free'
+                          const isSelected = selectedSlot === slot.time
+                          return isFree ? (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => setSelectedSlot(slot.time)}
+                              className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${
+                                isSelected
+                                  ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                  : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
+                              }`}
+                            >
+                              <span className="dark:text-slate-100">{slot.time}</span>
+                              {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
+                            </button>
+                          ) : (
+                            <div
+                              key={i}
+                              className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 line-through flex items-center justify-between cursor-not-allowed select-none"
+                              title="Occupied for regular classes"
+                            >
+                              <span>{slot.time}</span>
+                              <span className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold">{slot.label}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Applicant Details */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                          Applicant / Faculty Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={applicantName}
+                          onChange={(e) => setApplicantName(e.target.value)}
+                          placeholder="e.g. Prof. R. Sharma / Student"
+                          className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                          Applicant Department
+                        </label>
+                        <input
+                          type="text"
+                          value={department}
+                          onChange={(e) => setDepartment(e.target.value)}
+                          className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Optional/Required Mobile Phone for Cashfree */}
+                    {isPaidVenue && (
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                          Contact Mobile (for Cashfree Payment Receipt) *
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={applicantPhone}
+                          onChange={(e) => setApplicantPhone(e.target.value)}
+                          placeholder="10-digit mobile number (e.g. 9876543210)"
+                          className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                        />
+                      </div>
+                    )}
+
+                    {/* Faculty Session Nature: Academic Lecture vs Event */}
+                    {isFaculty && (
+                      <div className="space-y-2 pt-1">
+                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                          Session Nature / Activity Type *
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setBookingCategory('lecture')}
+                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+                              bookingCategory === 'lecture'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
+                            }`}
+                          >
+                            <GraduationCap className="w-4 h-4" />
+                            <span>Academic Lecture / Class</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setBookingCategory('event')}
+                            className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+                              bookingCategory === 'event'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
+                            }`}
+                          >
+                            <Calendar className="w-4 h-4" />
+                            <span>Campus Event / Seminar</span>
+                          </button>
+                        </div>
+
+                        {/* Dynamic Sanction / Instant Clearance Guidance Card */}
+                        {isFacultyInstantApproved ? (
+                          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs flex items-start gap-2.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-bold text-emerald-900 dark:text-emerald-200 block">⚡ Instant Approval</span>
+                              <p className="text-emerald-700 dark:text-emerald-300 text-[11px] mt-0.5 leading-relaxed">
+                                As a faculty member reserving a classroom in your home department ({venue?.department || currentUser?.department}), this regular academic lecture is <strong>instantly approved</strong> with an active gate pass.
+                              </p>
+                            </div>
                           </div>
-                          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
-                            <span className="font-bold block">10:30 – 12:30 PM</span> Lecture
+                        ) : (
+                          <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs flex items-start gap-2.5">
+                            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-bold text-amber-900 dark:text-amber-200 block">📋 HOD & Dean Permission Required</span>
+                              <p className="text-amber-700 dark:text-amber-300 text-[11px] mt-0.5 leading-relaxed">
+                                {bookingCategory === 'event'
+                                  ? 'Because this session is scheduled as an event, formal permission is required: your request will go to the Department HOD for sanction first, followed by the Dean for clearance.'
+                                  : !isHomeDept
+                                  ? `This venue belongs to ${venue?.department || 'another department'}. Inter-departmental bookings require sanction from the Department HOD and Dean.`
+                                  : 'Non-classroom facilities require sanction from the Department HOD and Dean.'}
+                              </p>
+                            </div>
                           </div>
-                          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-medium">
-                            <span className="font-bold block">12:30 – 02:30 PM</span> Free Gaps
+                        )}
+                      </div>
+                    )}
+
+                    {/* Event Purpose */}
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                        Event Purpose / Session Topic *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={eventPurpose}
+                        onChange={(e) => setEventPurpose(e.target.value)}
+                        placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
+                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    {/* Cashfree PG Highlight Card for Paid Venues */}
+                    {isPaidVenue && (
+                      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/90 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200/90 dark:border-blue-800/80 text-xs space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
+                              ₹
+                            </div>
+                            <div>
+                              <div className="font-extrabold text-slate-900 dark:text-white">Commercial Facility Tariff</div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400">Gateway: Cashfree PG (Production)</div>
+                            </div>
                           </div>
-                          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-medium line-through">
-                            <span className="font-bold block">02:30 – 04:30 PM</span> Practical
+                          <div className="text-right">
+                            <div className="text-base font-black text-blue-600 dark:text-blue-400">₹{numericPrice.toLocaleString('en-IN')}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Inclusive of 18% GST</div>
                           </div>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-blue-200/60 dark:border-blue-800/60 text-[11px] text-slate-600 dark:text-slate-300">
+                          <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
+                            <ShieldCheck className="w-3.5 h-3.5" /> UPI, GPay, PhonePe, Cards, NetBanking
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-medium">Instant Automated Invoice</span>
                         </div>
                       </div>
                     )}
 
-                    {/* Clean Simple Time Slot Buttons */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {classroomTimeSlots.map((slot, i) => {
-                        const isFree = slot.status === 'free'
-                        const isSelected = selectedSlot === slot.time
-                        return isFree ? (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => setSelectedSlot(slot.time)}
-                            className={`p-2.5 rounded-xl text-xs font-semibold border text-left cursor-pointer transition-colors flex items-center justify-between ${isSelected
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                              : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/40 dark:hover:bg-slate-700/60'
-                              }`}
-                          >
-                            <span className="dark:text-slate-100">{slot.time}</span>
-                            {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-white" />}
-                          </button>
+                    {/* Payment Error Alert */}
+                    {paymentError && (
+                      <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <span>{paymentError}</span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
+                      <span>
+                        Venue Capacity: <strong className="dark:text-slate-200">{capacity} Persons</strong> ({benches} Benches)
+                      </span>
+                      <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> {isPaidVenue ? 'Secured by Cashfree' : 'Instant Campus Routing'}
+                      </span>
+                    </div>
+
+                    {/* Submit / Cancel Buttons */}
+                    <div className="pt-3 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={isProcessingPayment}
+                        className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isProcessingPayment}
+                        className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
+                      >
+                        {isProcessingPayment ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            <span>Connecting to Cashfree Gateway...</span>
+                          </>
+                        ) : isPaidVenue ? (
+                          <>
+                            <CreditCard className="w-4 h-4" />
+                            <span>Pay ₹{numericPrice.toLocaleString('en-IN')} via Cashfree & Book</span>
+                          </>
+                        ) : isFacultyInstantApproved ? (
+                          <>
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>Confirm & Auto-Approve Slot</span>
+                          </>
                         ) : (
-                          <div
-                            key={i}
-                            className="p-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 line-through flex items-center justify-between cursor-not-allowed select-none"
-                            title="Occupied for regular classes"
-                          >
-                            <span>{slot.time}</span>
-                            <span className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold">{slot.label}</span>
-                          </div>
-                        )
-                      })}
+                          <>
+                            <span>Submit for HOD & Dean Clearance</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </>
+                        )}
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Applicant Details */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                        Applicant / Faculty Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={applicantName}
-                        onChange={(e) => setApplicantName(e.target.value)}
-                        placeholder="e.g. Prof. R. Sharma / Student"
-                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                        Applicant Department
-                      </label>
-                      <input
-                        type="text"
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 outline-none focus:border-blue-500 transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Optional/Required Mobile Phone for Cashfree */}
-                  {isPaidVenue && (
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                        Contact Mobile (for Cashfree Payment Receipt) *
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        value={applicantPhone}
-                        onChange={(e) => setApplicantPhone(e.target.value)}
-                        placeholder="10-digit mobile number (e.g. 9876543210)"
-                        className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
-                      />
-                    </div>
-                  )}
-
-                  {/* Faculty Session Nature: Academic Lecture vs Event */}
-                  {isFaculty && (
-                    <div className="space-y-2 pt-1">
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        Session Nature / Activity Type *
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setBookingCategory('lecture')}
-                          className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
-                            bookingCategory === 'lecture'
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
-                          }`}
-                        >
-                          <GraduationCap className="w-4 h-4" />
-                          <span>Academic Lecture / Class</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setBookingCategory('event')}
-                          className={`p-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 cursor-pointer ${
-                            bookingCategory === 'event'
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60'
-                          }`}
-                        >
-                          <Calendar className="w-4 h-4" />
-                          <span>Campus Event / Seminar</span>
-                        </button>
-                      </div>
-
-                      {/* Dynamic Sanction / Instant Clearance Guidance Card */}
-                      {isFacultyInstantApproved ? (
-                        <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs flex items-start gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                          <div>
-                            <span className="font-bold text-emerald-900 dark:text-emerald-200 block">⚡ Instant Approval</span>
-                            <p className="text-emerald-700 dark:text-emerald-300 text-[11px] mt-0.5 leading-relaxed">
-                              As a faculty member reserving a classroom in your home department ({venue?.department || currentUser?.department}), this regular academic lecture is <strong>instantly approved</strong> with an active gate pass.
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs flex items-start gap-2.5">
-                          <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                          <div>
-                            <span className="font-bold text-amber-900 dark:text-amber-200 block">📋 HOD & Dean Permission Required</span>
-                            <p className="text-amber-700 dark:text-amber-300 text-[11px] mt-0.5 leading-relaxed">
-                              {bookingCategory === 'event'
-                                ? 'Because this session is scheduled as an event, formal permission is required: your request will go to the Department HOD for sanction first, followed by the Dean for clearance.'
-                                : !isHomeDept
-                                ? `This venue belongs to ${venue?.department || 'another department'}. Inter-departmental bookings require sanction from the Department HOD and Dean.`
-                                : 'Non-classroom facilities require sanction from the Department HOD and Dean.'}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Event Purpose */}
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Event Purpose / Session Topic *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={eventPurpose}
-                      onChange={(e) => setEventPurpose(e.target.value)}
-                      placeholder="e.g. Guest Lecture, Lab Tutorial, Club Meeting"
-                      className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
-                    />
-                  </div>
-
-                  {/* Cashfree PG Highlight Card for Paid Venues */}
-                  {isPaidVenue && (
-                    <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/90 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200/90 dark:border-blue-800/80 text-xs space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
-                            ₹
-                          </div>
-                          <div>
-                            <div className="font-extrabold text-slate-900 dark:text-white">Commercial Facility Tariff</div>
-                            <div className="text-[10px] text-slate-500 dark:text-slate-400">Gateway: Cashfree PG (Production)</div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-base font-black text-blue-600 dark:text-blue-400">₹{numericPrice.toLocaleString('en-IN')}</div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Inclusive of 18% GST</div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-blue-200/60 dark:border-blue-800/60 text-[11px] text-slate-600 dark:text-slate-300">
-                        <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
-                          <ShieldCheck className="w-3.5 h-3.5" /> UPI, GPay, PhonePe, Cards, NetBanking
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-medium">Instant Automated Invoice</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Payment Error Alert */}
-                  {paymentError && (
-                    <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                      <span>{paymentError}</span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
-                    <span>
-                      Venue Capacity: <strong className="dark:text-slate-200">{capacity} Persons</strong> ({benches} Benches)
-                    </span>
-                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> {isPaidVenue ? 'Secured by Cashfree' : 'Instant Campus Routing'}
-                    </span>
-                  </div>
-
-                  {/* Submit / Cancel Buttons */}
-                  <div className="pt-3 flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={onClose}
-                      disabled={isProcessingPayment}
-                      className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isProcessingPayment}
-                      className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs transition-all shadow-sm cursor-pointer inline-flex items-center justify-center gap-2"
-                    >
-                      {isProcessingPayment ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 animate-spin" />
-                          <span>Connecting to Cashfree Gateway...</span>
-                        </>
-                      ) : isPaidVenue ? (
-                        <>
-                          <CreditCard className="w-4 h-4" />
-                          <span>Pay ₹{numericPrice.toLocaleString('en-IN')} via Cashfree & Book</span>
-                        </>
-                      ) : isFacultyInstantApproved ? (
-                        <>
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span>Confirm & Auto-Approve Slot</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Submit for HOD & Dean Clearance</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
