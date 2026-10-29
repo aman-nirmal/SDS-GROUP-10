@@ -410,7 +410,7 @@ export default function VenueBlockModal({
               </div>
 
               {/* Recurrence Selection */}
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-3">
+              <div className="p-3.5 rounded-xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Repeat className="w-4 h-4 text-purple-600 dark:text-purple-400" />
@@ -476,7 +476,7 @@ export default function VenueBlockModal({
                     {conflicts.map((c, i) => (
                       <div
                         key={i}
-                        className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-850/90 border border-amber-200/80 dark:border-amber-800/80 text-xs flex items-center justify-between gap-2"
+                        className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-800/90 border border-amber-200/80 dark:border-amber-800/80 text-xs flex items-center justify-between gap-2"
                       >
                         <div>
                           <strong className="text-slate-900 dark:text-white">{c.title}</strong>
@@ -537,7 +537,7 @@ export default function VenueBlockModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 bg-slate-100/60 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
           <button
             type="button"
             onClick={() => {

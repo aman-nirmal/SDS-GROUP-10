@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-slate-850: #141e33;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -225,3 +229,9 @@ select.text-\[10px\] {
 
 
 
+
+
+.dark .bg-slate-850,
+html.dark .bg-slate-850 {
+  background-color: #141e33 !important;
+}
